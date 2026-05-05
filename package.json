@@ -1,8 +1,8 @@
 {
   "name": "noustalgie",
   "version": "1.0.0",
-  "description": "Album photo couple IA — Noustalgie",
+  "description": "Album photo couple IA",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   }
 }
