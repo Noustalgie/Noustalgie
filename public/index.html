@@ -1549,11 +1549,30 @@ async function runGeneration(){
   document.getElementById('genResult').style.display='none';
   setProgress(5);
 
+  // Compresser les photos pour Vercel (limite 4.5MB)
+  async function compressPhoto(dataUrl, maxSize=200) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ratio = Math.min(maxSize/img.width, maxSize/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.6));
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  }
+
   try{
     log(T.log_analyzing,'lg');
-    const sample=S.photos.slice(0,Math.min(6,S.photos.length));
+    const sample=S.photos.slice(0,Math.min(4,S.photos.length));
+    // Compresser les photos en miniatures 200px pour l'analyse
+    const compressed = await Promise.all(sample.map(p => compressPhoto(p.data, 200)));
     const content=[{type:'text',text:`Analyse these couple photos. For each: context, emotion, mood. Reply ONLY in valid JSON: {"photos":[{"index":0,"context":"...","emotion":"...","mood":"..."}],"themes":["...","...","..."],"description":"couple in 10 words max"}`}];
-    sample.forEach(p=>content.push({type:'image_url',image_url:{url:p.data,detail:'low'}}));
+    compressed.forEach(c=>content.push({type:'image_url',image_url:{url:c,detail:'low'}}));
     const d1=await api('chat',{model:'gpt-4o',max_tokens:700,messages:[{role:'user',content}]});
     setProgress(38); log(T.log_analyzed,'lok');
 
