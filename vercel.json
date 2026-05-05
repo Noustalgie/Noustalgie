@@ -1,9 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/chat",            "destination": "/api/chat"            },
-    { "source": "/api/dalle",           "destination": "/api/chat"            },
-    { "source": "/api/create-checkout", "destination": "/api/create-checkout" },
-    { "source": "/success",             "destination": "/api/success"         },
-    { "source": "/cancel",              "destination": "/api/cancel"          }
+    { "source": "/success", "destination": "/api/success" },
+    { "source": "/cancel",  "destination": "/api/cancel"  }
   ]
 }
