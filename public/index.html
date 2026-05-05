@@ -797,23 +797,59 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 
     <!-- PANEL 4 -->
     <div class="panel" id="panel4">
-      <!-- Vrai aperçu immersif -->
+      <!-- Viewer + éditeur côte à côte -->
       <div id="albumViewer" style="background:#0a0806;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(201,160,90,.15);">
-        <!-- Page courante -->
-        <div id="avPage" style="width:100%;aspect-ratio:1;position:relative;overflow:hidden;cursor:pointer;" onclick="avNext()"></div>
-        <!-- Barre de navigation -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,8,6,.9);border-top:1px solid rgba(201,160,90,.1);">
-          <button onclick="avPrev()" id="avPrevBtn" style="background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;" disabled>←</button>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span id="avLabel" style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:rgba(201,160,90,.65);"></span>
-            <span id="avCtr" style="font-size:10px;color:rgba(255,255,255,.2);">1 / 1</span>
+
+        <!-- Barre top : nav + bouton éditer -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,8,6,.95);border-bottom:1px solid rgba(201,160,90,.08);">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button onclick="avPrev()" id="avPrevBtn" style="background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;" disabled>←</button>
+            <button onclick="avNext()" id="avNextBtn" style="background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;">→</button>
+            <span id="avCtr" style="font-size:10px;color:rgba(255,255,255,.2);margin-left:4px;">1 / 1</span>
           </div>
-          <button onclick="avNext()" id="avNextBtn" style="background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;">→</button>
+          <span id="avLabel" style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:rgba(201,160,90,.6);"></span>
+          <button id="avEditBtn" onclick="toggleEditor()" style="background:rgba(201,160,90,.1);border:1px solid rgba(201,160,90,.25);color:#c9a05a;padding:5px 12px;border-radius:20px;cursor:pointer;font-size:11px;font-family:var(--fb);letter-spacing:.05em;transition:all .2s;">✏️ Modifier</button>
         </div>
+
+        <!-- Page principale -->
+        <div id="avPage" style="width:100%;aspect-ratio:1;position:relative;overflow:hidden;"></div>
+
+        <!-- Panneau éditeur — slide depuis le bas -->
+        <div id="editorPanel" style="display:none;background:#0d0b09;border-top:1px solid rgba(201,160,90,.15);padding:14px;">
+
+          <!-- Onglets -->
+          <div style="display:flex;gap:6px;margin-bottom:12px;">
+            <button class="ed-tab active" id="tab-photo" onclick="edTab('photo')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(201,160,90,.25);background:rgba(201,160,90,.1);color:#c9a05a;font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">📷 Photo</button>
+            <button class="ed-tab" id="tab-text" onclick="edTab('text')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">✍️ Texte</button>
+            <button class="ed-tab" id="tab-layout" onclick="edTab('layout')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">⊞ Disposition</button>
+          </div>
+
+          <!-- Tab PHOTO -->
+          <div id="edPhotoPanel">
+            <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir une autre photo</div>
+            <div id="edPhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:5px;max-height:140px;overflow-y:auto;"></div>
+          </div>
+
+          <!-- Tab TEXTE -->
+          <div id="edTextPanel" style="display:none;">
+            <div id="edTextFields"></div>
+          </div>
+
+          <!-- Tab DISPOSITION -->
+          <div id="edLayoutPanel" style="display:none;">
+            <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir un layout</div>
+            <div id="edLayoutGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"></div>
+          </div>
+
+          <!-- Bouton appliquer -->
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button onclick="applyEdit()" style="flex:1;padding:9px;background:#c9a05a;color:#0a0806;border:none;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;font-family:var(--fb);">Appliquer ✓</button>
+            <button onclick="resetEdit()" style="padding:9px 14px;background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--fb);">Reset</button>
+          </div>
+        </div>
+
         <!-- Miniatures -->
-        <div id="avThumbs" style="display:flex;gap:4px;padding:8px 14px;overflow-x:auto;background:rgba(10,8,6,.95);scrollbar-width:none;"></div>
-        <!-- Hint tactile -->
-        <div style="text-align:center;padding:6px;font-family:Georgia,serif;font-size:10px;font-style:italic;color:rgba(255,255,255,.18);">← Swipe ou clic pour tourner les pages →</div>
+        <div id="avThumbs" style="display:flex;gap:4px;padding:8px 14px;overflow-x:auto;background:rgba(10,8,6,.98);scrollbar-width:none;border-top:1px solid rgba(255,255,255,.04);"></div>
       </div>
 
       <div class="btn-row" style="margin-top:1rem;">
@@ -1431,7 +1467,18 @@ function startApp(){document.getElementById('app').scrollIntoView({behavior:'smo
 function addPhotos(files){
   Array.from(files).forEach(f=>{
     if(!f.type.startsWith('image/')&&!f.name.toLowerCase().endsWith('.heic'))return;
-    const r=new FileReader(); r.onload=e=>{S.photos.push({name:f.name,data:e.target.result});renderPhotos();}; r.readAsDataURL(f);
+    const r=new FileReader();
+    r.onload=e=>{
+      // Test si l'image peut s'afficher
+      const img=new Image();
+      img.onload=()=>{S.photos.push({name:f.name,data:e.target.result});renderPhotos();};
+      img.onerror=()=>{
+        // HEIC non supporté - on ajoute quand même avec placeholder
+        S.photos.push({name:f.name,data:e.target.result,heic:true});renderPhotos();
+      };
+      img.src=e.target.result;
+    };
+    r.readAsDataURL(f);
   });
 }
 function renderPhotos(){
@@ -1446,7 +1493,7 @@ function renderPhotos(){
       ${S.captions[i]?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(14,11,9,.88);font-family:var(--fs);font-size:8px;font-style:italic;padding:3px 5px;color:var(--gold);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">"${S.captions[i]}"</div>`:''}
     </div>`).join('');
   const c=document.getElementById('photoCount');
-  const ok=S.photos.length>=15;
+  const ok=S.photos.length>=15; const heicCount=S.photos.filter(p=>p.heic).length;
   c.className='count-bar '+(ok?'c-ok':'c-warn');
   c.textContent=ok?`✓ ${S.photos.length}${T.photos_ok}`:`${S.photos.length}${T.photos_warn}${10-S.photos.length}${T.photos_warn2}`;
 }
@@ -1591,7 +1638,7 @@ function renderBookPreview(){
   // 1. COUVERTURE — photo pleine + titre overlay bas
   AV.pages.push(pg('Couverture','#0a0806',`
     <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-      ${photo(0)?`<img src="${photo(0)}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`:
+      ${photo(0)?`<img src="${photo(0)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';this.remove()"/>`:
       `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0e12,#2d1a22);"></div>`}
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 45%,transparent 65%);"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 18px;">
@@ -1613,13 +1660,15 @@ function renderBookPreview(){
 
   // 3. PAGE TYPO — intro
   if(S.story.introduction){
-    const words=S.story.introduction.split(' ');
+    const introWords=S.story.introduction.split(' ');
+    const introLine1=introWords.slice(0,3).join(' ');
+    const introLine2=S.story.introduction.split('.')[0].substring(0,60);
     AV.pages.push(pg('Introduction','#0a0806',`
       <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;">
         <div style="position:absolute;font-family:Georgia,serif;font-size:120px;font-weight:900;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;user-select:none;">♥</div>
         <div style="text-align:center;position:relative;z-index:1;">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,7vw,52px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${words.slice(0,3).join('<br>')}</div>
-          <div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(14px,3.5vw,22px);margin-top:12px;color:#c9a05a;">${words.slice(3,7).join(' ')}</div>
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,7vw,52px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${introWords.slice(0,3).join('<br>')}</div>
+          <div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3vw,18px);margin-top:12px;color:#c9a05a;max-width:280px;margin-left:auto;margin-right:auto;line-height:1.4;">${introLine2}${S.story.introduction.split('.')[0].length>60?'...':''}</div>
           <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:16px;color:rgba(255,255,255,.2);">${names}</div>
         </div>
       </div>`));
@@ -1633,7 +1682,7 @@ function renderBookPreview(){
     // Photo pleine page
     AV.pages.push(pg(`Chapitre ${i+1}`,'#000',`
       <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-        ${photo(pi)?`<img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`:
+        ${photo(pi)?`<img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';this.remove()"/>`:
         `<div style="width:100%;height:100%;background:linear-gradient(135deg,${BG[i%BG.length]},#111);"></div>`}
         <div style="position:absolute;inset:0;background:${layout%2===0?'linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 50%)':'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 50%)'};"></div>
         <div style="position:absolute;${layout%2===0?'bottom:0;padding-bottom:18px;':'top:0;padding-top:18px;'}left:0;right:0;padding-left:18px;padding-right:18px;">
@@ -1753,33 +1802,258 @@ function renderBookPreview(){
 function avRender(){
   const p=AV.pages[AV.cur];
   if(!p)return;
+
+  // Appliquer les éditions sauvegardées
+  const edit=AV.edits[AV.cur]||{};
+  let renderedHtml=p.html;
+
+  // Appliquer photo personnalisée
+  if(edit.photoIdx!==undefined&&S.photos[edit.photoIdx]){
+    // Remplacer toutes les img src dans cette page par la photo choisie
+    renderedHtml=renderedHtml.replace(/src="[^"]*data:image[^"]*"/g,`src="${S.photos[edit.photoIdx].data}"`);
+  }
+
+  // Appliquer textes personnalisés
+  if(edit.texts&&Object.keys(edit.texts).length>0){
+    Object.entries(edit.texts).forEach(([key,val])=>{
+      if(val) renderedHtml=renderedHtml.replace(new RegExp(`data-eid="${key}">[^<]*<`,'g'),`data-eid="${key}">${val}<`);
+    });
+  }
+
+  // Appliquer layout personnalisé
+  if(edit.layout!==undefined&&AV.layouts[edit.layout]){
+    renderedHtml=AV.layouts[edit.layout](p,edit);
+  }
+
   const box=document.getElementById('avPage');
   if(box){
     box.style.opacity='0';
     setTimeout(()=>{
-      box.innerHTML=p.html;
-      box.style.transition='opacity .25s ease';
+      box.innerHTML=renderedHtml;
+      box.style.transition='opacity .2s ease';
       box.style.opacity='1';
-    },150);
+    },120);
   }
   const lbl=document.getElementById('avLabel'); if(lbl)lbl.textContent=p.label;
   const ctr=document.getElementById('avCtr'); if(ctr)ctr.textContent=`${AV.cur+1} / ${AV.pages.length}`;
   const prev=document.getElementById('avPrevBtn'); if(prev){prev.disabled=AV.cur===0;prev.style.opacity=AV.cur===0?'.2':'1';}
   const next=document.getElementById('avNextBtn'); if(next){next.disabled=AV.cur===AV.pages.length-1;next.style.opacity=AV.cur===AV.pages.length-1?'.2':'1';}
   document.querySelectorAll('.av-thumb').forEach((t,i)=>t.style.outline=i===AV.cur?'2px solid #c9a05a':'none');
+
+  // Mettre à jour l'éditeur si ouvert
+  if(document.getElementById('editorPanel').style.display!=='none') refreshEditor();
 }
 
 function avBuildThumbs(){
   const container=document.getElementById('avThumbs');
   if(!container)return;
   container.innerHTML=AV.pages.map((p,i)=>`
-    <div class="av-thumb" onclick="AV.cur=${i};avRender()" style="width:42px;height:42px;flex-shrink:0;border-radius:3px;overflow:hidden;cursor:pointer;outline:${i===0?'2px solid #c9a05a':'none'};outline-offset:1px;transition:outline .15s;background:#1a1a1a;">
+    <div class="av-thumb" onclick="AV.cur=${i};avRender()" style="width:42px;height:42px;flex-shrink:0;border-radius:3px;overflow:hidden;cursor:pointer;outline:${i===0?'2px solid #c9a05a':'none'};outline-offset:1px;transition:outline .15s;background:#1a1a1a;position:relative;">
       <div style="width:100%;height:100%;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,.2);">${i+1}</div>
+      ${(AV.edits[i]&&Object.keys(AV.edits[i]).length)?`<div style="position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#c9a05a;"></div>`:''}
     </div>`).join('');
 }
 
 function avNext(){if(AV.cur<AV.pages.length-1){AV.cur++;avRender();}}
 function avPrev(){if(AV.cur>0){AV.cur--;avRender();}}
+
+// ══════════════════════════════════════════
+// ÉDITEUR DE PAGES
+// ══════════════════════════════════════════
+AV.edits={};
+AV.editState={};
+AV.layouts={};
+
+// Layouts disponibles par index
+const LAYOUT_DEFS=[
+  {icon:'⬛',name:'Pleine page',desc:'Photo 100%'},
+  {icon:'⬜',name:'Split 60/40',desc:'Photo + texte'},
+  {icon:'⊞',name:'Collage 2',desc:'My pov / Your pov'},
+  {icon:'▦',name:'Collage 3',desc:'Asymétrique'},
+  {icon:'Aa',name:'Typographique',desc:'Texte géant'},
+  {icon:'💌',name:'Dédicace',desc:'Fond clair centré'},
+];
+
+function toggleEditor(){
+  const panel=document.getElementById('editorPanel');
+  const btn=document.getElementById('avEditBtn');
+  const isOpen=panel.style.display!=='none';
+  panel.style.display=isOpen?'none':'block';
+  btn.style.background=isOpen?'rgba(201,160,90,.1)':'rgba(201,160,90,.2)';
+  btn.style.borderColor=isOpen?'rgba(201,160,90,.25)':'rgba(201,160,90,.5)';
+  if(!isOpen) refreshEditor();
+}
+
+function edTab(tab){
+  ['photo','text','layout'].forEach(t=>{
+    document.getElementById(`edPhotoPanel`).style.display=t==='photo'?'block':'none';
+    document.getElementById(`edTextPanel`).style.display=t==='text'?'block':'none';
+    document.getElementById(`edLayoutPanel`).style.display=t==='layout'?'block':'none';
+    const btn=document.getElementById(`tab-${t}`);
+    if(btn){
+      btn.style.background=t===tab?'rgba(201,160,90,.1)':'transparent';
+      btn.style.color=t===tab?'#c9a05a':'rgba(255,255,255,.35)';
+      btn.style.borderColor=t===tab?'rgba(201,160,90,.25)':'rgba(255,255,255,.08)';
+    }
+  });
+  // Corriger pour la tab active
+  const activeBtn=document.getElementById(`tab-${tab}`);
+  if(activeBtn){activeBtn.style.background='rgba(201,160,90,.1)';activeBtn.style.color='#c9a05a';}
+  document.getElementById(`ed${tab.charAt(0).toUpperCase()+tab.slice(1)}Panel`).style.display='block';
+}
+
+function refreshEditor(){
+  const i=AV.cur;
+  const p=AV.pages[i];
+  const edit=AV.edits[i]||{};
+  AV.editState={photoIdx:edit.photoIdx,texts:{...edit.texts||{}},layout:edit.layout};
+
+  // Grid photos
+  const grid=document.getElementById('edPhotoGrid');
+  if(grid){
+    grid.innerHTML=S.photos.map((ph,pi)=>`
+      <div onclick="edSelectPhoto(${pi})" style="aspect-ratio:1;border-radius:4px;overflow:hidden;cursor:pointer;border:${(edit.photoIdx===pi)?'2px solid #c9a05a':'1.5px solid rgba(255,255,255,.08)'};transition:all .15s;position:relative;">
+        <img src="${ph.data}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='#2a1a12';this.remove()"/>
+        ${edit.photoIdx===pi?`<div style="position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;background:#c9a05a;"></div>`:''}
+      </div>`).join('');
+  }
+
+  // Champs texte — extraire depuis le HTML de la page
+  const textFields=document.getElementById('edTextFields');
+  if(textFields){
+    // Extraire les textes éditables de la page courante
+    const html=p.html;
+    const editables=[];
+
+    // Titre du chapitre
+    const titleMatch=html.match(/font-weight:700[^>]*>([^<]{3,60})<\/div>/);
+    if(titleMatch) editables.push({key:'title',label:'Titre',val:edit.texts?.title||titleMatch[1]});
+
+    // Texte corps
+    const bodyMatch=html.match(/line-height:1\.7[^>]*>([^<]{10,})<\/div>/);
+    if(bodyMatch) editables.push({key:'body',label:'Texte',val:edit.texts?.body||bodyMatch[1].substring(0,200)});
+
+    // Caption
+    const capMatch=html.match(/my pov|your pov|caption/i);
+    if(capMatch) editables.push({key:'cap',label:'Légende',val:edit.texts?.cap||''});
+
+    if(editables.length===0){
+      textFields.innerHTML=`<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.3);text-align:center;padding:16px;">Cette page ne contient pas de texte éditable.</div>`;
+    } else {
+      textFields.innerHTML=editables.map(f=>`
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;">${f.label}</label>
+          <textarea id="ed_${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:12px;padding:8px 10px;resize:vertical;min-height:52px;line-height:1.5;" oninput="AV.editState.texts=AV.editState.texts||{};AV.editState.texts['${f.key}']=this.value">${f.val}</textarea>
+        </div>`).join('');
+    }
+  }
+
+  // Layouts disponibles
+  const layoutGrid=document.getElementById('edLayoutGrid');
+  if(layoutGrid){
+    layoutGrid.innerHTML=LAYOUT_DEFS.map((l,li)=>`
+      <div onclick="edSelectLayout(${li})" style="padding:8px 6px;border-radius:6px;border:${edit.layout===li?'1px solid #c9a05a':'1px solid rgba(255,255,255,.08)'};background:${edit.layout===li?'rgba(201,160,90,.1)':'rgba(255,255,255,.03)'};cursor:pointer;text-align:center;transition:all .15s;">
+        <div style="font-size:18px;margin-bottom:3px;">${l.icon}</div>
+        <div style="font-size:9px;font-weight:500;color:${edit.layout===li?'#c9a05a':'rgba(255,255,255,.5)'};">${l.name}</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.2);margin-top:1px;">${l.desc}</div>
+      </div>`).join('');
+  }
+}
+
+function edSelectPhoto(pi){
+  AV.editState=AV.editState||{};
+  AV.editState.photoIdx=pi;
+  // Preview immédiat
+  const edit={...AV.edits[AV.cur]||{},...AV.editState};
+  AV.edits[AV.cur]=edit;
+  avRender();
+  // Mettre à jour visuel de sélection
+  document.querySelectorAll('#edPhotoGrid > div').forEach((el,i)=>{
+    el.style.border=i===pi?'2px solid #c9a05a':'1.5px solid rgba(255,255,255,.08)';
+  });
+}
+
+function edSelectLayout(li){
+  AV.editState=AV.editState||{};
+  AV.editState.layout=li;
+  document.querySelectorAll('#edLayoutGrid > div').forEach((el,i)=>{
+    el.style.border=i===li?'1px solid #c9a05a':'1px solid rgba(255,255,255,.08)';
+    el.style.background=i===li?'rgba(201,160,90,.1)':'rgba(255,255,255,.03)';
+    el.querySelector('div:nth-child(2)').style.color=i===li?'#c9a05a':'rgba(255,255,255,.5)';
+  });
+}
+
+function applyEdit(){
+  const i=AV.cur;
+  const state=AV.editState||{};
+
+  // Récupérer les textes depuis les textarea
+  const texts={};
+  document.querySelectorAll('#edTextFields textarea').forEach(ta=>{
+    const key=ta.id.replace('ed_','');
+    if(ta.value.trim()) texts[key]=ta.value.trim();
+  });
+
+  // Appliquer le layout avec override
+  if(state.layout!==undefined){
+    AV.edits[i]={...AV.edits[i]||{},layout:state.layout,photoIdx:state.photoIdx,texts};
+    // Regénérer la page avec le nouveau layout
+    applyLayoutOverride(i,state.layout,state.photoIdx,texts);
+  } else {
+    AV.edits[i]={...AV.edits[i]||{},photoIdx:state.photoIdx,texts};
+  }
+
+  avRender();
+  avBuildThumbs();
+
+  // Feedback visuel
+  const btn=document.querySelector('#editorPanel button[onclick="applyEdit()"]');
+  if(btn){btn.textContent='✓ Appliqué !';btn.style.background='#7ec8a0';setTimeout(()=>{btn.textContent='Appliquer ✓';btn.style.background='#c9a05a';},1500);}
+}
+
+function applyLayoutOverride(pageIdx, layoutIdx, photoIdx, texts){
+  const page=AV.pages[pageIdx];
+  const pi=photoIdx!==undefined?photoIdx:0;
+  const ph=S.photos[pi]?.data;
+  const n1=document.getElementById('name1').value||'';
+  const n2=document.getElementById('name2').value||'';
+  const names=n2?`${n1} & ${n2}`:n1;
+  const chTitle=texts?.title||page.label;
+  const chText=texts?.body||'';
+
+  const phImg=ph?`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='#1a1210';this.remove()"/>`:'<div style="width:100%;height:100%;background:#1a1210;"></div>';
+
+  const layouts=[
+    // 0 — Pleine page
+    `<div style="width:100%;height:100%;position:relative;background:#000;">${phImg}<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:18px 16px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,28px);font-weight:700;color:#fff;line-height:1.1;">${chTitle}</div>${chText?`<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;font-style:italic;">${chText.substring(0,80)}...</div>`:''}</div></div>`,
+    // 1 — Split
+    `<div style="width:100%;height:100%;display:flex;background:#111;"><div style="flex:0 0 58%;overflow:hidden;">${phImg}</div><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 14px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,20px);font-weight:700;color:#f2ebe0;line-height:1.15;margin-bottom:10px;">${chTitle}</div>${chText?`<div style="font-size:11px;line-height:1.65;color:rgba(242,235,224,.55);font-style:italic;">${chText.substring(0,150)}...</div>`:''}</div></div>`,
+    // 2 — My pov / Your pov
+    `<div style="width:100%;height:100%;display:flex;gap:2px;background:#000;"><div style="flex:1;overflow:hidden;position:relative;">${phImg}<div style="position:absolute;bottom:8px;left:8px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">${texts?.cap||'my pov'}</div></div><div style="flex:1;overflow:hidden;position:relative;">${phImg}<div style="position:absolute;bottom:8px;right:8px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">your pov</div></div></div>`,
+    // 3 — Collage asymétrique
+    `<div style="width:100%;height:100%;display:grid;grid-template-columns:3fr 2fr;grid-template-rows:1fr 1fr;gap:2px;background:#0a0a0a;"><div style="grid-row:span 2;overflow:hidden;">${phImg}</div><div style="overflow:hidden;">${phImg}</div><div style="overflow:hidden;">${phImg}</div></div>`,
+    // 4 — Typographique
+    `<div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:24px;"><div style="text-align:center;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,6.5vw,52px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${chTitle.toUpperCase()}</div>${chText?`<div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3vw,18px);margin-top:12px;color:#c9a05a;">${chText.split('.')[0]}.</div>`:''}<div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:16px;color:rgba(255,255,255,.2);">${names}</div></div></div>`,
+    // 5 — Dédicace
+    `<div style="width:100%;height:100%;background:#f5f0e8;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;text-align:center;"><div style="font-size:20px;color:#c9a05a;margin-bottom:14px;opacity:.4;">♥</div><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(14px,3.5vw,22px);font-style:italic;color:#333;line-height:1.7;max-width:280px;">"${chText||chTitle}"</div><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:18px;color:#aaa;">${names}</div></div>`,
+  ];
+
+  if(layouts[layoutIdx]){
+    AV.pages[pageIdx]={...page, html:layouts[layoutIdx], bg:layoutIdx===4?'#0a0806':layoutIdx===5?'#f5f0e8':page.bg};
+  }
+}
+
+function resetEdit(){
+  delete AV.edits[AV.cur];
+  AV.editState={};
+  // Regénérer la page d'origine si layout overridé
+  renderBookPreview();
+  avRender();
+  avBuildThumbs();
+  refreshEditor();
+}
+
+
 
 // Swipe tactile sur la page
 document.addEventListener('DOMContentLoaded',()=>{
