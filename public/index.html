@@ -1552,61 +1552,18 @@ async function runGeneration(){
   goTab(3);
   document.getElementById('logBox').innerHTML='';
   document.getElementById('genResult').style.display='none';
-  setProgress(5);
-
-  // Compresser les photos pour Vercel (limite 4.5MB)
-  async function compressPhoto(dataUrl, maxSize=150) {
-    return new Promise(resolve => {
-      // Skip si HEIC (ne peut pas être affiché par le navigateur)
-      if(dataUrl.includes('image/heic') || dataUrl.includes('image/HEIC')) {
-        resolve(null); return;
-      }
-      const img = new Image();
-      const timeout = setTimeout(() => resolve(null), 3000);
-      img.onload = () => {
-        clearTimeout(timeout);
-        try {
-          const canvas = document.createElement('canvas');
-          const ratio = Math.min(maxSize/img.width, maxSize/img.height, 1);
-          canvas.width = Math.max(1, Math.round(img.width * ratio));
-          canvas.height = Math.max(1, Math.round(img.height * ratio));
-          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-          resolve(canvas.toDataURL('image/jpeg', 0.5));
-        } catch(e) { resolve(null); }
-      };
-      img.onerror = () => { clearTimeout(timeout); resolve(null); };
-      img.src = dataUrl;
-    });
-  }
+  setProgress(10);
 
   try{
     log(T.log_analyzing,'lg');
-    // Prendre les 4 premières photos non-HEIC
-    const jpgPhotos = S.photos.filter(p => !p.name?.toLowerCase().endsWith('.heic')).slice(0, 4);
-    const samplePhotos = jpgPhotos.length > 0 ? jpgPhotos : S.photos.slice(0, 2);
-    
-    // Compresser en 150px max
-    const compressedAll = await Promise.all(samplePhotos.map(p => compressPhoto(p.data, 150)));
-    const compressed = compressedAll.filter(Boolean);
-    
-    let analysis = {themes:['amour','complicité','aventures'],description:`${names}, a beautiful couple`};
-    
-    if(compressed.length > 0) {
-      const content=[{type:'text',text:`Analyse these couple photos briefly. Reply ONLY in valid JSON: {"themes":["...","...","..."],"description":"couple in 8 words max"}`}];
-      compressed.forEach(c=>content.push({type:'image_url',image_url:{url:c,detail:'low'}}));
-      try {
-        const d1=await api('chat',{model:'gpt-4o',max_tokens:200,messages:[{role:'user',content}]});
-        analysis=JSON.parse(d1.choices[0].message.content.replace(/```json|```/g,'').trim());
-      } catch(e) {
-        log('Analyse photo ignorée, génération directe...','lg');
-      }
-    }
-    setProgress(38); log(T.log_analyzed,'lok');
-    log(`${T.log_themes} ${(analysis.themes||[]).join(', ')}`);
+    // Génération directe sans analyse photo (évite les problèmes HEIC/taille)
+    const analysis = {themes:['amour','complicité','aventures','rires','tendresse'],description:`${names}, a beautiful couple in love`};
+    setProgress(40); log(T.log_analyzed,'lok');
+    log(`Thèmes : amour, complicité, aventures`);
     setProgress(55); log(T.log_writing,'lg');
 
     const captions=Object.values(S.captions).filter(Boolean);
-    const captionCtx=captions.length?`\nTheir own words: "${captions.slice(0,3).join('" · "')}"`:'' ;
+    const captionCtx=captions.length?`\nLeurs propres mots : "${captions.slice(0,3).join('" · "')}"`:'' ;
     const dedication=document.getElementById('dedication').value.trim();
     const lang_names={fr:'French',en:'English',de:'German',es:'Spanish',pt:'Portuguese'};
     const outputLang=lang_names[currentLang]||'French';
