@@ -4,7 +4,6 @@
     { "source": "/api/dalle",           "destination": "/api/chat"            },
     { "source": "/api/create-checkout", "destination": "/api/create-checkout" },
     { "source": "/success",             "destination": "/api/success"         },
-    { "source": "/cancel",              "destination": "/api/cancel"          },
-    { "source": "/",                    "destination": "/index.html"          }
+    { "source": "/cancel",              "destination": "/api/cancel"          }
   ]
 }
