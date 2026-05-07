@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
       'line_items[0][quantity]': '1',
       'mode': 'payment',
       'customer_email': email,
-      'success_url': `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}&name=${encodeURIComponent(name)}&pages=${pages}&price=${price}`,
+      'success_url': `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}&name=${encodeURIComponent(name)}&pages=${pages}&price=${price}&pdf_url=${encodeURIComponent(req.body.pdfUrl||'')}` ,
       'cancel_url': `${SITE_URL}/cancel`,
       'metadata[name]': name,
       'metadata[email]': email,
