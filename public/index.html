@@ -1527,7 +1527,10 @@ async function runGeneration(){
   const occasion=document.getElementById('occasion').value;
   const names=n2?`${n1} et ${n2}`:n1;
   const pages=selectedPages;
-  const nbChapters=pages<=20?4:pages<=30?5:6;
+  const nbChapters=pages<=20?4:pages<=30?6:8;
+  const withWishlist = true;
+  const withMemoryBox = pages >= 30;
+  const withLetterFutur = pages >= 20;
 
   document.getElementById('btnGen').disabled=true;
   goTab(3);
@@ -1554,23 +1557,32 @@ Write ENTIRELY in ${outputLang}.
 
 Couple: ${names}${meetDate?` — together since ${meetDate}`:''}
 Occasion: ${occasion}
-Description: ${analysis.description||'a magnificent couple'}
-Shared moments: ${(analysis.themes||[]).join(', ')}
-Photos: ${S.photos.length}
-Pages requested: ${pages} — write ${nbChapters} chapters${captionCtx}
+Photos: ${S.photos.length} — Pages: ${pages}
 Literary style: "${S.style}"
+${captionCtx}
 
-Create their love story:
-- A poetic memorable title (4-6 words)
-- A romantic introduction (3 sentences)
-- ${nbChapters} chapters: evocative title + 4-5 sentences each
-- A touching epilogue (2-3 sentences)
+Create a RICH, DETAILED love story album with the following structure.
+Every text must be LONG and POETIC (5-8 sentences minimum per section).
 
-Be sincere, poetic, moving. Adapt the tone to the "${S.style}" style.
-Reply ONLY in valid JSON without markdown:
-{"titre":"...","introduction":"...","chapitres":[{"titre":"...","texte":"..."}],"epilogue":"..."}`;
+REQUIRED JSON structure (reply ONLY with valid JSON, no markdown):
+{
+  "titre": "poetic album title (4-6 words)",
+  "introduction": "romantic introduction paragraph (5-6 sentences, poetic and personal)",
+  "chapitres": [
+    ${Array.from({length: nbChapters}, (_,i) => `{"titre": "chapter ${i+1} title", "texte": "chapter text (5-8 sentences, rich and detailed)"}`).join(',\n    ')}
+  ],
+  "epilogue": "touching epilogue (4-5 sentences)",
+  ${withWishlist ? `"wishlist": ["romantic wish 1", "wish 2 (travel/adventure)", "wish 3 (experience together)", "wish 4 (romantic)", "wish 5 (fun/silly)"],` : ''}
+  ${withLetterFutur ? `"futur": "a short letter to their future selves (3-4 sentences, warm and hopeful)",` : ''}
+  ${withMemoryBox ? `"souvenirs": ["meaningful memory 1 in one sentence", "memory 2", "memory 3"],` : ''}
+  "citation": "a beautiful love quote (real or invented, attributed to style)"
+}
 
-    const d2=await api('chat',{model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]});
+Important: Each chapter must fill a FULL ALBUM PAGE with rich content.
+Be sincere, poetic, moving. Adapt tone to "${S.style}" style.`;
+
+    const maxTok = pages <= 20 ? 3000 : pages <= 30 ? 4000 : 5000;
+    const d2=await api('chat',{model:'gpt-4o',max_tokens:maxTok,messages:[{role:'user',content:prompt}]});
     const rawContent = d2.choices[0].message.content;
     
     // Parsing robuste — extraire le JSON même si GPT ajoute du texte autour
@@ -1638,7 +1650,7 @@ function renderBookPreview(){
   // 1. COUVERTURE — photo pleine + titre overlay bas
   AV.pages.push(pg('Couverture','#0a0806',`
     <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-      ${photo(0)?`<img src="${photo(0)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';this.remove()"/>`:
+      ${photo(0)?`<img src="${photo(0)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';var d=document.createElement('div');d.style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.3';d.textContent='♥';this.parentElement.appendChild(d);"/>`:
       `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0e12,#2d1a22);"></div>`}
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 45%,transparent 65%);"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 18px;">
@@ -1682,7 +1694,7 @@ function renderBookPreview(){
     // Photo pleine page
     AV.pages.push(pg(`Chapitre ${i+1}`,'#000',`
       <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-        ${photo(pi)?`<img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';this.remove()"/>`:
+        ${photo(pi)?`<img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';var d=document.createElement('div');d.style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.3';d.textContent='♥';this.parentElement.appendChild(d);"/>`:
         `<div style="width:100%;height:100%;background:linear-gradient(135deg,${BG[i%BG.length]},#111);"></div>`}
         <div style="position:absolute;inset:0;background:${layout%2===0?'linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 50%)':'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 50%)'};"></div>
         <div style="position:absolute;${layout%2===0?'bottom:0;padding-bottom:18px;':'top:0;padding-top:18px;'}left:0;right:0;padding-left:18px;padding-right:18px;">
@@ -1755,43 +1767,69 @@ function renderBookPreview(){
     }
   });
 
-  // BUCKET LIST si sélectionnée
-  const bItems=typeof OPTIONS!=='undefined'?OPTIONS.bucket.filter(o=>selectedOptions[o.id]):[];
-  if(bItems.length>0){
-    AV.pages.push(pg('Notre bucket list','#f5f0e8',`
+  // WISHLIST depuis l'IA
+  if(wishlistItems.length > 0){
+    AV.pages.push(pg('Notre wishlist','#f5f0e8',`
       <div style="width:100%;height:100%;background:#f5f0e8;padding:24px 20px;display:flex;flex-direction:column;">
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,26px);font-weight:700;color:#111;margin-bottom:4px;">Notre bucket list</div>
-        <div style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:#888;margin-bottom:14px;">les aventures à vivre ensemble</div>
+        <div style="font-size:20px;margin-bottom:8px;text-align:center;">✨</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,24px);font-weight:700;color:#111;margin-bottom:4px;text-align:center;">Notre wishlist</div>
+        <div style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:#888;margin-bottom:14px;text-align:center;">les aventures à vivre ensemble</div>
         <div style="display:flex;flex-direction:column;gap:0;flex:1;overflow:hidden;">
-          ${bItems.slice(0,7).map(b=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.07);">
-              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #c9a05a;flex-shrink:0;"></div>
-              <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:#333;">${b.title}</div>
+          ${wishlistItems.slice(0,6).map((w,i)=>`
+            <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.07);">
+              <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #c9a05a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#c9a05a;">${i+1}</div>
+              <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:#333;">${w}</div>
             </div>`).join('')}
         </div>
       </div>`));
   }
 
+  // BOÎTE À SOUVENIRS (si 30+ pages)
+  if(souvenirs.length > 0){
+    AV.pages.push(pg('Nos souvenirs','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,160,90,.5);margin-bottom:16px;text-align:center;">nos moments inoubliables</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,28px);font-weight:700;color:#fff;text-align:center;margin-bottom:20px;">Boîte à<br><em style="color:#c9a05a;">souvenirs</em></div>
+        ${souvenirs.map(s=>`
+          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.6);line-height:1.7;text-align:center;padding:8px 0;border-bottom:1px solid rgba(201,160,90,.1);">"${s}"</div>`).join('')}
+      </div>`));
+  }
+
+  // CITATION
+  if(citation){
+    AV.pages.push(pg('Citation','#1a2744',`
+      <div style="width:100%;height:100%;background:#1a2744;display:flex;align-items:center;justify-content:center;padding:32px;flex-direction:column;text-align:center;">
+        <div style="font-size:28px;color:rgba(201,160,90,.3);margin-bottom:16px;line-height:1;">"</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,20px);font-style:italic;color:#e8f0ff;line-height:1.8;max-width:280px;">${citation}</div>
+        <div style="font-size:28px;color:rgba(201,160,90,.3);margin-top:12px;line-height:1;">"</div>
+      </div>`));
+  }
+
   // ÉPILOGUE
-  if(S.story.epilogue&&photo(nph-2)){
-    AV.pages.push(pg('Épilogue','#000',`
-      <div style="width:100%;height:100%;position:relative;">
-        <img src="${photo(nph-2)}" style="width:100%;height:65%;object-fit:cover;display:block;"/>
-        <div style="background:#0a0806;padding:18px 20px;">
+  if(S.story.epilogue){
+    AV.pages.push(pg('Épilogue','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;display:flex;flex-direction:column;">
+        ${photo(nph-2)?`<img src="${photo(nph-2)}" style="width:100%;height:55%;object-fit:cover;display:block;" onerror="this.style.display='none'"/>`:''}
+        <div style="flex:1;background:#0a0806;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;">
           <div style="font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,160,90,.5);margin-bottom:8px;">Épilogue</div>
-          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.6);line-height:1.7;">"${S.story.epilogue.substring(0,200)}"</div>
+          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.7);line-height:1.8;">"${S.story.epilogue.substring(0,250)}"</div>
         </div>
       </div>`));
   }
 
-  // 4ÈME COUVERTURE
-  AV.pages.push(pg('Fin · Votre futur','#0a0806',`
-    <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:28px;text-align:center;position:relative;">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);opacity:.3;"></div>
-      <div style="font-family:Georgia,serif;font-size:clamp(12px,3vw,16px);font-style:italic;color:rgba(255,255,255,.35);line-height:1.8;max-width:280px;margin-bottom:20px;">"${S.story.futur||closingMsg||'Ce livre n\'est pas une fin. C\'est une promesse — celle d\'écrire ensemble encore des milliers de pages.'}"</div>
-      <div style="width:24px;height:1px;background:#c9a05a;opacity:.3;margin-bottom:14px;"></div>
-      <div style="font-size:9px;color:rgba(201,160,90,.35);letter-spacing:.2em;text-transform:uppercase;">Noustalgie · ${new Date().getFullYear()}</div>
-    </div>`));
+  // LETTRE DU FUTUR
+  if(S.story.futur||closingMsg){
+    AV.pages.push(pg('Lettre du futur','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:28px;text-align:center;position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);opacity:.3;"></div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,160,90,.4);margin-bottom:16px;">une lettre pour vous, dans quelques années</div>
+        <div style="font-family:Georgia,serif;font-size:clamp(12px,3vw,16px);font-style:italic;color:rgba(255,255,255,.4);line-height:1.9;max-width:280px;margin-bottom:20px;">"${(S.story.futur||closingMsg).substring(0,280)}"</div>
+        <div style="width:24px;height:1px;background:#c9a05a;opacity:.3;margin-bottom:14px;"></div>
+        <div style="font-size:9px;color:rgba(201,160,90,.3);letter-spacing:.2em;text-transform:uppercase;">Noustalgie · ${new Date().getFullYear()}</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);opacity:.3;"></div>
+      </div>`));
+  }
+
 
   AV.cur=0;
   avRender();
