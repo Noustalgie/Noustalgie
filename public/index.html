@@ -2042,196 +2042,6 @@ function renderBookPreview(){
   S.done.add(4);
 }
 
-  // 1. COUVERTURE — photo pleine + titre overlay bas
-  AV.pages.push(pg('Couverture','#0a0806',`
-    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-      ${photo(0)?`<img src="${photo(0)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';var d=document.createElement('div');d.style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.3';d.textContent='♥';this.parentElement.appendChild(d);"/>`:
-      `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0e12,#2d1a22);"></div>`}
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 45%,transparent 65%);"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 18px;">
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,6vw,42px);font-weight:700;color:#fff;line-height:.95;letter-spacing:-.01em;">${S.story.titre||'Notre Histoire'}</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.22em;text-transform:uppercase;margin-top:8px;">${names} · ${new Date().getFullYear()}</div>
-      </div>
-    </div>`));
-  pi=1;
-
-  // 2. DÉDICACE — fond clair
-  if(dedication){
-    AV.pages.push(pg('Dédicace','#f5f0e8',`
-      <div style="width:100%;height:100%;background:#f5f0e8;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;text-align:center;">
-        <div style="font-size:24px;color:#c9a05a;margin-bottom:18px;opacity:.4;">♥</div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(14px,3.5vw,20px);font-style:italic;color:#333;line-height:1.7;max-width:280px;">"${dedication}"</div>
-        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:18px;color:#aaa;">${names}</div>
-      </div>`));
-  }
-
-  // 3. PAGE TYPO — intro
-  if(S.story.introduction){
-    const introWords=S.story.introduction.split(' ');
-    const introLine1=introWords.slice(0,3).join(' ');
-    const introLine2=S.story.introduction.split('.')[0].substring(0,60);
-    AV.pages.push(pg('Introduction','#0a0806',`
-      <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;">
-        <div style="position:absolute;font-family:Georgia,serif;font-size:120px;font-weight:900;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;user-select:none;">♥</div>
-        <div style="text-align:center;position:relative;z-index:1;">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,7vw,52px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${introWords.slice(0,3).join('<br>')}</div>
-          <div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3vw,18px);margin-top:12px;color:#c9a05a;max-width:280px;margin-left:auto;margin-right:auto;line-height:1.4;">${introLine2}${S.story.introduction.split('.')[0].length>60?'...':''}</div>
-          <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:16px;color:rgba(255,255,255,.2);">${names}</div>
-        </div>
-      </div>`));
-  }
-
-  // CHAPITRES — layouts variés photo-first
-  (S.story.chapitres||[]).forEach((ch,i)=>{
-    const cap=S.captions[pi]||ch.caption||'';
-    const layout=i%5;
-
-    // Photo pleine page
-    AV.pages.push(pg(`Chapitre ${i+1}`,'#000',`
-      <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-        ${photo(pi)?`<img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1210,#2d1a22)';var d=document.createElement('div');d.style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.3';d.textContent='♥';this.parentElement.appendChild(d);"/>`:
-        `<div style="width:100%;height:100%;background:linear-gradient(135deg,${BG[i%BG.length]},#111);"></div>`}
-        <div style="position:absolute;inset:0;background:${layout%2===0?'linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 50%)':'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 50%)'};"></div>
-        <div style="position:absolute;${layout%2===0?'bottom:0;padding-bottom:18px;':'top:0;padding-top:18px;'}left:0;right:0;padding-left:18px;padding-right:18px;">
-          <div style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:rgba(255,255,255,.55);margin-bottom:4px;">Chapitre ${i+1}</div>
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,28px);font-weight:700;color:#fff;line-height:1.1;">${ch.titre}</div>
-          ${cap?`<div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:6px;font-style:italic;">"${cap}"</div>`:''}
-        </div>
-      </div>`));
-    pi++;
-
-    // Split photo + texte
-    if(photo(pi)){
-      const isRight=i%2===0;
-      AV.pages.push(pg(`${ch.titre}`,'#111',`
-        <div style="width:100%;height:100%;display:flex;${isRight?'':'flex-direction:row-reverse'}">
-          <div style="flex:0 0 58%;overflow:hidden;">
-            <img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
-          </div>
-          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 16px;background:#111;">
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,160,90,.6);margin-bottom:10px;">Ch. ${i+1}</div>
-            <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,18px);font-weight:700;color:#f2ebe0;line-height:1.15;margin-bottom:10px;">${ch.titre}</div>
-            <div style="font-size:clamp(10px,2.5vw,12px);line-height:1.7;color:rgba(242,235,224,.55);font-style:italic;">${ch.texte.substring(0,140)}${ch.texte.length>140?'...':''}</div>
-          </div>
-        </div>`));
-      pi++;
-    }
-
-    // Collage 2 photos "my pov / your pov"
-    if(photo(pi)&&photo(pi+1)&&i%2===1){
-      AV.pages.push(pg('My pov · Your pov','#000',`
-        <div style="width:100%;height:100%;display:flex;gap:2px;background:#000;">
-          <div style="flex:1;overflow:hidden;position:relative;">
-            <img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 40%);"></div>
-            <div style="position:absolute;bottom:10px;left:10px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">${S.captions[pi]||'my pov'}</div>
-          </div>
-          <div style="flex:1;overflow:hidden;position:relative;">
-            <img src="${photo(pi+1)}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 40%);"></div>
-            <div style="position:absolute;bottom:10px;right:10px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">${S.captions[pi+1]||'your pov'}</div>
-          </div>
-        </div>`));
-      pi+=2;
-    }
-
-    // Page typo colorée tous les 3 chapitres
-    if(i%3===2){
-      const palettes=[['#0a0806','#fff','#c9a05a'],['#1a2744','#e8f0ff','rgba(232,240,255,.4)'],['#f5f0e8','#111','#c9a05a']];
-      const p=palettes[i%palettes.length];
-      AV.pages.push(pg('Moment','#0a0806',`
-        <div style="width:100%;height:100%;background:${p[0]};display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden;">
-          <div style="position:absolute;font-family:'Playfair Display',Georgia,serif;font-size:clamp(80px,22vw,160px);font-weight:900;color:rgba(255,255,255,.03);line-height:1;pointer-events:none;">${ch.titre.split(' ')[0]?.toUpperCase()||'♥'}</div>
-          <div style="text-align:center;position:relative;z-index:1;">
-            <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,6.5vw,48px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:${p[1]};">${ch.titre.toUpperCase()}</div>
-            <div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3.5vw,20px);margin-top:10px;color:${p[2]};">${ch.texte.split('.')[0]}.</div>
-            <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:16px;color:${p[2]};opacity:.5;">${names}</div>
-          </div>
-        </div>`));
-    }
-
-    // Collage asymétrique 3 photos tous les 4 chapitres
-    if(i%4===3&&photo(pi)&&photo(pi+1)&&photo(pi+2)){
-      AV.pages.push(pg('Nos moments','#0a0a0a',`
-        <div style="width:100%;height:100%;display:grid;grid-template-columns:3fr 2fr;grid-template-rows:1fr 1fr;gap:2px;background:#0a0a0a;">
-          <div style="grid-row:span 2;overflow:hidden;"><img src="${photo(pi)}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>
-          <div style="overflow:hidden;"><img src="${photo(pi+1)}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>
-          <div style="overflow:hidden;"><img src="${photo(pi+2)}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>
-        </div>`));
-      pi+=3;
-    }
-  });
-
-  // WISHLIST depuis l'IA
-  if(wishlistItems.length > 0){
-    AV.pages.push(pg('Notre wishlist','#f5f0e8',`
-      <div style="width:100%;height:100%;background:#f5f0e8;padding:24px 20px;display:flex;flex-direction:column;">
-        <div style="font-size:20px;margin-bottom:8px;text-align:center;">✨</div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,24px);font-weight:700;color:#111;margin-bottom:4px;text-align:center;">Notre wishlist</div>
-        <div style="font-family:Georgia,serif;font-size:11px;font-style:italic;color:#888;margin-bottom:14px;text-align:center;">les aventures à vivre ensemble</div>
-        <div style="display:flex;flex-direction:column;gap:0;flex:1;overflow:hidden;">
-          ${wishlistItems.slice(0,6).map((w,i)=>`
-            <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.07);">
-              <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #c9a05a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#c9a05a;">${i+1}</div>
-              <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:#333;">${w}</div>
-            </div>`).join('')}
-        </div>
-      </div>`));
-  }
-
-  // BOÎTE À SOUVENIRS (si 30+ pages)
-  if(souvenirs.length > 0){
-    AV.pages.push(pg('Nos souvenirs','#0a0806',`
-      <div style="width:100%;height:100%;background:#0a0806;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;">
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,160,90,.5);margin-bottom:16px;text-align:center;">nos moments inoubliables</div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,28px);font-weight:700;color:#fff;text-align:center;margin-bottom:20px;">Boîte à<br><em style="color:#c9a05a;">souvenirs</em></div>
-        ${souvenirs.map(s=>`
-          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.6);line-height:1.7;text-align:center;padding:8px 0;border-bottom:1px solid rgba(201,160,90,.1);">"${s}"</div>`).join('')}
-      </div>`));
-  }
-
-  // CITATION
-  if(citation){
-    AV.pages.push(pg('Citation','#1a2744',`
-      <div style="width:100%;height:100%;background:#1a2744;display:flex;align-items:center;justify-content:center;padding:32px;flex-direction:column;text-align:center;">
-        <div style="font-size:28px;color:rgba(201,160,90,.3);margin-bottom:16px;line-height:1;">"</div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,20px);font-style:italic;color:#e8f0ff;line-height:1.8;max-width:280px;">${citation}</div>
-        <div style="font-size:28px;color:rgba(201,160,90,.3);margin-top:12px;line-height:1;">"</div>
-      </div>`));
-  }
-
-  // ÉPILOGUE
-  if(S.story.epilogue){
-    AV.pages.push(pg('Épilogue','#0a0806',`
-      <div style="width:100%;height:100%;background:#0a0806;display:flex;flex-direction:column;">
-        ${photo(nph-2)?`<img src="${photo(nph-2)}" style="width:100%;height:55%;object-fit:cover;display:block;" onerror="this.style.display='none'"/>`:''}
-        <div style="flex:1;background:#0a0806;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;">
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,160,90,.5);margin-bottom:8px;">Épilogue</div>
-          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.7);line-height:1.8;">"${S.story.epilogue.substring(0,250)}"</div>
-        </div>
-      </div>`));
-  }
-
-  // LETTRE DU FUTUR
-  if(S.story.futur||closingMsg){
-    AV.pages.push(pg('Lettre du futur','#0a0806',`
-      <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:28px;text-align:center;position:relative;">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);opacity:.3;"></div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,160,90,.4);margin-bottom:16px;">une lettre pour vous, dans quelques années</div>
-        <div style="font-family:Georgia,serif;font-size:clamp(12px,3vw,16px);font-style:italic;color:rgba(255,255,255,.4);line-height:1.9;max-width:280px;margin-bottom:20px;">"${(S.story.futur||closingMsg).substring(0,280)}"</div>
-        <div style="width:24px;height:1px;background:#c9a05a;opacity:.3;margin-bottom:14px;"></div>
-        <div style="font-size:9px;color:rgba(201,160,90,.3);letter-spacing:.2em;text-transform:uppercase;">Noustalgie · ${new Date().getFullYear()}</div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);opacity:.3;"></div>
-      </div>`));
-  }
-
-
-  AV.cur=0;
-  avRender();
-  avBuildThumbs();
-  S.done.add(4);
-}
-
 function avRender(){
   const p=AV.pages[AV.cur];
   if(!p)return;
@@ -2280,11 +2090,14 @@ function avRender(){
 function avBuildThumbs(){
   const container=document.getElementById('avThumbs');
   if(!container)return;
-  container.innerHTML=AV.pages.map((p,i)=>`
-    <div class="av-thumb" onclick="AV.cur=${i};avRender()" style="width:42px;height:42px;flex-shrink:0;border-radius:3px;overflow:hidden;cursor:pointer;outline:${i===0?'2px solid #c9a05a':'none'};outline-offset:1px;transition:outline .15s;background:#1a1a1a;position:relative;">
-      <div style="width:100%;height:100%;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,.2);">${i+1}</div>
-      ${(AV.edits[i]&&Object.keys(AV.edits[i]).length)?`<div style="position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#c9a05a;"></div>`:''}
-    </div>`).join('');
+  container.innerHTML=AV.pages.map((p,i)=>{
+    const hasEdit=AV.edits&&AV.edits[i]&&Object.keys(AV.edits[i]).length;
+    const outline=i===AV.cur?'2px solid #c9a05a':'none';
+    return '<div class="av-thumb" onclick="AV.cur='+i+';avRender()" style="width:42px;height:42px;flex-shrink:0;border-radius:3px;overflow:hidden;cursor:pointer;outline:'+outline+';outline-offset:1px;background:#1a1a1a;position:relative;">'
+      +'<div style="width:100%;height:100%;background:'+p.bg+';display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,.2);">'+(i+1)+'</div>'
+      +(hasEdit?'<div style="position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#c9a05a;"></div>':'')
+      +'</div>';
+  }).join('');
 }
 
 function avNext(){if(AV.cur<AV.pages.length-1){AV.cur++;avRender();}}
