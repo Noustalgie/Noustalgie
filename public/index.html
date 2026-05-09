@@ -1552,34 +1552,49 @@ async function runGeneration(){
     const lang_names={fr:'French',en:'English',de:'German',es:'Spanish',pt:'Portuguese'};
     const outputLang=lang_names[currentLang]||'French';
 
-    const prompt=`You are a talented romantic author creating high-end couple photo albums.
+    const prompt=`You are a brilliant romantic author creating a luxury couple photo album.
 Write ENTIRELY in ${outputLang}.
 
 Couple: ${names}${meetDate?` — together since ${meetDate}`:''}
 Occasion: ${occasion}
-Photos: ${S.photos.length} — Pages: ${pages}
 Literary style: "${S.style}"
 ${captionCtx}
 
-Create a RICH, DETAILED love story album with the following structure.
-Every text must be LONG and POETIC (5-8 sentences minimum per section).
+Generate content for a magazine-style photo album. 
+Reply ONLY with valid JSON (no markdown, no code blocks):
 
-REQUIRED JSON structure (reply ONLY with valid JSON, no markdown):
 {
-  "titre": "poetic album title (4-6 words)",
-  "introduction": "romantic introduction paragraph (5-6 sentences, poetic and personal)",
-  "chapitres": [
-    ${Array.from({length: nbChapters}, (_,i) => `{"titre": "chapter ${i+1} title", "texte": "chapter text (5-8 sentences, rich and detailed)"}`).join(',\n    ')}
+  "titre": "poetic album title (4-6 words, evocative)",
+  "notes_amour": [
+    "short love note 1 (1-2 sentences, intimate and personal)",
+    "short love note 2 (different tone, tender)",
+    "short love note 3 (poetic)",
+    "short love note 4 (surprising, unexpected)"
   ],
-  "epilogue": "touching epilogue (4-5 sentences)",
-  ${withWishlist ? `"wishlist": ["romantic wish 1", "wish 2 (travel/adventure)", "wish 3 (experience together)", "wish 4 (romantic)", "wish 5 (fun/silly)"],` : ''}
-  ${withLetterFutur ? `"futur": "a short letter to their future selves (3-4 sentences, warm and hopeful)",` : ''}
-  ${withMemoryBox ? `"souvenirs": ["meaningful memory 1 in one sentence", "memory 2", "memory 3"],` : ''}
-  "citation": "a beautiful love quote (real or invented, attributed to style)"
+  "aimes_chez_toi": [
+    "specific thing I love about you (concrete, original, not cliché)",
+    "thing 2", "thing 3", "thing 4", "thing 5", "thing 6", "thing 7", "thing 8"
+  ],
+  "disputes": [
+    "funny recurring disagreement 1 (humorous, recognizable)",
+    "funny dispute 2",
+    "funny dispute 3"
+  ],
+  "film": "if your love was a movie, describe it in 3 sentences (genre, atmosphere, ending)",
+  "meteo": "your love as a weather forecast — poetic and specific (3 sentences)",
+  "wishlist": [
+    "dream to do together 1 (travel/adventure)",
+    "wish 2 (experience)", 
+    "wish 3 (small romantic gesture)",
+    "wish 4 (fun/silly)",
+    "wish 5 (deep/meaningful)"
+  ],
+  "ce_que_je_pas_dire": "optional prompt hint for the handwritten page (not displayed, just for context)",
+  "futur": "letter to your future selves in 3-4 years (warm, hopeful, slightly nostalgic)",
+  "citation": "a beautiful love quote — real or invented — poetic and memorable"
 }
 
-Important: Each chapter must fill a FULL ALBUM PAGE with rich content.
-Be sincere, poetic, moving. Adapt tone to "${S.style}" style.`;
+Be specific, original, NOT cliché. Make it feel personal and real.`;
 
     const maxTok = pages <= 20 ? 3000 : pages <= 30 ? 4000 : 5000;
     const d2=await api('chat',{model:'gpt-4o',max_tokens:maxTok,messages:[{role:'user',content:prompt}]});
@@ -1633,19 +1648,392 @@ let AV = { pages:[], cur:0 };
 
 function renderBookPreview(){
   if(!S.story){ return; }
-  const n1=document.getElementById('name1').value||''; 
-  const n2=document.getElementById('name2').value||'';
+  const n1=document.getElementById('name1').value||'toi'; 
+  const n2=document.getElementById('name2').value||'vous';
   const dedication=document.getElementById('dedication').value.trim();
   const closingMsg=document.getElementById('closingMsg').value.trim();
   const names=n2?`${n1} & ${n2}`:n1;
   const nph=S.photos.length||1;
   let pi=0;
 
-  const BG=['#0a0806','#f5f0e8','#0a0806','#1a2744','#111','#0a0a0a','#f5f0e8','#0a0806'];
-  function pg(label,bgColor,content){return{label,bg:bgColor,html:content};}
-  function photo(i){return S.photos[i%nph]?S.photos[i%nph].data:null;}
+  function pg(label,bg,html){return{label,bg,html};}
+  function ph(i){return S.photos[i%nph]?.data||null;}
+  function img(i,styles='width:100%;height:100%;object-fit:cover;display:block;'){
+    const src=ph(i);
+    if(!src) return `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1210,#2d1822);display:flex;align-items:center;justify-content:center;"><span style="font-size:2rem;opacity:.15;">♥</span></div>`;
+    return `<img src="${src}" style="${styles}" onerror="this.outerHTML='<div style=\\'width:100%;height:100%;background:linear-gradient(135deg,#1a1210,#2d1822);display:flex;align-items:center;justify-content:center;\\'><span style=\\'font-size:2rem;opacity:.15;\\'>♥</span></div>'"/>`;
+  }
 
-  AV.pages=[];
+  const story = S.story;
+  const notes = story.notes_amour || [];
+  const aimes = story.aimes_chez_toi || [];
+  const disputes = story.disputes || [];
+  const film = story.film || '';
+  const meteo = story.meteo || '';
+  const citation = story.citation || '';
+  const futur = story.futur || closingMsg || '';
+  const ceQueJePasDir = story.ce_que_je_pas_dire || '';
+
+  AV.pages = [];
+
+  // ═══════════════════════════════════════════
+  // 1. COUVERTURE — pleine page cinématique
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('Couverture','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(pi++)}
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.1) 50%,transparent 70%);"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:22px 20px;">
+        <div style="font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:rgba(201,160,90,.7);margin-bottom:10px;">Album Photo</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,6vw,40px);font-weight:700;color:#fff;line-height:.95;letter-spacing:-.02em;">${story.titre||names}</div>
+        <div style="width:32px;height:1px;background:#c9a05a;margin:12px 0;opacity:.6;"></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.18em;text-transform:uppercase;">${names} · ${new Date().getFullYear()}</div>
+      </div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 2. DÉDICACE — manuscrite sur fond blanc cassé
+  // ═══════════════════════════════════════════
+  if(dedication){
+    AV.pages.push(pg('Dédicace','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:36px;text-align:center;position:relative;">
+        <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;opacity:.6;">Pour toi</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,22px);font-style:italic;color:#2a2018;line-height:1.8;max-width:260px;">"${dedication}"</div>
+        <div style="width:20px;height:1px;background:#c9a05a;margin:20px auto;opacity:.4;"></div>
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#999;">${names}</div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 3. PHOTO PLEINE — éditoriale, pas de texte
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(pi++)}
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,.04);"></div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 4. "CE QUE J'AIME CHEZ TOI" — liste poétique
+  // ═══════════════════════════════════════════
+  if(aimes.length > 0){
+    AV.pages.push(pg('Ce que j\'aime chez toi','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;padding:24px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">par ${n1}</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,21px);font-weight:700;color:#1a1208;line-height:1.1;margin-bottom:16px;">Ce que j'aime<br>chez toi</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:0;">
+          ${aimes.slice(0,7).map((a,i)=>`
+            <div style="display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.06);">
+              <span style="font-family:Georgia,serif;font-size:9px;color:#c9a05a;flex-shrink:0;">${String(i+1).padStart(2,'0')}</span>
+              <span style="font-family:Georgia,serif;font-size:clamp(10px,2.8vw,13px);font-style:italic;color:#3a2e22;line-height:1.4;">${a}</span>
+            </div>`).join('')}
+        </div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 5. DOUBLE PORTRAIT — 2 photos côte à côte façon magazine
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#0a0806',`
+    <div style="width:100%;height:100%;display:flex;gap:2px;background:#0a0806;">
+      <div style="flex:1;overflow:hidden;position:relative;">${img(pi++)}</div>
+      <div style="flex:1;overflow:hidden;position:relative;">${img(pi++)}</div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 6. NOTE D'AMOUR — fond sombre, texte court lumineux
+  // ═══════════════════════════════════════════
+  if(notes[0]){
+    AV.pages.push(pg('','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:32px;position:relative;overflow:hidden;">
+        <div style="position:absolute;font-family:'Playfair Display',Georgia,serif;font-size:clamp(120px,35vw,220px);font-weight:900;color:rgba(255,255,255,.015);line-height:.8;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;">♥</div>
+        <div style="text-align:center;position:relative;z-index:1;max-width:280px;">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,28px);font-style:italic;font-weight:400;color:#f2ebe0;line-height:1.65;">"${notes[0]}"</div>
+          <div style="width:20px;height:1px;background:#c9a05a;margin:16px auto;opacity:.4;"></div>
+          <div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,160,90,.4);">${n1} à ${n2}</div>
+        </div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 7. PHOTO MAGAZINE — pleine page + caption minimal en bas
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(pi++)}
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 16px;">
+        <div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);">${names}</div>
+      </div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 8. "CE QUE JE N'ARRIVE PAS À TE DIRE EN FACE" — à remplir à la main
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('À remplir à la main','#f7f3ed',`
+    <div style="width:100%;height:100%;background:#f7f3ed;padding:28px 22px;display:flex;flex-direction:column;">
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:14px;opacity:.7;">une page pour toi seul·e</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,18px);font-weight:700;color:#1a1208;line-height:1.2;margin-bottom:20px;">Ce que je n'arrive pas<br>à te dire en face...</div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:0;">
+        ${[...Array(7)].map(()=>`
+          <div style="border-bottom:1px solid rgba(0,0,0,.12);height:32px;margin-bottom:2px;"></div>`).join('')}
+      </div>
+      <div style="margin-top:16px;text-align:right;font-family:Georgia,serif;font-size:9px;font-style:italic;color:#bbb;">— à écrire à la main dans ton livre</div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 9. CONTACT SHEET — grille 4 photos, esthétique photographique
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('Nos photos','#111',`
+    <div style="width:100%;height:100%;background:#111;padding:8px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;">
+      ${[0,1,2,3].map(j=>`
+        <div style="overflow:hidden;position:relative;border-radius:2px;">
+          ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9) contrast(1.05);')}
+        </div>`).join('')}
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 10. "NOS DISPUTES PRÉFÉRÉES" — humour
+  // ═══════════════════════════════════════════
+  if(disputes.length > 0){
+    AV.pages.push(pg('Nos désaccords préférés','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,160,90,.5);margin-bottom:8px;">avec amour & humour</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,22px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;">Nos désaccords<br><em style="color:#c9a05a;">préférés</em></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+          ${disputes.map((d,i)=>`
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:22px;height:22px;border-radius:50%;background:rgba(201,160,90,.1);border:1px solid rgba(201,160,90,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:#c9a05a;">${i+1}</div>
+              <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,13px);font-style:italic;color:rgba(242,235,224,.55);line-height:1.6;">${d}</div>
+            </div>`).join('')}
+        </div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 11. PHOTO CINÉMATIQUE — pleine page, teinte dramatique
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.1) saturate(.85);')}
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,.15);"></div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 12. "SI ON ÉTAIT UN FILM" — description cinématographique
+  // ═══════════════════════════════════════════
+  if(film){
+    AV.pages.push(pg('Si on était un film','#1a2744',`
+      <div style="width:100%;height:100%;background:#1a2744;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,240,255,.3);margin-bottom:12px;">Genre : Romance</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#e8f0ff;line-height:.95;margin-bottom:16px;">Si on était<br><em style="color:#c9a05a;">un film</em></div>
+        <div style="width:24px;height:1px;background:rgba(201,160,90,.3);margin-bottom:16px;"></div>
+        <div style="font-family:Georgia,serif;font-size:clamp(12px,3.2vw,15px);font-style:italic;color:rgba(232,240,255,.55);line-height:1.75;">${film}</div>
+        <div style="margin-top:auto;padding-top:16px;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,160,90,.3);">Réalisé par ${n1} & ${n2}</div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 13. STRIP FILMIQUE — 3 photos horizontales façon pellicule
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#0a0806',`
+    <div style="width:100%;height:100%;background:#0a0806;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0;">
+      ${[0,1,2].map(j=>`
+        <div style="flex:1;overflow:hidden;position:relative;">
+          ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}
+        </div>`).join('')}
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 14. NOTE D'AMOUR 2 — plus intime
+  // ═══════════════════════════════════════════
+  if(notes[1]){
+    AV.pages.push(pg('','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;display:flex;align-items:center;justify-content:center;padding:36px;flex-direction:column;text-align:center;">
+        <div style="font-size:32px;color:#c9a05a;opacity:.2;margin-bottom:12px;font-family:Georgia,serif;">"</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(14px,4vw,20px);font-style:italic;color:#2a1e12;line-height:1.8;max-width:260px;">${notes[1]}</div>
+        <div style="font-size:32px;color:#c9a05a;opacity:.2;margin-top:8px;font-family:Georgia,serif;">"</div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 15. PHOTO POLAROID — 3 photos avec bords blancs éparpillées
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('Nos polaroïds','#1a1410',`
+    <div style="width:100%;height:100%;background:#1a1410;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;width:120px;top:12%;left:8%;transform:rotate(-6deg);background:#fff;padding:6px 6px 18px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+        <div style="width:100%;aspect-ratio:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+        <div style="font-size:7px;text-align:center;color:#888;margin-top:4px;font-family:Georgia,serif;font-style:italic;">${names}</div>
+      </div>
+      <div style="position:absolute;width:130px;top:30%;left:50%;transform:translateX(-50%) rotate(2deg);background:#fff;padding:6px 6px 18px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+        <div style="width:100%;aspect-ratio:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+        <div style="font-size:7px;text-align:center;color:#888;margin-top:4px;font-family:Georgia,serif;font-style:italic;">♥</div>
+      </div>
+      <div style="position:absolute;width:115px;bottom:10%;right:6%;transform:rotate(5deg);background:#fff;padding:6px 6px 18px;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+        <div style="width:100%;aspect-ratio:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+        <div style="font-size:7px;text-align:center;color:#888;margin-top:4px;font-family:Georgia,serif;font-style:italic;">${new Date().getFullYear()}</div>
+      </div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 16. "VOTRE MÉTÉO D'AMOUR" — poétique
+  // ═══════════════════════════════════════════
+  if(meteo){
+    AV.pages.push(pg('Votre météo d\'amour','#0a1628',`
+      <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a1628 0%,#1a2744 60%,#0d1520 100%);padding:28px 22px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-20px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(201,160,90,.08) 0%,transparent 70%);"></div>
+        <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,90,.4);margin-bottom:16px;">bulletin météo · ${new Date().getFullYear()}</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#e8f0ff;line-height:.95;margin-bottom:20px;">Votre météo<br><em style="color:#c9a05a;">d'amour</em></div>
+        <div style="font-family:Georgia,serif;font-size:clamp(12px,3.2vw,15px);font-style:italic;color:rgba(232,240,255,.5);line-height:1.8;">${meteo}</div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 17. PHOTO PLEINE — grand angle, respiration
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(pi++)}
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 18. SPLIT ASYMÉTRIQUE — photo 65% + note courte
+  // ═══════════════════════════════════════════
+  if(notes[2]){
+    AV.pages.push(pg('','#0a0806',`
+      <div style="width:100%;height:100%;display:flex;flex-direction:row-reverse;">
+        <div style="flex:0 0 62%;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+        <div style="flex:1;background:#0a0806;display:flex;flex-direction:column;justify-content:center;padding:20px 16px;">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(12px,3.5vw,17px);font-style:italic;color:rgba(242,235,224,.65);line-height:1.75;">"${notes[2]}"</div>
+          <div style="width:16px;height:1px;background:#c9a05a;margin:14px 0;opacity:.4;"></div>
+          <div style="font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,160,90,.35);">${names}</div>
+        </div>
+      </div>`));
+  } else {
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 19. "CE QU'ON NE SAIT PAS ENCORE" — mystère et futur
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('Ce qu\'on ne sait pas encore','#0a0806',`
+    <div style="width:100%;height:100%;background:#0a0806;padding:32px 24px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,160,90,.06);"></div>
+      <div style="position:absolute;bottom:-20px;right:-20px;width:140px;height:140px;border-radius:50%;border:1px solid rgba(201,160,90,.04);"></div>
+      <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,90,.35);margin-bottom:16px;">à venir</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,30px);font-weight:700;color:#fff;line-height:1;margin-bottom:20px;">Ce qu'on<br>ne sait pas<br><em style="color:#c9a05a;">encore</em></div>
+      <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.3);line-height:1.9;">Les voyages pas encore faits.<br>Les fous rires pas encore nés.<br>Les photos pas encore prises.<br>Les promesses pas encore dites.</div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 20. PHOTO PLEINE + NOTE DE L'IA si dispo
+  // ═══════════════════════════════════════════
+  if(notes[3]){
+    AV.pages.push(pg('','#000',`
+      <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+        ${img(pi++)}
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 55%);"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 16px;">
+          <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(255,255,255,.6);line-height:1.65;">"${notes[3]}"</div>
+        </div>
+      </div>`));
+  } else {
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 21. WISHLIST — si générée
+  // ═══════════════════════════════════════════
+  const wishlistItems = story.wishlist || [];
+  if(wishlistItems.length > 0){
+    AV.pages.push(pg('Notre wishlist','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;padding:24px 20px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">rêves à deux</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,23px);font-weight:700;color:#1a1208;margin-bottom:16px;">Notre wishlist</div>
+        ${wishlistItems.slice(0,6).map((w,i)=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.07);">
+            <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #c9a05a;flex-shrink:0;"></div>
+            <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,13px);font-style:italic;color:#3a2e22;">${w}</div>
+          </div>`).join('')}
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 22. GRILLE MAGAZINE 3 PHOTOS
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#0a0806',`
+    <div style="width:100%;height:100%;background:#0a0806;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px;">
+      <div style="grid-row:span 2;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+      <div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+      <div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 23. "LE MEILLEUR SOUVENIR RESTE À VENIR"
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('Le meilleur souvenir reste à venir','#0a0806',`
+    <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:40px;position:relative;">
+      <div style="text-align:center;max-width:240px;">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,26px);font-weight:400;font-style:italic;color:rgba(242,235,224,.25);line-height:1.4;">
+          Le meilleur souvenir<br>reste à venir.
+        </div>
+      </div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 24. LETTRE DU FUTUR
+  // ═══════════════════════════════════════════
+  if(futur){
+    AV.pages.push(pg('Lettre du futur','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;padding:30px 24px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:14px;opacity:.6;">pour dans quelques années</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(14px,3.8vw,19px);font-weight:700;color:#1a1208;margin-bottom:18px;">Lettre à<br>vos futurs vous</div>
+        <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,13px);font-style:italic;color:#5a4a38;line-height:1.9;flex:1;">"${futur.substring(0,300)}"</div>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;height:1px;background:rgba(0,0,0,.08);"></div>
+          <div style="font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#bbb;">${names} · ${new Date().getFullYear()}</div>
+          <div style="flex:1;height:1px;background:rgba(0,0,0,.08);"></div>
+        </div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // 25. CITATION — page sobre
+  // ═══════════════════════════════════════════
+  if(citation){
+    AV.pages.push(pg('','#1a2744',`
+      <div style="width:100%;height:100%;background:#1a2744;display:flex;align-items:center;justify-content:center;padding:36px;flex-direction:column;text-align:center;">
+        <div style="font-family:Georgia,serif;font-size:28px;color:rgba(201,160,90,.2);line-height:1;margin-bottom:12px;">"</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,19px);font-style:italic;color:rgba(232,240,255,.5);line-height:1.8;max-width:260px;">${citation}</div>
+        <div style="font-family:Georgia,serif;font-size:28px;color:rgba(201,160,90,.2);line-height:1;margin-top:8px;">"</div>
+      </div>`));
+  }
+
+  // ═══════════════════════════════════════════
+  // DERNIÈRE PHOTO — avant 4ème de couv
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;">
+      ${img(nph-1)}
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,.08);"></div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 4ÈME DE COUVERTURE — minimaliste
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#0a0806',`
+    <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;text-align:center;position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,160,90,.2),transparent);"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,160,90,.2),transparent);"></div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,28px);font-weight:700;color:rgba(242,235,224,.08);letter-spacing:-.02em;margin-bottom:24px;">Noustalgie</div>
+      <div style="width:1px;height:32px;background:rgba(201,160,90,.2);margin-bottom:20px;"></div>
+      <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.2);line-height:1.8;">Ce livre appartient à<br>${names}</div>
+    </div>`));
+
+  AV.cur=0;
+  avRender();
+  avBuildThumbs();
+  S.done.add(4);
+}
 
   // 1. COUVERTURE — photo pleine + titre overlay bas
   AV.pages.push(pg('Couverture','#0a0806',`
