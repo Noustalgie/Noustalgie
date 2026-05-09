@@ -688,10 +688,11 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
           <div class="pgc-val" id="pgcVal">30 pages</div>
         </div>
         <div class="pgc-sub" data-i18n="pgc_sub">Ajustez selon votre histoire. De 10 à 100 pages.</div>
-        <input type="range" class="mslider" min="1" max="10" step="1" value="3" id="inAppSlider" oninput="onInAppSlider(this.value)" style="margin-bottom:0;"/>
+        <input type="range" class="mslider" min="1" max="3" step="1" value="2" id="inAppSlider" oninput="onInAppSlider(this.value)" style="margin-bottom:0;"/>
         <div style="display:flex;justify-content:space-between;margin-top:5px;">
-          <span style="font-family:var(--fs);font-size:.625rem;font-style:italic;color:var(--cream3);">10</span>
-          <span style="font-family:var(--fs);font-size:.625rem;font-style:italic;color:var(--cream3);">100</span>
+          <span style="font-family:var(--fs);font-size:.625rem;font-style:italic;color:var(--cream3);">20p</span>
+          <span style="font-family:var(--fs);font-size:.625rem;font-style:italic;color:var(--cream3);">30p</span>
+          <span style="font-family:var(--fs);font-size:.625rem;font-style:italic;color:var(--cream3);">50p</span>
         </div>
         <div class="price-prev">
           <div class="pp-item"><div class="pp-label" data-i18n="pdf_only">PDF seul</div><div class="pp-price" id="ppPdf">19,99 €</div></div>
@@ -1409,22 +1410,28 @@ const STYLE_PROMPTS = {
 const STEP_LABELS = ['step_duo','step_photos','step_style','step_creation','step_preview','step_order'];
 
 function goTab(n) {
-  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
-  for(let i=0;i<6;i++){
-    const ps=document.getElementById('ps'+i); const pd=document.getElementById('pd'+i);
-    if(!ps)continue;
-    ps.className='p-step'+(i===n?' active':S.done.has(i)?' done':'');
-    pd.textContent=S.done.has(i)?'✓':(i+1);
-    ps.querySelector('.p-lbl').textContent=LANGS[currentLang][STEP_LABELS[i]]||STEP_LABELS[i];
-  }
-  // Mobile progress
-  const T = LANGS[currentLang];
-  const fill = ((n+1)/6*100).toFixed(0);
-  document.getElementById('mobFill').style.width = fill+'%';
-  document.getElementById('mobStepTxt').textContent = T[STEP_LABELS[n]]||'';
-  document.getElementById('mobCount').textContent = (n+1)+' / 6';
-  if(n===4)renderBookPreview();
-  document.getElementById('app').scrollIntoView({behavior:'smooth',block:'start'});
+  try {
+    document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+    for(let i=0;i<6;i++){
+      const ps=document.getElementById('ps'+i); const pd=document.getElementById('pd'+i);
+      if(!ps||!pd)continue;
+      ps.className='p-step'+(i===n?' active':S.done.has(i)?' done':'');
+      pd.textContent=S.done.has(i)?'✓':(i+1);
+      const lbl=ps.querySelector('.p-lbl');
+      if(lbl) lbl.textContent=LANGS[currentLang][STEP_LABELS[i]]||STEP_LABELS[i];
+    }
+    const T = LANGS[currentLang];
+    const fill = ((n+1)/6*100).toFixed(0);
+    const mobFill=document.getElementById('mobFill');
+    const mobStep=document.getElementById('mobStepTxt');
+    const mobCount=document.getElementById('mobCount');
+    if(mobFill) mobFill.style.width = fill+'%';
+    if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
+    if(mobCount) mobCount.textContent = (n+1)+' / 6';
+    if(n===4) renderBookPreview();
+    const app=document.getElementById('app');
+    if(app) app.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e) { console.error('goTab error:', e); }
 }
 function startApp(){document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>goTab(0),300);}
 
