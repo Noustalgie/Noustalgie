@@ -2326,18 +2326,23 @@ async function processPayment(){
     let pdfUrl = '';
 
     if(format==='print'){
-      // Générer et uploader le PDF pour l'impression
       btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Génération du PDF...';
-      const pdfBase64 = await generateAlbumPDF();
-      
-      btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Upload en cours...';
-      const uploadRes = await fetch('/api/upload-pdf', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({pdf:pdfBase64, title:S.story?.titre||'noustalgie'})
-      });
-      const uploadData = await uploadRes.json();
-      if(!uploadData.url) throw new Error('Échec upload PDF');
-      pdfUrl = uploadData.url;
+      try {
+        const pdfBase64 = await generateAlbumPDF();
+        btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Préparation commande...';
+        try {
+          const uploadRes = await fetch('/api/upload-pdf', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({pdf:pdfBase64, title:S.story?.titre||'noustalgie'})
+          });
+          const uploadData = await uploadRes.json();
+          if(uploadData.url) pdfUrl = uploadData.url;
+        } catch(uploadErr) {
+          console.warn('Upload PDF échoué, paiement continue sans PDF URL:', uploadErr.message);
+        }
+      } catch(pdfErr) {
+        console.warn('Génération PDF échouée, paiement continue:', pdfErr.message);
+      }
     }
 
     btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Redirection paiement...';
