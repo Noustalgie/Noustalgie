@@ -2524,7 +2524,7 @@ function selectFormat(format) {
   const pages = selectedPages || 30;
   const price = isPrint ? PRICES[pages]?.print : PRICES[pages]?.pdf;
   const btn = document.getElementById('payBtn');
-  if(btn) btn.textContent = isPrint ? `Commander le livre · ${(price||39.99).toFixed(2).replace('.',',')} € <svg style="display:inline;vertical-align:middle;width:.85em;height:.85em;" viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 21s-9-5.5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-9 12-9 12z"/></svg>` : `Télécharger le PDF · ${(price||19.99).toFixed(2).replace('.',',')} € ↓`;
+  if(btn) btn.textContent = isPrint ? `Commander le livre · ${(price||39.99).toFixed(2).replace('.',',')} € ♥` : `Télécharger le PDF · ${(price||19.99).toFixed(2).replace('.',',')} € ↓`;
 }
 function updateFormatPrices() {
   const pages = selectedPages || 30;
