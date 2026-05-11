@@ -252,7 +252,7 @@ textarea{resize:vertical;min-height:75px;line-height:1.65;}
 .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem;flex-wrap:wrap;}
 
 /* Drop zone */
-.dz{border:1px dashed var(--border2);border-radius:10px;padding:2.5rem 2rem;text-align:center;cursor:pointer;position:relative;transition:all .2s;}
+.dz{border:1px dashed var(--border2);border-radius:10px;padding:2.5rem 2rem;text-align:center;cursor:pointer;position:relative;transition:all .2s;overflow:hidden;}
 .dz:hover,.dz.drag{border-color:var(--gold);background:var(--golddim);}
 .dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .dz-ico{font-size:2rem;margin-bottom:10px;opacity:.5;}
@@ -673,7 +673,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
       <div class="card">
         <div class="card-hd" data-i18n="p1_hd">Vos photos ensemble</div>
         <div class="dz" id="dz">
-          <input type="file" accept="image/*,.heic,.HEIC" multiple onchange="addPhotos(this.files)"/>
+          <input type="file" accept="image/*,.heic,.HEIC" multiple onchange="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
           <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum 15 photos</div>
@@ -1439,33 +1439,34 @@ function startApp(){document.getElementById('app').scrollIntoView({behavior:'smo
 // PHOTOS
 // ══════════════════════════════════════════
 function addPhotos(files){
-  Array.from(files).forEach(f=>{
-    if(!f.type.startsWith('image/')&&!f.name.toLowerCase().endsWith('.heic')&&!f.name.toLowerCase().endsWith('.heif'))return;
-    const r=new FileReader();
-    r.onload=e=>{
-      const img=new Image();
-      img.onload=()=>{
-        // Convertir en JPEG via Canvas (résout HEIC + images trop lourdes)
-        const canvas=document.createElement('canvas');
-        const MAX=1200;
-        const ratio=Math.min(MAX/img.width,MAX/img.height,1);
-        canvas.width=Math.round(img.width*ratio);
-        canvas.height=Math.round(img.height*ratio);
-        const ctx=canvas.getContext('2d');
-        ctx.fillStyle='#ffffff';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        const jpeg=canvas.toDataURL('image/jpeg',0.85);
-        S.photos.push({name:f.name,data:jpeg});
-        renderPhotos();
+  const newFiles = Array.from(files).filter(f=>
+    f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif')
+  );
+  
+  // Traiter toutes les photos en parallèle
+  Promise.all(newFiles.map(f => new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 800; // Réduit de 1200 à 800 pour plus de rapidité
+        const ratio = Math.min(MAX/img.width, MAX/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve({name: f.name, data: canvas.toDataURL('image/jpeg', 0.8)});
       };
-      img.onerror=()=>{
-        // Photo non lisible — on l'ignore silencieusement
-        console.warn('Photo ignorée (format non supporté):', f.name);
-      };
-      img.src=e.target.result;
+      img.onerror = () => resolve(null);
+      img.src = e.target.result;
     };
     r.readAsDataURL(f);
+  }))).then(results => {
+    results.filter(Boolean).forEach(p => S.photos.push(p));
+    renderPhotos();
   });
 }
 function renderPhotos(){
