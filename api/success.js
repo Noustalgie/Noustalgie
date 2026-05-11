@@ -3,7 +3,7 @@ const https = require('https');
 async function sendEmail({ to, subject, html }) {
   const RESEND = process.env.RESEND_API_KEY;
   if (!RESEND) { console.log('Email non envoyé (pas de RESEND_API_KEY):', to); return; }
-  const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <commandes@noustalgie.fr>', to, subject, html }));
+  const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <contact@noustalgie.fr>', to, subject, html }));
   return new Promise(resolve => {
     const req = https.request({
       hostname: 'api.resend.com', path: '/emails', method: 'POST',
