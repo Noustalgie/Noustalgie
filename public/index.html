@@ -1616,8 +1616,26 @@ Reply ONLY with valid JSON (no markdown, no code blocks):
 
 Be specific, original, NOT cliché. Make it feel personal and real.`;
 
-    const maxTok = pages <= 20 ? 3000 : pages <= 30 ? 4000 : 5000;
-    const d2=await api('chat',{model:'gpt-4o',max_tokens:maxTok,messages:[{role:'user',content:prompt}]});
+    const maxTok = 2500; // Réduit pour éviter les timeouts
+
+    // Retry automatique jusqu'à 3 fois
+    let d2 = null;
+    let lastError = null;
+    for(let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        log(attempt > 1 ? `Tentative ${attempt}/3...` : T.log_writing, 'lg');
+        d2 = await api('chat',{model:'gpt-4o',max_tokens:maxTok,messages:[{role:'user',content:prompt}]});
+        break; // Succès — on sort de la boucle
+      } catch(e) {
+        lastError = e;
+        if(attempt < 3) {
+          log(`Erreur temporaire, nouvelle tentative dans 2s...`, 'li');
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    }
+    if(!d2) throw lastError; // Toutes les tentatives ont échoué
+
     const rawContent = d2.choices[0].message.content;
     
     // Parsing robuste — extraire le JSON même si GPT ajoute du texte autour
