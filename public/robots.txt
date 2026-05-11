@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://noustalgie.fr/sitemap.xml
