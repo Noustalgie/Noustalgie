@@ -1,4 +1,5 @@
 const https = require('https');
+const crypto = require('crypto');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,56 +9,71 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
-    const { pdf, title } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const { pdf, title } = body;
     if (!pdf) return res.status(400).json({ error: 'PDF manquant' });
 
-    // Convertir base64 en Buffer
+    const CLOUD = process.env.CLOUDINARY_CLOUD_NAME;
+    const KEY = process.env.CLOUDINARY_API_KEY;
+    const SECRET = process.env.CLOUDINARY_API_SECRET;
+
+    if (!CLOUD || !KEY || !SECRET) {
+      return res.status(500).json({ error: 'Cloudinary non configuré' });
+    }
+
+    const timestamp = Math.round(Date.now() / 1000);
+    const publicId = `noustalgie/${(title||'album').replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${timestamp}`;
+    
+    // Signature Cloudinary
+    const sigStr = `public_id=${publicId}&resource_type=raw&timestamp=${timestamp}${SECRET}`;
+    const signature = crypto.createHash('sha256').update(sigStr).digest('hex');
+
+    // Upload via multipart
+    const boundary = '----CloudinaryBoundary' + Date.now();
     const pdfBuffer = Buffer.from(pdf, 'base64');
-    const filename = `${(title || 'noustalgie').replace(/[^a-z0-9]/gi, '-').toLowerCase()}.pdf`;
-
-    // Upload vers file.io (service gratuit, URL valide 14 jours, 1 téléchargement)
-    const boundary = '----FormBoundary' + Date.now().toString(16);
-    const formParts = [
-      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: application/pdf\r\n\r\n`,
+    
+    const parts = [
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="album.pdf"\r\nContent-Type: application/pdf\r\n\r\n`),
       pdfBuffer,
-      `\r\n--${boundary}\r\nContent-Disposition: form-data; name="expires"\r\n\r\n14d\r\n`,
-      `--${boundary}\r\nContent-Disposition: form-data; name="maxDownloads"\r\n\r\n3\r\n`,
-      `--${boundary}--\r\n`
+      Buffer.from(`\r\n--${boundary}\r\nContent-Disposition: form-data; name="api_key"\r\n\r\n${KEY}\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="timestamp"\r\n\r\n${timestamp}\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="public_id"\r\n\r\n${publicId}\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="resource_type"\r\n\r\nraw\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="signature"\r\n\r\n${signature}\r\n`),
+      Buffer.from(`--${boundary}--\r\n`)
     ];
-
-    const bodyParts = formParts.map(p => Buffer.isBuffer(p) ? p : Buffer.from(p));
-    const body = Buffer.concat(bodyParts);
+    const formBody = Buffer.concat(parts);
 
     const result = await new Promise((resolve, reject) => {
-      const reqHttp = https.request({
-        hostname: 'file.io',
-        path: '/',
+      const req2 = https.request({
+        hostname: 'api.cloudinary.com',
+        path: `/v1_1/${CLOUD}/raw/upload`,
         method: 'POST',
         headers: {
           'Content-Type': `multipart/form-data; boundary=${boundary}`,
-          'Content-Length': body.length
-        }
+          'Content-Length': formBody.length
+        },
+        timeout: 30000
       }, r => {
-        let data = '';
-        r.on('data', c => data += c);
+        let d = ''; r.on('data', c => d += c);
         r.on('end', () => {
-          try { resolve(JSON.parse(data)); }
-          catch(e) { reject(new Error('Parse error: ' + data.slice(0,200))); }
+          try { resolve(JSON.parse(d)); } catch(e) { resolve({ error: d }); }
         });
       });
-      reqHttp.on('error', reject);
-      reqHttp.write(body);
-      reqHttp.end();
+      req2.on('error', reject);
+      req2.on('timeout', () => { req2.destroy(); reject(new Error('Timeout Cloudinary')); });
+      req2.write(formBody);
+      req2.end();
     });
 
-    if (result.success && result.link) {
-      console.log(`✅ PDF uploadé : ${result.link} (${Math.round(pdfBuffer.length/1024)}KB)`);
-      return res.json({ url: result.link, key: result.key });
+    if (result.secure_url) {
+      console.log(`✅ PDF uploadé Cloudinary: ${result.secure_url}`);
+      return res.json({ url: result.secure_url });
     } else {
-      throw new Error('file.io error: ' + JSON.stringify(result));
+      throw new Error('Cloudinary error: ' + JSON.stringify(result).slice(0, 200));
     }
   } catch(e) {
-    console.error('Upload PDF error:', e.message);
+    console.error('Upload error:', e.message);
     return res.status(500).json({ error: e.message });
   }
 };
