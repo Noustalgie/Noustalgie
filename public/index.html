@@ -557,26 +557,26 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
       <div onclick="selectPricing(20,this)" class="price-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;">
         <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Essentiel</div>
         <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:var(--cream);line-height:1;">20</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages</div>
+        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">photos max</div>
         <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 14,99€</div>
         <div style="font-size:.8125rem;color:var(--gold);">Livre 34,99€</div>
       </div>
 
       <!-- 30 pages — populaire -->
-      <div onclick="selectPricing(30,this)" class="price-card active" style="background:var(--bg3);border:1.5px solid rgba(201,160,90,.5);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;">
+      <div onclick="selectPricing(35,this)" class="price-card active" style="background:var(--bg3);border:1.5px solid rgba(201,160,90,.5);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;">
         <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#c9a05a;color:#0a0806;font-size:.625rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;text-transform:uppercase;">⭐ Populaire</div>
         <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Classique</div>
-        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:#c9a05a;line-height:1;">30</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages</div>
+        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:#c9a05a;line-height:1;">35</div>
+        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">photos max</div>
         <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 19,99€</div>
         <div style="font-size:.8125rem;color:var(--gold);">Livre 44,99€</div>
       </div>
 
       <!-- 50 pages -->
-      <div onclick="selectPricing(50,this)" class="price-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;">
+      <div onclick="selectPricing(60,this)" class="price-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;">
         <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Premium</div>
-        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:var(--cream);line-height:1;">50</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages</div>
+        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:var(--cream);line-height:1;">60</div>
+        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">photos max</div>
         <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 24,99€</div>
         <div style="font-size:.8125rem;color:var(--gold);">Livre 59,99€</div>
       </div>
@@ -1316,11 +1316,11 @@ function setLang(lang) {
 // ══════════════════════════════════════════
 const PRICES = {
   20:  { pdf: 14.99, print: 34.99, name: 'Essentiel'   },
-  30:  { pdf: 19.99, print: 44.99, name: 'Populaire'   },
-  50:  { pdf: 24.99, print: 59.99, name: 'Premium'     },
+  35:  { pdf: 19.99, print: 44.99, name: 'Classique'   },
+  60:  { pdf: 24.99, print: 59.99, name: 'Premium'     },
 };
-const STEPS = [20, 30, 50];
-let selectedPages = 30;
+const STEPS = [20, 35, 60];
+let selectedPages = 35;
 
 function selectPricing(pages, el) {
   selectedPages = pages;
