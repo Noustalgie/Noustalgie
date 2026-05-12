@@ -1469,7 +1469,7 @@ function addPhotos(files){
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX = 700;
+          const MAX = 1000;
           const ratio = Math.min(MAX/img.width, MAX/img.height, 1);
           canvas.width = Math.round(img.width * ratio);
           canvas.height = Math.round(img.height * ratio);
@@ -1477,7 +1477,7 @@ function addPhotos(files){
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          resolve({name: f.name, data: canvas.toDataURL('image/jpeg', 0.75)});
+          resolve({name: f.name, data: canvas.toDataURL('image/jpeg', 0.88)});
         };
         img.onerror = () => resolve(null);
         img.src = e.target.result;
@@ -2073,14 +2073,56 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   // SLIDES BONUS pour 50 pages
   if(totalPages >= 50){
+    // Photo pleine
     AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
-    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:flex;gap:2px;"><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
+    // "Nos premières fois" - liste
+    AV.pages.push(pg('Nos premières fois','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">souvenirs</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4vw,22px);font-weight:700;color:#1a1208;margin-bottom:18px;">Nos premières fois</div>
+        ${['Notre premier regard','Notre premier voyage','Notre premier chez-nous','Notre premier défi ensemble','Notre première dispute (et réconciliation)'].map((s,i)=>`
+          <div style="display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.06);">
+            <span style="font-size:9px;color:#c9a05a;flex-shrink:0;">${String(i+1).padStart(2,'0')}</span>
+            <span style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:#3a2e22;">${s}</span>
+          </div>`).join('')}
+      </div>`));
+    // Double photo
+    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:flex;gap:2px;background:#0a0806;"><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
+    // "Si tu étais..." - page créative
+    AV.pages.push(pg('Si tu étais...','#1a2744',`
+      <div style="width:100%;height:100%;background:#1a2744;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,30px);font-weight:700;color:#e8f0ff;margin-bottom:20px;">Si tu étais<br><em style="color:#c9a05a;">une saison...</em></div>
+        <div style="font-family:Georgia,serif;font-size:clamp(12px,3vw,15px);font-style:italic;color:rgba(232,240,255,.45);line-height:1.9;">
+          Tu serais l'été qui s'étire,<br>
+          chaud même quand il pleut,<br>
+          lumineux même dans l'ombre,<br>
+          et toujours trop court.
+        </div>
+      </div>`));
+    // Grille 4 photos
+    AV.pages.push(pg('','#111',`<div style="width:100%;height:100%;background:#111;padding:6px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;">${[0,1,2,3].map(()=>`<div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>`).join('')}</div>`));
+    // "Ce qu'on a appris l'un de l'autre"
+    AV.pages.push(pg('Ce qu'on a appris','#0a0806',`
+      <div style="width:100%;height:100%;background:#0a0806;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,160,90,.45);margin-bottom:12px;">grandir ensemble</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,26px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;">Ce qu'on a appris<br><em style="color:#c9a05a;">l'un de l'autre</em></div>
+        <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.4);line-height:1.9;">
+          La patience.<br>Le silence qui réconforte.<br>Que l'amour se choisit chaque jour.<br>Que deux têtes dures font une belle histoire.
+        </div>
+      </div>`));
+    // Photo pleine
     AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
-    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px;"><div style="grid-row:span 2;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
-    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
-    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:flex;gap:2px;"><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
-    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
-    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    // "Nos endroits à nous"
+    AV.pages.push(pg('Nos endroits','#f7f3ed',`
+      <div style="width:100%;height:100%;background:#f7f3ed;padding:28px 22px;display:flex;flex-direction:column;">
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">géographie intime</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4vw,22px);font-weight:700;color:#1a1208;margin-bottom:16px;">Nos endroits<br>à nous</div>
+        ${['Le café du premier rendez-vous','Notre coin canapé','La rue où tout a commencé','Notre restaurant secret','L'endroit où on se ressource'].map((s,i)=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.06);">
+            <div style="width:5px;height:5px;border-radius:50%;background:#c9a05a;flex-shrink:0;"></div>
+            <span style="font-family:Georgia,serif;font-size:clamp(11px,3vw,13px);font-style:italic;color:#3a2e22;">${s}</span>
+          </div>`).join('')}
+      </div>`));
   }
 
   // DERNIÈRE PHOTO — avant 4ème de couv
