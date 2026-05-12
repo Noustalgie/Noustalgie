@@ -1322,6 +1322,20 @@ const PRICES = {
 const STEPS = [20, 30, 50];
 let selectedPages = 30;
 
+
+function highlightPal(pages) {
+  [20,30,50].forEach(function(p) {
+    var el = document.getElementById('pal'+p);
+    if(!el) return;
+    if(p === pages) {
+      el.style.border = '1.5px solid rgba(201,160,90,.5)';
+      el.style.background = 'rgba(201,160,90,.06)';
+    } else {
+      el.style.border = '1.5px solid var(--border)';
+      el.style.background = 'transparent';
+    }
+  });
+}
 function selectPricing(pages, el) {
   selectedPages = pages;
   document.querySelectorAll('.price-card').forEach(c => {
