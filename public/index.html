@@ -1442,7 +1442,16 @@ function goTab(n) {
     if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
     if(mobCount) mobCount.textContent = (n+1)+' / 6';
     if(n===4) renderBookPreview();
-    if(n===5) updateFormatPrices();
+    if(n===5) {
+      updateFormatPrices();
+      const p = PRICES[selectedPages];
+      if(p) {
+        const fp = document.getElementById('payFinalPrice');
+        const fd = document.getElementById('payFinalDesc');
+        if(fp) fp.textContent = p.print.toFixed(2).replace('.',',');
+        if(fd) fd.textContent = 'Album Premium · ' + selectedPages + ' pages';
+      }
+    }
     const app=document.getElementById('app');
     if(app) app.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(e) { console.error('goTab error:', e); }
