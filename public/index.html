@@ -1442,6 +1442,7 @@ function goTab(n) {
     if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
     if(mobCount) mobCount.textContent = (n+1)+' / 6';
     if(n===4) renderBookPreview();
+    if(n===5) updateFormatPrices();
     const app=document.getElementById('app');
     if(app) app.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(e) { console.error('goTab error:', e); }
