@@ -654,11 +654,12 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
           <div><label class="fl" data-i18n="since_lbl">Ensemble depuis</label><input type="text" id="meetDate" data-i18n-ph="since_ph" placeholder="ex : juin 2021"/></div>
           <div><label class="fl" data-i18n="occasion_lbl">Occasion du livre</label>
             <select id="occasion">
-              <option value="Surprise romantique" data-i18n="occ1">Saint-Valentin 💝</option>
-              <option value="anniversaire de couple" data-i18n="occ2">Anniversaire de couple 🥂</option>
-              <option value="Noël" data-i18n="occ3">Noël 🎄</option>
-              <option value="surprise romantique" data-i18n="occ4">Surprise romantique ✨</option>
-              <option value="mariage" data-i18n="occ5">Mariage 💒</option>
+              <option value="Surprise romantique" selected>Surprise romantique</option>
+              <option value="Saint-Valentin">Saint-Valentin</option>
+              <option value="Anniversaire de couple">Anniversaire de couple</option>
+              <option value="Noël">Noël</option>
+              <option value="Mariage">Mariage</option>
+              <option value="Cadeau pour un proche">Cadeau pour un proche</option>
             </select>
           </div>
         </div>
@@ -980,7 +981,7 @@ const LANGS = {
     p0_hd:'Votre couple', p0_title:'Parlons de vous deux <svg style="display:inline;vertical-align:middle;width:.85em;height:.85em;" viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 21s-9-5.5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-9 12-9 12z"/></svg>', p0_sub:'Ces informations personnalisent chaque ligne de votre livre.',
     name1_lbl:'Prénom 1', name1_ph:'Emma', name2_lbl:'Prénom 2', name2_ph:'Lucas',
     since_lbl:'Ensemble depuis', since_ph:'ex : juin 2021', occasion_lbl:'Occasion du livre',
-    occ1:'Saint-Valentin 💝', occ2:'Anniversaire de couple 🥂', occ3:'Noël 🎄', occ4:'Surprise romantique ✨', occ5:'Mariage 💒',
+    occ1:'Surprise romantique', occ2:'Saint-Valentin', occ3:'Anniversaire de couple', occ4:'Noël', occ5:'Mariage', occ6:'Cadeau pour un proche',
     ded_lbl:'Dédicace (première page)', ded_ph:'À toi, mon amour...', next_photos:'Suivant — Nos photos →',
     p1_hd:'Vos photos ensemble', dz_label:'Glissez vos photos ici ou cliquez', dz_sub:'JPG · PNG · WEBP · HEIC — minimum 15 photos',
     pgc_title:'Nombre de pages', pgc_sub:'Ajustez selon votre histoire. De 10 à 100 pages.',
