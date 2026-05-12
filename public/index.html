@@ -1736,6 +1736,7 @@ function renderBookPreview(){
   const ceQueJePasDir = story.ce_que_je_pas_dire || '';
 
   AV.pages = [];
+  const totalPages = selectedPages || 30;
 
   // ═══════════════════════════════════════════
   // 1. COUVERTURE — pleine page cinématique
@@ -1856,7 +1857,7 @@ function renderBookPreview(){
   // 10. "NOS DISPUTES PRÉFÉRÉES" — humour
   // ═══════════════════════════════════════════
   if(disputes.length > 0){
-    AV.pages.push(pg('Nos désaccords préférés','#0a0806',`
+    if(totalPages >= 30) AV.pages.push(pg('Nos désaccords préférés','#0a0806',`
       <div style="width:100%;height:100%;background:#0a0806;padding:28px 22px;display:flex;flex-direction:column;">
         <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,160,90,.5);margin-bottom:8px;">avec amour & humour</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,22px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;">Nos désaccords<br><em style="color:#c9a05a;">préférés</em></div>
@@ -1883,7 +1884,7 @@ function renderBookPreview(){
   // 12. "SI ON ÉTAIT UN FILM" — description cinématographique
   // ═══════════════════════════════════════════
   if(film){
-    AV.pages.push(pg('Si on était un film','#1a2744',`
+    if(totalPages >= 30) AV.pages.push(pg('Si on était un film','#1a2744',`
       <div style="width:100%;height:100%;background:#1a2744;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;">
         <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,240,255,.3);margin-bottom:12px;">Genre : Romance</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#e8f0ff;line-height:.95;margin-bottom:16px;">Si on était<br><em style="color:#c9a05a;">un film</em></div>
@@ -2006,7 +2007,7 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   const wishlistItems = story.wishlist || [];
   if(wishlistItems.length > 0){
-    AV.pages.push(pg('Notre wishlist','#f7f3ed',`
+    if(totalPages >= 30) AV.pages.push(pg('Notre wishlist','#f7f3ed',`
       <div style="width:100%;height:100%;background:#f7f3ed;padding:24px 20px;display:flex;flex-direction:column;">
         <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">rêves à deux</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,23px);font-weight:700;color:#1a1208;margin-bottom:16px;">Notre wishlist</div>
@@ -2070,6 +2071,18 @@ function renderBookPreview(){
   }
 
   // ═══════════════════════════════════════════
+  // SLIDES BONUS pour 50 pages
+  if(totalPages >= 50){
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:flex;gap:2px;"><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px;"><div style="grid-row:span 2;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;display:flex;gap:2px;"><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div><div style="flex:1;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div></div>`));
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    AV.pages.push(pg('','#0a0806',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+  }
+
   // DERNIÈRE PHOTO — avant 4ème de couv
   // ═══════════════════════════════════════════
   AV.pages.push(pg('','#000',`
