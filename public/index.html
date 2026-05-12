@@ -2103,6 +2103,26 @@ function renderBookPreview(){
       <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.2);line-height:1.8;">Ce livre appartient à<br>${names}</div>
     </div>`));
 
+  // Ajuster pour atteindre exactement totalPages slides
+  while(AV.pages.length > totalPages) {
+    // Supprimer des slides photo simples (sans label) en partant de l'avant-dernière
+    let removed = false;
+    for(let i = AV.pages.length - 2; i > 2; i--) {
+      if(AV.pages[i].label === '') {
+        AV.pages.splice(i, 1);
+        removed = true;
+        break;
+      }
+    }
+    if(!removed) break;
+  }
+  while(AV.pages.length < totalPages) {
+    // Ajouter des slides photo avant la 4ème de couverture
+    const lastPage = AV.pages.pop();
+    AV.pages.push(pg('','#000',`<div style="width:100%;height:100%;position:relative;overflow:hidden;">${img(pi++)}</div>`));
+    AV.pages.push(lastPage);
+  }
+
   AV.cur=0;
   avRender();
   avBuildThumbs();
