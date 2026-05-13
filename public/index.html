@@ -856,8 +856,15 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
             <input type="hidden" id="payFormat" value="print"/>
             <!-- Adresse (masquée si PDF) -->
             <div id="addressField">
-              <label class="fl" data-i18n="pay_addr_lbl">Adresse de livraison</label>
-              <input type="text" id="payAddress" data-i18n-ph="pay_addr_ph" placeholder="12 rue des Amoureux, 75001 Paris"/>
+              <label class="fl">Adresse de livraison</label>
+              <input type="text" id="payAddrLine1" placeholder="12 rue des Amoureux" style="margin-bottom:6px;"/>
+              <input type="text" id="payAddrLine2" placeholder="Appartement, bâtiment, étage... (optionnel)" style="margin-bottom:6px;"/>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;margin-bottom:6px;">
+                <input type="text" id="payAddrPostal" placeholder="75001" maxlength="10"/>
+                <input type="text" id="payAddrCity" placeholder="Paris"/>
+              </div>
+              <input type="text" id="payAddrCountry" placeholder="France" style="margin-bottom:0;"/>
+              <input type="hidden" id="payAddress"/>
             </div>
           </div>
           <button class="btn-pay" id="payBtn" onclick="processPayment()" data-i18n="pay_btn">Payer & commander</button>
@@ -2404,12 +2411,19 @@ function openFullPreview(){ /* désactivé — aperçu intégré */ }
 async function processPayment(){
   const name=document.getElementById('payName').value.trim();
   const email=document.getElementById('payEmail').value.trim();
-  const address=document.getElementById('payAddress')?.value.trim()||'';
+  // Assembler l'adresse structurée
+  const line1 = document.getElementById('payAddrLine1')?.value.trim()||'';
+  const line2 = document.getElementById('payAddrLine2')?.value.trim()||'';
+  const postal = document.getElementById('payAddrPostal')?.value.trim()||'';
+  const city = document.getElementById('payAddrCity')?.value.trim()||'';
+  const country = document.getElementById('payAddrCountry')?.value.trim()||'France';
+  const address = [line1, line2, postal + ' ' + city, country].filter(Boolean).join(', ');
+  if(!line1 || !postal || !city) { alert('Remplis ton adresse complète (rue, code postal, ville).'); btn.disabled=false; btn.innerHTML='Payer & commander'; return; }
   const format=document.getElementById('payFormat')?.value||'print'; // 'pdf' ou 'print'
   
   if(!name||!email){alert('Remplis ton prénom et email.');return;}
   if(!email.includes('@')){alert('Email invalide.');return;}
-  if(format==='print'&&!address){alert('Remplis l\'adresse de livraison.');return;}
+  // Validation adresse dans processPayment
 
   const btn=document.getElementById('payBtn');
   btn.disabled=true;
