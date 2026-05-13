@@ -2479,109 +2479,21 @@ async function processPayment(){
 
 // Génère le PDF album en base64 (format carré 21x21cm pour Prodigi)
 async function generateAlbumPDF(){
-  return new Promise((resolve, reject) => {
-    if(!S.story) return reject(new Error('Génère d\'abord l\'histoire'));
-    if(!window.jspdf) return reject(new Error('jsPDF non chargé'));
-    const {jsPDF} = window.jspdf;
-    const SIZE = 210; // 21x21cm carré
-    const doc = new jsPDF({unit:'mm', format:[SIZE, SIZE]});
-    const n1=document.getElementById('name1').value||'Nous';
-    const n2=document.getElementById('name2').value||'';
-    const names=n2?`${n1} & ${n2}`:n1;
-    const dedication=document.getElementById('dedication').value.trim();
-    const closingMsg=document.getElementById('closingMsg').value.trim();
-
-    // COUVERTURE - fond sombre
-    doc.setFillColor(12,9,5);doc.rect(0,0,SIZE,SIZE,'F');
-    if(S.photos[0]?.data){
-      try{doc.addImage(S.photos[0].data,'JPEG',0,0,SIZE,SIZE,undefined,'MEDIUM');}catch(e){}
-    }
-    // Overlay gradient simulé
-    doc.setFillColor(0,0,0);doc.setGState(new doc.GState({opacity:0.5}));
-    doc.rect(0,SIZE*0.55,SIZE,SIZE*0.45,'F');
-    doc.setGState(new doc.GState({opacity:1}));
-    doc.setTextColor(242,235,224);
-    doc.setFont('helvetica','bold');doc.setFontSize(22);
-    doc.text(S.story.titre||'Notre Histoire',SIZE/2,SIZE*0.75,{align:'center'});
-    doc.setFontSize(9);doc.setTextColor(201,160,90);
-    doc.text(names.toUpperCase()+' · '+new Date().getFullYear(),SIZE/2,SIZE*0.83,{align:'center'});
-
-    const addPage = (bg, img, title, body, caption) => {
-      doc.addPage([SIZE,SIZE]);
-      // Background
-      if(bg==='white'){doc.setFillColor(255,255,255);}
-      else if(bg==='cream'){doc.setFillColor(245,240,232);}
-      else{doc.setFillColor(12,9,5);}
-      doc.rect(0,0,SIZE,SIZE,'F');
-
-      if(img){
-        try{doc.addImage(img,'JPEG',0,0,SIZE,SIZE,undefined,'MEDIUM');}catch(e){}
-        // Overlay bas
-        doc.setFillColor(0,0,0);
-        const gs=new doc.GState({opacity:0.6});
-        doc.setGState(gs);
-        doc.rect(0,SIZE*0.65,SIZE,SIZE*0.35,'F');
-        doc.setGState(new doc.GState({opacity:1}));
-        if(title){
-          doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(14);
-          const tl=doc.splitTextToSize(title,SIZE-20);
-          doc.text(tl,SIZE/2,SIZE*0.75,{align:'center'});
-        }
-        if(caption){
-          doc.setTextColor(201,160,90);doc.setFont('helvetica','italic');doc.setFontSize(9);
-          doc.text('"'+caption+'"',SIZE/2,SIZE*0.88,{align:'center'});
-        }
-      } else {
-        // Page texte
-        let y=30;
-        if(title){
-          const col=bg==='white'||bg==='cream'?[40,30,20]:[242,235,224];
-          doc.setTextColor(...col);doc.setFont('helvetica','bold');doc.setFontSize(15);
-          const tl=doc.splitTextToSize(title,SIZE-30);
-          doc.text(tl,SIZE/2,y,{align:'center'});
-          y+=tl.length*7+8;
-        }
-        if(body){
-          const bcol=bg==='white'||bg==='cream'?[80,65,50]:[180,170,160];
-          doc.setTextColor(...bcol);doc.setFont('helvetica','italic');doc.setFontSize(10);
-          const bl=doc.splitTextToSize(body,SIZE-30);
-          bl.forEach(l=>{
-            if(y>SIZE-20){doc.addPage([SIZE,SIZE]);y=20;doc.setFillColor(bg==='white'?255:bg==='cream'?245:12,bg==='white'?255:bg==='cream'?240:9,bg==='white'?255:bg==='cream'?232:5);doc.rect(0,0,SIZE,SIZE,'F');}
-            doc.text(l,SIZE/2,y,{align:'center'});y+=6.5;
-          });
-        }
-      }
-    };
-
-    // DÉDICACE
-    if(dedication) addPage('cream',null,'',`"${dedication}"`);
-
-    // INTRODUCTION
-    if(S.story.introduction) addPage('dark',S.photos[1]?.data,null,S.story.introduction);
-
-    // CHAPITRES
-    let pi=2;
-    (S.story.chapitres||[]).forEach((c,i)=>{
-      addPage('dark',S.photos[pi%S.photos.length]?.data,c.titre,null,S.captions[pi]||'');pi++;
-      addPage('white',null,c.titre,c.texte);
-      if(i%2===1&&S.photos[pi%S.photos.length]){
-        addPage('dark',S.photos[pi%S.photos.length]?.data,'','');pi++;
-      }
-    });
-
-    // ÉPILOGUE
-    if(S.story.epilogue) addPage('white',null,'Épilogue',S.story.epilogue);
-
-    // 4ÈME COUVERTURE
-    addPage('dark',null,'',S.story.futur||closingMsg||'Ce livre n\'est pas une fin. C\'est une promesse.');
-
-    // Retourner en base64
-    const b64 = doc.output('datauristring').split(',')[1];
-    resolve(b64);
+  // Envoyer les pages HTML à l'API Puppeteer pour génération PDF haute résolution
+  const pagesData = AV.pages.map(p => ({ html: p.html, bg: p.bg }));
+  
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ pages: pagesData, title: S.story?.titre || 'noustalgie' })
   });
+  
+  const data = await res.json();
+  if (!data.pdf) throw new Error('Génération PDF échouée: ' + (data.error || ''));
+  return data.pdf;
 }
 
-// ══════════════════════════════════════════
+
 // FORMAT SELECTOR
 function selectFormat(format) {
   document.getElementById('payFormat').value = format;
