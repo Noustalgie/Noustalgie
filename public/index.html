@@ -1599,12 +1599,12 @@ async function runGeneration(){
   setProgress(10);
 
   try{
-    log(T.log_analyzing,'lg');
+    log(T.log_analyzing,'lg'); setProgress(10);
     // Génération directe sans analyse photo (évite les problèmes HEIC/taille)
     const analysis = {themes:['amour','complicité','aventures','rires','tendresse'],description:`${names}, a beautiful couple in love`};
     setProgress(40); log(T.log_analyzed,'lok');
     log(`Thèmes : amour, complicité, aventures`);
-    setProgress(55); log(T.log_writing,'lg');
+    setProgress(55); log(T.log_writing,'lg'); setProgress(50);
 
     const captions=Object.values(S.captions).filter(Boolean);
     const captionCtx=captions.length?`\nLeurs propres mots : "${captions.slice(0,3).join('" · "')}"`:'' ;
