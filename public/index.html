@@ -1729,7 +1729,7 @@ Be specific, original, NOT cliché. Make it feel personal and real.`;
       }
     }
     S.story = parsed;
-    setProgress(100); log(T.log_ready,'lok');
+    clearInterval(window._fakeProgressInterval); setProgress(100); log(T.log_ready,'lok');
     S.done.add(0);S.done.add(1);S.done.add(2);S.done.add(3);
 
     document.getElementById('tagsRow').innerHTML=(analysis.themes||[]).map(t=>`<span class="tag">${t}</span>`).join('')+`<span class="tag">${S.photos.length} photos</span><span class="tag">${pages} pages</span><span class="tag">${S.style}</span>`;
