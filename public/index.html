@@ -1598,6 +1598,17 @@ async function api(type, payload){
 // GENERATION
 // ══════════════════════════════════════════
 async function runGeneration(){
+  // Animation progressive de la barre
+  let fakePct = 0;
+  const fakeInterval = setInterval(() => {
+    if(fakePct < 90) {
+      fakePct += Math.random() * 3;
+      if(fakePct > 90) fakePct = 90;
+      setProgress(Math.round(fakePct));
+    }
+  }, 300);
+  window._fakeProgressInterval = fakeInterval;
+
   const T = LANGS[currentLang];
   if(S.photos.length<15){alert(`${T.photos_warn.replace('/10','')}10 photos required`);return;}
   const n1=document.getElementById('name1').value.trim()||'you';
@@ -1729,6 +1740,8 @@ Be specific, original, NOT cliché. Make it feel personal and real.`;
     document.getElementById('storyBody').textContent=body;
     document.getElementById('genResult').style.display='block';
   }catch(e){
+    clearInterval(window._fakeProgressInterval);
+    setProgress(0);
     log(`${LANGS[currentLang].log_error} ${e.message}`,'lerr');
     log(LANGS[currentLang].log_server_tip,'li');
   }
