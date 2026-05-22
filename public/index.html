@@ -1599,7 +1599,7 @@ async function api(type, payload){
 // ══════════════════════════════════════════
 async function runGeneration(){
   // Animation progressive de la barre
-  let fakePct = 0;
+  let fakePct = 1; setProgress(1);
   const fakeInterval = setInterval(() => {
     if(fakePct < 90) {
       fakePct += Math.random() * 3;
