@@ -734,10 +734,14 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 
     <!-- PANEL 3 -->
     <div class="panel" id="panel3">
-      <div class="card">
-        <div class="card-hd" data-i18n="p3_hd">Création de votre album</div>
-        <div class="log" id="logBox"></div>
-        <div class="pw"><div class="pf" id="progressFill" style="width:0%"></div></div>
+      <div class="card" style="text-align:center;padding:2.5rem 1.5rem;">
+        <div style="font-family:var(--fd);font-size:1.25rem;font-weight:500;color:var(--cream);margin-bottom:.5rem;">Création de votre album</div>
+        <div style="font-family:var(--fs);font-size:.875rem;font-style:italic;color:var(--cream3);margin-bottom:2rem;" id="genStatusMsg">Analyse de vos photos...</div>
+        <div style="background:var(--bg2);border-radius:100px;height:6px;overflow:hidden;max-width:320px;margin:0 auto 1rem;">
+          <div id="progressFill" style="height:100%;background:linear-gradient(90deg,#c9a05a,#e8b84b);border-radius:100px;width:0%;transition:width .5s ease;"></div>
+        </div>
+        <div style="font-size:.75rem;color:var(--cream3);font-family:var(--fs);" id="progressPct">0%</div>
+        <div class="log" id="logBox" style="display:none;"></div>
       </div>
       <div id="genResult" style="display:none;">
         <div class="tags" id="tagsRow"></div>
@@ -1542,7 +1546,22 @@ function selStyle(el,s){document.querySelectorAll('.sopt').forEach(o=>o.classLis
 // ══════════════════════════════════════════
 // LOG
 // ══════════════════════════════════════════
-function log(msg,cls='li'){const b=document.getElementById('logBox');const t=new Date().toTimeString().slice(0,8);b.innerHTML+=`<div class="ll"><span class="lt">${t}</span><span class="${cls}">${msg}</span></div>`;b.scrollTop=b.scrollHeight;}
+function log(msg,cls='li'){
+  const statusMsg=document.getElementById('genStatusMsg');
+  if(statusMsg && cls!=='lerr') statusMsg.textContent=msg;
+  if(statusMsg && cls==='lerr'){statusMsg.textContent=msg;statusMsg.style.color='#e07070';}
+  const b=document.getElementById('logBox');
+  if(!b)return;
+  const t=new Date().toTimeString().slice(0,8);
+  b.innerHTML+=`<div class="ll"><span class="lt">${t}</span><span class="${cls}">${msg}</span></div>`;
+  b.scrollTop=b.scrollHeight;
+}
+function setProgress(pct){
+  const fill=document.getElementById('progressFill');
+  const pctEl=document.getElementById('progressPct');
+  if(fill) fill.style.width=pct+'%';
+  if(pctEl) pctEl.textContent=pct+'%';
+}
 function setProgress(v){document.getElementById('progressFill').style.width=v+'%';}
 
 // ══════════════════════════════════════════
