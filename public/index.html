@@ -2501,7 +2501,8 @@ async function processPayment(){
         name, email, address, pages, price,
         names:`${n1}${n2?' & '+n2:''}`,
         style:S.style||'Romantique Cinéma',
-        format, pdfUrl
+        format, pdfUrl,
+        promoCode: appliedPromo?.code||''
       })
     });
     const data=await res.json();
