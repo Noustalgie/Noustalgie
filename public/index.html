@@ -858,6 +858,11 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
               </div>
             </div>
             <input type="hidden" id="payFormat" value="print"/>
+            <div style="margin-top:8px;display:flex;gap:8px;">
+              <input type="text" id="promoCode" placeholder="Code promo (optionnel)" style="flex:1;text-transform:uppercase;"/>
+              <button type="button" onclick="applyPromo()" style="background:var(--border);color:var(--cream);border:1px solid var(--border2);border-radius:2px;padding:0 14px;font-size:.75rem;cursor:pointer;">Appliquer</button>
+            </div>
+            <div id="promoMsg" style="font-size:.75rem;margin-top:4px;display:none;"></div>
             <!-- Adresse (masquée si PDF) -->
             <div id="addressField">
               <label class="fl">Adresse de livraison</label>
@@ -2573,6 +2578,29 @@ async function generateAlbumPDF(){
   });
 }
 
+
+
+// CODES PROMO
+let appliedPromo = null;
+async function applyPromo() {
+  const code = document.getElementById('promoCode').value.trim().toUpperCase();
+  const msg = document.getElementById('promoMsg');
+  if(!code) return;
+  try {
+    const res = await fetch('/api/promo', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+    const data = await res.json();
+    if(data.valid) {
+      appliedPromo = {code, discount:data.discount, type:data.type};
+      msg.style.display='block'; msg.style.color='#7ec8a0';
+      msg.textContent = data.type==='free' ? 'Code valide - commande gratuite !' : 'Code valide - '+data.discount+'% de reduction !';
+      updateFormatPrices();
+    } else {
+      msg.style.display='block'; msg.style.color='#e07070';
+      msg.textContent = data.error||'Code invalide ou deja utilise.';
+      appliedPromo = null;
+    }
+  } catch(e) { console.error(e); }
+}
 
 // FORMAT SELECTOR
 function selectFormat(format) {
