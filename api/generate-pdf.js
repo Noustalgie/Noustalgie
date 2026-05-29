@@ -17,9 +17,7 @@ module.exports = async (req, res) => {
     const payload = JSON.stringify({
       source: html,
       format: 'Letter',
-      width: '210mm',
-      height: '210mm',
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      margin: '0',
       use_print: true,
       sandbox: false
     });
@@ -42,11 +40,9 @@ module.exports = async (req, res) => {
         r.on('data', c => chunks.push(c));
         r.on('end', () => {
           if (r.statusCode === 200) {
-            const pdfBuffer = Buffer.concat(chunks);
-            resolve({ success: true, pdf: pdfBuffer.toString('base64') });
+            resolve({ success: true, pdf: Buffer.concat(chunks).toString('base64') });
           } else {
-            const text = Buffer.concat(chunks).toString();
-            resolve({ success: false, error: `PDFShift ${r.statusCode}: ${text.slice(0,200)}` });
+            resolve({ success: false, error: `PDFShift ${r.statusCode}: ${Buffer.concat(chunks).toString().slice(0,300)}` });
           }
         });
       });
@@ -57,7 +53,7 @@ module.exports = async (req, res) => {
     });
 
     if (result.success) {
-      console.log('PDF généré via PDFShift OK');
+      console.log('PDF OK via PDFShift');
       return res.json({ pdf: result.pdf });
     } else {
       throw new Error(result.error);
