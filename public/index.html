@@ -2524,21 +2524,48 @@ async function generateAlbumPDF(){
   const n2 = document.getElementById('name2')?.value||'';
   const names = n2 ? n1+' & '+n2 : n1;
   
+  // Compresser les photos à 400px max pour réduire la taille du HTML
+  function compressPhotoForPdf(dataUrl) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 400;
+        const ratio = Math.min(MAX/img.width, MAX/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.6));
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  }
+
+  // Compresser toutes les photos
+  const compressedPhotos = await Promise.all(
+    S.photos.map(p => compressPhotoForPdf(p.data))
+  );
+
+  // Reconstruire le HTML avec photos compressées
+  const photoMap = {};
+  S.photos.forEach((p, i) => { photoMap[p.data] = compressedPhotos[i]; });
+
   const pagesHtml = AV.pages.map(p => {
-    return '<div class="page" style="background:'+p.bg+';">'+p.html+'</div>';
+    let html = p.html;
+    S.photos.forEach((ph, i) => {
+      if(ph.data) html = html.split(ph.data).join(compressedPhotos[i]);
+    });
+    return '<div class="page" style="background:'+p.bg+';width:210mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;">'+html+'</div>';
   }).join('');
 
   const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
     + '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>'
-    + '<style>'
-    + '* { margin:0; padding:0; box-sizing:border-box; }'
-    + 'body { background:#000; }'
-    + '.page { width:210mm; height:210mm; page-break-after:always; overflow:hidden; position:relative; }'
-    + '.page:last-child { page-break-after:avoid; }'
-    + 'img { max-width:100%; }'
-    + '</style></head><body>'
-    + pagesHtml
-    + '</body></html>';
+    + '<style>* { margin:0; padding:0; box-sizing:border-box; } body { background:#000; } .page:last-child { page-break-after:avoid; } img { max-width:100%; height:auto; }</style>'
+    + '</head><body>' + pagesHtml + '</body></html>';
+
+  console.log('HTML size:', Math.round(fullHtml.length/1024), 'KB');
 
   const res = await fetch('/api/generate-pdf', {
     method: 'POST',
