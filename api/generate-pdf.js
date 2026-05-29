@@ -1,5 +1,4 @@
-const chromium = require('@sparticuz/chromium');
-const puppeteer = require('puppeteer-core');
+const https = require('https');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,52 +7,63 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(204).end();
 
   try {
-    const { pages, title } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    if (!pages || !pages.length) return res.status(400).json({ error: 'Pages manquantes' });
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const { html, title } = body;
+    if (!html) return res.status(400).json({ error: 'HTML manquant' });
 
-    // HTML complet de l'album
-    const html = `<!DOCTYPE html><html><head>
-    <meta charset="UTF-8"/>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-    <style>
-      * { margin:0; padding:0; box-sizing:border-box; }
-      body { background:#000; }
-      .page {
-        width: 630px; height: 630px;
-        page-break-after: always;
-        overflow: hidden;
-        position: relative;
-      }
-      .page:last-child { page-break-after: avoid; }
-    </style>
-    </head><body>
-    ${pages.map(p => `<div class="page">${p.html}</div>`).join('')}
-    </body></html>`;
+    const PDFSHIFT_KEY = process.env.PDFSHIFT_API_KEY;
+    if (!PDFSHIFT_KEY) return res.status(500).json({ error: 'PDFSHIFT_API_KEY manquante' });
 
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: { width: 630, height: 630 },
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
-
-    const pdf = await page.pdf({
+    const payload = JSON.stringify({
+      source: html,
+      format: 'Letter',
       width: '210mm',
       height: '210mm',
-      printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      use_print: true,
+      sandbox: false
     });
 
-    await browser.close();
+    const result = await new Promise((resolve, reject) => {
+      const auth = Buffer.from('api:' + PDFSHIFT_KEY).toString('base64');
+      const buf = Buffer.from(payload);
+      const req2 = https.request({
+        hostname: 'api.pdfshift.io',
+        path: '/v3/convert/pdf',
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + auth,
+          'Content-Type': 'application/json',
+          'Content-Length': buf.length
+        },
+        timeout: 50000
+      }, r => {
+        const chunks = [];
+        r.on('data', c => chunks.push(c));
+        r.on('end', () => {
+          if (r.statusCode === 200) {
+            const pdfBuffer = Buffer.concat(chunks);
+            resolve({ success: true, pdf: pdfBuffer.toString('base64') });
+          } else {
+            const text = Buffer.concat(chunks).toString();
+            resolve({ success: false, error: `PDFShift ${r.statusCode}: ${text.slice(0,200)}` });
+          }
+        });
+      });
+      req2.on('error', reject);
+      req2.on('timeout', () => { req2.destroy(); reject(new Error('Timeout PDFShift')); });
+      req2.write(buf);
+      req2.end();
+    });
 
-    const base64 = Buffer.from(pdf).toString('base64');
-    return res.json({ pdf: base64 });
-
+    if (result.success) {
+      console.log('PDF généré via PDFShift OK');
+      return res.json({ pdf: result.pdf });
+    } else {
+      throw new Error(result.error);
+    }
   } catch(e) {
-    console.error('PDF gen error:', e.message);
+    console.error('PDF error:', e.message);
     return res.status(500).json({ error: e.message });
   }
 };
