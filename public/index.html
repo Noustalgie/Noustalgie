@@ -2466,7 +2466,9 @@ async function processPayment(){
   btn.disabled=true;
 
   const pages=selectedPages||30;
-  const price=format==='pdf'?PRICES[pages]?.pdf:PRICES[pages]?.print||39.99;
+  let price=format==='pdf'?PRICES[pages]?.pdf:PRICES[pages]?.print||39.99;
+  if(appliedPromo && appliedPromo.type==='free') price=0.50;
+  else if(appliedPromo && appliedPromo.discount) price=parseFloat((price*(1-appliedPromo.discount/100)).toFixed(2));
   const n1=document.getElementById('name1').value.trim()||'';
   const n2=document.getElementById('name2').value.trim()||'';
 
