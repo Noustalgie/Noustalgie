@@ -2519,6 +2519,38 @@ async function processPayment(){
 
 // Génère le PDF album en base64 (format carré 21x21cm pour Prodigi)
 async function generateAlbumPDF(){
+  // Construire le HTML complet de l'album pour PDFShift
+  const n1 = document.getElementById('name1')?.value||'Nous';
+  const n2 = document.getElementById('name2')?.value||'';
+  const names = n2 ? n1+' & '+n2 : n1;
+  
+  const pagesHtml = AV.pages.map(p => {
+    return '<div class="page" style="background:'+p.bg+';">'+p.html+'</div>';
+  }).join('');
+
+  const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
+    + '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>'
+    + '<style>'
+    + '* { margin:0; padding:0; box-sizing:border-box; }'
+    + 'body { background:#000; }'
+    + '.page { width:210mm; height:210mm; page-break-after:always; overflow:hidden; position:relative; }'
+    + '.page:last-child { page-break-after:avoid; }'
+    + 'img { max-width:100%; }'
+    + '</style></head><body>'
+    + pagesHtml
+    + '</body></html>';
+
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ html: fullHtml, title: S.story?.titre||'noustalgie' })
+  });
+  const data = await res.json();
+  if(!data.pdf) throw new Error('PDFShift erreur: '+(data.error||'inconnu'));
+  return data.pdf;
+}
+
+async function generateAlbumPDF_UNUSED(){
   return new Promise((resolve, reject) => {
     try {
       if(!window.jspdf) return reject(new Error('jsPDF non chargé'));
