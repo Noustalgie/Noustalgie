@@ -2511,18 +2511,66 @@ async function processPayment(){
 
 // Génère le PDF album en base64 (format carré 21x21cm pour Prodigi)
 async function generateAlbumPDF(){
-  // Envoyer les pages HTML à l'API Puppeteer pour génération PDF haute résolution
-  const pagesData = AV.pages.map(p => ({ html: p.html, bg: p.bg }));
-  
-  const res = await fetch('/api/generate-pdf', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ pages: pagesData, title: S.story?.titre || 'noustalgie' })
+  return new Promise((resolve, reject) => {
+    try {
+      if(!window.jspdf) return reject(new Error('jsPDF non chargé'));
+      const {jsPDF} = window.jspdf;
+      const SIZE = 210;
+      const doc = new jsPDF({unit:'mm', format:[SIZE,SIZE], compress:true});
+      const n1 = document.getElementById('name1')?.value||'Nous';
+      const n2 = document.getElementById('name2')?.value||'';
+      const names = n2 ? n1+' & '+n2 : n1;
+
+      AV.pages.forEach((page, idx) => {
+        if(idx > 0) doc.addPage([SIZE,SIZE]);
+        // Fond de page
+        const bg = page.bg || '#0a0806';
+        const hex = bg.replace('#','');
+        const r = parseInt(hex.slice(0,2),16)||10;
+        const g = parseInt(hex.slice(2,4),16)||8;
+        const b = parseInt(hex.slice(4,6),16)||6;
+        doc.setFillColor(r,g,b);
+        doc.rect(0,0,SIZE,SIZE,'F');
+        
+        // Ajouter les photos de la page
+        const photo = S.photos[idx % S.photos.length];
+        if(photo?.data) {
+          try {
+            doc.addImage(photo.data,'JPEG',0,0,SIZE,SIZE,undefined,'MEDIUM');
+          } catch(e) {}
+        }
+        
+        // Label de la page si disponible
+        if(page.label) {
+          doc.setFillColor(0,0,0);
+          doc.setGState(doc.GState ? new doc.GState({opacity:0.5}) : {});
+          doc.rect(0,SIZE-20,SIZE,20,'F');
+          doc.setTextColor(201,160,90);
+          doc.setFontSize(8);
+          try { doc.text(page.label, SIZE/2, SIZE-8, {align:'center'}); } catch(e){}
+        }
+      });
+      
+      // Titre et noms sur la couverture
+      doc.setPage(1);
+      doc.setFillColor(0,0,0);
+      doc.setGState(doc.GState ? new doc.GState({opacity:0.6}) : {});
+      doc.rect(0,SIZE*0.6,SIZE,SIZE*0.4,'F');
+      doc.setTextColor(242,235,224);
+      doc.setFontSize(18);
+      try {
+        doc.text(S.story?.titre||names, SIZE/2, SIZE*0.75, {align:'center'});
+        doc.setFontSize(9);
+        doc.setTextColor(201,160,90);
+        doc.text(names.toUpperCase()+' · '+new Date().getFullYear(), SIZE/2, SIZE*0.85, {align:'center'});
+      } catch(e){}
+      
+      const b64 = doc.output('datauristring').split(',')[1];
+      resolve(b64);
+    } catch(e) {
+      reject(e);
+    }
   });
-  
-  const data = await res.json();
-  if (!data.pdf) throw new Error('Génération PDF échouée: ' + (data.error || ''));
-  return data.pdf;
 }
 
 
