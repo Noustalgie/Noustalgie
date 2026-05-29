@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).end();
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -22,22 +21,21 @@ module.exports = async (req, res) => {
     }
 
     const timestamp = Math.round(Date.now() / 1000);
-    const publicId = `noustalgie/${(title||'album').replace(/[^a-z0-9]/gi,'-').toLowerCase()}-${timestamp}`;
+    const folder = 'noustalgie';
     
-    // Signature Cloudinary
-    const sigStr = `public_id=${publicId}&resource_type=raw&timestamp=${timestamp}${SECRET}`;
+    // Signature correcte - seulement les params envoyés dans l'ordre alphabétique
+    const sigStr = `folder=${folder}&timestamp=${timestamp}${SECRET}`;
     const signature = crypto.createHash('sha256').update(sigStr).digest('hex');
 
-    // Upload via multipart
-    const boundary = '----CloudinaryBoundary' + Date.now();
     const pdfBuffer = Buffer.from(pdf, 'base64');
-    
+    const boundary = '----CloudinaryBoundary' + Date.now();
+
     const parts = [
       Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="album.pdf"\r\nContent-Type: application/pdf\r\n\r\n`),
       pdfBuffer,
       Buffer.from(`\r\n--${boundary}\r\nContent-Disposition: form-data; name="api_key"\r\n\r\n${KEY}\r\n`),
       Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="timestamp"\r\n\r\n${timestamp}\r\n`),
-      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="public_id"\r\n\r\n${publicId}\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="folder"\r\n\r\n${folder}\r\n`),
       Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="resource_type"\r\n\r\nraw\r\n`),
       Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="signature"\r\n\r\n${signature}\r\n`),
       Buffer.from(`--${boundary}--\r\n`)
@@ -67,7 +65,7 @@ module.exports = async (req, res) => {
     });
 
     if (result.secure_url) {
-      console.log(`✅ PDF uploadé Cloudinary: ${result.secure_url}`);
+      console.log('PDF uploadé Cloudinary:', result.secure_url);
       return res.json({ url: result.secure_url });
     } else {
       throw new Error('Cloudinary error: ' + JSON.stringify(result).slice(0, 200));
