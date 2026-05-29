@@ -2,6 +2,7 @@
 // Format: CODE -> { discount: 100, type: 'free', used: false }
 const PROMOS = {
   'ANTOINE34': { discount: 100, type: 'free', used: false },
+  'ANTOINE2': { discount: 100, type: 'free', used: false },
 };
 
 module.exports = async (req, res) => {
