@@ -5,6 +5,7 @@ const PROMOS = {
   'ANTOINE2': { discount: 100, type: 'free', used: false },
   'ANTOINE3': { discount: 100, type: 'free', used: false },
   'ANTOINE4': { discount: 100, type: 'free', used: false },
+  'ANTOINE5': { discount: 100, type: 'free', used: false },
 };
 
 module.exports = async (req, res) => {
