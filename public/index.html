@@ -197,7 +197,7 @@ input[type=range].mslider:hover::-webkit-slider-thumb{box-shadow:0 0 0 7px rgba(
 .testi-stars{color:var(--gold);font-size:.875rem;margin-bottom:1rem;letter-spacing:3px;}
 .testi-q{font-family:var(--fs);font-size:1rem;font-weight:400;font-style:italic;color:var(--cream2);line-height:1.75;margin-bottom:1.25rem;}
 .testi-by{display:flex;align-items:center;gap:10px;}
-.testi-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.9rem;color:var(--bg);font-weight:500;flex-shrink:0;}
+.testi-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#c9a05a,var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.9rem;color:var(--bg);font-weight:500;flex-shrink:0;}
 .testi-name{font-size:.875rem;font-weight:500;color:var(--cream);}
 .testi-date{font-family:var(--fs);font-size:.75rem;font-style:italic;color:var(--cream3);}
 
@@ -313,7 +313,7 @@ textarea{resize:vertical;min-height:75px;line-height:1.65;}
 .book-scroll{background:var(--bg);border-radius:10px;padding:1.25rem;max-height:430px;overflow-y:auto;}
 .bpp-cover{background:#0a0704;color:var(--cream);padding:2.5rem 2rem;text-align:center;border-radius:6px;margin-bottom:8px;border:1px solid rgba(201,160,90,.14);position:relative;overflow:hidden;}
 .bpp-cover::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.bpp-cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent);}
+.bpp-cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#c9a05a,transparent);}
 .bpp-cover-heart{font-size:1.4rem;margin-bottom:.75rem;opacity:.5;}
 .bpp-cover h2{font-family:var(--fd);font-size:1.65rem;font-weight:400;margin-bottom:8px;}
 .bpp-cover-sub{font-family:var(--fs);font-size:.6875rem;font-style:italic;opacity:.28;letter-spacing:.15em;}
@@ -2552,17 +2552,28 @@ async function generateAlbumPDF(){
   const photoMap = {};
   S.photos.forEach((p, i) => { photoMap[p.data] = compressedPhotos[i]; });
 
-  const pagesHtml = AV.pages.map(p => {
+  // Utiliser le HTML rendu incluant les éditions de l'éditeur
+  const pagesHtml = AV.pages.map((p, idx) => {
+    // Récupérer le HTML rendu depuis le DOM (inclut les éditions)
+    const renderedEl = document.querySelector('#avPage .av-slide-inner');
     let html = p.html;
+    // Appliquer les éditions sauvegardées
+    const edit = AV.edits && AV.edits[idx] ? AV.edits[idx] : {};
+    if(edit.photo && S.photos[edit.photo]) {
+      const oldPhoto = S.photos[idx % S.photos.length]?.data;
+      const newPhoto = S.photos[edit.photo].data;
+      if(oldPhoto) html = html.split(oldPhoto).join(compressedPhotos[edit.photo] || newPhoto);
+    }
+    // Remplacer les photos par versions compressées
     S.photos.forEach((ph, i) => {
-      if(ph.data) html = html.split(ph.data).join(compressedPhotos[i]);
+      if(ph.data && compressedPhotos[i]) html = html.split(ph.data).join(compressedPhotos[i]);
     });
-    return '<div class="page" style="background:'+p.bg+';width:210mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;">'+html+'</div>';
+    return '<div class="page" style="background:'+p.bg+';">'+html+'</div>';
   }).join('');
 
   const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
     + '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>'
-    + '<style>* { margin:0; padding:0; box-sizing:border-box; } body { background:#000; } .page:last-child { page-break-after:avoid; } img { max-width:100%; height:auto; }</style>'
+    + '<style>@page { size: 210mm 210mm; margin: 0; } * { margin:0; padding:0; box-sizing:border-box; } body { background:#000; width:210mm; } .page { width:210mm; height:210mm; overflow:hidden; position:relative; page-break-after:always; page-break-inside:avoid; } .page:last-child { page-break-after:avoid; }</style>'
     + '</head><body>' + pagesHtml + '</body></html>';
 
   console.log('HTML size:', Math.round(fullHtml.length/1024), 'KB');
