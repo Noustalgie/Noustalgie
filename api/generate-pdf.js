@@ -16,7 +16,9 @@ module.exports = async (req, res) => {
 
     const payload = JSON.stringify({
       source: html,
-      format: 'Letter',
+      format: 'Custom',
+      page_width: '210mm',
+      page_height: '210mm',
       margin: '0',
       use_print: true,
       sandbox: false
