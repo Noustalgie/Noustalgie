@@ -984,7 +984,7 @@ const LANGS = {
     create_btn:'Créer notre album',
     cmp_show:'Voir le tableau comparatif ↓', cmp_hide:'Masquer le tableau ↑',
     cmp_tier:'Palier', pdf_only:'PDF seul', printed_book:'Livre imprimé', delivery_col:'Livraison', included:'Offerte',
-    tier_souvenir:'Souvenir', tier_essentiel:'Essentiel', tier_popular:'Populaire', tier_classique:'Classique', tier_complet:'Complet', tier_grand:'Grand', tier_prestige:'Prestige', tier_luxe:'Luxe', tier_premium:'Premium', tier_collector:'Collector',
+    
     price_note:'✓ Aperçu gratuit avant paiement · Satisfait ou remboursé · Livraison offerte',
     testi_eyebrow:'Ils ont créé leur album', testi_title1:'Des histoires', testi_title2:'vraies',
     testi1_q:'« J\'ai offert ça à mon copain pour notre anniversaire. Il a pleuré. »', testi1_date:'Anniversaire 3 ans · 30 pages',
@@ -1053,7 +1053,7 @@ const LANGS = {
     create_btn:'Create our album',
     cmp_show:'View full comparison table ↓', cmp_hide:'Hide table ↑',
     cmp_tier:'Tier', pdf_only:'PDF only', printed_book:'Printed book', delivery_col:'Delivery', included:'Free',
-    tier_souvenir:'Keepsake', tier_essentiel:'Essential', tier_popular:'Popular', tier_classique:'Classic', tier_complet:'Complete', tier_grand:'Large', tier_prestige:'Prestige', tier_luxe:'Luxury', tier_premium:'Premium', tier_collector:'Collector',
+    
     price_note:'✓ Free preview before payment · Satisfaction guaranteed · Free delivery on all printed albums',
     testi_eyebrow:'They created their album', testi_title1:'Real', testi_title2:'stories',
     testi1_q:'"I gave this to my boyfriend for our anniversary. He cried. Our story is beautifully written."', testi1_date:'3rd anniversary · 30 pages',
@@ -1122,7 +1122,7 @@ const LANGS = {
     create_btn:'Unser Album erstellen',
     cmp_show:'Vollständige Vergleichstabelle ↓', cmp_hide:'Tabelle ausblenden ↑',
     cmp_tier:'Stufe', pdf_only:'Nur PDF', printed_book:'Gedrucktes Buch', delivery_col:'Versand', included:'Gratis',
-    tier_souvenir:'Andenken', tier_essentiel:'Basis', tier_popular:'Beliebt', tier_classique:'Klassisch', tier_complet:'Komplett', tier_grand:'Groß', tier_prestige:'Prestige', tier_luxe:'Luxus', tier_premium:'Premium', tier_collector:'Kollektor',
+    
     price_note:'✓ Kostenlose Vorschau · Zufriedenheitsgarantie · Kostenloser Versand',
     testi_eyebrow:'Ihre Alben', testi_title1:'Echte', testi_title2:'Geschichten',
     testi1_q:'"Ich habe das meinem Freund zum Jahrestag geschenkt. Er hat geweint. Unsere Geschichte ist wunderschön erzählt."', testi1_date:'3. Jahrestag · 30 Seiten',
@@ -1191,7 +1191,7 @@ const LANGS = {
     create_btn:'Crear nuestro álbum',
     cmp_show:'Ver tabla comparativa completa ↓', cmp_hide:'Ocultar tabla ↑',
     cmp_tier:'Nivel', pdf_only:'Solo PDF', printed_book:'Libro impreso', delivery_col:'Envío', included:'Gratis',
-    tier_souvenir:'Recuerdo', tier_essentiel:'Esencial', tier_popular:'Popular', tier_classique:'Clásico', tier_complet:'Completo', tier_grand:'Grande', tier_prestige:'Prestigio', tier_luxe:'Lujo', tier_premium:'Premium', tier_collector:'Coleccionista',
+    
     price_note:'✓ Vista previa gratis · Satisfacción garantizada · Envío gratuito en todos los álbumes impresos',
     testi_eyebrow:'Han creado su álbum', testi_title1:'Historias', testi_title2:'reales',
     testi1_q:'"Se lo regalé a mi novio por nuestro aniversario. Lloró al verlo. Nuestra historia está magníficamente narrada."', testi1_date:'3er aniversario · 30 páginas',
@@ -1260,7 +1260,7 @@ const LANGS = {
     create_btn:'Criar o nosso álbum',
     cmp_show:'Ver tabela comparativa completa ↓', cmp_hide:'Ocultar tabela ↑',
     cmp_tier:'Nível', pdf_only:'Só PDF', printed_book:'Livro impresso', delivery_col:'Envio', included:'Grátis',
-    tier_souvenir:'Lembrança', tier_essentiel:'Essencial', tier_popular:'Popular', tier_classique:'Clássico', tier_complet:'Completo', tier_grand:'Grande', tier_prestige:'Prestígio', tier_luxe:'Luxo', tier_premium:'Premium', tier_collector:'Colecionador',
+    
     price_note:'✓ Pré-visualização gratuita · Satisfação garantida · Envio gratuito em todos os álbuns impressos',
     testi_eyebrow:'Criaram o seu álbum', testi_title1:'Histórias', testi_title2:'reais',
     testi1_q:'"Ofereci isto ao meu namorado no nosso aniversário. Ele chorou. A nossa história está magnificamente narrada."', testi1_date:'3º aniversário · 30 páginas',
@@ -2756,7 +2756,7 @@ function generateFinalPDF(){
 // ══════════════════════════════════════════
 const LEGAL={
   mentions:`<span class="eyebrow">Informations légales</span><h1 class="legal-title">Mentions légales</h1><p class="legal-sub">Loi n°2004-575 du 21 juin 2004</p><div class="legal-s"><h3>Éditeur</h3><p>Noustalgie — Auto-entrepreneur · contact@noustalgie.fr</p></div><div class="legal-s"><h3>Propriété intellectuelle</h3><p>L'ensemble du contenu est protégé par le droit d'auteur. Toute reproduction est interdite sans autorisation.</p></div>`,
-  cgv:`<span class="eyebrow">Conditions générales</span><h1 class="legal-title">CGV</h1><p class="legal-sub">En vigueur au 1er janvier 2025</p><div class="legal-s"><h3>Produits & tarifs</h3><p>Album Essentiel (PDF) : de 9,99€ à 54,99€ selon le nombre de pages (10 à 100).<br>Album Premium (impression + livraison) : de 29,99€ à 74,99€ selon le nombre de pages.<br>La différence entre PDF et impression reflète le coût réel d'impression Prodigi (~20€) et la livraison offerte.</p></div><div class="legal-s"><h3>Commande</h3><p>Aperçu complet gratuit avant tout paiement. Commande confirmée après paiement via Stripe.</p></div><div class="legal-s"><h3>Livraison</h3><p>Albums Premium imprimés par Prodigi, livrés en 3 à 5 jours ouvrés. Livraison offerte sur toute la France métropolitaine et les pays européens desservis par Prodigi.</p></div><div class="legal-s"><h3>Satisfaction garantie</h3><p>Aucun montant facturé si le client n'est pas satisfait de l'aperçu. Remplacement offert en cas de défaut d'impression.</p></div>`,
+  cgv:`<span class="eyebrow">Conditions générales</span><h1 class="legal-title">CGV</h1><p class="legal-sub">En vigueur au 1er janvier 2025</p><div class="legal-s"><h3>Produits & tarifs</h3><p>Album Essentiel (PDF) : 14,99€ (20 pages), 19,99€ (30 pages), 24,99€ (50 pages).<br>Album Premium (impression + livraison) : 34,99€ (20 pages), 44,99€ (30 pages), 59,99€ (50 pages).<br>La différence entre PDF et impression reflète le coût réel d'impression Prodigi (~20€) et la livraison offerte.</p></div><div class="legal-s"><h3>Commande</h3><p>Aperçu complet gratuit avant tout paiement. Commande confirmée après paiement via Stripe.</p></div><div class="legal-s"><h3>Livraison</h3><p>Albums Premium imprimés par Prodigi, livrés en 3 à 5 jours ouvrés. Livraison offerte sur toute la France métropolitaine et les pays européens desservis par Prodigi.</p></div><div class="legal-s"><h3>Satisfaction garantie</h3><p>Aucun montant facturé si le client n'est pas satisfait de l'aperçu. Remplacement offert en cas de défaut d'impression.</p></div>`,
   confidentialite:`<span class="eyebrow">Protection des données</span><h1 class="legal-title">Confidentialité</h1><p class="legal-sub">Conformément au RGPD</p><div class="legal-s"><h3>Données collectées</h3><p>Uniquement les données nécessaires : prénom, email, adresse de livraison. Aucune donnée bancaire stockée.</p></div><div class="legal-s"><h3>Vos photos</h3><p>Les photos uploadées sont traitées localement dans votre navigateur. Elles ne sont jamais stockées sur nos serveurs.</p></div><div class="legal-s"><h3>Vos droits</h3><p>Droit d'accès, rectification et suppression : contact@noustalgie.fr</p></div>`,
   contact:`<span class="eyebrow">Nous contacter</span><h1 class="legal-title">Contact</h1><p class="legal-sub">Réponse sous 24h ouvrées.</p><div class="legal-s"><h3>Email</h3><p>contact@noustalgie.fr</p></div><div class="legal-s"><h3>Europe</h3><p>Noustalgie livre dans toute l'Europe via Prodigi. Pour les commandes hors France, précisez votre pays lors de la commande.</p></div>`
 };
