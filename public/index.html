@@ -645,7 +645,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
         <div class="card-title" data-i18n="p0_title">Parlons de vous deux</div>
         <div class="card-sub" style="margin-bottom:1.5rem;" data-i18n="p0_sub">Ces informations personnalisent chaque ligne de votre livre.</div>
         <div class="field-row">
-          <div><label class="fl" data-i18n="name1_lbl">Prénom 1</label><input type="text" id="name1" data-i18n-ph="name1_ph" placeholder="Emma"/></div>
+          <div><label class="fl" data-i18n="name1_lbl">Prénom 1</label><input type="text" id="name1" data-i18n-ph="name1_ph" placeholder="Votre prénom"/></div>
           <div><label class="fl" data-i18n="name2_lbl">Prénom 2</label><input type="text" id="name2" data-i18n-ph="name2_ph" placeholder="Lucas"/></div>
         </div>
         <div class="field-row">
@@ -825,7 +825,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
         <div id="payForm">
           <div class="pay-heart"></div>
           <div class="pay-title" data-i18n="pay_title">Votre livre est prêt</div>
-          <div class="pay-sub" data-i18n="pay_sub">Satisfait de l'aperçu ? Commandez votre livre photo premium, livré en 5-7 jours.</div>
+          <div class="pay-sub" data-i18n="pay_sub">Satisfait de l'aperçu ? Commandez votre livre photo premium, livré en 3-5 jours.</div>
           <div class="pay-price-box">
             <div class="pay-big"><sup>€</sup><span id="payFinalPrice">44,99</span></div>
             <div class="pay-big-sub" id="payFinalDesc">Album Premium · 30 pages</div>
@@ -840,7 +840,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
           </ul>
           <div class="pay-form">
             <label class="fl" data-i18n="pay_name_lbl">Votre prénom</label>
-            <input type="text" id="payName" data-i18n-ph="pay_name_ph" placeholder="Emma"/>
+            <input type="text" id="payName" data-i18n-ph="pay_name_ph" placeholder="Votre prénom"/>
             <label class="fl" data-i18n="pay_email_lbl">Email (suivi de commande)</label>
             <input type="email" id="payEmail" placeholder="emma@email.com"/>
             <!-- Choix format -->
@@ -849,12 +849,12 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
               <div id="formatPrint" onclick="selectFormat('print')" style="border:1.5px solid rgba(201,160,90,.4);background:rgba(201,160,90,.08);border-radius:6px;padding:10px 8px;cursor:pointer;text-align:center;">
                 <div style="font-size:.875rem;margin-bottom:2px;">📦</div>
                 <div style="font-size:.75rem;font-weight:600;color:#c9a05a;">Livre imprimé</div>
-                <div style="font-size:.6875rem;color:rgba(255,255,255,.4);" id="printPriceLabel">44,99 €</div>
+                <div style="font-size:.6875rem;color:rgba(255,255,255,.4);" id="printPriceLabel">44,99€</div>
               </div>
               <div id="formatPdf" onclick="selectFormat('pdf')" style="border:1.5px solid rgba(255,255,255,.1);background:transparent;border-radius:6px;padding:10px 8px;cursor:pointer;text-align:center;">
                 <div style="font-size:.875rem;margin-bottom:2px;">📄</div>
                 <div style="font-size:.75rem;font-weight:500;color:rgba(255,255,255,.45);">PDF seul</div>
-                <div style="font-size:.6875rem;color:rgba(255,255,255,.25);" id="pdfPriceLabel">19,99 €</div>
+                <div style="font-size:.6875rem;color:rgba(255,255,255,.25);" id="pdfPriceLabel">19,99€</div>
               </div>
             </div>
             <input type="hidden" id="payFormat" value="print"/>
@@ -978,7 +978,7 @@ const LANGS = {
     pdf_per:'/PDF', for_word:'Pour',
     ess_f1:'Histoire rédigée sur mesure', ess_f2:'Mise en page premium', ess_f3:'Dédicace & légendes intégrées', ess_f4:'PDF haute résolution',
     choose_btn:'Choisir →',
-    prem_name:'Album Premium', prem_desc:'Livre imprimé sur papier photo pro, livré en 5-7 jours.',
+    prem_name:'Album Premium', prem_desc:'Livre imprimé sur papier photo pro, livré en 3-5 jours.',
     print_per:'/livre imprimé', free_delivery:'Livraison offerte',
     prem_f1:'Tout de l\'Essentiel inclus', prem_f2:'Photos sublimées incluses', prem_f3:'Impression pro Prodigi', prem_f4:'Couverture rigide premium', prem_f5:'Livraison offerte',
     create_btn:'Créer notre album',
@@ -1016,7 +1016,7 @@ const LANGS = {
     legal_mentions:'Mentions légales', legal_cgv:'CGV', legal_privacy:'Confidentialité', legal_contact:'Contact',
     footer_copy:'© 2025 Noustalgie — Tous droits réservés', footer_made:'Fait avec', create_album:'Créer mon album',
     close_btn:'← Fermer', modal_title:'Votre petit mot 💌', modal_sub:'Cette légende apparaîtra sous cette photo.', modal_lbl:'Légende personnelle', modal_ph:'Notre premier soir à Paris...', cancel:'Annuler', save_word:'Sauvegarder',
-    log_analyzing:'Analyse de vos photos...', log_analyzed:'Analyse terminée ✓', log_themes:'Thèmes :', log_writing:'Rédaction de votre histoire d\'amour...', log_ready:'Votre histoire est prête', log_error:'Erreur :', log_server_tip:'Vérifie que node server.js tourne et que ta clé API est valide.',
+    log_analyzing:'Analyse de vos photos...', log_analyzed:'Analyse terminée ✓', log_themes:'Thèmes :', log_writing:'Rédaction de votre histoire d\'amour...', log_ready:'Votre album est prêt ✓', log_error:'Erreur :', log_server_tip:'Réessaie dans quelques secondes ou contacte contact@noustalgie.fr',
     photos_ok:' photos prêtes', photos_warn:'/15 — encore ', photos_warn2:' à ajouter',
     soon_eyebrow:'Bientôt', soon_title1:'Les premières histoires', soon_title2:'seront les vôtres', soon_sub:'Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album.', soon_cta:'Créer le premier album', soon_note:'Aperçu 100% gratuit — aucun engagement avant de voir le résultat',
   },
@@ -1032,7 +1032,7 @@ const LANGS = {
     step2_name:'Your personal words', step2_desc:'Dedication, photo captions, closing message.',
     step3_name:'Your story', step3_desc:'Your love story written from scratch based on your shared moments.',
     step4_name:'Full preview', step4_desc:'View your complete album before ordering.',
-    step5_name:'Print & delivery', step5_desc:'Pro book printed on premium photo paper, delivered in 5-7 days.',
+    step5_name:'Print & delivery', step5_desc:'Pro book printed on premium photo paper, delivered in 3-5 days.',
     free:'Free', from19:'From €19',
     feat_eyebrow:'What makes us unique', feat_title1:'More than an album.', feat_title2:'A work of art for two.',
     feat1_name:'Tailored story', feat1_desc:'Your love story written from your photos. 100% unique every time.',
@@ -1047,7 +1047,7 @@ const LANGS = {
     pdf_per:'/PDF', for_word:'For',
     ess_f1:'Custom-written story', ess_f2:'Premium layout', ess_f3:'Dedication & captions included', ess_f4:'High-resolution PDF',
     choose_btn:'Choose →',
-    prem_name:'Premium Album', prem_desc:'Printed photo book on pro paper, delivered to your door in 5-7 days.',
+    prem_name:'Premium Album', prem_desc:'Printed photo book on pro paper, delivered to your door in 3-5 days.',
     print_per:'/printed book', free_delivery:'Free delivery',
     prem_f1:'Everything in Essential', prem_f2:'Enhanced photos included', prem_f3:'Pro Prodigi printing', prem_f4:'Premium hard cover', prem_f5:'Free delivery',
     create_btn:'Create our album',
@@ -1085,7 +1085,7 @@ const LANGS = {
     legal_mentions:'Legal notice', legal_cgv:'T&Cs', legal_privacy:'Privacy', legal_contact:'Contact',
     footer_copy:'© 2025 Noustalgie — All rights reserved', footer_made:'Made with', create_album:'Create my album',
     close_btn:'← Close', modal_title:'Your personal note 💌', modal_sub:'This caption will appear under the photo in your book.', modal_lbl:'Personal caption', modal_ph:'Our first night in Paris...', cancel:'Cancel', save_word:'Save',
-    log_analyzing:'Analysing your photos...', log_analyzed:'Analysis complete ✓', log_themes:'Themes:', log_writing:'Writing your love story...', log_ready:'Your story is ready', log_error:'Error:', log_server_tip:'Make sure node server.js is running and your API key is valid.',
+    log_analyzing:'Analysing your photos...', log_analyzed:'Analysis complete ✓', log_themes:'Themes:', log_writing:'Writing your love story...', log_ready:'Your album is ready ✓', log_error:'Error:', log_server_tip:'Please try again in a few seconds.',
     photos_ok:' photos ready', photos_warn:'/15 — ', photos_warn2:' more needed',
     soon_eyebrow:'Coming soon', soon_title1:'The first stories', soon_title2:'will be yours', soon_sub:'Noustalgie is launching soon. Be among the first to create your album.', soon_cta:'Create the first album', soon_note:'100% free preview — no commitment until you see the result',
   },
@@ -1154,7 +1154,7 @@ const LANGS = {
     legal_mentions:'Impressum', legal_cgv:'AGB', legal_privacy:'Datenschutz', legal_contact:'Kontakt',
     footer_copy:'© 2025 Noustalgie — Alle Rechte vorbehalten', footer_made:'Mit gemacht', create_album:'Mein Album erstellen',
     close_btn:'← Schließen', modal_title:'Eure persönliche Notiz 💌', modal_sub:'Diese Bildunterschrift erscheint unter dem Foto.', modal_lbl:'Persönliche Bildunterschrift', modal_ph:'Unser erster Abend in Paris...', cancel:'Abbrechen', save_word:'Speichern',
-    log_analyzing:'Fotos werden analysiert...', log_analyzed:'Analyse abgeschlossen ✓', log_themes:'Themen:', log_writing:'Liebesgeschichte wird geschrieben...', log_ready:'Eure Geschichte ist fertig', log_error:'Fehler:', log_server_tip:'Prüft ob node server.js läuft und der API-Schlüssel gültig ist.',
+    log_analyzing:'Fotos werden analysiert...', log_analyzed:'Analyse abgeschlossen ✓', log_themes:'Themen:', log_writing:'Liebesgeschichte wird geschrieben...', log_ready:'Eure Geschichte ist fertig', log_error:'Fehler:', log_server_tip:'Bitte versuche es in einigen Sekunden erneut.',
     photos_ok:' Fotos bereit', photos_warn:'/15 — noch ', photos_warn2:' erforderlich',
     soon_eyebrow:'Demnächst', soon_title1:'Die ersten Geschichten', soon_title2:'werden eure sein', soon_sub:'Noustalgie ist im Start. Gehört zu den Ersten, die ihr Album erstellen.', soon_cta:'Das erste Album erstellen', soon_note:'100% kostenlose Vorschau — keine Verpflichtung bis ihr das Ergebnis seht',
   },
@@ -1223,7 +1223,7 @@ const LANGS = {
     legal_mentions:'Aviso legal', legal_cgv:'Condiciones', legal_privacy:'Privacidad', legal_contact:'Contacto',
     footer_copy:'© 2025 Noustalgie — Todos los derechos reservados', footer_made:'Hecho con', create_album:'Crear mi álbum',
     close_btn:'← Cerrar', modal_title:'Vuestro pequeño mensaje 💌', modal_sub:'Este pie de foto aparecerá bajo la foto en vuestro libro.', modal_lbl:'Pie de foto personal', modal_ph:'Nuestra primera noche en París...', cancel:'Cancelar', save_word:'Guardar',
-    log_analyzing:'Analizando vuestras fotos...', log_analyzed:'Análisis completado ✓', log_themes:'Temas:', log_writing:'Escribiendo vuestra historia de amor...', log_ready:'¡Vuestra historia está lista', log_error:'Error:', log_server_tip:'Asegúrate de que node server.js está en marcha y la clave API es válida.',
+    log_analyzing:'Analizando vuestras fotos...', log_analyzed:'Análisis completado ✓', log_themes:'Temas:', log_writing:'Escribiendo vuestra historia de amor...', log_ready:'¡Vuestra historia está lista', log_error:'Error:', log_server_tip:'Por favor, inténtalo de nuevo en unos segundos.',
     photos_ok:' fotos listas', photos_warn:'/15 — faltan ', photos_warn2:' más',
     soon_eyebrow:'Próximamente', soon_title1:'Las primeras historias', soon_title2:'serán las vuestras', soon_sub:'Noustalgie está en lanzamiento. Sed de los primeros en crear vuestro álbum.', soon_cta:'Crear el primer álbum', soon_note:'Vista previa 100% gratis — sin compromiso hasta ver el resultado',
   },
@@ -1292,7 +1292,7 @@ const LANGS = {
     legal_mentions:'Aviso legal', legal_cgv:'CGV', legal_privacy:'Privacidade', legal_contact:'Contacto',
     footer_copy:'© 2025 Noustalgie — Todos os direitos reservados', footer_made:'Feito com', create_album:'Criar o meu álbum',
     close_btn:'← Fechar', modal_title:'A vossa mensagem pessoal 💌', modal_sub:'Esta legenda aparecerá sob a foto no vosso livro.', modal_lbl:'Legenda pessoal', modal_ph:'A nossa primeira noite em Paris...', cancel:'Cancelar', save_word:'Guardar',
-    log_analyzing:'A analisar as vossas fotos...', log_analyzed:'Análise concluída ✓', log_themes:'Temas:', log_writing:'A escrever a vossa história de amor...', log_ready:'A vossa história está pronta', log_error:'Erro:', log_server_tip:'Certifiquem-se que node server.js está a correr e a chave API é válida.',
+    log_analyzing:'A analisar as vossas fotos...', log_analyzed:'Análise concluída ✓', log_themes:'Temas:', log_writing:'A escrever a vossa história de amor...', log_ready:'A vossa história está pronta', log_error:'Erro:', log_server_tip:'Por favor, tente novamente em alguns segundos.',
     photos_ok:' fotos prontas', photos_warn:'/15 — faltam ', photos_warn2:' mais',
     soon_eyebrow:'Em breve', soon_title1:'As primeiras histórias', soon_title2:'serão as vossas', soon_sub:'O Noustalgie está a lançar. Sejam dos primeiros a criar o vosso álbum.', soon_cta:'Criar o primeiro álbum', soon_note:'Pré-visualização 100% gratuita — sem compromisso até ver o resultado',
   }
