@@ -632,10 +632,9 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
     <div class="prog" id="prog">
       <div class="p-step active" id="ps0" onclick="goTab(0)"><div class="p-dot" id="pd0">1</div><div class="p-lbl" data-i18n="step_duo">Votre duo</div></div>
       <div class="p-step" id="ps1" onclick="goTab(1)"><div class="p-dot" id="pd1">2</div><div class="p-lbl" data-i18n="step_photos">Photos</div></div>
-      <div class="p-step" id="ps2" onclick="goTab(2)"><div class="p-dot" id="pd2">3</div><div class="p-lbl" data-i18n="step_style">Style</div></div>
-      <div class="p-step" id="ps3" onclick="goTab(3)"><div class="p-dot" id="pd3">4</div><div class="p-lbl" data-i18n="step_creation">Création</div></div>
-      <div class="p-step" id="ps4" onclick="goTab(4)"><div class="p-dot" id="pd4">5</div><div class="p-lbl" data-i18n="step_preview">Aperçu</div></div>
-      <div class="p-step" id="ps5" onclick="goTab(5)"><div class="p-dot" id="pd5">6</div><div class="p-lbl" data-i18n="step_order">Commander</div></div>
+      <div class="p-step" id="ps2" onclick="goTab(2)"><div class="p-dot" id="pd2">4</div><div class="p-lbl" data-i18n="step_creation">Création</div></div>
+      <div class="p-step" id="ps3" onclick="goTab(2)"><div class="p-dot" id="pd3">5</div><div class="p-lbl" data-i18n="step_preview">Aperçu</div></div>
+      <div class="p-step" id="ps4" onclick="goTab(2)"><div class="p-dot" id="pd4">6</div><div class="p-lbl" data-i18n="step_order">Commander</div></div>
     </div>
 
     <!-- PANEL 0 -->
@@ -704,36 +703,12 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
       <div class="notice" data-i18n="photos_notice">📸 La 1ère photo = couverture du livre · La dernière = 4ème de couverture. Choisissez-les bien ! Survolez chaque photo pour ajouter une légende personnalisée.</div>
       <div class="btn-row">
         <button class="btn" onclick="goTab(0)" data-i18n="back">← Retour</button>
-        <button class="btn btn-gold" onclick="goTab(2)" data-i18n="next_style">Suivant — Style →</button>
-      </div>
-    </div>
-
-    <!-- PANEL 2 -->
-    <div class="panel" id="panel2">
-      <div class="card">
-        <div class="card-hd" data-i18n="p2_hd">L'ambiance de votre album</div>
-        <div class="style-grid">
-          <div class="sopt sel" onclick="selStyle(this,'Romantique Cinéma')"><div class="sopt-emo">🎬</div><div class="sopt-name" data-i18n="style1">Cinéma</div><div class="sopt-desc" data-i18n="style1d">Dramatique, golden hour</div></div>
-          <div class="sopt" onclick="selStyle(this,'Luxury')"><div class="sopt-emo">✨</div><div class="sopt-name" data-i18n="style2">Luxury</div><div class="sopt-desc" data-i18n="style2d">Élégant, haut de gamme</div></div>
-          <div class="sopt" onclick="selStyle(this,'Vintage Amour')"><div class="sopt-emo">📽️</div><div class="sopt-name" data-i18n="style3">Vintage</div><div class="sopt-desc" data-i18n="style3d">Argentique, nostalgie</div></div>
-          <div class="sopt" onclick="selStyle(this,'Conte de Fées')"><div class="sopt-emo">🌸</div><div class="sopt-name" data-i18n="style4">Conte de Fées</div><div class="sopt-desc" data-i18n="style4d">Magique, féerique</div></div>
-          <div class="sopt" onclick="selStyle(this,'Épique')"><div class="sopt-emo">🌅</div><div class="sopt-name" data-i18n="style5">Épique</div><div class="sopt-desc" data-i18n="style5d">Grand, cinématographique</div></div>
-          <div class="sopt" onclick="selStyle(this,'Poétique')"><div class="sopt-emo">🌙</div><div class="sopt-name" data-i18n="style6">Poétique</div><div class="sopt-desc" data-i18n="style6d">Lyrique, aquarelle</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-hd" data-i18n="closing_hd">Message de clôture</div>
-        <div class="card-sub" style="margin-bottom:1rem;" data-i18n="closing_sub">Ce message personnel apparaîtra sur la toute dernière page.</div>
-        <textarea id="closingMsg" data-i18n-ph="closing_ph" placeholder="Et notre histoire continue..."></textarea>
-      </div>
-      <div class="btn-row">
-        <button class="btn" onclick="goTab(1)" data-i18n="back">← Retour</button>
         <button class="btn btn-gold" id="btnGen" onclick="runGeneration()" data-i18n="gen_btn">Créer notre histoire →</button>
       </div>
     </div>
 
     <!-- PANEL 3 -->
-    <div class="panel" id="panel3">
+    <div class="panel" id="panel2">
       <div class="card" style="text-align:center;padding:2.5rem 1.5rem;">
         <div style="font-family:var(--fd);font-size:1.25rem;font-weight:500;color:var(--cream);margin-bottom:.5rem;">Création de votre album</div>
         <div style="font-family:var(--fs);font-size:.875rem;font-style:italic;color:var(--cream3);margin-bottom:2rem;" id="genStatusMsg">Analyse de vos photos...</div>
@@ -751,13 +726,13 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
         </div>
         <div class="btn-row" style="margin-top:1rem;">
           <button class="btn" onclick="goTab(2)" data-i18n="back_modify">← Modifier</button>
-          <button class="btn btn-gold" onclick="goTab(4)" data-i18n="see_preview">Voir l'aperçu →</button>
+          <button class="btn btn-gold" onclick="goTab(2)" data-i18n="see_preview">Voir l'aperçu →</button>
         </div>
       </div>
     </div>
 
     <!-- PANEL 4 -->
-    <div class="panel" id="panel4">
+    <div class="panel" id="panel3">
       <!-- Viewer + éditeur côte à côte -->
       <div id="albumViewer" style="background:#0a0806;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(201,160,90,.15);">
 
@@ -814,13 +789,13 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
       </div>
 
       <div class="btn-row" style="margin-top:1rem;">
-        <button class="btn" onclick="goTab(3)">← Retour</button>
-        <button class="btn btn-gold" onclick="goTab(5)" id="btnOrder">Commander ce livre</button>
+        <button class="btn" onclick="goTab(2)">← Retour</button>
+        <button class="btn btn-gold" onclick="goTab(2)" id="btnOrder">Commander ce livre</button>
       </div>
     </div>
 
     <!-- PANEL 5 -->
-    <div class="panel" id="panel5">
+    <div class="panel" id="panel4">
       <div class="pay-wrap">
         <div id="payForm">
           <div class="pay-heart"></div>
@@ -1436,7 +1411,7 @@ const STYLE_PROMPTS = {
 // ══════════════════════════════════════════
 // NAV
 // ══════════════════════════════════════════
-const STEP_LABELS = ['step_duo','step_photos','step_style','step_creation','step_preview','step_order'];
+const STEP_LABELS = ['step_duo','step_photos','step_creation','step_preview','step_order'];
 
 function goTab(n) {
   try {
@@ -1450,13 +1425,13 @@ function goTab(n) {
       if(lbl) lbl.textContent=LANGS[currentLang][STEP_LABELS[i]]||STEP_LABELS[i];
     }
     const T = LANGS[currentLang];
-    const fill = ((n+1)/6*100).toFixed(0);
+    const fill = ((n+1)/5*100).toFixed(0);
     const mobFill=document.getElementById('mobFill');
     const mobStep=document.getElementById('mobStepTxt');
     const mobCount=document.getElementById('mobCount');
     if(mobFill) mobFill.style.width = fill+'%';
     if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
-    if(mobCount) mobCount.textContent = (n+1)+' / 6';
+    if(mobCount) mobCount.textContent = (n+1)+' / 5';
     if(n===4) renderBookPreview();
     if(n===5) {
       updateFormatPrices();
