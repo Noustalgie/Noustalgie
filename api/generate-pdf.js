@@ -16,7 +16,6 @@ module.exports = async (req, res) => {
 
     const payload = JSON.stringify({
       source: html,
-      format: 'Letter',
       margin: '0',
       use_print: true,
       sandbox: false
