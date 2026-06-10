@@ -751,36 +751,27 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
         <div id="avPage" style="width:100%;aspect-ratio:1;position:relative;overflow:hidden;"></div>
 
         <!-- Panneau éditeur — slide depuis le bas -->
-        <div id="editorPanel" style="display:none;background:#0d0b09;border-top:1px solid rgba(201,160,90,.15);padding:14px;">
-
-          <!-- Onglets -->
-          <div style="display:flex;gap:6px;margin-bottom:12px;">
-            <button class="ed-tab active" id="tab-photo" onclick="edTab('photo')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(201,160,90,.25);background:rgba(201,160,90,.1);color:#c9a05a;font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">📷 Photo</button>
-            <button class="ed-tab" id="tab-text" onclick="edTab('text')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">✍️ Texte</button>
-            <button class="ed-tab" id="tab-layout" onclick="edTab('layout')" style="flex:1;padding:7px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .15s;">⊞ Disposition</button>
+        <div id="editorPanel" style="display:none;background:#0d0b09;border-top:1px solid rgba(201,160,90,.15);padding:14px 14px 16px;">
+          <div id="slotSelector" style="display:none;margin-bottom:10px;"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Zone à modifier</div><div id="slotBtns" style="display:flex;gap:5px;"></div></div>
+          <div style="display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;">
+            <button class="ed-tab active" id="tab-photo" onclick="edTab('photo')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(201,160,90,.3);background:rgba(201,160,90,.1);color:#c9a05a;font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">📷 Photo</button>
+            <button class="ed-tab" id="tab-filter" onclick="edTab('filter')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">🎨 Filtres</button>
+            <button class="ed-tab" id="tab-text" onclick="edTab('text')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">✍️ Texte</button>
+            <button class="ed-tab" id="tab-layout" onclick="edTab('layout')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">⊞ Page</button>
           </div>
-
-          <!-- Tab PHOTO -->
-          <div id="edPhotoPanel">
-            <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir une autre photo</div>
-            <div id="edPhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:5px;max-height:140px;overflow-y:auto;"></div>
-          </div>
-
-          <!-- Tab TEXTE -->
-          <div id="edTextPanel" style="display:none;">
-            <div id="edTextFields"></div>
-          </div>
-
-          <!-- Tab DISPOSITION -->
-          <div id="edLayoutPanel" style="display:none;">
-            <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir un layout</div>
-            <div id="edLayoutGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"></div>
-          </div>
-
-          <!-- Bouton appliquer -->
+          <div id="edPhotoPanel"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir une photo</div><div id="edPhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:4px;max-height:150px;overflow-y:auto;"></div></div>
+          <div id="edFilterPanel" style="display:none;"><div style="display:grid;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Noir &amp; Blanc</div><div id="bwToggle" onclick="toggleBW()" style="width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;position:relative;transition:all .2s;"><div id="bwKnob" style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .2s;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Luminosité</div><div id="brightnessVal" style="font-size:10px;color:#c9a05a;">0</div></div><input type="range" id="brightnessSlider" min="-60" max="60" value="0" oninput="updateFilter('brightness',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Contraste</div><div id="contrastVal" style="font-size:10px;color:#c9a05a;">0</div></div><input type="range" id="contrastSlider" min="-50" max="50" value="0" oninput="updateFilter('contrast',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Saturation</div><div id="saturateVal" style="font-size:10px;color:#c9a05a;">0</div></div><input type="range" id="saturateSlider" min="-80" max="80" value="0" oninput="updateFilter('saturate',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);margin-bottom:6px;">Recadrage</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div><div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px;">Horizontal</div><input type="range" id="cropXSlider" min="0" max="100" value="50" oninput="updateCrop('x',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div><div><div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px;">Vertical</div><input type="range" id="cropYSlider" min="0" max="100" value="50" oninput="updateCrop('y',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div></div></div>
+          </div></div>
+          <div id="edTextPanel" style="display:none;"><div id="edTextFields"></div><div id="edTextStyles" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Style</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;"><select id="textFont" onchange="updateTextStyle('font',this.value)" style="background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:4px;color:#f2ebe0;font-size:11px;padding:5px 6px;cursor:pointer;"><option value="playfair">Playfair</option><option value="inter">Inter</option><option value="baskerville">Baskerville</option></select><select id="textColor" onchange="updateTextStyle('color',this.value)" style="background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:4px;color:#f2ebe0;font-size:11px;padding:5px 6px;cursor:pointer;"><option value="cream">Crème</option><option value="gold">Doré</option><option value="white">Blanc</option><option value="dark">Sombre</option></select></div><div style="display:flex;gap:5px;"><button id="boldBtn" onclick="toggleTextStyle('bold')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;">G</button><button id="italicBtn" onclick="toggleTextStyle('italic')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;font-style:italic;cursor:pointer;transition:all .15s;font-family:Georgia,serif;">I</button><button onclick="setTextSize('small')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;">S</button><button onclick="setTextSize('medium')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(201,160,90,.2);background:rgba(201,160,90,.05);color:rgba(201,160,90,.7);font-size:10px;cursor:pointer;">M</button><button onclick="setTextSize('large')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;">L</button></div></div></div>
+          <div id="edLayoutPanel" style="display:none;"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Layout</div><div id="edLayoutGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;"></div></div>
           <div style="display:flex;gap:8px;margin-top:12px;">
-            <button onclick="applyEdit()" style="flex:1;padding:9px;background:#c9a05a;color:#0a0806;border:none;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;font-family:var(--fb);">Appliquer ✓</button>
-            <button onclick="resetEdit()" style="padding:9px 14px;background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--fb);">Reset</button>
+            <button onclick="applyEdit()" style="flex:1;padding:9px;background:#c9a05a;color:#0a0806;border:none;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;font-family:var(--fb);">Appliquer ✓</button>
+            <button onclick="resetEdit()" style="padding:9px 14px;background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08);border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--fb);">↩ Reset</button>
           </div>
         </div>
 
@@ -2200,7 +2191,7 @@ function avRender(){
   document.querySelectorAll('.av-thumb').forEach((t,i)=>t.style.outline=i===AV.cur?'2px solid #c9a05a':'none');
 
   // Mettre à jour l'éditeur si ouvert
-  if(document.getElementById('editorPanel').style.display!=='none') refreshEditor();
+  setTimeout(()=>{applySlotEditsToDOM();if(document.getElementById('editorPanel').style.display!=='none')refreshEditor();},150);
 }
 
 function avBuildThumbs(){
@@ -2220,201 +2211,27 @@ function avNext(){if(AV.cur<AV.pages.length-1){AV.cur++;avRender();}}
 function avPrev(){if(AV.cur>0){AV.cur--;avRender();}}
 
 // ══════════════════════════════════════════
-// ÉDITEUR DE PAGES
+// ÉDITEUR DE PAGES — NIVEAU 100
 // ══════════════════════════════════════════
-AV.edits={};
-AV.editState={};
-AV.layouts={};
-
-// Layouts disponibles par index
-const LAYOUT_DEFS=[
-  {icon:'⬛',name:'Pleine page',desc:'Photo 100%'},
-  {icon:'⬜',name:'Split 60/40',desc:'Photo + texte'},
-  {icon:'⊞',name:'Collage 2',desc:'My pov / Your pov'},
-  {icon:'▦',name:'Collage 3',desc:'Asymétrique'},
-  {icon:'Aa',name:'Typographique',desc:'Texte géant'},
-  {icon:'💌',name:'Dédicace',desc:'Fond clair centré'},
-];
-
-function toggleEditor(){
-  const panel=document.getElementById('editorPanel');
-  const btn=document.getElementById('avEditBtn');
-  const isOpen=panel.style.display!=='none';
-  panel.style.display=isOpen?'none':'block';
-  btn.style.background=isOpen?'rgba(201,160,90,.1)':'rgba(201,160,90,.2)';
-  btn.style.borderColor=isOpen?'rgba(201,160,90,.25)':'rgba(201,160,90,.5)';
-  if(!isOpen) refreshEditor();
-}
-
-function edTab(tab){
-  ['photo','text','layout'].forEach(t=>{
-    document.getElementById(`edPhotoPanel`).style.display=t==='photo'?'block':'none';
-    document.getElementById(`edTextPanel`).style.display=t==='text'?'block':'none';
-    document.getElementById(`edLayoutPanel`).style.display=t==='layout'?'block':'none';
-    const btn=document.getElementById(`tab-${t}`);
-    if(btn){
-      btn.style.background=t===tab?'rgba(201,160,90,.1)':'transparent';
-      btn.style.color=t===tab?'#c9a05a':'rgba(255,255,255,.35)';
-      btn.style.borderColor=t===tab?'rgba(201,160,90,.25)':'rgba(255,255,255,.08)';
-    }
-  });
-  // Corriger pour la tab active
-  const activeBtn=document.getElementById(`tab-${tab}`);
-  if(activeBtn){activeBtn.style.background='rgba(201,160,90,.1)';activeBtn.style.color='#c9a05a';}
-  document.getElementById(`ed${tab.charAt(0).toUpperCase()+tab.slice(1)}Panel`).style.display='block';
-}
-
-function refreshEditor(){
-  const i=AV.cur;
-  const p=AV.pages[i];
-  const edit=AV.edits[i]||{};
-  AV.editState={photoIdx:edit.photoIdx,texts:{...edit.texts||{}},layout:edit.layout};
-
-  // Grid photos
-  const grid=document.getElementById('edPhotoGrid');
-  if(grid){
-    grid.innerHTML=S.photos.map((ph,pi)=>`
-      <div onclick="edSelectPhoto(${pi})" style="aspect-ratio:1;border-radius:4px;overflow:hidden;cursor:pointer;border:${(edit.photoIdx===pi)?'2px solid #c9a05a':'1.5px solid rgba(255,255,255,.08)'};transition:all .15s;position:relative;">
-        <img src="${ph.data}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.visibility='hidden'"/>
-        ${edit.photoIdx===pi?`<div style="position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;background:#c9a05a;"></div>`:''}
-      </div>`).join('');
-  }
-
-  // Champs texte — extraire depuis le HTML de la page
-  const textFields=document.getElementById('edTextFields');
-  if(textFields){
-    // Extraire les textes éditables de la page courante
-    const html=p.html;
-    const editables=[];
-
-    // Titre du chapitre
-    const titleMatch=html.match(/font-weight:700[^>]*>([^<]{3,60})<\/div>/);
-    if(titleMatch) editables.push({key:'title',label:'Titre',val:edit.texts?.title||titleMatch[1]});
-
-    // Texte corps
-    const bodyMatch=html.match(/line-height:1\.7[^>]*>([^<]{10,})<\/div>/);
-    if(bodyMatch) editables.push({key:'body',label:'Texte',val:edit.texts?.body||bodyMatch[1].substring(0,200)});
-
-    // Caption
-    const capMatch=html.match(/my pov|your pov|caption/i);
-    if(capMatch) editables.push({key:'cap',label:'Légende',val:edit.texts?.cap||''});
-
-    if(editables.length===0){
-      textFields.innerHTML=`<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.3);text-align:center;padding:16px;">Cette page ne contient pas de texte éditable.</div>`;
-    } else {
-      textFields.innerHTML=editables.map(f=>`
-        <div style="margin-bottom:10px;">
-          <label style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;">${f.label}</label>
-          <textarea id="ed_${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:12px;padding:8px 10px;resize:vertical;min-height:52px;line-height:1.5;" oninput="AV.editState.texts=AV.editState.texts||{};AV.editState.texts['${f.key}']=this.value">${f.val}</textarea>
-        </div>`).join('');
-    }
-  }
-
-  // Layouts disponibles
-  const layoutGrid=document.getElementById('edLayoutGrid');
-  if(layoutGrid){
-    layoutGrid.innerHTML=LAYOUT_DEFS.map((l,li)=>`
-      <div onclick="edSelectLayout(${li})" style="padding:8px 6px;border-radius:6px;border:${edit.layout===li?'1px solid #c9a05a':'1px solid rgba(255,255,255,.08)'};background:${edit.layout===li?'rgba(201,160,90,.1)':'rgba(255,255,255,.03)'};cursor:pointer;text-align:center;transition:all .15s;">
-        <div style="font-size:18px;margin-bottom:3px;">${l.icon}</div>
-        <div style="font-size:9px;font-weight:500;color:${edit.layout===li?'#c9a05a':'rgba(255,255,255,.5)'};">${l.name}</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.2);margin-top:1px;">${l.desc}</div>
-      </div>`).join('');
-  }
-}
-
-function edSelectPhoto(pi){
-  AV.editState=AV.editState||{};
-  AV.editState.photoIdx=pi;
-  // Preview immédiat
-  const edit={...AV.edits[AV.cur]||{},...AV.editState};
-  AV.edits[AV.cur]=edit;
-  avRender();
-  // Mettre à jour visuel de sélection
-  document.querySelectorAll('#edPhotoGrid > div').forEach((el,i)=>{
-    el.style.border=i===pi?'2px solid #c9a05a':'1.5px solid rgba(255,255,255,.08)';
-  });
-}
-
-function edSelectLayout(li){
-  AV.editState=AV.editState||{};
-  AV.editState.layout=li;
-  document.querySelectorAll('#edLayoutGrid > div').forEach((el,i)=>{
-    el.style.border=i===li?'1px solid #c9a05a':'1px solid rgba(255,255,255,.08)';
-    el.style.background=i===li?'rgba(201,160,90,.1)':'rgba(255,255,255,.03)';
-    el.querySelector('div:nth-child(2)').style.color=i===li?'#c9a05a':'rgba(255,255,255,.5)';
-  });
-}
-
-function applyEdit(){
-  const i=AV.cur;
-  const state=AV.editState||{};
-
-  // Récupérer les textes depuis les textarea
-  const texts={};
-  document.querySelectorAll('#edTextFields textarea').forEach(ta=>{
-    const key=ta.id.replace('ed_','');
-    if(ta.value.trim()) texts[key]=ta.value.trim();
-  });
-
-  // Appliquer le layout avec override
-  if(state.layout!==undefined){
-    AV.edits[i]={...AV.edits[i]||{},layout:state.layout,photoIdx:state.photoIdx,texts};
-    // Regénérer la page avec le nouveau layout
-    applyLayoutOverride(i,state.layout,state.photoIdx,texts);
-  } else {
-    AV.edits[i]={...AV.edits[i]||{},photoIdx:state.photoIdx,texts};
-  }
-
-  avRender();
-  avBuildThumbs();
-
-  // Feedback visuel
-  const btn=document.querySelector('#editorPanel button[onclick="applyEdit()"]');
-  if(btn){btn.textContent='✓ Appliqué !';btn.style.background='#7ec8a0';setTimeout(()=>{btn.textContent='Appliquer ✓';btn.style.background='#c9a05a';},1500);}
-}
-
-function applyLayoutOverride(pageIdx, layoutIdx, photoIdx, texts){
-  const page=AV.pages[pageIdx];
-  const pi=photoIdx!==undefined?photoIdx:0;
-  const ph=S.photos[pi]?.data;
-  const n1=document.getElementById('name1').value||'';
-  const n2=document.getElementById('name2').value||'';
-  const names=n2?`${n1} & ${n2}`:n1;
-  const chTitle=texts?.title||page.label;
-  const chText=texts?.body||'';
-
-  const phImg=ph?`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.visibility='hidden'"/>`:'<div style="width:100%;height:100%;background:#1a1210;"></div>';
-
-  const layouts=[
-    // 0 — Pleine page
-    `<div style="width:100%;height:100%;position:relative;background:#000;">${phImg}<div style="position:absolute;bottom:0;left:0;right:0;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.8);padding:18px 16px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,28px);font-weight:700;color:#fff;line-height:1.1;">${chTitle}</div>${chText?`<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;font-style:italic;">${chText.substring(0,80)}...</div>`:''}</div></div>`,
-    // 1 — Split
-    `<div style="width:100%;height:100%;display:flex;background:#111;"><div style="flex:0 0 58%;overflow:hidden;">${phImg}</div><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 14px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,20px);font-weight:700;color:#f2ebe0;line-height:1.15;margin-bottom:10px;">${chTitle}</div>${chText?`<div style="font-size:11px;line-height:1.65;color:rgba(242,235,224,.55);font-style:italic;">${chText.substring(0,150)}...</div>`:''}</div></div>`,
-    // 2 — My pov / Your pov
-    `<div style="width:100%;height:100%;display:flex;gap:2px;background:#000;"><div style="flex:1;overflow:hidden;position:relative;">${phImg}<div style="position:absolute;bottom:8px;left:8px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">${texts?.cap||'my pov'}</div></div><div style="flex:1;overflow:hidden;position:relative;">${phImg}<div style="position:absolute;bottom:8px;right:8px;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;">your pov</div></div></div>`,
-    // 3 — Collage asymétrique
-    `<div style="width:100%;height:100%;display:grid;grid-template-columns:3fr 2fr;grid-template-rows:1fr 1fr;gap:2px;background:#0a0a0a;"><div style="grid-row:span 2;overflow:hidden;">${phImg}</div><div style="overflow:hidden;">${phImg}</div><div style="overflow:hidden;">${phImg}</div></div>`,
-    // 4 — Typographique
-    `<div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:24px;"><div style="text-align:center;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,6.5vw,52px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${chTitle.toUpperCase()}</div>${chText?`<div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3vw,18px);margin-top:12px;color:#c9a05a;">${chText.split('.')[0]}.</div>`:''}<div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:16px;color:rgba(255,255,255,.2);">${names}</div></div></div>`,
-    // 5 — Dédicace
-    `<div style="width:100%;height:100%;background:#f5f0e8;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;text-align:center;"><div style="font-size:20px;color:#c9a05a;margin-bottom:14px;opacity:.4;"></div><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(14px,3.5vw,22px);font-style:italic;color:#333;line-height:1.7;max-width:280px;">"${chText||chTitle}"</div><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:18px;color:#aaa;">${names}</div></div>`,
-  ];
-
-  if(layouts[layoutIdx]){
-    AV.pages[pageIdx]={...page, html:layouts[layoutIdx], bg:layoutIdx===4?'#0a0806':layoutIdx===5?'#f5f0e8':page.bg};
-  }
-}
-
-function resetEdit(){
-  delete AV.edits[AV.cur];
-  AV.editState={};
-  // Regénérer la page d'origine si layout overridé
-  renderBookPreview();
-  avRender();
-  avBuildThumbs();
-  refreshEditor();
-}
-
+AV.edits={};AV.editState={};AV.activeSlot=0;
+const LAYOUT_DEFS=[{icon:'⬛',name:'Pleine page',desc:'Photo 100%'},{icon:'◧',name:'Split',desc:'Photo + texte'},{icon:'⊞',name:'2 photos',desc:'Côte à côte'},{icon:'▦',name:'Collage',desc:'1+2 photos'},{icon:'Aa',name:'Typo',desc:'Texte géant'},{icon:'💌',name:'Dédicace',desc:'Fond clair'},];
+function toggleEditor(){const panel=document.getElementById('editorPanel');const btn=document.getElementById('avEditBtn');const isOpen=panel.style.display!=='none';panel.style.display=isOpen?'none':'block';btn.style.background=isOpen?'rgba(201,160,90,.1)':'rgba(201,160,90,.2)';btn.style.borderColor=isOpen?'rgba(201,160,90,.25)':'rgba(201,160,90,.5)';if(!isOpen)refreshEditor();}
+function edTab(tab){['photo','filter','text','layout'].forEach(t=>{const p=document.getElementById('ed'+t.charAt(0).toUpperCase()+t.slice(1)+'Panel');if(p)p.style.display=t===tab?'block':'none';const b=document.getElementById('tab-'+t);if(b){b.style.background=t===tab?'rgba(201,160,90,.1)':'transparent';b.style.color=t===tab?'#c9a05a':'rgba(255,255,255,.35)';b.style.borderColor=t===tab?'rgba(201,160,90,.3)':'rgba(255,255,255,.08)';}});}
+function refreshEditor(){const i=AV.cur;const edit=AV.edits[i]||{};AV.editState={slots:JSON.parse(JSON.stringify(edit.slots||{})),texts:{...(edit.texts||{})},layout:edit.layout,textStyles:{...(edit.textStyles||{})}};const box=document.getElementById('avPage');const imgCount=box?box.querySelectorAll('img').length:0;const slotSel=document.getElementById('slotSelector');const slotBtns=document.getElementById('slotBtns');if(imgCount>1&&slotSel&&slotBtns){slotSel.style.display='block';slotBtns.innerHTML=Array.from({length:imgCount},(_,si)=>`<button onclick="setActiveSlot(${si})" style="flex:1;padding:5px 8px;border-radius:4px;border:${AV.activeSlot===si?'1px solid #c9a05a':'1px solid rgba(255,255,255,.1)'};background:${AV.activeSlot===si?'rgba(201,160,90,.12)':'transparent'};color:${AV.activeSlot===si?'#c9a05a':'rgba(255,255,255,.35)'};font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;">Zone ${si+1}</button>`).join('');}else if(slotSel){slotSel.style.display='none';AV.activeSlot=0;}const grid=document.getElementById('edPhotoGrid');if(grid){const se=(edit.slots||{})[AV.activeSlot]||{};grid.innerHTML=S.photos.map((ph,pi)=>{const sel=se.photoIdx===pi;return `<div onclick="edSelectPhoto(${pi})" style="aspect-ratio:1;border-radius:4px;overflow:hidden;cursor:pointer;border:${sel?'2px solid #c9a05a':'1.5px solid rgba(255,255,255,.07)'};transition:all .15s;position:relative;"><img src="${ph.data}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.visibility='hidden'"/>${sel?'<div style="position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:#c9a05a;"></div>':''}</div>`;}).join('');}const sf=((edit.slots||{})[AV.activeSlot]||{}).filters||{};const sc=((edit.slots||{})[AV.activeSlot]||{}).crop||{};const bwOn=sf.bw>0;const bwT=document.getElementById('bwToggle');const bwK=document.getElementById('bwKnob');if(bwT)bwT.style.background=bwOn?'#c9a05a':'rgba(255,255,255,.1)';if(bwK){bwK.style.left=bwOn?'22px':'3px';bwK.style.background=bwOn?'#0a0806':'rgba(255,255,255,.35)';}['brightness','contrast','saturate'].forEach(f=>{const sl=document.getElementById(f+'Slider');const vl=document.getElementById(f+'Val');if(sl)sl.value=sf[f]||0;if(vl)vl.textContent=sf[f]||0;});const cx=document.getElementById('cropXSlider');const cy=document.getElementById('cropYSlider');if(cx)cx.value=sc.x!==undefined?sc.x:50;if(cy)cy.value=sc.y!==undefined?sc.y:50;refreshTextFields(edit);const layoutGrid=document.getElementById('edLayoutGrid');if(layoutGrid){layoutGrid.innerHTML=LAYOUT_DEFS.map((l,li)=>{const sel=edit.layout===li;return `<div onclick="edSelectLayout(${li})" style="padding:8px 5px;border-radius:6px;border:${sel?'1px solid #c9a05a':'1px solid rgba(255,255,255,.07)'};background:${sel?'rgba(201,160,90,.1)':'rgba(255,255,255,.02)'};cursor:pointer;text-align:center;transition:all .15s;"><div style="font-size:15px;margin-bottom:3px;">${l.icon}</div><div style="font-size:9px;font-weight:600;color:${sel?'#c9a05a':'rgba(255,255,255,.45)'};">${l.name}</div></div>`;}).join('');}}
+function refreshTextFields(edit){const tf=document.getElementById('edTextFields');const ts=document.getElementById('edTextStyles');if(!tf)return;const box=document.getElementById('avPage');if(!box)return;const editables=[];box.querySelectorAll('[style*="font-weight:700"],[style*="font-weight: 700"]').forEach((el,idx)=>{const txt=el.textContent.trim();if(txt.length>1&&txt.length<200){el.dataset.edKey='title_'+idx;editables.push({key:'title_'+idx,label:'Titre',val:(edit.texts||{})['title_'+idx]||txt});}});box.querySelectorAll('[style*="font-style:italic"],[style*="font-style: italic"]').forEach((el,idx)=>{const txt=el.textContent.trim();if(txt.length>15&&txt.length<500&&!el.dataset.edKey){el.dataset.edKey='body_'+idx;editables.push({key:'body_'+idx,label:'Texte',val:(edit.texts||{})['body_'+idx]||txt});}});if(editables.length===0){tf.innerHTML='<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.25);text-align:center;padding:16px;">Page sans texte modifiable</div>';if(ts)ts.style.display='none';}else{tf.innerHTML=editables.slice(0,4).map(f=>`<div style="margin-bottom:10px;"><label style="font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;">${f.label}</label><textarea id="ed_${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.12);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:12px;padding:8px 10px;resize:vertical;min-height:46px;line-height:1.5;" oninput="AV.editState.texts=AV.editState.texts||{};AV.editState.texts['${f.key}']=this.value">${f.val}</textarea></div>`).join('');if(ts)ts.style.display='block';}}
+function setActiveSlot(si){AV.activeSlot=si;document.querySelectorAll('#slotBtns button').forEach((btn,i)=>{btn.style.borderColor=i===si?'#c9a05a':'rgba(255,255,255,.1)';btn.style.background=i===si?'rgba(201,160,90,.12)':'transparent';btn.style.color=i===si?'#c9a05a':'rgba(255,255,255,.35)';});const edit=AV.edits[AV.cur]||{};const sf=((edit.slots||{})[si]||{}).filters||{};const sc=((edit.slots||{})[si]||{}).crop||{};const bwOn=sf.bw>0;const bwT=document.getElementById('bwToggle');const bwK=document.getElementById('bwKnob');if(bwT)bwT.style.background=bwOn?'#c9a05a':'rgba(255,255,255,.1)';if(bwK){bwK.style.left=bwOn?'22px':'3px';bwK.style.background=bwOn?'#0a0806':'rgba(255,255,255,.35)';}['brightness','contrast','saturate'].forEach(f=>{const sl=document.getElementById(f+'Slider');const vl=document.getElementById(f+'Val');if(sl)sl.value=sf[f]||0;if(vl)vl.textContent=sf[f]||0;});const cx=document.getElementById('cropXSlider');const cy=document.getElementById('cropYSlider');if(cx)cx.value=sc.x!==undefined?sc.x:50;if(cy)cy.value=sc.y!==undefined?sc.y:50;const grid=document.getElementById('edPhotoGrid');if(grid){const se=(edit.slots||{})[si]||{};grid.querySelectorAll('div').forEach((el,pi)=>{el.style.borderColor=se.photoIdx===pi?'#c9a05a':'rgba(255,255,255,.07)';el.style.borderWidth=se.photoIdx===pi?'2px':'1.5px';});}}
+function edSelectPhoto(pi){const si=AV.activeSlot;AV.edits[AV.cur]=AV.edits[AV.cur]||{};AV.edits[AV.cur].slots=AV.edits[AV.cur].slots||{};AV.edits[AV.cur].slots[si]={...(AV.edits[AV.cur].slots[si]||{}),photoIdx:pi};AV.editState.slots=AV.editState.slots||{};AV.editState.slots[si]=AV.editState.slots[si]||{};AV.editState.slots[si].photoIdx=pi;applySlotEditsToDOM();const grid=document.getElementById('edPhotoGrid');if(grid){grid.querySelectorAll('div').forEach((el,i)=>{el.style.borderColor=i===pi?'#c9a05a':'rgba(255,255,255,.07)';el.style.borderWidth=i===pi?'2px':'1.5px';});}}
+function updateFilter(type,val){const si=AV.activeSlot;val=parseFloat(val);AV.edits[AV.cur]=AV.edits[AV.cur]||{};AV.edits[AV.cur].slots=AV.edits[AV.cur].slots||{};AV.edits[AV.cur].slots[si]=AV.edits[AV.cur].slots[si]||{};AV.edits[AV.cur].slots[si].filters=AV.edits[AV.cur].slots[si].filters||{};AV.edits[AV.cur].slots[si].filters[type]=val;const vEl=document.getElementById(type+'Val');if(vEl)vEl.textContent=(val>0?'+':'')+val;applySlotEditsToDOM();}
+function updateCrop(axis,val){const si=AV.activeSlot;val=parseFloat(val);AV.edits[AV.cur]=AV.edits[AV.cur]||{};AV.edits[AV.cur].slots=AV.edits[AV.cur].slots||{};AV.edits[AV.cur].slots[si]=AV.edits[AV.cur].slots[si]||{};AV.edits[AV.cur].slots[si].crop=AV.edits[AV.cur].slots[si].crop||{};AV.edits[AV.cur].slots[si].crop[axis]=val;applySlotEditsToDOM();}
+function toggleBW(){const si=AV.activeSlot;AV.edits[AV.cur]=AV.edits[AV.cur]||{};AV.edits[AV.cur].slots=AV.edits[AV.cur].slots||{};AV.edits[AV.cur].slots[si]=AV.edits[AV.cur].slots[si]||{};AV.edits[AV.cur].slots[si].filters=AV.edits[AV.cur].slots[si].filters||{};const cur=AV.edits[AV.cur].slots[si].filters.bw||0;const nv=cur>0?0:1;AV.edits[AV.cur].slots[si].filters.bw=nv;const bwOn=nv>0;const bwT=document.getElementById('bwToggle');const bwK=document.getElementById('bwKnob');if(bwT)bwT.style.background=bwOn?'#c9a05a':'rgba(255,255,255,.1)';if(bwK){bwK.style.left=bwOn?'22px':'3px';bwK.style.background=bwOn?'#0a0806':'rgba(255,255,255,.35)';}applySlotEditsToDOM();}
+function applySlotEditsToDOM(){const i=AV.cur;const edit=AV.edits[i]||{};const box=document.getElementById('avPage');if(!box)return;box.querySelectorAll('img').forEach((img,si)=>{const slot=(edit.slots||{})[si]||{};if(slot.photoIdx!==undefined&&S.photos[slot.photoIdx])img.src=S.photos[slot.photoIdx].data;const f=slot.filters||{};const crop=slot.crop||{};let fs='';if(f.bw>0)fs+=`grayscale(${f.bw}) `;if(f.brightness)fs+=`brightness(${1+f.brightness/100}) `;if(f.contrast)fs+=`contrast(${1+f.contrast/100}) `;if(f.saturate)fs+=`saturate(${1+f.saturate/100}) `;img.style.filter=fs.trim()||'';if(crop.x!==undefined||crop.y!==undefined)img.style.objectPosition=`${crop.x!==undefined?crop.x:50}% ${crop.y!==undefined?crop.y:50}%`;});}
+function updateTextStyle(type,val){AV.editState.textStyles=AV.editState.textStyles||{};AV.editState.textStyles[type]=val;}
+function toggleTextStyle(type){AV.editState.textStyles=AV.editState.textStyles||{};AV.editState.textStyles[type]=!AV.editState.textStyles[type];const btn=document.getElementById(type+'Btn');if(btn){const on=AV.editState.textStyles[type];btn.style.background=on?'rgba(201,160,90,.15)':'transparent';btn.style.color=on?'#c9a05a':'rgba(255,255,255,.4)';}}
+function setTextSize(size){AV.editState.textStyles=AV.editState.textStyles||{};AV.editState.textStyles.size=size;}
+function edSelectLayout(li){AV.editState.layout=li;document.querySelectorAll('#edLayoutGrid > div').forEach((el,i)=>{el.style.borderColor=i===li?'#c9a05a':'rgba(255,255,255,.07)';el.style.background=i===li?'rgba(201,160,90,.1)':'rgba(255,255,255,.02)';el.querySelector('div:nth-child(2)').style.color=i===li?'#c9a05a':'rgba(255,255,255,.45)';});}
+function applyEdit(){const i=AV.cur;const state=AV.editState||{};const texts={};document.querySelectorAll('#edTextFields textarea').forEach(ta=>{const key=ta.id.replace('ed_','');if(ta.value.trim())texts[key]=ta.value.trim();});if(state.layout!==undefined)applyLayoutOverride(i,state.layout,null,texts);AV.edits[i]={...(AV.edits[i]||{}),slots:state.slots||AV.edits[i]?.slots||{},texts,textStyles:state.textStyles||{},layout:state.layout!==undefined?state.layout:AV.edits[i]?.layout};avRender();avBuildThumbs();const btn=document.querySelector('#editorPanel button[onclick="applyEdit()"]');if(btn){btn.textContent='✓ Appliqué !';btn.style.background='#7ec8a0';setTimeout(()=>{btn.textContent='Appliquer ✓';btn.style.background='#c9a05a';},1500);}}
+function applyLayoutOverride(pageIdx,layoutIdx,photoIdx,texts){const page=AV.pages[pageIdx];const edit=AV.edits[pageIdx]||{};const slot0=(edit.slots||{})[0]||{};const slot1=(edit.slots||{})[1]||{};const ph0=S.photos[slot0.photoIdx!==undefined?slot0.photoIdx:0]?.data||S.photos[0]?.data;const ph1=S.photos[slot1.photoIdx!==undefined?slot1.photoIdx:(1<S.photos.length?1:0)]?.data||ph0;const n1=document.getElementById('name1').value||'';const n2=document.getElementById('name2').value||'';const names=n2?`${n1} & ${n2}`:n1;const title=texts?.title_0||page.label||names;const body=texts?.body_0||'';const img0=ph0?`<img src="${ph0}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.visibility='hidden'"/>`:'<div style="width:100%;height:100%;background:#1a1210;"></div>';const img1=ph1?`<img src="${ph1}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.visibility='hidden'"/>`:'<div style="width:100%;height:100%;background:#1a1210;"></div>';const layouts=[`<div style="width:100%;height:100%;position:relative;background:#000;">${img0}<div style="position:absolute;bottom:0;left:0;right:0;text-shadow:0 1px 6px rgba(0,0,0,.95);padding:18px 16px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,26px);font-weight:700;color:#fff;line-height:1.1;">${title}</div>${body?`<div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:6px;font-style:italic;">${body.substring(0,80)}…</div>`:''}</div></div>`,`<div style="width:100%;height:100%;display:flex;background:#111;"><div style="flex:0 0 60%;overflow:hidden;">${img0}</div><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 14px;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,20px);font-weight:700;color:#f2ebe0;line-height:1.15;margin-bottom:10px;">${title}</div>${body?`<div style="font-size:11px;line-height:1.7;color:rgba(242,235,224,.5);font-style:italic;">${body.substring(0,180)}</div>`:''}</div></div>`,`<div style="width:100%;height:100%;display:flex;gap:2px;background:#000;"><div style="flex:1;overflow:hidden;position:relative;">${img0}<div style="position:absolute;bottom:8px;left:8px;font-size:9px;color:rgba(255,255,255,.65);letter-spacing:.1em;text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.9);">${n1||'Moi'}</div></div><div style="flex:1;overflow:hidden;position:relative;">${img1}<div style="position:absolute;bottom:8px;right:8px;font-size:9px;color:rgba(255,255,255,.65);letter-spacing:.1em;text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.9);">${n2||'Toi'}</div></div></div>`,`<div style="width:100%;height:100%;display:grid;grid-template-columns:3fr 2fr;grid-template-rows:1fr 1fr;gap:2px;background:#0a0a0a;"><div style="grid-row:span 2;overflow:hidden;">${img0}</div><div style="overflow:hidden;">${img1}</div><div style="overflow:hidden;">${img0}</div></div>`,`<div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:24px;"><div style="text-align:center;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,6vw,48px);font-weight:900;line-height:.9;text-transform:uppercase;letter-spacing:-.02em;color:#fff;">${title.toUpperCase()}</div>${body?`<div style="font-family:Georgia,serif;font-style:italic;font-size:clamp(11px,2.5vw,16px);margin-top:14px;color:#c9a05a;">${body.split('.')[0]}.</div>`:''}<div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:18px;color:rgba(255,255,255,.18);">${names}</div></div></div>`,`<div style="width:100%;height:100%;background:#f5f0e8;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;text-align:center;"><div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(13px,3.5vw,22px);font-style:italic;color:#2a1e12;line-height:1.75;max-width:280px;">"${body||title}"</div><div style="width:40px;height:1px;background:#c9a05a;opacity:.4;margin:16px auto;"></div><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#aaa;">${names}</div></div>`];if(layouts[layoutIdx])AV.pages[pageIdx]={...page,html:layouts[layoutIdx],bg:layoutIdx===4?'#0a0806':layoutIdx===5?'#f5f0e8':page.bg};}
+function resetEdit(){delete AV.edits[AV.cur];AV.editState={};AV.activeSlot=0;renderBookPreview();avRender();avBuildThumbs();refreshEditor();}
 function openFullPreview(){ /* désactivé — aperçu intégré */ }
 
 // ══════════════════════════════════════════
