@@ -633,8 +633,8 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
       <div class="p-step active" id="ps0" onclick="goTab(0)"><div class="p-dot" id="pd0">1</div><div class="p-lbl" data-i18n="step_duo">Votre duo</div></div>
       <div class="p-step" id="ps1" onclick="goTab(1)"><div class="p-dot" id="pd1">2</div><div class="p-lbl" data-i18n="step_photos">Photos</div></div>
       <div class="p-step" id="ps2" onclick="goTab(2)"><div class="p-dot" id="pd2">4</div><div class="p-lbl" data-i18n="step_creation">Création</div></div>
-      <div class="p-step" id="ps3" onclick="goTab(2)"><div class="p-dot" id="pd3">5</div><div class="p-lbl" data-i18n="step_preview">Aperçu</div></div>
-      <div class="p-step" id="ps4" onclick="goTab(2)"><div class="p-dot" id="pd4">6</div><div class="p-lbl" data-i18n="step_order">Commander</div></div>
+      <div class="p-step" id="ps3" onclick="goTab(3)"><div class="p-dot" id="pd3">4</div><div class="p-lbl" data-i18n="step_preview">Aperçu</div></div>
+      <div class="p-step" id="ps4" onclick="goTab(4)"><div class="p-dot" id="pd4">5</div><div class="p-lbl" data-i18n="step_order">Commander</div></div>
     </div>
 
     <!-- PANEL 0 -->
@@ -725,8 +725,8 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
           <div class="story-body" id="storyBody"></div>
         </div>
         <div class="btn-row" style="margin-top:1rem;">
-          <button class="btn" onclick="goTab(2)" data-i18n="back_modify">← Modifier</button>
-          <button class="btn btn-gold" onclick="goTab(2)" data-i18n="see_preview">Voir l'aperçu →</button>
+          <button class="btn" onclick="goTab(1)" data-i18n="back_modify">← Modifier</button>
+          <button class="btn btn-gold" onclick="goTab(3)" data-i18n="see_preview">Voir l'aperçu →</button>
         </div>
       </div>
     </div>
@@ -781,7 +781,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 
       <div class="btn-row" style="margin-top:1rem;">
         <button class="btn" onclick="goTab(2)">← Retour</button>
-        <button class="btn btn-gold" onclick="goTab(2)" id="btnOrder">Commander ce livre</button>
+        <button class="btn btn-gold" onclick="goTab(4)" id="btnOrder">Commander ce livre</button>
       </div>
     </div>
 
