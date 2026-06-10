@@ -1732,7 +1732,7 @@ function renderBookPreview(){
   const n1=document.getElementById('name1').value||'toi'; 
   const n2=document.getElementById('name2').value||'vous';
   const dedication=document.getElementById('dedication').value.trim();
-  const closingMsg=document.getElementById('closingMsg').value.trim();
+  const closingMsgEl=document.getElementById('closingMsg'); const closingMsg=closingMsgEl?closingMsgEl.value.trim():'';
   const names=n2?`${n1} & ${n2}`:n1;
   const nph=S.photos.length||1;
   let pi=0;
@@ -2513,7 +2513,7 @@ function generateFinalPDF(){
   const n1=document.getElementById('name1').value||'Nous'; const n2=document.getElementById('name2').value||'';
   const names=n2?`${n1} & ${n2}`:n1;
   const dedication=document.getElementById('dedication').value.trim();
-  const closingMsg=document.getElementById('closingMsg').value.trim();
+  const closingMsgEl=document.getElementById('closingMsg'); const closingMsg=closingMsgEl?closingMsgEl.value.trim():'';
 
   doc.setFillColor(12,9,5);doc.rect(0,0,W,H,'F');
   doc.setTextColor(242,235,224);doc.setFont('helvetica','normal');
