@@ -2213,7 +2213,7 @@ function avPrev(){if(AV.cur>0){AV.cur--;avRender();}}
 // ══════════════════════════════════════════
 // ÉDITEUR DE PAGES — NIVEAU 100
 // ══════════════════════════════════════════
-AV.edits={};AV.editState={};AV.activeSlot=0;
+if(!AV.edits)AV.edits={};if(!AV.editState)AV.editState={};if(AV.activeSlot===undefined)AV.activeSlot=0;
 const LAYOUT_DEFS=[{icon:'⬛',name:'Pleine page',desc:'Photo 100%'},{icon:'◧',name:'Split',desc:'Photo + texte'},{icon:'⊞',name:'2 photos',desc:'Côte à côte'},{icon:'▦',name:'Collage',desc:'1+2 photos'},{icon:'Aa',name:'Typo',desc:'Texte géant'},{icon:'💌',name:'Dédicace',desc:'Fond clair'},];
 function toggleEditor(){const panel=document.getElementById('editorPanel');const btn=document.getElementById('avEditBtn');const isOpen=panel.style.display!=='none';panel.style.display=isOpen?'none':'block';btn.style.background=isOpen?'rgba(201,160,90,.1)':'rgba(201,160,90,.2)';btn.style.borderColor=isOpen?'rgba(201,160,90,.25)':'rgba(201,160,90,.5)';if(!isOpen)refreshEditor();}
 function edTab(tab){['photo','filter','text','layout'].forEach(t=>{const p=document.getElementById('ed'+t.charAt(0).toUpperCase()+t.slice(1)+'Panel');if(p)p.style.display=t===tab?'block':'none';const b=document.getElementById('tab-'+t);if(b){b.style.background=t===tab?'rgba(201,160,90,.1)':'transparent';b.style.color=t===tab?'#c9a05a':'rgba(255,255,255,.35)';b.style.borderColor=t===tab?'rgba(201,160,90,.3)':'rgba(255,255,255,.08)';}});}
