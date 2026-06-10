@@ -1423,7 +1423,7 @@ function goTab(n) {
     if(mobFill) mobFill.style.width = fill+'%';
     if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
     if(mobCount) mobCount.textContent = (n+1)+' / 5';
-    if(n===4) renderBookPreview();
+    if(n===3) renderBookPreview();
     if(n===5) {
       updateFormatPrices();
       const p = PRICES[selectedPages];
