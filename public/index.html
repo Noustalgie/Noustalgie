@@ -759,7 +759,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
             <button class="ed-tab" id="tab-text" onclick="edTab('text')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">✍️ Texte</button>
             <button class="ed-tab" id="tab-layout" onclick="edTab('layout')" style="flex:1;min-width:55px;padding:7px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap;">⊞ Page</button>
           </div>
-          <div id="edPhotoPanel"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Choisir une photo</div><div id="edPhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:4px;max-height:150px;overflow-y:auto;"></div></div>
+          <div id="edPhotoPanel"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;">Choisir une photo</div><label style="position:relative;font-size:10px;color:#c9a05a;cursor:pointer;font-family:var(--fb);border:1px solid rgba(201,160,90,.3);border-radius:4px;padding:4px 9px;background:rgba(201,160,90,.06);transition:all .15s;">+ Ajouter<input type="file" accept="image/*,.heic,.HEIC" multiple onchange="addPhotosFromEditor(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;"/></label></div><div id="edPhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:4px;max-height:150px;overflow-y:auto;"></div></div>
           <div id="edFilterPanel" style="display:none;"><div style="display:grid;gap:10px;">
             <div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Noir &amp; Blanc</div><div id="bwToggle" onclick="toggleBW()" style="width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;position:relative;transition:all .2s;"><div id="bwKnob" style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .2s;"></div></div></div>
             <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Luminosité</div><div id="brightnessVal" style="font-size:10px;color:#c9a05a;">0</div></div><input type="range" id="brightnessSlider" min="-60" max="60" value="0" oninput="updateFilter('brightness',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div>
@@ -1440,6 +1440,33 @@ function startApp(){document.getElementById('app').scrollIntoView({behavior:'smo
 // ══════════════════════════════════════════
 // PHOTOS
 // ══════════════════════════════════════════
+function addPhotosFromEditor(files){
+  const newFiles=Array.from(files).filter(f=>f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif'));
+  if(!newFiles.length)return;
+  let added=0;
+  Promise.all(newFiles.map(f=>new Promise(resolve=>{
+    const r=new FileReader();
+    r.onload=e=>{const im=new Image();im.onload=()=>{
+      const canvas=document.createElement('canvas');const MAX=1600;const rt=Math.min(MAX/im.width,MAX/im.height,1);
+      canvas.width=Math.round(im.width*rt);canvas.height=Math.round(im.height*rt);
+      const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(im,0,0,canvas.width,canvas.height);
+      const _o=im.width/im.height;const orient=_o>1.25?'paysage':_o<0.8?'portrait':'carre';
+      resolve({name:f.name,data:canvas.toDataURL('image/jpeg',0.95),w:im.width,h:im.height,ratio:_o,orient:orient,focalY:orient==='portrait'?38:50});
+    };im.onerror=()=>resolve(null);im.src=e.target.result;};
+    r.readAsDataURL(f);
+  }))).then(results=>{
+    results.filter(Boolean).forEach(p=>{S.photos.push(p);added++;});
+    if(typeof renderPhotos==='function')renderPhotos();
+    // Rafraîchir la grille de l'éditeur
+    refreshEditor();
+    // Petit feedback
+    const grid=document.getElementById('edPhotoGrid');
+    if(grid&&added>0){const note=document.createElement('div');note.textContent='✓ '+added+' photo'+(added>1?'s':'')+' ajoutée'+(added>1?'s':'');
+      note.style.cssText='grid-column:1/-1;font-size:10px;color:#7ec8a0;text-align:center;padding:4px;font-family:var(--fb);';
+      grid.prepend(note);setTimeout(()=>{if(note.parentNode)note.remove();},2000);}
+  });
+}
 function addPhotos(files){
   const newFiles = Array.from(files).filter(f=>
     f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif')
