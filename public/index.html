@@ -1786,12 +1786,12 @@ function renderBookPreview(){
   }
 
   // ═══════════════════════════════════════════
-  // 3. PHOTO PLEINE — éditoriale, pas de texte
+  // 3. PHOTO PLEINE — éditoriale cinématique
   // ═══════════════════════════════════════════
   AV.pages.push(pg('','#000',`
     <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-      ${img(pi++)}
-      
+      ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.06) saturate(.95);')}
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.25) 100%);"></div>
     </div>`));
 
   // ═══════════════════════════════════════════
@@ -1916,12 +1916,11 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   // 13. STRIP FILMIQUE — 3 photos horizontales façon pellicule
   // ═══════════════════════════════════════════
-  AV.pages.push(pg('','#0a0806',`
-    <div style="width:100%;height:100%;background:#0a0806;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0;">
-      ${[0,1,2].map(j=>`
-        <div style="flex:1;overflow:hidden;position:relative;">
-          ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}
-        </div>`).join('')}
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;background:#000;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.4fr 1fr;gap:2px;">
+      <div style="grid-column:span 2;overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+      <div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+      <div style="overflow:hidden;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
     </div>`));
 
   // ═══════════════════════════════════════════
@@ -1958,22 +1957,24 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   // 16. "VOTRE MÉTÉO D'AMOUR" — poétique
   // ═══════════════════════════════════════════
-  if(meteo){
-    AV.pages.push(pg('Votre météo d\'amour','#0a1628',`
-      <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a1628 0%,#1a2744 60%,#0d1520 100%);padding:28px 22px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:-20px;right:-20px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(201,160,90,.08) 0%,transparent 70%);"></div>
-        <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,90,.4);margin-bottom:16px;">bulletin météo · ${new Date().getFullYear()}</div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#e8f0ff;line-height:.95;margin-bottom:20px;">Votre météo<br><em style="color:#c9a05a;">d'amour</em></div>
-        <div style="font-family:Georgia,serif;font-size:clamp(12px,3.2vw,15px);font-style:italic;color:rgba(232,240,255,.5);line-height:1.8;">${meteo}</div>
-      </div>`));
-  }
-
-  // ═══════════════════════════════════════════
-  // 17. PHOTO PLEINE — grand angle, respiration
-  // ═══════════════════════════════════════════
+  // Photo pleine cinématique (remplace l'ancienne page météo)
   AV.pages.push(pg('','#000',`
     <div style="width:100%;height:100%;position:relative;overflow:hidden;">
-      ${img(pi++)}
+      ${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.08) saturate(.92);')}
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 40%);"></div>
+      <div style="position:absolute;bottom:18px;left:18px;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);text-shadow:0 1px 4px rgba(0,0,0,.8);">${names}</div>
+    </div>`));
+
+  // ═══════════════════════════════════════════
+  // 17. PHOTO PLEINE — diptyque vertical élégant
+  // ═══════════════════════════════════════════
+  AV.pages.push(pg('','#000',`
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:2px;background:#000;">
+      <div style="flex:1.6;overflow:hidden;position:relative;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}</div>
+      <div style="flex:1;overflow:hidden;position:relative;">${img(pi++,'width:100%;height:100%;object-fit:cover;display:block;')}
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent 60%);"></div>
+        <div style="position:absolute;bottom:14px;left:16px;right:16px;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:clamp(12px,3.4vw,17px);color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.9);line-height:1.4;">${notes[0]||'Chaque instant avec toi.'}</div>
+      </div>
     </div>`));
 
   // ═══════════════════════════════════════════
@@ -2002,7 +2003,7 @@ function renderBookPreview(){
       <div style="position:absolute;bottom:-20px;right:-20px;width:140px;height:140px;border-radius:50%;border:1px solid rgba(201,160,90,.04);"></div>
       <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,90,.35);margin-bottom:16px;">à venir</div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,30px);font-weight:700;color:#fff;line-height:1;margin-bottom:20px;">Ce qu'on<br>ne sait pas<br><em style="color:#c9a05a;">encore</em></div>
-      <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.3);line-height:1.9;">Les voyages pas encore faits.<br>Les fous rires pas encore nés.<br>Les photos pas encore prises.<br>Les promesses pas encore dites.</div>
+      <div style="font-family:Georgia,serif;font-size:clamp(11px,3vw,14px);font-style:italic;color:rgba(242,235,224,.4);line-height:2;">Les voyages pas encore faits.<br>Les fous rires pas encore nés.<br>Les matins pas encore partagés.<br>Les photos pas encore prises.<br>Les promesses pas encore dites.<br>Et tout ce qu'on inventera ensemble.</div>
     </div>`));
 
   // ═══════════════════════════════════════════
@@ -2053,10 +2054,10 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   AV.pages.push(pg('Le meilleur souvenir reste à venir','#0a0806',`
     <div style="width:100%;height:100%;background:#0a0806;display:flex;align-items:center;justify-content:center;padding:40px;position:relative;">
-      <div style="text-align:center;max-width:240px;">
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,26px);font-weight:400;font-style:italic;color:rgba(242,235,224,.25);line-height:1.4;">
-          Le meilleur souvenir<br>reste à venir.
-        </div>
+      <div style="text-align:center;max-width:260px;">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,5vw,30px);font-weight:400;font-style:italic;color:rgba(242,235,224,.9);line-height:1.35;">Le meilleur souvenir<br>reste à venir.</div>
+        <div style="width:30px;height:1px;background:#c9a05a;margin:18px auto;opacity:.5;"></div>
+        <div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(201,160,90,.5);">${names}</div>
       </div>
     </div>`));
 
@@ -2169,19 +2170,11 @@ function avRender(){
     });
   }
 
-  // Appliquer layout personnalisé
-  if(edit.layout!==undefined&&AV.layouts[edit.layout]){
-    renderedHtml=AV.layouts[edit.layout](p,edit);
-  }
+  // (layout déjà appliqué directement dans AV.pages[i].html via applyLayoutOverride)
 
   const box=document.getElementById('avPage');
   if(box){
-    box.style.opacity='0';
-    setTimeout(()=>{
-      box.innerHTML=renderedHtml;
-      box.style.transition='opacity .2s ease';
-      box.style.opacity='1';
-    },120);
+    box.innerHTML=renderedHtml;box.style.opacity='1';
   }
   const lbl=document.getElementById('avLabel'); if(lbl)lbl.textContent=p.label;
   const ctr=document.getElementById('avCtr'); if(ctr)ctr.textContent=`${AV.cur+1} / ${AV.pages.length}`;
