@@ -419,6 +419,71 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
   .hero-actions{flex-direction:column;align-items:center;}
   .btn-hero,.btn-outline{width:100%;max-width:280px;}
 }
+
+/* ===== ÉDITORIAL CLAIR (accueil) ===== */
+.ed-wrap{background:#fff;color:#111;font-family:'Times New Roman',Georgia,serif;}
+.ed-nav{display:flex;align-items:center;justify-content:space-between;padding:20px 5vw;border-bottom:2px solid #111;position:relative;z-index:50;background:#fff;}
+.ed-nav-links{display:flex;gap:22px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#333;font-family:'Inter',sans-serif;}
+.ed-nav-links a{color:#333;text-decoration:none;cursor:pointer;transition:opacity .2s;}
+.ed-nav-links a:hover{opacity:.5;}
+.ed-logo{font-size:26px;font-weight:700;letter-spacing:-.01em;cursor:pointer;}
+.ed-nav-cta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;border:1px solid #111;padding:9px 18px;cursor:pointer;background:#fff;color:#111;transition:all .2s;}
+.ed-nav-cta:hover{background:#111;color:#fff;}
+.ed-hero{display:grid;grid-template-columns:1.1fr 1fr;min-height:78vh;}
+.ed-hero-txt{padding:6vh 5vw;display:flex;flex-direction:column;justify-content:center;}
+.ed-eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#999;margin-bottom:24px;font-family:'Inter',sans-serif;}
+.ed-h1{font-size:clamp(38px,6vw,60px);font-weight:700;line-height:.98;letter-spacing:-.02em;margin:0 0 24px;}
+.ed-h1 em{font-style:italic;}
+.ed-lead{font-size:16px;color:#555;line-height:1.7;margin:0 0 32px;font-family:'Inter',sans-serif;max-width:380px;}
+.ed-btn-dark{display:inline-block;background:#111;color:#fff;padding:15px 34px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;border:none;cursor:pointer;transition:opacity .2s;}
+.ed-btn-dark:hover{opacity:.8;}
+.ed-btn-out{display:inline-block;border:1px solid #111;padding:15px 30px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;color:#111;background:#fff;cursor:pointer;margin-left:10px;transition:all .2s;}
+.ed-btn-out:hover{background:#f2f2f2;}
+.ed-hero-img{position:relative;overflow:hidden;background:#111;}
+.ed-hero-img img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);}
+.ed-hero-cap{position:absolute;bottom:0;left:0;right:0;padding:24px;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);color:#fff;}
+.ed-hero-cap .l{font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.6;font-family:'Inter',sans-serif;}
+.ed-hero-cap .q{font-family:Georgia,serif;font-style:italic;font-size:19px;margin-top:6px;}
+.ed-stats{display:flex;border-top:1px solid #111;border-bottom:1px solid #111;}
+.ed-stat{flex:1;padding:20px;text-align:center;border-right:1px solid #ddd;}
+.ed-stat:last-child{border-right:none;}
+.ed-stat-n{font-size:28px;font-weight:700;}
+.ed-stat-n.it{font-style:italic;}
+.ed-stat-l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#999;font-family:'Inter',sans-serif;margin-top:4px;}
+.ed-sec{padding:6vh 5vw;}
+.ed-sec-eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#999;font-family:'Inter',sans-serif;text-align:center;margin-bottom:36px;}
+.ed-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;max-width:820px;margin:0 auto;}
+.ed-step .num{font-family:Georgia,serif;font-size:34px;font-style:italic;color:#ccc;}
+.ed-step .t{font-weight:700;font-size:18px;margin:8px 0;}
+.ed-step .d{font-size:13px;color:#666;line-height:1.6;font-family:'Inter',sans-serif;}
+.ed-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.ed-gallery img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:grayscale(1);}
+.ed-price{padding:6vh 5vw;border-top:1px solid #111;}
+.ed-price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;max-width:820px;margin:36px auto 0;border:1px solid #111;}
+.ed-price-card{padding:32px 22px;text-align:center;cursor:pointer;border-right:1px solid #ddd;transition:background .2s;}
+.ed-price-card:last-child{border-right:none;}
+.ed-price-card:hover{background:#f7f7f7;}
+.ed-price-card.feat{background:#111;color:#fff;}
+.ed-price-card.feat:hover{background:#222;}
+.ed-price-tier{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#999;font-family:'Inter',sans-serif;margin-bottom:14px;}
+.ed-price-card.feat .ed-price-tier{color:rgba(255,255,255,.6);}
+.ed-price-n{font-size:46px;font-weight:700;line-height:1;}
+.ed-price-pages{font-size:12px;color:#999;font-family:'Inter',sans-serif;margin-bottom:16px;}
+.ed-price-card.feat .ed-price-pages{color:rgba(255,255,255,.6);}
+.ed-price-v{font-size:14px;font-family:'Inter',sans-serif;}
+.ed-price-v strong{font-weight:600;}
+.ed-cta-center{text-align:center;margin-top:36px;}
+.ed-note{font-family:Georgia,serif;font-style:italic;font-size:13px;color:#999;margin-top:14px;}
+@media(max-width:760px){
+  .ed-hero{grid-template-columns:1fr;}
+  .ed-hero-img{min-height:42vh;}
+  .ed-steps{grid-template-columns:1fr;gap:24px;}
+  .ed-price-grid{grid-template-columns:1fr;}
+  .ed-price-card{border-right:none;border-bottom:1px solid #ddd;}
+  .ed-gallery{grid-template-columns:repeat(2,1fr);}
+  .ed-nav-links{display:none;}
+  .ed-btn-out{margin-left:0;margin-top:10px;}
+}
 </style>
 </head>
 <body>
@@ -457,158 +522,85 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 </div>
 
 <!-- NAV -->
-<nav>
-  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Nous<em>talgie</em><span class="logo-heart"></span></div>
-  <div class="nav-mid">
+<div class="ed-wrap">
+<nav class="ed-nav">
+  <div class="ed-nav-links">
     <a onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="nav_how">Comment ça marche</a>
     <a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" data-i18n="nav_pricing">Tarifs</a>
-    <a onclick="startApp()" data-i18n="nav_create">Créer notre album</a>
   </div>
-  <button class="nav-cta" onclick="startApp()" data-i18n="nav_cta">Commencer</button>
+  <div class="ed-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Noustalgie</div>
+  <button class="ed-nav-cta" onclick="startApp()" data-i18n="nav_cta">Créer</button>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-ornament">
-    <div class="orn-line"></div>
-    <span class="orn-txt" data-i18n="hero_badge">Album photo couple · Impression premium</span>
-    <div class="orn-line r"></div>
-  </div>
-  <h1 class="hero-h1">
-    <span data-i18n="hero_h1_1">Votre histoire,</span><br><em data-i18n="hero_h1_2">immortalisée</em>
-    <span class="sub" data-i18n="hero_h1_sub">en un livre que vous garderez toute votre vie</span>
-  </h1>
-  <p class="hero-p">
-    <span data-i18n="hero_p1">Envoyez vos plus belles photos.</span> <strong data-i18n="hero_p2">Nous rédigeons votre histoire d'amour</strong><span data-i18n="hero_p3">, mettons en page votre album et vous livrons un livre imprimé sur papier photo professionnel.</span>
-  </p>
-  <div class="hero-actions">
-    <button class="btn-hero" onclick="startApp()" data-i18n="hero_cta">Créer notre album</button>
-    <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="hero_how">Voir comment ça marche</button>
-  </div>
-  <div class="hero-proof">
-    <div class="proof-row">
-      <div class="proof-item"><div class="proof-n">2 min</div><div class="proof-l" data-i18n="proof1">Pour uploader</div></div>
-      <div class="proof-sep"></div>
-      <div class="proof-item"><div class="proof-n" data-i18n="proof2_n">Unique</div><div class="proof-l" data-i18n="proof2">Histoire sur mesure</div></div>
-      <div class="proof-sep"></div>
-      <div class="proof-item"><div class="proof-n">Dès 19€</div><div class="proof-l" data-i18n="proof3">Livre livré chez vous</div></div>
+<section class="ed-hero">
+  <div class="ed-hero-txt">
+    <div class="ed-eyebrow" data-i18n="hero_badge">Numéro 01 — L'Amour</div>
+    <h1 class="ed-h1"><span data-i18n="hero_h1_1">L'album</span><br><em><span data-i18n="hero_h1_2">qui raconte</span><br><span data-i18n="hero_h1_sub">votre histoire</span></em></h1>
+    <p class="ed-lead"><span data-i18n="hero_p2">Envoyez vos plus belles photos.</span> <span data-i18n="hero_p3">Nous composons votre album et vous livrons un livre imprimé sur papier photo professionnel.</span></p>
+    <div>
+      <button class="ed-btn-dark" onclick="startApp()" data-i18n="hero_cta">Composer mon album</button>
+      <button class="ed-btn-out" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="hero_how">Comment ça marche</button>
     </div>
+  </div>
+  <div class="ed-hero-img">
+    <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=80" alt="Couple" onerror="this.style.display='none'"/>
+    <div class="ed-hero-cap"><div class="l" data-i18n="hero_cap_l">Édition limitée</div><div class="q" data-i18n="hero_cap_q">"Notre plus belle page"</div></div>
   </div>
 </section>
 
-<!-- HOW -->
-<section class="section how" id="how">
-  <div class="section-inner">
-    <div class="reveal" style="text-align:center;">
-      <div class="eyebrow" data-i18n="how_eyebrow">Le processus</div>
-      <h2 class="s-title"><span data-i18n="how_title1">Simple comme</span> <em data-i18n="how_title2">dire je t'aime</em></h2>
-    </div>
-    <!-- FRISE COMPACTE -->
-    <div class="reveal" style="margin-top:2rem;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;max-width:680px;margin:0 auto;overflow-x:auto;">
-        <!-- Étape 1 -->
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:100px;max-width:160px;text-align:center;padding:0 6px;">
-          <div style="width:44px;height:44px;border-radius:50%;background:rgba(201,160,90,.12);border:1.5px solid rgba(201,160,90,.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:8px;">💑</div>
-          <div style="font-size:.75rem;font-weight:600;color:var(--cream);line-height:1.3;" data-i18n="step1_name">Vos infos & photos</div>
-          <div style="font-size:.625rem;color:var(--cream3);margin-top:3px;font-style:italic;" data-i18n="free">Gratuit</div>
-        </div>
-        <div style="flex:0 0 20px;height:1px;border-top:1px dashed rgba(201,160,90,.2);margin-top:22px;"></div>
-        <!-- Étape 2 -->
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:100px;max-width:160px;text-align:center;padding:0 6px;">
-          <div style="width:44px;height:44px;border-radius:50%;background:rgba(201,160,90,.12);border:1.5px solid rgba(201,160,90,.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:8px;">✍️</div>
-          <div style="font-size:.75rem;font-weight:600;color:var(--cream);line-height:1.3;" data-i18n="step3_name">Votre histoire générée</div>
-          <div style="font-size:.625rem;color:var(--cream3);margin-top:3px;font-style:italic;" data-i18n="free">Gratuit</div>
-        </div>
-        <div style="flex:0 0 20px;height:1px;border-top:1px dashed rgba(201,160,90,.2);margin-top:22px;"></div>
-        <!-- Étape 3 -->
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:100px;max-width:160px;text-align:center;padding:0 6px;">
-          <div style="width:44px;height:44px;border-radius:50%;background:rgba(201,160,90,.12);border:1.5px solid rgba(201,160,90,.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:8px;">👁</div>
-          <div style="font-size:.75rem;font-weight:600;color:var(--cream);line-height:1.3;" data-i18n="step4_name">Aperçu complet</div>
-          <div style="font-size:.625rem;color:var(--cream3);margin-top:3px;font-style:italic;" data-i18n="free">Gratuit</div>
-        </div>
-        <div style="flex:0 0 20px;height:1px;border-top:1px dashed rgba(201,160,90,.2);margin-top:22px;"></div>
-        <!-- Étape 4 -->
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:100px;max-width:160px;text-align:center;padding:0 6px;">
-          <div style="width:44px;height:44px;border-radius:50%;background:rgba(201,160,90,.2);border:1.5px solid rgba(201,160,90,.5);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:8px;">📖</div>
-          <div style="font-size:.75rem;font-weight:600;color:#c9a05a;line-height:1.3;" data-i18n="step5_name">Livraison 3-5 jours</div>
-          <div style="font-size:.625rem;color:#c9a05a;margin-top:3px;font-style:italic;" data-i18n="from19">Dès 19€</div>
-        </div>
-      </div>
-    </div>
+<div class="ed-stats">
+  <div class="ed-stat"><div class="ed-stat-n">2 min</div><div class="ed-stat-l" data-i18n="proof1">Pour créer</div></div>
+  <div class="ed-stat"><div class="ed-stat-n it" data-i18n="proof2_n">Unique</div><div class="ed-stat-l" data-i18n="proof2">Sur mesure</div></div>
+  <div class="ed-stat"><div class="ed-stat-n">Dès 35€</div><div class="ed-stat-l" data-i18n="proof3">Livré chez vous</div></div>
+</div>
+
+<section class="ed-sec" id="how">
+  <div class="ed-sec-eyebrow" data-i18n="how_eyebrow">Le procédé — en trois temps</div>
+  <div class="ed-steps">
+    <div class="ed-step"><div class="num">I</div><div class="t" data-i18n="step1_name">Vos photos</div><div class="d" data-i18n="how_d1">Choisissez vos plus beaux clichés et renseignez vos prénoms.</div></div>
+    <div class="ed-step"><div class="num">II</div><div class="t" data-i18n="step3_name">La composition</div><div class="d" data-i18n="how_d2">L'album se compose sous vos yeux, page après page.</div></div>
+    <div class="ed-step"><div class="num">III</div><div class="t" data-i18n="step5_name">L'impression</div><div class="d" data-i18n="how_d3">Imprimé sur papier photo, relié, livré en 3 à 5 jours.</div></div>
   </div>
 </section>
 
-<div class="div-orn"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.2;margin:0 5px;"></div><div class="dd"></div><div class="dl r"></div></div>
+<div class="ed-gallery">
+  <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80" alt="" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400&q=80" alt="" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80" alt="" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80" alt="" onerror="this.style.display='none'"/>
+</div>
 
-<!-- PRICING -->
-<section class="section pricing-bg" id="pricing" style="padding-top:3rem;padding-bottom:3rem;">
-  <div class="section-inner">
-    <div class="reveal" style="text-align:center;">
-      <div class="eyebrow" data-i18n="price_eyebrow">Nos tarifs</div>
-      <h2 class="s-title"><span data-i18n="price_title1">Simple,</span> <em data-i18n="price_title2">transparent</em></h2>
-      <p class="s-sub" style="margin:0 auto;">Aperçu 100% gratuit — vous payez uniquement si vous êtes satisfait.</p>
+<section class="ed-price" id="pricing">
+  <div class="ed-sec-eyebrow" data-i18n="price_eyebrow">Nos tarifs — simple, transparent</div>
+  <div class="ed-price-grid">
+    <div class="ed-price-card" onclick="selectPricing(20,this);startApp()">
+      <div class="ed-price-tier">Essentiel</div>
+      <div class="ed-price-n">20</div>
+      <div class="ed-price-pages" data-i18n="price_pages_20">pages · 20 photos</div>
+      <div class="ed-price-v"><strong>Livre 34,99€</strong></div>
+      <div class="ed-price-v" style="color:#999;">PDF 14,99€</div>
     </div>
-
-    <!-- 3 CARDS SIMPLES -->
-    <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;max-width:720px;margin:2.5rem auto 0;">
-
-      <!-- 20 pages -->
-      <div onclick="selectPricing(20,this)" class="price-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;">
-        <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Essentiel</div>
-        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:var(--cream);line-height:1;">20</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages · jusqu'à 20 photos</div>
-        <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 14,99€</div>
-        <div style="font-size:.8125rem;color:var(--gold);">Livre 34,99€</div>
-      </div>
-
-      <!-- 30 pages — populaire -->
-      <div onclick="selectPricing(30,this)" class="price-card active" style="background:var(--bg3);border:1.5px solid rgba(201,160,90,.5);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;position:relative;">
-        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#c9a05a;color:#0a0806;font-size:.625rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;text-transform:uppercase;">⭐ Populaire</div>
-        <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Classique</div>
-        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:#c9a05a;line-height:1;">30</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages · jusqu'à 35 photos</div>
-        <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 19,99€</div>
-        <div style="font-size:.8125rem;color:var(--gold);">Livre 44,99€</div>
-      </div>
-
-      <!-- 50 pages -->
-      <div onclick="selectPricing(50,this)" class="price-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;cursor:pointer;transition:all .2s;text-align:center;">
-        <div style="font-size:.75rem;color:var(--cream3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;">Premium</div>
-        <div style="font-family:var(--fd);font-size:2.25rem;font-weight:700;color:var(--cream);line-height:1;">50</div>
-        <div style="font-size:.8125rem;color:var(--cream3);margin-bottom:1rem;">pages · jusqu'à 60 photos</div>
-        <div style="font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;">PDF 24,99€</div>
-        <div style="font-size:.8125rem;color:var(--gold);">Livre 59,99€</div>
-      </div>
-
+    <div class="ed-price-card feat" onclick="selectPricing(30,this);startApp()">
+      <div class="ed-price-tier">Classique</div>
+      <div class="ed-price-n">30</div>
+      <div class="ed-price-pages" data-i18n="price_pages_30">pages · 35 photos</div>
+      <div class="ed-price-v"><strong>Livre 44,99€</strong></div>
+      <div class="ed-price-v" style="color:rgba(255,255,255,.6);">PDF 19,99€</div>
     </div>
-
-    <!-- CTA -->
-    <div style="text-align:center;margin-top:2rem;">
-      <button class="btn-hero" onclick="startApp()">Créer notre album →</button>
-      <p style="font-family:var(--fs);font-size:.8125rem;font-style:italic;color:var(--cream3);margin-top:1rem;">✓ Aperçu gratuit avant paiement &nbsp;·&nbsp; Livraison offerte</p>
+    <div class="ed-price-card" onclick="selectPricing(50,this);startApp()">
+      <div class="ed-price-tier">Premium</div>
+      <div class="ed-price-n">50</div>
+      <div class="ed-price-pages" data-i18n="price_pages_50">pages · 60 photos</div>
+      <div class="ed-price-v"><strong>Livre 59,99€</strong></div>
+      <div class="ed-price-v" style="color:#999;">PDF 24,99€</div>
     </div>
   </div>
-</section>
-
-
-
-<div class="div-orn"><div class="dl"></div><div class="dd"></div><div class="dd" style="opacity:.2;margin:0 5px;"></div><div class="dd"></div><div class="dl r"></div></div>
-
-<!-- SOON -->
-<section class="section" style="padding-top:2rem;">
-  <div class="section-inner">
-    <div class="reveal" style="text-align:center;max-width:620px;margin:0 auto;">
-      <div class="eyebrow" data-i18n="soon_eyebrow">Bientôt</div>
-      <h2 class="s-title"><span data-i18n="soon_title1">Les premières histoires</span><br><em data-i18n="soon_title2">seront les vôtres</em></h2>
-      <p class="s-sub" style="margin:0 auto;" data-i18n="soon_sub">Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album et à partager votre histoire.</p>
-      <div style="margin-top:2.5rem;">
-        <button class="btn-hero" onclick="startApp()" data-i18n="soon_cta">Créer le premier album</button>
-      </div>
-      <p style="font-family:var(--fs);font-size:.8125rem;font-style:italic;color:var(--cream3);margin-top:1.25rem;" data-i18n="soon_note">Aperçu 100% gratuit — aucun engagement avant de voir le résultat</p>
-    </div>
+  <div class="ed-cta-center">
+    <button class="ed-btn-dark" onclick="startApp()" data-i18n="hero_cta">Composer mon album</button>
+    <div class="ed-note" data-i18n="soon_note">Aperçu gratuit avant paiement · Livraison offerte</div>
   </div>
 </section>
+</div>
 
 <!-- APP -->
 <section class="section app-section" id="app">
