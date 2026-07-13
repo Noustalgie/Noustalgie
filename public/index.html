@@ -33,7 +33,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--cream);overflow-x:hi
 .bg-svg{position:absolute;inset:0;opacity:.45;}
 
 /* ── LANGUAGE SELECTOR ── */
-.lang-bar{position:fixed;top:0;left:0;right:0;z-index:400;height:32px;background:rgba(8,6,4,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;padding:0 2.5rem;gap:4px;}
+.lang-bar{position:relative;display:inline-flex;align-items:center;}
 .lang-btn{padding:3px 10px;border-radius:20px;border:1px solid transparent;background:transparent;font-family:var(--fb);font-size:.6875rem;color:var(--cream3);cursor:pointer;transition:all .15s;letter-spacing:.03em;}
 .lang-btn:hover{color:var(--cream2);border-color:var(--border);}
 .lang-btn.active{background:var(--golddim);border-color:var(--border2);color:var(--gold);}
@@ -538,7 +538,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 /* Aperçu album : garder le cadre sombre du livre MAIS habillage clair autour */
 .app-section #albumViewer{border:1px solid #ddd !important;}
 /* Palier inline (dans étape photos) */
-.app-section [id^="pal"]{border:1.5px solid #ddd !important;background:#fff !important;}
+/* palier styles gérés par highlightPal en JS */
 /* Paiement : inclusions, prix */
 .app-section .pay-form,.app-section .pay-box{background:#fff !important;color:#111 !important;}
 .app-section .pay-big{color:#111 !important;}
@@ -606,17 +606,6 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
   <div class="bg-grain"></div>
 </div>
 
-<!-- LANGUAGE BAR -->
-<div class="lang-bar">
-  <button class="lang-toggle" onclick="toggleLangMenu()" id="langToggle">🌐 FR ▾</button>
-  <div class="lang-menu" id="langMenu">
-    <button class="active" onclick="setLang('fr');pickLang('FR')">🇫🇷 Français</button>
-    <button onclick="setLang('en');pickLang('EN')">🇬🇧 English</button>
-    <button onclick="setLang('de');pickLang('DE')">🇩🇪 Deutsch</button>
-    <button onclick="setLang('es');pickLang('ES')">🇪🇸 Español</button>
-    <button onclick="setLang('pt');pickLang('PT')">🇵🇹 Português</button>
-  </div>
-</div>
 
 <!-- NAV -->
 <div class="ed-wrap">
@@ -626,7 +615,19 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
     <a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" data-i18n="nav_pricing">Tarifs</a>
   </div>
   <div class="ed-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Noustalgie</div>
-  <button class="ed-nav-cta" onclick="startApp()" data-i18n="nav_cta">Créer</button>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="lang-bar" style="position:relative;">
+      <button class="lang-toggle" onclick="toggleLangMenu()" id="langToggle">🌐 FR ▾</button>
+      <div class="lang-menu" id="langMenu">
+        <button class="active" onclick="setLang('fr');pickLang('FR')">🇫🇷 Français</button>
+        <button onclick="setLang('en');pickLang('EN')">🇬🇧 English</button>
+        <button onclick="setLang('de');pickLang('DE')">🇩🇪 Deutsch</button>
+        <button onclick="setLang('es');pickLang('ES')">🇪🇸 Español</button>
+        <button onclick="setLang('pt');pickLang('PT')">🇵🇹 Português</button>
+      </div>
+    </div>
+    <button class="ed-nav-cta" onclick="startApp()" data-i18n="nav_cta">Créer</button>
+  </div>
 </nav>
 
 <section class="ed-hero">
@@ -670,21 +671,21 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 <section class="ed-price" id="pricing">
   <div class="ed-sec-eyebrow" data-i18n="price_eyebrow">Nos tarifs — simple, transparent</div>
   <div class="ed-price-grid">
-    <div class="ed-price-card" onclick="selectPricing(20,this);startApp()">
+    <div class="ed-price-card" id="edPrice20" onclick="edPickPrice(20)">
       <div class="ed-price-tier">Essentiel</div>
       <div class="ed-price-n">20</div>
       <div class="ed-price-pages" data-i18n="price_pages_20">pages · 20 photos</div>
       <div class="ed-price-v"><strong>Livre 34,99€</strong></div>
       <div class="ed-price-v" style="color:#999;">PDF 14,99€</div>
     </div>
-    <div class="ed-price-card feat" onclick="selectPricing(30,this);startApp()">
+    <div class="ed-price-card feat" id="edPrice30" onclick="edPickPrice(30)">
       <div class="ed-price-tier">Classique</div>
       <div class="ed-price-n">30</div>
       <div class="ed-price-pages" data-i18n="price_pages_30">pages · 35 photos</div>
       <div class="ed-price-v"><strong>Livre 44,99€</strong></div>
       <div class="ed-price-v" style="color:rgba(255,255,255,.6);">PDF 19,99€</div>
     </div>
-    <div class="ed-price-card" onclick="selectPricing(50,this);startApp()">
+    <div class="ed-price-card" id="edPrice50" onclick="edPickPrice(50)">
       <div class="ed-price-tier">Premium</div>
       <div class="ed-price-n">50</div>
       <div class="ed-price-pages" data-i18n="price_pages_50">pages · 60 photos</div>
@@ -862,10 +863,10 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
         </div>
 
         <!-- Miniatures -->
-        <div id="avThumbs" style="display:flex;gap:4px;padding:8px 14px;overflow-x:auto;background:rgba(10,8,6,.98);scrollbar-width:none;border-top:1px solid rgba(255,255,255,.04);"></div>
+        <div id="avThumbs" style="display:none;gap:4px;padding:8px 14px;overflow-x:auto;background:rgba(10,8,6,.98);scrollbar-width:none;border-top:1px solid rgba(255,255,255,.04);"></div>
       </div>
 
-      <div class="btn-row" style="margin-top:1rem;">
+      <div class="btn-row" id="previewActions" style="margin-top:1rem;display:none;">
         <button class="btn" onclick="goTab(2)">← Retour</button>
         <button class="btn btn-gold" onclick="goTab(4)" id="btnOrder">Commander ce livre</button>
       </div>
@@ -1399,21 +1400,30 @@ function highlightPal(pages) {
     var el = document.getElementById('pal'+p);
     if(!el) return;
     if(p === pages) {
-      el.style.border = '1.5px solid rgba(201,160,90,.5)';
-      el.style.background = 'rgba(201,160,90,.06)';
+      el.style.border = '2.5px solid #111';
+      el.style.background = '#111';
+      el.style.transform = 'scale(1.04)';
+      el.querySelectorAll('div').forEach(function(d){d.style.color='#fff';});
     } else {
-      el.style.border = '1.5px solid var(--border)';
-      el.style.background = 'transparent';
+      el.style.border = '1.5px solid #ddd';
+      el.style.background = '#fff';
+      el.style.transform = 'scale(1)';
+      var divs = el.querySelectorAll('div');
+      if(divs[0]) divs[0].style.color = '#111';
+      if(divs[1]) divs[1].style.color = '#999';
+      if(divs[2]) divs[2].style.color = '#111';
     }
   });
 }
 function selectPricing(pages, el) {
   selectedPages = pages;
   document.querySelectorAll('.price-card').forEach(c => {
-    c.style.border = '1.5px solid var(--border)';
+    c.style.border = '1.5px solid #ddd';
   });
-  if(el) el.style.border = '1.5px solid rgba(201,160,90,.5)';
+  if(el) el.style.border = '1.5px solid #111';
   updateFormatPrices();
+  // Refléter le choix dans le tunnel (palier inline)
+  if(typeof highlightPal==='function') highlightPal(pages);
   // Sync in-app slider
   const idx = STEPS.indexOf(pages);
   if(idx >= 0 && document.getElementById('inAppSlider')) onInAppSlider(idx+1);
@@ -1512,7 +1522,10 @@ function goTab(n) {
     if(mobFill) mobFill.style.width = fill+'%';
     if(mobStep) mobStep.textContent = T[STEP_LABELS[n]]||'';
     if(mobCount) mobCount.textContent = (n+1)+' / 5';
+    if(n===1 && typeof highlightPal==='function') highlightPal(selectedPages);
     if(n===3) renderBookPreview();
+    var pa=document.getElementById('previewActions'); if(pa) pa.style.display = (n===3)?'flex':'none';
+    var th=document.getElementById('avThumbs'); if(th) th.style.display = (n===3)?'flex':'none';
     if(n===5) {
       updateFormatPrices();
       const p = PRICES[selectedPages];
@@ -1527,7 +1540,13 @@ function goTab(n) {
     if(app) app.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(e) { console.error('goTab error:', e); }
 }
-function startApp(){document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>goTab(0),300);}
+function edPickPrice(pages){
+  [20,30,50].forEach(function(p){var el=document.getElementById('edPrice'+p);if(el)el.classList.toggle('feat',p===pages);});
+  selectedPages=pages;
+  if(typeof selectPricing==='function')selectPricing(pages,null);
+  if(typeof highlightPal==='function')highlightPal(pages);
+}
+function startApp(){document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>{goTab(0);if(typeof highlightPal==='function')highlightPal(selectedPages);if(typeof updateFormatPrices==='function')updateFormatPrices();},300);}
 
 // ══════════════════════════════════════════
 // PHOTOS
