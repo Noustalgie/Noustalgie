@@ -2511,13 +2511,22 @@ async function processPayment(){
           const uploadData = await uploadRes.json();
           if(uploadData.url) pdfUrl = uploadData.url;
         } catch(uploadErr) {
-          console.warn('Upload PDF échoué, paiement continue sans PDF URL:', uploadErr.message);
+          console.error('Upload PDF echoue:', uploadErr && uploadErr.message);
         }
       } catch(pdfErr) {
-        console.warn('Génération PDF échouée, paiement continue:', pdfErr.message);
+        console.error('Generation PDF echouee:', pdfErr && pdfErr.message);
+        btn.disabled=false; btn.innerHTML='Payer & commander';
+        alert('Un souci est survenu lors de la preparation de votre livre. Merci de reessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
+        return;
       }
     }
 
+    // Si livre imprime et PDF absent -> bloquer le paiement
+    if(format==='print' && !pdfUrl){
+      btn.disabled=false; btn.innerHTML='Payer & commander';
+      alert('Un souci est survenu lors de la preparation de votre livre. Merci de reessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
+      return;
+    }
     btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Redirection paiement...';
 
     const res=await fetch('/api/create-checkout',{

@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'STRIPE_SECRET_KEY manquante dans les variables Vercel' });
   }
 
-  const { name, email, address, pages, price, names, style } = req.body;
+  const { name, email, address, pages, price, names, style, pdfUrl, format } = req.body;
   const SITE_URL = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3000';
@@ -55,6 +55,9 @@ module.exports = async (req, res) => {
       'metadata[pages]': pages,
       'metadata[names]': names,
       'metadata[style]': style,
+      'metadata[pdf_url]': pdfUrl || '',
+      'metadata[format]': format || 'print',
+      'metadata[price]': price,
     });
 
     if (session.url) {
