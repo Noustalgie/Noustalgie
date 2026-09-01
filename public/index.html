@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBlMGIwOSIvPgogIDxwYXRoIGQ9Ik0xNiAyNHMtOS01LjUtOS0xMmE1IDUgMCAwIDEgOS0zIDUgNSAwIDAgMSA5IDNjMCA2LjUtOSAxMi05IDEyeiIgZmlsbD0iI2M5YTA1YSIvPgo8L3N2Zz4="/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMTExMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk48L3RleHQ+PC9zdmc+"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Noustalgie — Album photo couple personnalisé par IA | Cadeau original</title><meta name="description" content="Créez un album photo unique pour votre couple. L'IA rédige votre histoire d'amour et livre un livre photo premium en 3-5 jours. Apercu gratuit. Dès 19€."/><meta name="keywords" content="album photo couple, cadeau original couple, livre photo personnalisé, cadeau saint valentin, album photo mariage"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://noustalgie.fr"/><meta property="og:type" content="website"/><meta property="og:url" content="https://noustalgie.fr"/><meta property="og:title" content="Noustalgie — Album photo couple par IA"/><meta property="og:description" content="Créez un album photo unique. Apercu gratuit. Dès 19€."/><meta property="og:site_name" content="Noustalgie"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -542,6 +542,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 /* Paiement : inclusions, prix */
 .app-section .pay-form,.app-section .pay-box{background:#fff !important;color:#111 !important;}
 .app-section .pay-big{color:#111 !important;}
+.app-section .pay-big sup{color:#111 !important;}
 .app-section .pay-big-sub{color:#666 !important;}
 .app-section .pay-inc,.app-section .pay-inc li{color:#555 !important;}
 /* ===== SÉLECTEUR DE LANGUE — menu déroulant discret ===== */
@@ -558,9 +559,9 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 .app-section .pay-wrap,.app-section #payForm{background:#fff !important;color:#111 !important;}
 .app-section .pay-title{color:#111 !important;font-family:'Times New Roman',Georgia,serif !important;font-weight:700;}
 .app-section .pay-sub{color:#666 !important;}
-.app-section .pay-price-box{background:#111 !important;border-radius:0 !important;}
-.app-section .pay-big{color:#fff !important;}
-.app-section .pay-big-sub{color:rgba(255,255,255,.6) !important;}
+.app-section .pay-price-box{background:#fff !important;border:1px solid #e2e2e2 !important;border-radius:0 !important;}
+.app-section .pay-big{color:#111 !important;}
+.app-section .pay-big-sub{color:#666 !important;}
 .app-section .pay-includes li{color:#555 !important;}
 .app-section .pay-includes li::before{color:#111 !important;}
 .app-section .pay-heart{filter:grayscale(1) brightness(.3);}
@@ -571,7 +572,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 
 /* ===== FINITIONS FINALES ===== */
 /* encart prix étape commander */
-.app-section .pay-price-box{background:#111 !important;border:none !important;border-radius:0 !important;}
+.app-section .pay-price-box{background:#fff !important;border:1px solid #e2e2e2 !important;border-radius:0 !important;}
 /* paiement sécurisé visible */
 .app-section .pay-secure{color:#111 !important;font-weight:500;}
 /* "Votre album commence ici" (titre section app) tout en noir */
@@ -706,7 +707,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
     <div style="text-align:center;margin-bottom:2.5rem;" class="reveal">
       <div class="eyebrow" data-i18n="app_eyebrow">Créez maintenant</div>
       <h2 class="s-title" style="margin-bottom:.4rem;"><span data-i18n="app_title1">Votre album</span> <em data-i18n="app_title2">commence ici</em></h2>
-      <p style="font-family:var(--fs);font-size:.875rem;font-style:italic;color:var(--cream3);" data-i18n="app_sub">Aperçu gratuit · Payez uniquement si vous êtes satisfait</p>
+      <p style="font-family:var(--fs);font-size:.875rem;font-style:italic;color:#555;" data-i18n="app_sub">Aperçu gratuit · Payez uniquement si vous êtes satisfait</p>
     </div>
 
     <!-- Mobile progress bar -->
@@ -880,7 +881,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
           <div class="pay-title" data-i18n="pay_title">Votre livre est prêt</div>
           <div class="pay-sub" data-i18n="pay_sub">Satisfait de l'aperçu ? Commandez votre livre photo premium, livré en 3-5 jours.</div>
           <div class="pay-price-box">
-            <div class="pay-big"><sup>€</sup><span id="payFinalPrice">44,99</span></div>
+            <div class="pay-big"><span id="payFinalPrice">44,99</span><sup>€</sup></div>
             <div class="pay-big-sub" id="payFinalDesc">Album Premium · 30 pages</div>
           </div>
           <ul class="pay-includes">
@@ -911,9 +912,11 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
               </div>
             </div>
             <input type="hidden" id="payFormat" value="print"/>
-            <div style="margin-top:8px;display:flex;gap:8px;">
-              <input type="text" id="promoCode" placeholder="Code promo (optionnel)" style="flex:1;text-transform:uppercase;"/>
-              <button type="button" onclick="applyPromo()" style="background:var(--border);color:var(--cream);border:1px solid var(--border2);border-radius:2px;padding:0 14px;font-size:.75rem;cursor:pointer;">Appliquer</button>
+            <div style="margin-top:14px;">
+              <div style="display:flex;gap:0;border:1px solid #ddd;border-radius:0;overflow:hidden;transition:border-color .2s;" id="promoWrap">
+                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:.85rem !important;letter-spacing:.05em;margin:0 !important;font-family:'Inter',sans-serif;color:#111 !important;outline:none;"/>
+                <button type="button" onclick="applyPromo()" style="background:#111;color:#fff;border:none;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Appliquer</button>
+              </div>
             </div>
             <div id="promoMsg" style="font-size:.75rem;margin-top:4px;display:none;"></div>
             <!-- Adresse (masquée si PDF) -->
