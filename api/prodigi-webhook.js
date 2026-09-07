@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
     await sendEmail({
       to: email,
       subject: 'Votre livre Noustalgie a été expédié ! ♥',
-      html: `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;color:#333;">
+      html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
         <h1 style="color:#111;">Noustalgie</h1>
         <h2>Bonjour ${name} ♥</h2>
         <p>Bonne nouvelle : votre livre a été expédié et est en route vers vous ! 📦</p>

@@ -133,12 +133,12 @@ module.exports = async (req, res) => {
                   sendEmail({
                     to: email,
                     subject: `Votre PDF Noustalgie est prêt ♥`,
-                    html: `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;color:#333;">
-                      <h1 style="color:#c9a05a;">Noustalgie</h1>
+                    html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
+                      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:Arial,sans-serif;margin-bottom:8px;">Noustalgie</div><div style="width:30px;height:2px;background:#111;margin-bottom:20px;"></div>
                       <h2>Bonjour ${name} ♥</h2>
                       <p>Votre album PDF <b>${names}</b> est prêt ! Cliquez sur le bouton ci-dessous pour le télécharger.</p>
                       <div style="text-align:center;margin:2rem 0;">
-                        <a href="${metaPdfUrl}" style="background:#c9a05a;color:#0e0b09;padding:14px 28px;border-radius:4px;text-decoration:none;font-weight:600;font-size:14px;">Télécharger mon album PDF ↓</a>
+                        <a href="${metaPdfUrl}" style="background:#111;color:#fff;padding:14px 28px;border-radius:4px;text-decoration:none;font-weight:600;font-size:14px;">Télécharger mon album PDF ↓</a>
                       </div>
                       <p style="color:#888;font-size:12px;">Ce lien est valide 14 jours.</p>
                       <p style="margin-top:1.5rem;">Merci ! ♥<br><b>L'équipe Noustalgie</b></p>
@@ -177,8 +177,8 @@ module.exports = async (req, res) => {
                   await sendEmail({
                     to: email,
                     subject: `Votre livre Noustalgie est en préparation ♥`,
-                    html: `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;color:#333;">
-                      <h1 style="color:#c9a05a;">Noustalgie</h1>
+                    html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
+                      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:Arial,sans-serif;margin-bottom:8px;">Noustalgie</div><div style="width:30px;height:2px;background:#111;margin-bottom:20px;"></div>
                       <h2>Bonjour ${name} ♥</h2>
                       <p>Votre commande est confirmée. Votre livre <b>${names}</b> est en cours d'impression.</p>
                       <table style="width:100%;margin:1rem 0;border-collapse:collapse;">
