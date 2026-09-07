@@ -33,7 +33,7 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
 
   const nameParts = (name||'').trim().split(' ');
   const orderPayload = {
-    merchantReference: `NOUST-${stripeSessionId||Date.now()}`,
+    merchantRéférence: `NOUST-${stripeSessionId||Date.now()}`,
     shippingMethod: 'Budget',
     idempotencyKey: `noustalgie-${stripeSessionId||Date.now()}`,
     recipient: {
@@ -42,7 +42,7 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
       address: { line1, postalOrZipCode: postalCode||'75001', countryCode: country, townOrCity: city||'Paris', isBusiness: false }
     },
     items: [{
-      merchantReference: `album-${Date.now()}`,
+      merchantRéférence: `album-${Date.now()}`,
       sku: 'BOOK-FE-8_3-SQ-HARD-G',
       copies: 1,
       sizing: 'fillPrintArea',
@@ -76,27 +76,27 @@ function successHTML(name, pages, price, prodigiOrderId) {
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Commande confirmée — Noustalgie</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
-<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Inter',sans-serif;background:#0e0b09;color:#f2ebe0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}.box{max-width:480px;width:100%;text-align:center;}.ico{font-size:3rem;margin-bottom:1.5rem;}h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.5rem;}h1 em{color:#c9a05a;font-style:italic;}.sub{font-family:'Playfair Display',serif;font-size:.9375rem;font-style:italic;color:rgba(242,235,224,.5);line-height:1.75;margin-bottom:2rem;}.card{background:#1c1610;border:1px solid rgba(201,160,90,.18);border-radius:10px;padding:1.5rem;margin-bottom:2rem;text-align:left;}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(210,175,120,.08);font-size:.875rem;}.row:last-child{border-bottom:none;}.lbl{color:rgba(242,235,224,.45);font-size:.8125rem;}.val{font-weight:500;}.steps{display:flex;flex-direction:column;gap:10px;margin-bottom:2rem;text-align:left;}.step{display:flex;align-items:flex-start;gap:12px;font-size:.875rem;color:rgba(242,235,224,.65);}.sn{width:22px;height:22px;border-radius:50%;background:${hasOrder?'rgba(126,200,160,.15)':'rgba(201,160,90,.15)'};border:1px solid ${hasOrder?'rgba(126,200,160,.3)':'rgba(201,160,90,.3)'};color:${hasOrder?'#7ec8a0':'#c9a05a'};font-size:.6875rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.btn{display:inline-block;padding:13px 32px;background:#c9a05a;color:#0e0b09;border-radius:2px;text-decoration:none;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}.badge{display:inline-block;background:rgba(126,200,160,.1);border:1px solid rgba(126,200,160,.3);color:#7ec8a0;border-radius:20px;padding:4px 12px;font-size:.75rem;letter-spacing:.08em;margin-bottom:1.5rem;}</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Inter',sans-serif;background:#fff;color:#111;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}.box{max-width:500px;width:100%;text-align:center;}.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;margin-bottom:20px;}h1{font-family:'Times New Roman',Georgia,serif;font-size:2.6rem;font-weight:700;line-height:1;margin-bottom:18px;letter-spacing:-.02em;}h1 em{font-style:italic;}.sub{font-size:15px;color:#555;line-height:1.7;margin-bottom:2rem;}.card{background:#fff;border:1px solid #e2e2e2;padding:1.5rem;margin-bottom:2rem;text-align:left;}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}.row:last-child{border-bottom:none;}.lbl{color:#999;}.val{font-weight:500;color:#111;}.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:2rem;text-align:left;}.step{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:#555;line-height:1.5;}.sn{width:24px;height:24px;border-radius:50%;background:#111;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.btn{display:inline-block;padding:14px 32px;background:#111;color:#fff;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}.badge{display:inline-block;background:#111;color:#fff;padding:5px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem;}</style>
 </head><body><div class="box">
-<div class="ico">🎉</div>
-${hasOrder?'<div class="badge">✓ Commande envoyée à l\'imprimeur</div>':''}
-<h1>Commande<br><em>confirmée !</em></h1>
-<p class="sub">Merci ${name} — votre livre est${hasOrder?' en cours d\'impression':" confirmé"}.<br>Un email de confirmation vous a été envoyé.</p>
+<div class="eyebrow">Noustalgie — Commande</div>
+${hasOrder?'<div class="badge">Envoyee a l impression</div>':''}
+<h1>Merci<br><em>${name}</em></h1>
+<p class="sub">Votre commande est confirmée et bien enregistrée.${hasOrder?' Votre livre est deja en cours d impression.':''}<br>Un email de confirmation vous a été envoyé. Si vous ne le voyez pas, vérifiez vos spams.</p>
 <div class="card">
-<div class="row"><span class="lbl">Produit</span><span class="val">Album Premium Noustalgie</span></div>
+<div class="row"><span class="lbl">Produit</span><span class="val">Album Noustalgie</span></div>
 <div class="row"><span class="lbl">Format</span><span class="val">Carré 21×21cm · Couverture rigide</span></div>
 <div class="row"><span class="lbl">Pages</span><span class="val">${pages} pages</span></div>
 <div class="row"><span class="lbl">Montant payé</span><span class="val">${price} €</span></div>
-<div class="row"><span class="lbl">Livraison estimée</span><span class="val">${hasOrder?'3 à 5 jours ouvrés':'5 à 7 jours ouvrés'}</span></div>
-${prodigiOrderId?`<div class="row"><span class="lbl">N° commande</span><span class="val" style="font-size:.75rem;color:rgba(242,235,224,.4);">${prodigiOrderId}</span></div>`:''}
+<div class="row"><span class="lbl">Livraison estimée</span><span class="val">3 à 5 jours ouvrés</span></div>
+${prodigiOrderId?`<div class="row"><span class="lbl">Référence</span><span class="val" style="font-size:12px;color:#999;">${prodigiOrderId}</span></div>`:''}
 </div>
 <div class="steps">
-<div class="step"><div class="sn">${hasOrder?'✓':'1'}</div>${hasOrder?'Votre album est en cours d\'impression professionnelle chez notre imprimeur partenaire.':'Votre album va être envoyé en impression professionnelle.'}</div>
-<div class="step"><div class="sn">${hasOrder?'✓':'2'}</div>Un email de suivi avec numéro de tracking vous sera envoyé à l'expédition.</div>
-<div class="step"><div class="sn">3</div>Livraison à votre adresse en ${hasOrder?'3-5':'5-7'} jours ouvrés.</div>
+<div class="step"><div class="sn">1</div>Votre album est imprimé avec soin par notre atelier partenaire.</div>
+<div class="step"><div class="sn">2</div>Un email de suivi avec numéro de tracking vous sera envoye des l expedition.</div>
+<div class="step"><div class="sn">3</div>Livraison a votre adresse sous 3 à 5 jours ouvrés.</div>
 </div>
-<a href="/" class="btn">← Créer un autre album</a>
+<a href="/" class="btn">Créer un autre album</a>
 </div></body></html>`;
 }
 

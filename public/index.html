@@ -1492,6 +1492,49 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 // STATE
 // ══════════════════════════════════════════
 const S = { photos:[], captions:{}, style:'Romantique Cinéma', story:null, transformed:[], done:new Set() };
+// ── SAUVEGARDE LOCALE ANTI-PERTE (textes/réglages seulement, pas les photos) ──
+function saveDraft(){
+  try{
+    const draft = {
+      name1: document.getElementById('name1')?.value||'',
+      name2: document.getElementById('name2')?.value||'',
+      meetDate: document.getElementById('meetDate')?.value||'',
+      occasion: document.getElementById('occasion')?.value||'',
+      dedication: document.getElementById('dedication')?.value||'',
+      payName: document.getElementById('payName')?.value||'',
+      payEmail: document.getElementById('payEmail')?.value||'',
+      selectedPages: (typeof selectedPages!=='undefined')?selectedPages:30,
+      captions: S.captions||{},
+      savedAt: Date.now()
+    };
+    localStorage.setItem('noustalgie_draft', JSON.stringify(draft));
+  }catch(e){/* localStorage plein ou indisponible : on ignore */}
+}
+function restoreDraft(){
+  try{
+    const raw = localStorage.getItem('noustalgie_draft');
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    // Ne restaurer que si récent (moins de 7 jours)
+    if(!d.savedAt || Date.now()-d.savedAt > 7*24*60*60*1000){ localStorage.removeItem('noustalgie_draft'); return; }
+    const set=(id,val)=>{const el=document.getElementById(id);if(el&&val)el.value=val;};
+    set('name1',d.name1); set('name2',d.name2); set('meetDate',d.meetDate);
+    set('occasion',d.occasion); set('dedication',d.dedication);
+    set('payName',d.payName); set('payEmail',d.payEmail);
+    if(d.captions) S.captions=d.captions;
+    if(d.selectedPages && typeof selectedPages!=='undefined'){ selectedPages=d.selectedPages; }
+  }catch(e){/* ignore */}
+}
+function clearDraft(){ try{ localStorage.removeItem('noustalgie_draft'); }catch(e){} }
+// Sauvegarde auto à chaque saisie
+document.addEventListener('input', function(e){
+  if(e.target && (e.target.id==='name1'||e.target.id==='name2'||e.target.id==='meetDate'||e.target.id==='dedication'||e.target.id==='payName'||e.target.id==='payEmail')){
+    saveDraft();
+  }
+});
+// Restaurer au chargement
+window.addEventListener('load', function(){ setTimeout(restoreDraft, 300); });
+
 const STYLE_PROMPTS = {
   'Romantique Cinéma':'cinematic romantic couple scene, dramatic warm golden hour lighting, soft bokeh, deep shadows, Netflix romantic drama aesthetic, ultra high quality',
   'Luxury':'luxury lifestyle couple editorial, high-end fashion magazine Vogue aesthetics, clean elegant, professional studio lighting',
