@@ -583,6 +583,20 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 .app-section *[style*="border-top:1px solid var(--border)"]{border-top-color:#e2e2e2 !important;}
 /* Barre noire sous boutons : cibler les pseudo et bordures */
 .app-section .btn-row{border-top:none !important;}
+
+/* ===== FAQ EDITORIAL ===== */
+.ed-faq-section{background:#fff !important;color:#111;padding:6vh 5vw;border-top:2px solid #111;}
+.ed-faq-wrap{max-width:760px;margin:0 auto;}
+.ed-faq-head{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:'Inter',sans-serif;text-align:center;margin-bottom:12px;}
+.ed-faq-title{font-family:'Times New Roman',Georgia,serif;font-size:clamp(26px,4vw,38px);font-weight:700;text-align:center;color:#111;margin-bottom:40px;letter-spacing:-.02em;}
+.ed-faq-item{border-bottom:1px solid #e2e2e2;}
+.ed-faq-q{width:100%;text-align:left;background:none;border:none;padding:22px 0;font-family:'Times New Roman',Georgia,serif;font-size:clamp(16px,2.4vw,20px);font-weight:700;color:#111 !important;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.ed-faq-q:hover{opacity:.6;}
+.ed-faq-sign{font-family:'Inter',sans-serif;font-size:22px;font-weight:400;flex-shrink:0;color:#111;transition:transform .25s;}
+.ed-faq-item.open .ed-faq-sign{transform:rotate(45deg);}
+.ed-faq-a{max-height:0;overflow:hidden;transition:max-height .5s ease;}
+.ed-faq-a-inner{padding:0 0 22px;font-family:'Inter',sans-serif;font-size:15px;line-height:1.75;color:#555 !important;}
+.ed-faq-item.open .ed-faq-a{max-height:600px;}
 </style>
 </head>
 <body>
@@ -947,6 +961,52 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
   </div>
 </section>
 
+<section class="ed-faq-section" id="faq">
+  <div class="ed-faq-wrap">
+    <div class="ed-faq-head">Vos questions</div>
+    <div class="ed-faq-title">Tout ce qu'il faut savoir</div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Combien de temps pour recevoir mon album ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Votre album imprimé est fabriqué avec le plus grand soin par notre atelier partenaire, puis expédié directement chez vous. Comptez en moyenne 3 à 5 jours ouvrés pour une livraison en France métropolitaine, et un peu plus selon les destinations européennes. Si vous avez choisi la version PDF, elle vous est envoyée par email immédiatement après votre paiement, sans aucune attente.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Puis-je voir mon album avant de payer ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Oui, et c'est tout l'intérêt de Noustalgie. Vous composez votre album entièrement, avec vos photos, vos prénoms et votre histoire, puis vous en découvrez un aperçu complet, page par page, entièrement gratuit. Vous ne réglez votre commande que si le résultat vous plaît vraiment. Aucun engagement n'est pris tant que vous n'avez pas validé le paiement.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Combien de photos dois-je fournir ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Cela dépend du format que vous choisissez. L'album 20 pages accueille jusqu'à 20 photos, le 30 pages jusqu'à 35, et le 50 pages jusqu'à 60. Nous vous conseillons de sélectionner vos plus beaux souvenirs plutôt que de chercher à remplir chaque emplacement : c'est la qualité et l'émotion de vos clichés qui feront la beauté de votre livre, pas leur nombre.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Quelle est la qualité d'impression ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Nos albums sont imprimés sur du papier photo professionnel épais, avec une couverture rigide et une reliure cousue et soignée. Le format carré de 21 par 21 centimètres met parfaitement en valeur vos photos. Chaque exemplaire est pensé comme un véritable objet à conserver, que vous aurez plaisir à feuilleter et à offrir pendant de nombreuses années.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Comment fonctionne la création de l'album ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Tout se passe en quelques minutes directement sur le site. Vous renseignez vos prénoms et quelques informations sur votre histoire, vous importez vos photos, et notre système compose automatiquement un album élégant et personnalisé. Vous pouvez ensuite modifier chaque page à votre goût, ajuster les textes et les photos, avant de valider votre aperçu.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Puis-je personnaliser les textes et les pages ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Bien sûr. Une fois votre album généré, vous accédez à un éditeur complet qui vous permet de modifier les textes de chaque page, de changer les photos, d'ajuster leur cadrage et de choisir la mise en page qui vous convient. Vous gardez la main sur l'ensemble du rendu pour que votre livre vous ressemble vraiment, jusque dans les moindres détails.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Mes photos sont-elles en sécurité ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">La confidentialité de vos souvenirs est une priorité absolue. Vos photos servent uniquement à créer votre album et ne sont jamais vendues ni partagées à des fins commerciales. Elles sont automatiquement supprimées de nos serveurs 30 jours après votre commande. Vous pouvez consulter notre politique de confidentialité pour connaître le détail de nos engagements en matière de protection des données.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Que se passe-t-il si mon livre arrive abîmé ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Si votre album présente un défaut d'impression ou si le colis a été endommagé pendant le transport, contactez-nous dans les 14 jours suivant la réception à contact@noustalgie.fr, en joignant quelques photos du problème. Nous procédons alors à une réimpression complète ou à un remboursement, sans frais supplémentaires pour vous. Votre satisfaction est notre priorité.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Puis-je modifier ma commande après le paiement ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Une fois le paiement validé, votre album part très rapidement en impression, ce qui rend les modifications difficiles. Nous vous invitons donc à bien vérifier votre aperçu avant de payer. Si vous vous rendez compte d'une erreur juste après votre commande, écrivez-nous au plus vite à contact@noustalgie.fr : si l'impression n'a pas encore démarré, nous ferons notre possible pour vous aider.</div></div>
+    </div>
+    <div class="ed-faq-item">
+      <button class="ed-faq-q" onclick="toggleFaq(this)">Livrez-vous en dehors de la France ?<span class="ed-faq-sign">+</span></button>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner">Oui, nous livrons dans toute l'Europe grâce à notre réseau d'imprimeurs partenaires. Il vous suffit d'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l'expédition de votre album.</div></div>
+    </div>
+  </div>
+</section>
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -1592,6 +1652,7 @@ function edPickPrice(pages){
   if(typeof selectPricing==='function')selectPricing(pages,null);
   if(typeof highlightPal==='function')highlightPal(pages);
 }
+function toggleFaq(btn){var item=btn.closest('.ed-faq-item');if(item)item.classList.toggle('open');}
 function startApp(){document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>{goTab(0);if(typeof highlightPal==='function')highlightPal(selectedPages);if(typeof updateFormatPrices==='function')updateFormatPrices();},300);}
 
 // ══════════════════════════════════════════
