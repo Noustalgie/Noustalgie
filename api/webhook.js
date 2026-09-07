@@ -24,7 +24,7 @@ async function sendEmail({ to, subject, html }) {
 // ─────────────────────────────────────────────
 // Créer la commande Prodigi
 // ─────────────────────────────────────────────
-async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId }) {
+async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId, orderNumber }) {
   if (!process.env.PRODIGI_API_KEY) { console.log('PRODIGI_API_KEY manquante'); return null; }
   if (!pdfUrl) { console.log('Pas de PDF URL — commande Prodigi ignorée'); return null; }
   const parts = (address || '').split(',').map(s => s.trim());
@@ -36,7 +36,7 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
   }
   if (parts[2]) { const cc = parts[2].toUpperCase(); country = cc.includes('BELG')?'BE':cc.includes('SUISS')?'CH':'FR'; }
   const orderPayload = {
-    merchantReference: `NOUST-${stripeSessionId||Date.now()}`,
+    merchantReference: orderNumber || `NOUST-${stripeSessionId||Date.now()}`,
     shippingMethod: 'Budget',
     idempotencyKey: `noustalgie-${stripeSessionId||Date.now()}`,
     recipient: {
@@ -144,6 +144,12 @@ module.exports = async (req, res) => {
   const format  = m.format || 'print';
   const pdfUrl  = m.pdf_url || '';
 
+  // Numéro de commande lisible : NOUST-AAMMJJ-XXXX
+  const _d = new Date();
+  const _ymd = String(_d.getFullYear()).slice(2) + String(_d.getMonth()+1).padStart(2,'0') + String(_d.getDate()).padStart(2,'0');
+  const _rand = Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,4).padEnd(4,'0');
+  const orderNumber = `NOUST-${_ymd}-${_rand}`;
+
   console.log(`Webhook paiement: ${name} (${email}) — ${format} — ${pages}p`);
 
   let prodigiOrderId = null;
@@ -167,7 +173,7 @@ module.exports = async (req, res) => {
 
     // Format imprimé : créer la commande Prodigi
     if (format === 'print' && pdfUrl) {
-      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId: session.id });
+      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId: session.id, orderNumber });
     }
 
     // Email au propriétaire (toi)
@@ -179,6 +185,7 @@ module.exports = async (req, res) => {
         to: NOTIFY,
         subject: `🎉 Commande Noustalgie — ${name} — ${price}€${prodigiOrderId?' ✅ Prodigi':''}`,
         html: `<h2>Nouvelle commande (webhook) !</h2>
+          <p><b>N° commande :</b> ${orderNumber}</p>
           <p><b>Client :</b> ${name} (${email})</p>
           <p><b>Couple :</b> ${names}</p>
           <p><b>Format :</b> ${format} · <b>Pages :</b> ${pages} · <b>Montant :</b> ${price}€</p>
@@ -197,6 +204,7 @@ module.exports = async (req, res) => {
         html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
           <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:Arial,sans-serif;margin-bottom:8px;">Noustalgie</div><div style="width:30px;height:2px;background:#111;margin-bottom:20px;"></div><h2>Bonjour ${name} ♥</h2>
           <p>Votre commande est confirmée. Votre livre <b>${names}</b> est en cours d'impression.</p>
+          <p style="font-size:13px;color:#666;">Votre numéro de commande : <b style="color:#111;">${orderNumber}</b></p>
           <p style="color:#888;font-size:13px;">Vous recevrez un email de suivi à l'expédition avec le numéro de tracking.</p>
           <p>Merci pour votre confiance 🎉<br><b>L'équipe Noustalgie</b></p></div>`
       });
