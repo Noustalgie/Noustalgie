@@ -37,6 +37,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
 <style>
 :root {
   --bg:#0e0b09; --bg2:#141008; --bg3:#1c1610; --bg4:#221c14;
@@ -1318,7 +1319,7 @@ const LANGS = {
     since_lbl:'Zusammen seit', since_ph:'z.B. Juni 2021', occasion_lbl:'Anlass des Buches',
     occ1:'Valentinstag 💝', occ2:'Jahrestag 🥂', occ3:'Weihnachten 🎄', occ4:'Romantische Überraschung ✨', occ5:'Hochzeit 💒',
     ded_lbl:'Widmung (erste Seite)', ded_ph:'Für dich, meine Liebe...', next_photos:'Weiter — Unsere Fotos →',
-    p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — mindestens 10 Fotos',
+    p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — mindestens 15 Fotos',
     pgc_title:'Seitenanzahl', pgc_sub:'Anpassen an eure Geschichte. Von 10 bis 100 Seiten.',
     margin_lbl:'Versand', photos_notice:'💡 Bewegt euch über jedes Foto, um eine persönliche Bildunterschrift hinzuzufügen.',
     back:'← Zurück', next_style:'Weiter — Stil →',
@@ -1400,7 +1401,7 @@ const LANGS = {
     since_lbl:'Juntos desde', since_ph:'ej: junio 2021', occasion_lbl:'Ocasión del libro',
     occ1:'San Valentín 💝', occ2:'Aniversario de pareja 🥂', occ3:'Navidad 🎄', occ4:'Sorpresa romántica ✨', occ5:'Boda 💒',
     ded_lbl:'Dedicatoria (primera página)', ded_ph:'Para ti, mi amor...', next_photos:'Siguiente — Nuestras fotos →',
-    p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 10 fotos',
+    p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
     pgc_title:'Número de páginas', pgc_sub:'Ajustadlo a vuestra historia. De 10 a 100 páginas.',
     margin_lbl:'Envío', photos_notice:'💡 Pasad el ratón sobre cada foto para añadir un pie de foto personal.',
     back:'← Volver', next_style:'Siguiente — Estilo →',
@@ -1482,7 +1483,7 @@ const LANGS = {
     since_lbl:'Juntos desde', since_ph:'ex: junho 2021', occasion_lbl:'Ocasião do livro',
     occ1:'Dia dos Namorados 💝', occ2:'Aniversário de casal 🥂', occ3:'Natal 🎄', occ4:'Surpresa romântica ✨', occ5:'Casamento 💒',
     ded_lbl:'Dedicatória (primeira página)', ded_ph:'Para ti, meu amor...', next_photos:'Seguinte — As nossas fotos →',
-    p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 10 fotos',
+    p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
     pgc_title:'Número de páginas', pgc_sub:'Ajustem à vossa história. De 10 a 100 páginas.',
     margin_lbl:'Envio', photos_notice:'💡 Passem o rato sobre cada foto para adicionar uma legenda pessoal.',
     back:'← Voltar', next_style:'Seguinte — Estilo →',
@@ -1757,7 +1758,8 @@ function addPhotosFromEditor(files){
   const newFiles=Array.from(files).filter(f=>f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif'));
   if(!newFiles.length)return;
   let added=0;
-  Promise.all(newFiles.map(f=>new Promise(resolve=>{
+  Promise.all(newFiles.map(f=>new Promise(async resolve=>{
+    f = await ensureConvertible(f);
     const r=new FileReader();
     r.onload=e=>{const im=new Image();im.onload=()=>{
       const canvas=document.createElement('canvas');const MAX=1600;const rt=Math.min(MAX/im.width,MAX/im.height,1);
@@ -1780,6 +1782,23 @@ function addPhotosFromEditor(files){
       grid.prepend(note);setTimeout(()=>{if(note.parentNode)note.remove();},2000);}
   });
 }
+// Convertit un fichier HEIC/HEIF en Blob JPEG si nécessaire (photos iPhone).
+async function ensureConvertible(file){
+  const isHeic = file.name && (file.name.toLowerCase().endsWith('.heic')||file.name.toLowerCase().endsWith('.heif'));
+  const isHeicType = file.type && (file.type==='image/heic'||file.type==='image/heif');
+  if(!isHeic && !isHeicType) return file;
+  // Si la librairie n'est pas chargée, on renvoie le fichier tel quel (Safari le gère)
+  if(typeof heic2any==='undefined') return file;
+  try{
+    const converted = await heic2any({ blob:file, toType:'image/jpeg', quality:0.92 });
+    const blob = Array.isArray(converted)?converted[0]:converted;
+    // Redonner un nom .jpg
+    return new File([blob], (file.name||'photo').replace(/\.(heic|heif)$/i,'.jpg'), { type:'image/jpeg' });
+  }catch(e){
+    console.error('Conversion HEIC échouée:', e && e.message);
+    return file; // fallback : on tente quand même
+  }
+}
 function addPhotos(files){
   const newFiles = Array.from(files).filter(f=>
     f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif')
@@ -1792,7 +1811,8 @@ function addPhotos(files){
     const batch = newFiles.slice(idx, idx+5);
     if(!batch.length) { renderPhotos(); return; }
     idx += 5;
-    Promise.all(batch.map(f => new Promise(resolve => {
+    Promise.all(batch.map(f => new Promise(async resolve => {
+      f = await ensureConvertible(f);
       const r = new FileReader();
       r.onload = e => {
         const img = new Image();
