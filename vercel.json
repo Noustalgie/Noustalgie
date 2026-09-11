@@ -2,14 +2,10 @@
   "functions": {
     "api/chat.js": { "maxDuration": 60 },
     "api/create-checkout.js": { "maxDuration": 30 },
-    "api/success.js": { "maxDuration": 30 },
-    "api/cleanup.js": { "maxDuration": 60 }
+    "api/success.js": { "maxDuration": 30 }
   },
   "rewrites": [
     { "source": "/success", "destination": "/api/success" },
     { "source": "/cancel",  "destination": "/api/cancel"  }
-  ],
-  "crons": [
-    { "path": "/api/cleanup", "schedule": "0 3 * * *" }
   ]
 }
