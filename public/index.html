@@ -798,6 +798,19 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
         <label class="fl" data-i18n="ded_lbl">Dédicace (première page)</label>
         <textarea id="dedication" data-i18n-ph="ded_ph" placeholder="À toi, mon amour..."></textarea>
       </div>
+      <div class="card">
+        <div class="card-hd" data-i18n="extra_hd">Pour aller plus loin</div>
+        <div class="card-title" data-i18n="extra_title">Rendez votre album unique</div>
+        <div class="card-sub" style="margin-bottom:1.5rem;" data-i18n="extra_sub">Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.</div>
+        <label class="fl" data-i18n="q_meet_lbl">Où et comment vous êtes-vous rencontrés ?</label>
+        <textarea id="qMeet" data-i18n-ph="q_meet_ph" placeholder="ex : à une soirée chez des amis, en septembre 2021..."></textarea>
+        <label class="fl" data-i18n="q_memory_lbl">Un souvenir qui compte particulièrement</label>
+        <textarea id="qMemory" data-i18n-ph="q_memory_ph" placeholder="ex : notre premier voyage à Rome, le jour où..."></textarea>
+        <label class="fl" data-i18n="q_habit_lbl">Un surnom, une habitude ou un petit truc à vous</label>
+        <textarea id="qHabit" data-i18n-ph="q_habit_ph" placeholder="ex : on s'appelle 'Doudou', nos soirées pizza du vendredi..."></textarea>
+        <label class="fl" data-i18n="q_special_lbl">Ce qui rend votre relation spéciale</label>
+        <textarea id="qSpecial" data-i18n-ph="q_special_ph" placeholder="ex : on se comprend sans parler, on rit de tout..."></textarea>
+      </div>
       <div class="btn-row"><button class="btn btn-gold" onclick="goTab(1)" data-i18n="next_photos">Suivant — Nos photos →</button></div>
     </div>
 
@@ -1098,6 +1111,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
 // ══════════════════════════════════════════
 const LANGS = {
   fr: {
+    extra_hd:'Pour aller plus loin', extra_title:'Rendez votre album unique', extra_sub:'Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.', q_meet_lbl:'Où et comment vous êtes-vous rencontrés ?', q_meet_ph:'ex : à une soirée chez des amis, en septembre 2021...', q_memory_lbl:'Un souvenir qui compte particulièrement', q_memory_ph:'ex : notre premier voyage à Rome, le jour où...', q_habit_lbl:'Un surnom, une habitude ou un petit truc à vous', q_habit_ph:"ex : on s'appelle 'Doudou', nos soirées pizza du vendredi...", q_special_lbl:'Ce qui rend votre relation spéciale', q_special_ph:'ex : on se comprend sans parler, on rit de tout...',
     hero_cap_l:'Édition limitée', hero_cap_q:'"Notre plus belle page"', how_d1:'Choisissez vos plus beaux clichés et renseignez vos prénoms.', how_d2:"L'album se compose sous vos yeux, page après page.", how_d3:'Imprimé sur papier photo, relié, livré en 3 à 5 jours.', stat_from:'Dès 15€',
     tier_essentiel:'Essentiel', tier_classique:'Classique', tier_premium:'Premium', word_book:'Livre', price_pages_20:'pages · 20 photos', price_pages_30:'pages · 35 photos', price_pages_50:'pages · 60 photos',
     faq_head:'Vos questions', faq_title:"Tout ce qu'il faut savoir",
@@ -1180,6 +1194,7 @@ const LANGS = {
     soon_eyebrow:'Bientôt', soon_title1:'Les premières histoires', soon_title2:'seront les vôtres', soon_sub:'Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album.', soon_cta:'Créer le premier album', soon_note:'Aperçu 100% gratuit — aucun engagement avant de voir le résultat',
   },
   en: {
+    extra_hd:'Go further', extra_title:'Make your album unique', extra_sub:'These questions are optional, but each answer makes your story more personal and more accurate. Write in your own words, even simply.', q_meet_lbl:'Where and how did you meet?', q_meet_ph:'e.g. at a friends party, in September 2021...', q_memory_lbl:'A memory that matters to you', q_memory_ph:'e.g. our first trip to Rome, the day when...', q_habit_lbl:'A nickname, a habit or a little thing of yours', q_habit_ph:"e.g. we call each other 'Bubs', our Friday pizza nights...", q_special_lbl:'What makes your relationship special', q_special_ph:'e.g. we understand each other without words, we laugh at everything...',
     hero_cap_l:'Limited edition', hero_cap_q:'"Our most beautiful page"', how_d1:'Pick your best photos and enter your first names.', how_d2:'The album takes shape before your eyes, page by page.', how_d3:'Printed on photo paper, bound, delivered in 3 to 5 days.', stat_from:'From €15',
     tier_essentiel:'Essential', tier_classique:'Classic', tier_premium:'Premium', word_book:'Book', price_pages_20:'pages · 20 photos', price_pages_30:'pages · 35 photos', price_pages_50:'pages · 60 photos',
     faq_head:'Your questions', faq_title:'Everything you need to know',
@@ -1262,6 +1277,7 @@ const LANGS = {
     soon_eyebrow:'Coming soon', soon_title1:'The first stories', soon_title2:'will be yours', soon_sub:'Noustalgie is launching soon. Be among the first to create your album.', soon_cta:'Create the first album', soon_note:'100% free preview — no commitment until you see the result',
   },
   de: {
+    extra_hd:'Noch persönlicher', extra_title:'Macht euer Album einzigartig', extra_sub:'Diese Fragen sind optional, aber jede Antwort macht eure Geschichte persönlicher und stimmiger. Schreibt mit euren eigenen Worten, ganz einfach.', q_meet_lbl:'Wo und wie habt ihr euch kennengelernt?', q_meet_ph:'z. B. auf einer Party bei Freunden, im September 2021...', q_memory_lbl:'Eine Erinnerung, die euch besonders wichtig ist', q_memory_ph:'z. B. unsere erste Reise nach Rom, der Tag, als...', q_habit_lbl:'Ein Spitzname, eine Gewohnheit oder eine kleine Eigenart', q_habit_ph:"z. B. wir nennen uns 'Schatz', unsere Pizza-Freitage...", q_special_lbl:'Was eure Beziehung besonders macht', q_special_ph:'z. B. wir verstehen uns ohne Worte, wir lachen über alles...',
     hero_cap_l:'Limitierte Auflage', hero_cap_q:'"Unsere schönste Seite"', how_d1:'Wählen Sie Ihre schönsten Fotos und geben Sie Ihre Vornamen ein.', how_d2:'Das Album entsteht vor Ihren Augen, Seite für Seite.', how_d3:'Auf Fotopapier gedruckt, gebunden, in 3 bis 5 Tagen geliefert.', stat_from:'Ab 15€',
     tier_essentiel:'Essential', tier_classique:'Klassik', tier_premium:'Premium', word_book:'Buch', price_pages_20:'Seiten · 20 Fotos', price_pages_30:'Seiten · 35 Fotos', price_pages_50:'Seiten · 60 Fotos',
     faq_head:'Ihre Fragen', faq_title:'Alles, was Sie wissen müssen',
@@ -1344,6 +1360,7 @@ const LANGS = {
     soon_eyebrow:'Demnächst', soon_title1:'Die ersten Geschichten', soon_title2:'werden eure sein', soon_sub:'Noustalgie ist im Start. Gehört zu den Ersten, die ihr Album erstellen.', soon_cta:'Das erste Album erstellen', soon_note:'100% kostenlose Vorschau — keine Verpflichtung bis ihr das Ergebnis seht',
   },
   es: {
+    extra_hd:'Ir más lejos', extra_title:'Haced único vuestro álbum', extra_sub:'Estas preguntas son opcionales, pero cada respuesta hace vuestra historia más personal y más auténtica. Escribid con vuestras palabras, aunque sea de forma sencilla.', q_meet_lbl:'¿Dónde y cómo os conocisteis?', q_meet_ph:'ej: en una fiesta de amigos, en septiembre de 2021...', q_memory_lbl:'Un recuerdo que os importa especialmente', q_memory_ph:'ej: nuestro primer viaje a Roma, el día en que...', q_habit_lbl:'Un apodo, una costumbre o algo vuestro', q_habit_ph:"ej: nos llamamos 'Cari', nuestras noches de pizza de los viernes...", q_special_lbl:'Lo que hace especial vuestra relación', q_special_ph:'ej: nos entendemos sin hablar, nos reímos de todo...',
     hero_cap_l:'Edición limitada', hero_cap_q:'"Nuestra página más bonita"', how_d1:'Elige tus mejores fotos e introduce vuestros nombres.', how_d2:'El álbum se compone ante tus ojos, página a página.', how_d3:'Impreso en papel fotográfico, encuadernado, entregado en 3 a 5 días.', stat_from:'Desde 15€',
     tier_essentiel:'Esencial', tier_classique:'Clásico', tier_premium:'Premium', word_book:'Libro', price_pages_20:'páginas · 20 fotos', price_pages_30:'páginas · 35 fotos', price_pages_50:'páginas · 60 fotos',
     faq_head:'Tus preguntas', faq_title:'Todo lo que necesitas saber',
@@ -1426,6 +1443,7 @@ const LANGS = {
     soon_eyebrow:'Próximamente', soon_title1:'Las primeras historias', soon_title2:'serán las vuestras', soon_sub:'Noustalgie está en lanzamiento. Sed de los primeros en crear vuestro álbum.', soon_cta:'Crear el primer álbum', soon_note:'Vista previa 100% gratis — sin compromiso hasta ver el resultado',
   },
   pt: {
+    extra_hd:'Ir mais longe', extra_title:'Tornem o vosso álbum único', extra_sub:'Estas perguntas são opcionais, mas cada resposta torna a vossa história mais pessoal e mais verdadeira. Escrevam com as vossas palavras, mesmo de forma simples.', q_meet_lbl:'Onde e como se conheceram?', q_meet_ph:'ex: numa festa de amigos, em setembro de 2021...', q_memory_lbl:'Uma memória que é especialmente importante', q_memory_ph:'ex: a nossa primeira viagem a Roma, o dia em que...', q_habit_lbl:'Uma alcunha, um hábito ou algo vosso', q_habit_ph:"ex: chamamo-nos 'Amor', as nossas noites de pizza à sexta...", q_special_lbl:'O que torna a vossa relação especial', q_special_ph:'ex: entendemo-nos sem falar, rimo-nos de tudo...',
     hero_cap_l:'Edição limitada', hero_cap_q:'"A nossa página mais bonita"', how_d1:'Escolha as suas melhores fotos e introduza os vossos nomes.', how_d2:'O álbum compõe-se diante dos seus olhos, página a página.', how_d3:'Impresso em papel fotográfico, encadernado, entregue em 3 a 5 dias.', stat_from:'Desde 15€',
     tier_essentiel:'Essencial', tier_classique:'Clássico', tier_premium:'Premium', word_book:'Livro', price_pages_20:'páginas · 20 fotos', price_pages_30:'páginas · 35 fotos', price_pages_50:'páginas · 60 fotos',
     faq_head:'As suas perguntas', faq_title:'Tudo o que precisa de saber',
@@ -1968,52 +1986,74 @@ async function runGeneration(){
     const captions=Object.values(S.captions).filter(Boolean);
     const captionCtx=captions.length?`\nLeurs propres mots : "${captions.slice(0,3).join('" · "')}"`:'' ;
     const dedication=(document.getElementById('dedication')?.value||'').trim();
+    // Réponses optionnelles enrichies (matière authentique fournie par le client)
+    const qMeet=(document.getElementById('qMeet')?.value||'').trim();
+    const qMemory=(document.getElementById('qMemory')?.value||'').trim();
+    const qHabit=(document.getElementById('qHabit')?.value||'').trim();
+    const qSpecial=(document.getElementById('qSpecial')?.value||'').trim();
+    // On assemble uniquement ce que le client a réellement fourni
+    const realFacts=[];
+    if(qMeet) realFacts.push(`How they met: ${qMeet}`);
+    if(qMemory) realFacts.push(`A meaningful memory they shared: ${qMemory}`);
+    if(qHabit) realFacts.push(`A nickname / habit / inside thing of theirs: ${qHabit}`);
+    if(qSpecial) realFacts.push(`What makes their relationship special: ${qSpecial}`);
+    if(dedication) realFacts.push(`Their dedication message: ${dedication}`);
+    const factsBlock = realFacts.length
+      ? `\n\nREAL FACTS the couple provided (use ONLY these as concrete facts — weave them in naturally, never contradict them):\n- ${realFacts.join('\n- ')}`
+      : `\n\nThe couple did not share specific details. Write beautifully but keep the content UNIVERSAL and timeless — never invent specific events, places, or facts about them.`;
     const lang_names={fr:'French',en:'English',de:'German',es:'Spanish',pt:'Portuguese'};
     const outputLang=lang_names[currentLang]||'French';
 
-    const prompt=`You are a brilliant romantic author creating a luxury couple photo album.
-Write ENTIRELY in ${outputLang}.
+    const prompt=`You are an acclaimed romantic author writing the text for a luxury, magazine-style couple's photo album. Your writing is elegant, warm, specific and deeply moving — never cheesy, never generic, never using tired clichés like "you complete me", "my other half", "forever and always".
 
-Couple: ${names}${meetDate?` — together since ${meetDate}`:''}
-Occasion: ${occasion}
-Literary style: "${S.style}"
-${captionCtx}
+Write ENTIRELY and ONLY in ${outputLang}, with flawless, natural, native-level language.
 
-Generate content for a magazine-style photo album. 
-Reply ONLY with valid JSON (no markdown, no code blocks):
+THE COUPLE
+Names: ${names}${meetDate?` — together since ${meetDate}`:''}
+Occasion for this album: ${occasion}
+Desired literary atmosphere: "${S.style}"${captionCtx}${factsBlock}
+
+ABSOLUTE RULES
+1. NEVER invent concrete facts (places, dates, events, trips, proposals) that were not explicitly provided above. If a fact was not given, stay evocative and universal instead of fabricating.
+2. When real facts ARE provided, weave them in with subtlety and taste — make the couple feel truly seen, without listing them mechanically.
+3. Avoid ALL clichés. Every line should feel freshly written, tender and true. Prefer concrete, sensory, slightly unexpected images over abstract declarations.
+4. Vary rhythm and tone across the sections: some tender, some playful, some quietly profound.
+5. Keep it warm and sincere — this is a gift meant to move someone to tears of joy.
+
+Reply ONLY with valid JSON (no markdown, no code blocks, no text before or after):
 
 {
-  "titre": "poetic album title (4-6 words, evocative)",
+  "titre": "an evocative, original album title (3-6 words) — poetic, never generic",
   "notes_amour": [
-    "short love note 1 (1-2 sentences, intimate and personal)",
-    "short love note 2 (different tone, tender)",
-    "short love note 3 (poetic)",
-    "short love note 4 (surprising, unexpected)"
+    "short love note 1 (1-2 sentences, intimate, specific in feeling)",
+    "short love note 2 (a different, tender tone)",
+    "short love note 3 (poetic, a fresh image)",
+    "short love note 4 (playful or surprising)"
   ],
   "aimes_chez_toi": [
-    "specific thing I love about you (concrete, original, not cliché)",
+    "a specific, original thing to love about the other (concrete, never cliché)",
     "thing 2", "thing 3", "thing 4", "thing 5", "thing 6", "thing 7", "thing 8"
   ],
   "disputes": [
-    "funny recurring disagreement 1 (humorous, recognizable)",
+    "a warm, funny, RELATABLE little recurring disagreement (gentle, never hurtful)",
     "funny dispute 2",
     "funny dispute 3"
   ],
-  "film": "if your love was a movie, describe it in 3 sentences (genre, atmosphere, ending)",
-  "meteo": "your love as a weather forecast — poetic and specific (3 sentences)",
+  "film": "if their love were a film, describe it in 3 sentences (genre, atmosphere, ending) — cinematic and specific",
+  "meteo": "their love told as a poetic weather forecast (3 sentences) — playful and beautiful",
   "wishlist": [
-    "dream to do together 1 (travel/adventure)",
-    "wish 2 (experience)", 
-    "wish 3 (small romantic gesture)",
-    "wish 4 (fun/silly)",
-    "wish 5 (deep/meaningful)"
+    "a dream to live together (adventure/travel)",
+    "wish 2 (an experience)",
+    "wish 3 (a small romantic gesture)",
+    "wish 4 (fun / lighthearted)",
+    "wish 5 (deep / meaningful)"
   ],
-  "ce_que_je_pas_dire": "optional prompt hint for the handwritten page (not displayed, just for context)",
-  "futur": "letter to your future selves in 3-4 years (warm, hopeful, slightly nostalgic)",
-  "citation": "a beautiful love quote — real or invented — poetic and memorable"
+  "ce_que_je_pas_dire": "a short private context hint (not displayed)",
+  "futur": "a letter to their future selves in a few years (warm, hopeful, gently nostalgic, 3-4 sentences)",
+  "citation": "a beautiful, memorable love line — original and poetic, never a worn-out quote"
 }
 
-Be specific, original, NOT cliché. Make it feel personal and real.`;
+Make every word count. This must feel personal, elegant and unforgettable.`;
 
     const maxTok = 2500; // Réduit pour éviter les timeouts
 
