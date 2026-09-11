@@ -2691,6 +2691,22 @@ function openFullPreview(){ /* désactivé — aperçu intégré */ }
 // ══════════════════════════════════════════
 // PAYMENT
 // ══════════════════════════════════════════
+// Fetch avec timeout : évite qu'un appel réseau reste bloqué indéfiniment (mobile 4G instable)
+async function fetchWithTimeout(url, options, timeoutMs){
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs || 60000);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return res;
+  } catch(err) {
+    clearTimeout(id);
+    if(err.name === 'AbortError') {
+      throw new Error('TIMEOUT_RESEAU');
+    }
+    throw err;
+  }
+}
 async function processPayment(){
   const btn=document.getElementById('payBtn');
   const name=document.getElementById('payName').value.trim();
@@ -2733,10 +2749,10 @@ async function processPayment(){
         const pdfBase64 = await generateAlbumPDF();
         btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Préparation commande...';
         try {
-          const uploadRes = await fetch('/api/upload-pdf', {
+          const uploadRes = await fetchWithTimeout('/api/upload-pdf', {
             method:'POST', headers:{'Content-Type':'application/json'},
             body:JSON.stringify({pdf:pdfBase64, title:S.story?.titre||'noustalgie'})
-          });
+          }, 60000);
           const uploadData = await uploadRes.json();
           if(uploadData.url) pdfUrl = uploadData.url;
         } catch(uploadErr) {
@@ -2758,7 +2774,7 @@ async function processPayment(){
     }
     btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Redirection paiement...';
 
-    const res=await fetch('/api/create-checkout',{
+    const res=await fetchWithTimeout('/api/create-checkout',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         name, email, address, pages, price,
@@ -2767,14 +2783,18 @@ async function processPayment(){
         format, pdfUrl,
         promoCode: appliedPromo?.code||''
       })
-    });
+    }, 30000);
     const data=await res.json();
     if(data.url){ window.location.href=data.url; }
     else { throw new Error(data.error||'Erreur serveur'); }
   } catch(e){
     btn.disabled=false;
     btn.innerHTML='Payer & commander';
-    alert('Erreur : '+e.message);
+    if(e.message==='TIMEOUT_RESEAU'){
+      alert('La connexion semble lente ou instable. Merci de vérifier votre réseau et de réessayer. Vous ne serez pas débité.');
+    } else {
+      alert('Une erreur est survenue. Merci de réessayer. Si le problème persiste, contactez contact@noustalgie.fr — vous ne serez pas débité.');
+    }
   }
 }
 
@@ -2839,11 +2859,11 @@ async function generateAlbumPDF(){
 
   console.log('HTML size:', Math.round(fullHtml.length/1024), 'KB');
 
-  const res = await fetch('/api/generate-pdf', {
+  const res = await fetchWithTimeout('/api/generate-pdf', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ html: fullHtml, title: S.story?.titre||'noustalgie' })
-  });
+  }, 90000);
   const data = await res.json();
   if(!data.pdf) throw new Error('PDFShift erreur: '+(data.error||'inconnu'));
   return data.pdf;
