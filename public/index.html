@@ -2057,6 +2057,16 @@ Be specific, original, NOT cliché. Make it feel personal and real.`;
         };
       }
     }
+    // Garde de sécurité : si tout le parsing a échoué, construire une histoire minimale
+    if(!parsed || typeof parsed !== 'object'){
+      parsed = {
+        titre: 'Notre Histoire',
+        introduction: (typeof rawContent==='string'? rawContent.substring(0,200) : 'Une belle histoire à deux.'),
+        chapitres: [{titre: 'Notre aventure', texte: (typeof rawContent==='string'? rawContent.substring(200,600) : '')}],
+        epilogue: 'Et notre histoire continue, plus belle chaque jour.'
+      };
+    }
+    if(!parsed.titre) parsed.titre = 'Notre Histoire';
     S.story = parsed;
     clearInterval(window._fakeProgressInterval); setProgress(100); log(T.log_ready,'lok');
     S.done.add(0);S.done.add(1);S.done.add(2);S.done.add(3);
