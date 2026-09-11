@@ -267,7 +267,7 @@ input[type=range].mslider:hover::-webkit-slider-thumb{box-shadow:0 0 0 7px rgba(
 
 /* Form */
 .fl{font-size:.75rem;color:var(--cream3);display:block;margin-bottom:5px;letter-spacing:.03em;}
-input[type=text],input[type=password],input[type=email],textarea,select{width:100%;font-size:.9375rem;padding:11px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg4);color:var(--cream);font-family:var(--fb);transition:border-color .2s;margin-bottom:1rem;}
+input[type=text],input[type=password],input[type=email],textarea,select{width:100%;font-size:16px;padding:11px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg4);color:var(--cream);font-family:var(--fb);transition:border-color .2s;margin-bottom:1rem;}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);}
 input::placeholder,textarea::placeholder{color:var(--cream3);font-family:var(--fs);font-style:italic;font-size:.875rem;}
 textarea{resize:vertical;min-height:75px;line-height:1.65;}
@@ -424,6 +424,7 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
+  input,textarea,select{font-size:16px !important;}
   .lang-bar{padding:0 1.25rem;}
   nav{padding:0 1.25rem;}
   .nav-mid{display:none;}
