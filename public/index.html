@@ -2671,8 +2671,15 @@ function openFullPreview(){ /* désactivé — aperçu intégré */ }
 // PAYMENT
 // ══════════════════════════════════════════
 async function processPayment(){
+  const btn=document.getElementById('payBtn');
   const name=document.getElementById('payName').value.trim();
   const email=document.getElementById('payEmail').value.trim();
+  const format=document.getElementById('payFormat')?.value||'print'; // 'pdf' ou 'print'
+
+  // Validation prénom + email (les deux formats)
+  if(!name||!email){ alert('Merci de renseigner votre prénom et votre email.'); return; }
+  if(!email.includes('@')){ alert('Votre email semble invalide.'); return; }
+
   // Assembler l'adresse structurée
   const line1 = document.getElementById('payAddrLine1')?.value.trim()||'';
   const line2 = document.getElementById('payAddrLine2')?.value.trim()||'';
@@ -2680,14 +2687,13 @@ async function processPayment(){
   const city = document.getElementById('payAddrCity')?.value.trim()||'';
   const country = document.getElementById('payAddrCountry')?.value.trim()||'France';
   const address = [line1, line2, postal + ' ' + city, country].filter(Boolean).join(', ');
-  if(!line1 || !postal || !city) { alert('Remplis ton adresse complète (rue, code postal, ville).'); btn.disabled=false; btn.innerHTML='Payer & commander'; return; }
-  const format=document.getElementById('payFormat')?.value||'print'; // 'pdf' ou 'print'
-  
-  if(!name||!email){alert('Remplis ton prénom et email.');return;}
-  if(!email.includes('@')){alert('Email invalide.');return;}
-  // Validation adresse dans processPayment
 
-  const btn=document.getElementById('payBtn');
+  // L'adresse n'est requise QUE pour un livre imprimé
+  if(format==='print' && (!line1 || !postal || !city)) {
+    alert('Merci de renseigner votre adresse complète (rue, code postal, ville) pour la livraison.');
+    return;
+  }
+
   btn.disabled=true;
 
   const pages=selectedPages||30;
