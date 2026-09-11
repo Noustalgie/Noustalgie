@@ -5,10 +5,21 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
+  // Anti-abus : limite de taille + origine autorisée
+  const ALLOWED = ['https://noustalgie.fr','https://www.noustalgie.fr'];
+  const origin = req.headers['origin'] || '';
+  const referer = req.headers['referer'] || '';
+  if (!ALLOWED.some(o => origin.startsWith(o) || referer.startsWith(o))) {
+    return res.status(403).json({ error: 'Origine non autorisee.' });
+  }
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const { pdf } = body;
+    const MAX_PDF = 28000000; // ~20 Mo en base64
+    if (pdf && pdf.length > MAX_PDF) {
+      return res.status(413).json({ error: 'Fichier trop volumineux.' });
+    }
     if (!pdf) return res.status(400).json({ error: 'PDF manquant' });
 
     const CLOUD = process.env.CLOUDINARY_CLOUD_NAME;
