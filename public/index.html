@@ -1834,7 +1834,7 @@ function renderPhotos(){
   const c=document.getElementById('photoCount');
   const ok=S.photos.length>=15; const heicCount=S.photos.filter(p=>p.heic).length;
   c.className='count-bar '+(ok?'c-ok':'c-warn');
-  c.textContent=ok?`✓ ${S.photos.length}${T.photos_ok}`:`${S.photos.length}${T.photos_warn}${10-S.photos.length}${T.photos_warn2}`;
+  c.textContent=ok?`✓ ${S.photos.length}${T.photos_ok}`:`${S.photos.length}${T.photos_warn}${15-S.photos.length}${T.photos_warn2}`;
 }
 function removePhoto(i){S.photos.splice(i,1);const nc={};Object.keys(S.captions).forEach(k=>{const ki=parseInt(k);if(ki<i)nc[ki]=S.captions[ki];else if(ki>i)nc[ki-1]=S.captions[ki];});S.captions=nc;renderPhotos();}
 
@@ -1918,7 +1918,7 @@ async function runGeneration(){
   window._fakeProgressInterval = fakeInterval;
 
   const T = LANGS[currentLang];
-  if(S.photos.length<15){alert(`${T.photos_warn.replace('/10','')}10 photos required`);return;}
+  if(S.photos.length<15){alert('Il faut au moins 15 photos pour créer votre album.');return;}
   const n1=document.getElementById('name1').value.trim()||'you';
   const n2=document.getElementById('name2').value.trim()||'';
   const meetDate=document.getElementById('meetDate').value.trim();
