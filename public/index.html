@@ -2700,7 +2700,7 @@ async function processPayment(){
   try {
     let pdfUrl = '';
 
-    if(format==='print'){
+    if(true){
       btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Génération du PDF...';
       try {
         const pdfBase64 = await generateAlbumPDF();
@@ -2724,7 +2724,7 @@ async function processPayment(){
     }
 
     // Si livre imprime et PDF absent -> bloquer le paiement
-    if(format==='print' && !pdfUrl){
+    if(!pdfUrl){
       btn.disabled=false; btn.innerHTML='Payer & commander';
       alert('Un souci est survenu lors de la preparation de votre livre. Merci de reessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
       return;
