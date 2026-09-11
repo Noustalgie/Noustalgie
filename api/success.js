@@ -129,7 +129,7 @@ module.exports = async (req, res) => {
                 const format = s.metadata?.format || 'print';
 
                 // Si PDF seulement — envoyer le lien PDF au client par email
-                if(format === 'pdf' && metaPdfUrl && email) {
+                if(false && format === 'pdf' && metaPdfUrl && email) {
                   sendEmail({
                     to: email,
                     subject: `Votre PDF Noustalgie est prêt ♥`,
@@ -148,16 +148,14 @@ module.exports = async (req, res) => {
 
                 console.log(`✅ Paiement confirmé : ${name} (${email}) — ${pages}p — ${price}€`);
 
-                // Créer la commande Prodigi automatiquement
-                if (metaPdfUrl) {
-                  prodigiOrderId = await createProdigiOrder({
-                    pdfUrl: metaPdfUrl, name, email, address, stripeSessionId: sessionId
-                  });
-                }
+                // NOTE: création Prodigi désormais gérée UNIQUEMENT par le webhook Stripe
+                // (api/webhook.js) pour éviter les doublons. Désactivé ici.
+                // if (metaPdfUrl) { prodigiOrderId = await createProdigiOrder(...); }
+                prodigiOrderId = null;
 
                 // Email propriétaire
                 const NOTIFY = process.env.NOTIFY_EMAIL;
-                if (NOTIFY) {
+                if (false && NOTIFY) {
                   await sendEmail({
                     to: NOTIFY,
                     subject: `🎉 Commande Noustalgie — ${name} — ${price}€${prodigiOrderId?' ✅ Prodigi envoyé':''}`,
@@ -172,8 +170,8 @@ module.exports = async (req, res) => {
                   });
                 }
 
-                // Email client
-                if (email) {
+                // Email client -> géré par le webhook désormais
+                if (false && email) {
                   await sendEmail({
                     to: email,
                     subject: `Votre livre Noustalgie est en préparation ♥`,
