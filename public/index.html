@@ -2764,7 +2764,7 @@ function refreshTextFields(edit){
     const full=el.textContent.trim();
     if(!direct||direct.length<2)return; // pas de texte propre
     if(direct!==full && full.length>direct.length+2)return; // conteneur, on saute
-    if(direct.length>400)return;
+    if(direct.length>2000)return;
     // éviter doublons
     const key='t'+editables.length;
     if(seen.has(direct))return; seen.add(direct);
@@ -2781,7 +2781,12 @@ function refreshTextFields(edit){
     tf.innerHTML='<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.25);text-align:center;padding:16px;">Aucun texte sur cette page.</div>';
     if(ts)ts.style.display='none';return;
   }
-  tf.innerHTML=editables.slice(0,8).map(f=>`<div style="margin-bottom:9px;"><label style="font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.12);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:12px;padding:8px 10px;resize:vertical;min-height:42px;line-height:1.5;" oninput="liveText(this)">${f.val}</textarea></div>`).join('');
+  // Hauteur estimée selon la longueur du texte (pour tout voir sans couper)
+  function estH(txt){ const lines = Math.ceil((txt||'').length / 34) + (txt||'').split('\n').length; return Math.max(46, Math.min(180, lines * 20)); }
+  tf.style.maxHeight = '260px';
+  tf.style.overflowY = 'auto';
+  tf.style.paddingRight = '4px';
+  tf.innerHTML=editables.map(f=>`<div style="margin-bottom:11px;"><label style="font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:5px;">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:13px;padding:9px 11px;resize:vertical;height:${estH(f.val)}px;line-height:1.55;box-sizing:border-box;" oninput="liveText(this);this.style.height='auto';this.style.height=Math.min(180,this.scrollHeight)+'px';">${f.val}</textarea></div>`).join('');
   if(ts)ts.style.display='block';
 }
 function liveText(ta){
