@@ -2781,13 +2781,15 @@ function refreshTextFields(edit){
     tf.innerHTML='<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.25);text-align:center;padding:16px;">Aucun texte sur cette page.</div>';
     if(ts)ts.style.display='none';return;
   }
-  // Hauteur estimée selon la longueur du texte (pour tout voir sans couper)
-  function estH(txt){ const lines = Math.ceil((txt||'').length / 34) + (txt||'').split('\n').length; return Math.max(46, Math.min(180, lines * 20)); }
-  tf.style.maxHeight = '260px';
+  // Hauteur adaptée : courte pour texte court, plus grande pour texte long
+  function estRows(txt){ const len=(txt||'').length; if(len<=40) return 1; if(len<=90) return 2; if(len<=160) return 3; return Math.min(6, Math.ceil(len/55)); }
+  tf.style.maxHeight = '240px';
   tf.style.overflowY = 'auto';
-  tf.style.paddingRight = '4px';
-  tf.innerHTML=editables.map(f=>`<div style="margin-bottom:11px;"><label style="font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:5px;">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.15);border-radius:5px;color:#f2ebe0;font-family:Georgia,serif;font-size:13px;padding:9px 11px;resize:vertical;height:${estH(f.val)}px;line-height:1.55;box-sizing:border-box;" oninput="liveText(this);this.style.height='auto';this.style.height=Math.min(180,this.scrollHeight)+'px';">${f.val}</textarea></div>`).join('');
+  tf.style.paddingRight = '6px';
+  tf.innerHTML=editables.map(f=>`<div style="margin-bottom:12px;"><label style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px;font-family:var(--fb);">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" rows="${estRows(f.val)}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.18);border-radius:6px;color:#f2ebe0;font-family:Georgia,serif;font-size:13px;padding:9px 11px;resize:none;line-height:1.5;box-sizing:border-box;overflow:hidden;" oninput="liveText(this);this.style.height='auto';this.style.height=(this.scrollHeight+2)+'px';" onfocus="this.style.borderColor='rgba(201,160,90,.5)'" onblur="this.style.borderColor='rgba(201,160,90,.18)'">${f.val}</textarea></div>`).join('');
   if(ts)ts.style.display='block';
+  // Ajuster les hauteurs au contenu réel après rendu
+  setTimeout(()=>{ tf.querySelectorAll('textarea').forEach(t=>{ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }); }, 0);
 }
 function liveText(ta){
   const key=ta.dataset.targetKey;const val=ta.value;
