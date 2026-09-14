@@ -861,7 +861,7 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
       <div class="card" style="text-align:center;padding:4rem 1.5rem;background:#fff !important;border:1px solid #e2e2e2 !important;">
         <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:'Inter',sans-serif;margin-bottom:10px;">Noustalgie</div>
         <div style="width:30px;height:2px;background:#111;margin:0 auto 28px;"></div>
-        <div id="progressPct" style="font-family:'Times New Roman',Georgia,serif;font-size:4.5rem;font-weight:700;color:#111;line-height:1;letter-spacing:-.03em;margin-bottom:6px;">0%</div>
+        <div id="progressPct" style="font-family:'Times New Roman',Georgia,serif;font-size:3rem;font-weight:700;color:#111;line-height:1;letter-spacing:-.03em;margin-bottom:6px;">0%</div>
         <div style="font-family:'Times New Roman',Georgia,serif;font-size:1.15rem;font-weight:700;color:#111;margin-bottom:24px;">Création de votre album</div>
         <div style="background:#eee;border-radius:100px;height:6px;overflow:hidden;max-width:300px;margin:0 auto 20px;">
           <div id="progressFill" style="height:100%;background:#111;border-radius:100px;width:0%;transition:width .4s ease;"></div>
@@ -2207,13 +2207,17 @@ Make every word count. This must feel personal, elegant and unforgettable.`;
     clearInterval(window._fakeProgressInterval); setProgress(100); log(T.log_ready,'lok');
     S.done.add(0);S.done.add(1);S.done.add(2);S.done.add(3);
 
-    document.getElementById('tagsRow').innerHTML=(analysis.themes||[]).map(t=>`<span class="tag">${t}</span>`).join('')+`<span class="tag">${S.photos.length} photos</span><span class="tag">${pages} pages</span><span class="tag">${S.style}</span>`;
-    document.getElementById('storyTitle').textContent=S.story.titre||'Notre Histoire';
-    let body=S.story.introduction||'';
-    (S.story.chapitres||[]).forEach(c=>{body+=`\n\n— ${c.titre} —\n${c.texte}`;});
-    if(S.story.epilogue)body+=`\n\n${S.story.epilogue}`;
-    document.getElementById('storyBody').textContent=body;
-    document.getElementById('genResult').style.display='block';
+    // On prépare quand même le contenu genResult (au cas où) mais on ne l'affiche pas
+    try {
+      document.getElementById('tagsRow').innerHTML=(analysis.themes||[]).map(t=>`<span class="tag">${t}</span>`).join('')+`<span class="tag">${S.photos.length} photos</span><span class="tag">${pages} pages</span><span class="tag">${S.style}</span>`;
+      document.getElementById('storyTitle').textContent=S.story.titre||'Notre Histoire';
+      let body=S.story.introduction||'';
+      (S.story.chapitres||[]).forEach(c=>{body+=`\n\n— ${c.titre} —\n${c.texte}`;});
+      if(S.story.epilogue)body+=`\n\n${S.story.epilogue}`;
+      document.getElementById('storyBody').textContent=body;
+    } catch(prepErr){ console.warn('prep genResult:', prepErr && prepErr.message); }
+    // Aller DIRECTEMENT à l'aperçu de l'album (petit délai pour laisser voir le 100%)
+    setTimeout(()=>{ goTab(3); }, 700);
   }catch(e){
     clearInterval(window._fakeProgressInterval);
     setProgress(0);
