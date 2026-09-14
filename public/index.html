@@ -1780,13 +1780,15 @@ function addPhotosFromEditor(files){
   Promise.all(newFiles.map(f=>new Promise(async resolve=>{
     f = await ensureConvertible(f);
     const r=new FileReader();
-    r.onload=e=>{const im=new Image();im.onload=()=>{
+    r.onload=e=>{const im=new Image();im.onload=async ()=>{
       const canvas=document.createElement('canvas');const MAX=1600;const rt=Math.min(MAX/im.width,MAX/im.height,1);
       canvas.width=Math.round(im.width*rt);canvas.height=Math.round(im.height*rt);
       const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(im,0,0,canvas.width,canvas.height);
       const _o=im.width/im.height;const orient=_o>1.25?'paysage':_o<0.8?'portrait':'carre';
-      resolve({name:f.name,data:canvas.toDataURL('image/jpeg',0.95),w:im.width,h:im.height,ratio:_o,orient:orient,focalY:orient==='portrait'?38:50});
+      const detected=await detectFocalY(im,orient);
+      const focalY=(detected!==null)?detected:(orient==='portrait'?38:orient==='carre'?42:48);
+      resolve({name:f.name,data:canvas.toDataURL('image/jpeg',0.95),w:im.width,h:im.height,ratio:_o,orient:orient,focalY:focalY});
     };im.onerror=()=>resolve(null);im.src=e.target.result;};
     r.readAsDataURL(f);
   }))).then(results=>{
@@ -1818,6 +1820,27 @@ async function ensureConvertible(file){
     return file; // fallback : on tente quand même
   }
 }
+// Détecte les visages d'une image et renvoie le focalY optimal (0-100).
+// Utilise l'API native FaceDetector si disponible, sinon renvoie null (fallback heuristique).
+async function detectFocalY(imgEl, orient){
+  try{
+    if('FaceDetector' in window){
+      const fd = new window.FaceDetector({ maxDetectedFaces: 10, fastMode: true });
+      const faces = await fd.detect(imgEl);
+      if(faces && faces.length){
+        // Centre vertical moyen des visages, en % de la hauteur
+        let sum = 0;
+        faces.forEach(f => { sum += (f.boundingBox.y + f.boundingBox.height/2); });
+        const avgY = sum / faces.length;
+        let pct = Math.round((avgY / imgEl.naturalHeight) * 100);
+        // On remonte légèrement pour garder le haut de la tête + un peu d'air
+        pct = Math.max(20, Math.min(75, pct - 8));
+        return pct;
+      }
+    }
+  }catch(e){ /* FaceDetector indispo ou échec : fallback */ }
+  return null; // pas de détection -> heuristique
+}
 function addPhotos(files){
   const newFiles = Array.from(files).filter(f=>
     f.type.startsWith('image/')||f.name.toLowerCase().endsWith('.heic')||f.name.toLowerCase().endsWith('.heif')
@@ -1835,7 +1858,7 @@ function addPhotos(files){
       const r = new FileReader();
       r.onload = e => {
         const img = new Image();
-        img.onload = () => {
+        img.onload = async () => {
           const canvas = document.createElement('canvas');
           const MAX = 1600;
           const ratio = Math.min(MAX/img.width, MAX/img.height, 1);
@@ -1845,7 +1868,10 @@ function addPhotos(files){
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const _oratio=img.width/img.height;const orient=_oratio>1.25?'paysage':_oratio<0.8?'portrait':'carre';resolve({name:f.name,data:canvas.toDataURL('image/jpeg',0.95),w:img.width,h:img.height,ratio:_oratio,orient:orient,focalY:orient==='portrait'?38:50});
+          const _oratio=img.width/img.height;const orient=_oratio>1.25?'paysage':_oratio<0.8?'portrait':'carre';
+          const detected = await detectFocalY(img, orient);
+          const focalY = (detected!==null) ? detected : (orient==='portrait'?38:orient==='carre'?42:48);
+          resolve({name:f.name,data:canvas.toDataURL('image/jpeg',0.95),w:img.width,h:img.height,ratio:_oratio,orient:orient,focalY:focalY});
         };
         img.onerror = () => resolve(null);
         img.src = e.target.result;
