@@ -527,6 +527,29 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 .app-section input[type=text],.app-section input[type=password],.app-section input[type=email],.app-section textarea,.app-section select{background:#fafafa !important;border:1px solid #ddd !important;color:#111 !important;border-radius:0 !important;}
 .app-section input:focus,.app-section textarea:focus,.app-section select:focus{border-color:#111 !important;}
 .app-section input::placeholder,.app-section textarea::placeholder{color:#bbb !important;}
+/* ═══ ÉDITEUR : fond noir cohérent sur TOUT le panneau ═══ */
+.app-section #editorPanel{ background:#0d0b09 !important; color:#f2ebe0 !important; }
+.app-section #editorPanel *{ box-sizing:border-box; }
+/* Tous les conteneurs internes de l'éditeur : transparents (héritent du noir) */
+.app-section #editorPanel > div,
+.app-section #editorPanel #edTextPanel,
+.app-section #editorPanel #edTextFields,
+.app-section #editorPanel #edFilterPanel,
+.app-section #editorPanel #edPhotoPanel,
+.app-section #editorPanel #edLayoutPanel{ background:transparent !important; }
+/* Champs de texte : sombres, lisibles */
+.app-section #editorPanel #edTextFields textarea{
+  background:#1a1512 !important; color:#f2ebe0 !important;
+  border:1px solid rgba(201,160,90,.22) !important; border-radius:7px !important;
+  min-height:0 !important; font-family:Georgia,serif !important; font-size:13px !important;
+  line-height:1.5 !important; padding:10px 12px !important;
+}
+.app-section #editorPanel #edTextFields textarea:focus{ border-color:#c9a05a !important; outline:none !important; }
+.app-section #editorPanel #edTextFields label{ color:rgba(255,255,255,.42) !important; }
+/* Section Style : bloc sombre encadré */
+.app-section #editorPanel #edTextStyles{ background:rgba(0,0,0,.3) !important; border:1px solid rgba(201,160,90,.15) !important; }
+/* Selects éventuels dans l'éditeur : sombres */
+.app-section #editorPanel select{ background:#1a1512 !important; color:#f2ebe0 !important; border:1px solid rgba(201,160,90,.2) !important; }
 /* Champs texte de l'éditeur : sombres élégants, cohérents avec le panneau */
 .app-section #editorPanel #edTextFields textarea{
   background:#1a1512 !important;
