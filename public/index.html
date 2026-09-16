@@ -527,19 +527,22 @@ footer{padding:3.5rem 2rem 2rem;border-top:1px solid var(--border);position:rela
 .app-section input[type=text],.app-section input[type=password],.app-section input[type=email],.app-section textarea,.app-section select{background:#fafafa !important;border:1px solid #ddd !important;color:#111 !important;border-radius:0 !important;}
 .app-section input:focus,.app-section textarea:focus,.app-section select:focus{border-color:#111 !important;}
 .app-section input::placeholder,.app-section textarea::placeholder{color:#bbb !important;}
-/* Champs texte de l'éditeur : compacts, lisibles, cohérents éditorial clair */
-.app-section #edTextFields textarea{
-  background:#fff !important;
-  color:#111 !important;
-  border:1px solid #ddd !important;
-  border-radius:6px !important;
+/* Champs texte de l'éditeur : sombres élégants, cohérents avec le panneau */
+.app-section #editorPanel #edTextFields textarea{
+  background:#1a1512 !important;
+  color:#f2ebe0 !important;
+  border:1px solid rgba(201,160,90,.2) !important;
+  border-radius:7px !important;
   min-height:0 !important;
+  height:auto !important;
+  font-family:Georgia,serif !important;
   font-size:13px !important;
   line-height:1.5 !important;
-  padding:8px 10px !important;
+  padding:10px 12px !important;
+  box-sizing:border-box !important;
 }
-.app-section #edTextFields textarea:focus{ border-color:#111 !important; }
-.app-section #edTextFields label{ color:#999 !important; }
+.app-section #editorPanel #edTextFields textarea:focus{ border-color:#c9a05a !important; outline:none !important; }
+.app-section #editorPanel #edTextFields label{ color:rgba(255,255,255,.42) !important; }
 .app-section .p-step{background:#f5f5f5 !important;border-right:1px solid #e2e2e2 !important;}
 .app-section .p-step.active{background:#111 !important;}
 .app-section .p-step.active .p-lbl{color:#fff !important;}
@@ -931,7 +934,29 @@ footer .footer-inner > div:last-child{color:#bbb !important;}
             <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);">Saturation</div><div id="saturateVal" style="font-size:10px;color:#c9a05a;">0</div></div><input type="range" id="saturateSlider" min="-80" max="80" value="0" oninput="updateFilter('saturate',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div>
             <div><div style="font-size:11px;color:rgba(255,255,255,.6);font-family:var(--fb);margin-bottom:6px;">Recadrage &amp; zoom</div><div style="display:grid;grid-template-columns:1fr;gap:10px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><div style="font-size:9px;color:rgba(255,255,255,.3);">Zoom</div><div id="zoomVal" style="font-size:9px;color:#c9a05a;">100%</div></div><input type="range" id="zoomSlider" min="100" max="300" value="100" oninput="updateZoom(this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/></div><div><div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px;">Position verticale</div><input type="range" id="cropYSlider" min="0" max="100" value="50" oninput="updateCrop('y',this.value)" style="width:100%;accent-color:#c9a05a;cursor:pointer;"/><input type="hidden" id="cropXSlider" value="50"/></div><div style="font-size:9px;color:rgba(255,255,255,.25);font-style:italic;text-align:center;">Astuce : pince pour zoomer, glisse pour déplacer directement sur la photo</div></div></div></div></div>
           </div></div>
-          <div id="edTextPanel" style="display:none;"><div id="edTextFields"></div><div id="edTextStyles" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);"><div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Police</div><div style="display:flex;gap:5px;margin-bottom:10px;"><button type="button" id="fontPlayfair" onclick="updateTextStyle('font','playfair')" style="flex:1;padding:7px 4px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:Georgia,serif;font-size:13px;cursor:pointer;transition:all .15s;">Playfair</button><button type="button" id="fontInter" onclick="updateTextStyle('font','inter')" style="flex:1;padding:7px 4px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:Inter,sans-serif;font-size:13px;cursor:pointer;transition:all .15s;">Inter</button><button type="button" id="fontBaskerville" onclick="updateTextStyle('font','baskerville')" style="flex:1;padding:7px 4px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:Georgia,serif;font-size:13px;font-style:italic;cursor:pointer;transition:all .15s;">Bask.</button></div><div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Couleur</div><div style="display:flex;gap:8px;margin-bottom:10px;"><button type="button" onclick="updateTextStyle('color','cream')" title="Crème" style="width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:#f2ebe0;cursor:pointer;"></button><button type="button" onclick="updateTextStyle('color','gold')" title="Doré" style="width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:#c9a05a;cursor:pointer;"></button><button type="button" onclick="updateTextStyle('color','white')" title="Blanc" style="width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:#ffffff;cursor:pointer;"></button><button type="button" onclick="updateTextStyle('color','dark')" title="Sombre" style="width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:#2a1e12;cursor:pointer;"></button></div><div style="display:flex;gap:5px;"><button id="boldBtn" onclick="toggleTextStyle('bold')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;">G</button><button id="italicBtn" onclick="toggleTextStyle('italic')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;font-style:italic;cursor:pointer;transition:all .15s;font-family:Georgia,serif;">I</button><button onclick="setTextSize('small')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;">S</button><button onclick="setTextSize('medium')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(201,160,90,.2);background:rgba(201,160,90,.05);color:rgba(201,160,90,.7);font-size:10px;cursor:pointer;">M</button><button onclick="setTextSize('large')" style="flex:1;padding:5px;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;">L</button></div></div></div>
+          <div id="edTextPanel" style="display:none;"><div id="edTextFields"></div><div id="edTextStyles" style="display:none;margin-top:14px;padding:14px;background:rgba(0,0,0,.25);border:1px solid rgba(201,160,90,.12);border-radius:8px;">
+          <div style="font-size:9px;color:rgba(255,255,255,.42);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-family:var(--fb);">Police</div>
+          <div style="display:flex;gap:6px;margin-bottom:16px;">
+            <button type="button" onclick="updateTextStyle('font','playfair')" style="flex:1;padding:9px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:#f2ebe0;font-family:Georgia,serif;font-size:14px;cursor:pointer;transition:all .15s;">Playfair</button>
+            <button type="button" onclick="updateTextStyle('font','inter')" style="flex:1;padding:9px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:#f2ebe0;font-family:Inter,sans-serif;font-size:13px;cursor:pointer;transition:all .15s;">Inter</button>
+            <button type="button" onclick="updateTextStyle('font','baskerville')" style="flex:1;padding:9px 4px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:#f2ebe0;font-family:Georgia,serif;font-style:italic;font-size:14px;cursor:pointer;transition:all .15s;">Bask.</button>
+          </div>
+          <div style="font-size:9px;color:rgba(255,255,255,.42);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-family:var(--fb);">Couleur</div>
+          <div style="display:flex;gap:12px;margin-bottom:16px;align-items:center;">
+            <button type="button" onclick="updateTextStyle('color','cream')" title="Crème" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#f2ebe0;cursor:pointer;padding:0;transition:transform .15s;"></button>
+            <button type="button" onclick="updateTextStyle('color','gold')" title="Doré" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#c9a05a;cursor:pointer;padding:0;transition:transform .15s;"></button>
+            <button type="button" onclick="updateTextStyle('color','white')" title="Blanc" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#ffffff;cursor:pointer;padding:0;transition:transform .15s;"></button>
+            <button type="button" onclick="updateTextStyle('color','dark')" title="Sombre" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#2a1e12;cursor:pointer;padding:0;transition:transform .15s;"></button>
+          </div>
+          <div style="font-size:9px;color:rgba(255,255,255,.42);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-family:var(--fb);">Format</div>
+          <div style="display:flex;gap:6px;">
+            <button id="boldBtn" onclick="toggleTextStyle('bold')" title="Gras" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#f2ebe0;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;">G</button>
+            <button id="italicBtn" onclick="toggleTextStyle('italic')" title="Italique" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#f2ebe0;font-size:13px;font-style:italic;cursor:pointer;transition:all .15s;font-family:Georgia,serif;">I</button>
+            <button onclick="setTextSize('small')" title="Petit" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#f2ebe0;font-size:10px;cursor:pointer;transition:all .15s;">S</button>
+            <button onclick="setTextSize('medium')" title="Moyen" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(201,160,90,.3);background:rgba(201,160,90,.08);color:#c9a05a;font-size:12px;cursor:pointer;transition:all .15s;">M</button>
+            <button onclick="setTextSize('large')" title="Grand" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#f2ebe0;font-size:14px;cursor:pointer;transition:all .15s;">L</button>
+          </div>
+        </div></div></div>
           <div id="edLayoutPanel" style="display:none;"><div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:4px;font-family:var(--fb);">Disposition de la page</div><div style="font-size:9px;color:rgba(255,255,255,.3);font-style:italic;margin-bottom:10px;">Choisis comment organiser photos et texte. Appliqué instantanément.</div><div id="edLayoutGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"></div></div>
           <div style="display:flex;gap:6px;margin-top:12px;"><button onclick="undoEdit()" id="undoBtn" style="padding:9px 12px;background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--fb);">↶ Retour</button><button onclick="applyEdit()" style="flex:1;padding:9px;background:#c9a05a;color:#0a0806;border:none;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;font-family:var(--fb);">Appliquer ✓</button><button onclick="resetEdit()" style="padding:9px 12px;background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08);border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--fb);">Reset</button></div>
         </div>
@@ -2794,15 +2819,14 @@ function refreshTextFields(edit){
     tf.innerHTML='<div style="font-family:Georgia,serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.25);text-align:center;padding:16px;">Aucun texte sur cette page.</div>';
     if(ts)ts.style.display='none';return;
   }
-  // Hauteur adaptée : courte pour texte court, plus grande pour texte long
-  function estRows(txt){ const len=(txt||'').length; if(len<=40) return 1; if(len<=90) return 2; if(len<=160) return 3; return Math.min(6, Math.ceil(len/55)); }
-  tf.style.maxHeight = '240px';
+  function estRows(txt){ const len=(txt||'').length; if(len<=42) return 1; if(len<=95) return 2; if(len<=170) return 3; return Math.min(6, Math.ceil(len/58)); }
+  tf.style.maxHeight = '230px';
   tf.style.overflowY = 'auto';
   tf.style.paddingRight = '6px';
-  tf.innerHTML=editables.map(f=>`<div style="margin-bottom:12px;"><label style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px;font-family:var(--fb);">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" rows="${estRows(f.val)}" style="width:100%;background:#1a1610;border:1px solid rgba(201,160,90,.18);border-radius:6px;color:#f2ebe0;font-family:Georgia,serif;font-size:13px;padding:9px 11px;resize:none;line-height:1.5;box-sizing:border-box;overflow:hidden;" oninput="liveText(this);this.style.height='auto';this.style.height=(this.scrollHeight+2)+'px';" onfocus="this.style.borderColor='rgba(201,160,90,.5)'" onblur="this.style.borderColor='rgba(201,160,90,.18)'">${f.val}</textarea></div>`).join('');
+  tf.innerHTML=editables.map(f=>`<div style="margin-bottom:13px;"><label style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px;font-family:var(--fb);color:rgba(255,255,255,.42);">${f.label}</label><textarea id="ed_${f.key}" data-target-key="${f.key}" rows="${estRows(f.val)}" oninput="liveText(this);this.style.height='auto';this.style.height=(this.scrollHeight+2)+'px';">${f.val}</textarea></div>`).join('');
   if(ts)ts.style.display='block';
-  // Ajuster les hauteurs au contenu réel après rendu
-  setTimeout(()=>{ tf.querySelectorAll('textarea').forEach(t=>{ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }); }, 0);
+  // Ajuster les hauteurs au contenu réel après rendu (pour tout voir, jamais coupé)
+  setTimeout(()=>{ tf.querySelectorAll('textarea').forEach(t=>{ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }); }, 30);
 }
 function liveText(ta){
   const key=ta.dataset.targetKey;const val=ta.value;
