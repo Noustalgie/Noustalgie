@@ -678,6 +678,42 @@ html body .app-section #edTextFields textarea{
 }
 html body .app-section #edTextFields textarea::placeholder{ color:rgba(255,255,255,.3) !important; }
 html body .app-section #edTextFields label{ color:rgba(255,255,255,.45) !important; }
+
+/* ═══ PANNEAUX EDITEUR : fond noir uniforme ═══ */
+html body #edTextPanel,
+html body #edPhotoPanel,
+html body #edFilterPanel,
+html body #edLayoutPanel{
+  background:#0d0b09 !important;
+  padding:14px !important;
+  border-radius:0 0 8px 8px;
+}
+html body #edTextFields{ background:#0d0b09 !important; }
+/* Labels bien visibles */
+html body #edTextFields label{
+  color:#c9a05a !important;
+  font-size:9px !important;
+  letter-spacing:.14em !important;
+  opacity:1 !important;
+}
+/* Champs sombres, espacement resserre */
+html body #edTextFields textarea{
+  background:#1a1512 !important; color:#f2ebe0 !important;
+  border:1px solid rgba(201,160,90,.22) !important; border-radius:6px !important;
+  min-height:0 !important; font-family:Georgia,serif !important; font-size:13px !important;
+  line-height:1.5 !important; padding:9px 11px !important; box-sizing:border-box !important;
+  margin-bottom:0 !important;
+}
+html body #edTextFields textarea:focus{ border-color:#c9a05a !important; outline:none !important; }
+html body #edTextFields > div{ margin-bottom:9px !important; }
+/* Section Style : noir aussi */
+html body #edTextStyles{
+  background:rgba(255,255,255,.03) !important;
+  border:1px solid rgba(201,160,90,.15) !important;
+  margin-top:10px !important; padding:12px !important;
+}
+html body #edTextStyles div{ color:#c9a05a !important; }
+html body #edTextStyles button{ color:#f2ebe0 !important; }
 </style>
 </head>
 <body>
