@@ -24,7 +24,7 @@ async function sendEmail({ to, subject, html }) {
 // ─────────────────────────────────────────────
 // Créer la commande Prodigi
 // ─────────────────────────────────────────────
-async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId, orderNumber }) {
+async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId, orderNumber, pages }) {
   if (!process.env.PRODIGI_API_KEY) { console.log('PRODIGI_API_KEY manquante'); return null; }
   if (!pdfUrl) { console.log('Pas de PDF URL — commande Prodigi ignorée'); return null; }
   // Découpage robuste : on cherche le segment "code postal + ville" où qu'il soit,
@@ -58,7 +58,7 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
       sku: 'BOOK-FE-8_3-SQ-HARD-G',
       copies: 1,
       sizing: 'fillPrintArea',
-      assets: [{ printArea: 'default', url: pdfUrl }]
+      assets: [{ printArea: 'default', url: pdfUrl, pageCount: parseInt(pages, 10) || 20 }]
     }]
   };
   return new Promise((resolve) => {
@@ -182,7 +182,7 @@ module.exports = async (req, res) => {
 
     // Format imprimé : créer la commande Prodigi
     if (format === 'print' && pdfUrl) {
-      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId: session.id, orderNumber });
+      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId: session.id, orderNumber, pages });
     }
 
     // Email au propriétaire (toi)
