@@ -2962,6 +2962,19 @@ function openFullPreview(){ /* désactivé — aperçu intégré */ }
 // PAYMENT
 // ══════════════════════════════════════════
 // Fetch avec timeout : évite qu'un appel réseau reste bloqué indéfiniment (mobile 4G instable)
+// Convertit une chaîne base64 en Blob, par chunks (évite les soucis de perf sur gros fichiers)
+function base64ToBlob(base64, mimeType){
+  const byteChars = atob(base64);
+  const chunkSize = 1024;
+  const byteArrays = [];
+  for (let offset = 0; offset < byteChars.length; offset += chunkSize) {
+    const slice = byteChars.slice(offset, offset + chunkSize);
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i);
+    byteArrays.push(new Uint8Array(byteNumbers));
+  }
+  return new Blob(byteArrays, { type: mimeType });
+}
 async function fetchWithTimeout(url, options, timeoutMs){
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs || 60000);
@@ -3021,12 +3034,17 @@ async function processPayment(){
         const pdfBase64 = await generateAlbumPDF();
         btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Préparation commande...';
         try {
-          const uploadRes = await fetchWithTimeout('/api/upload-pdf', {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({pdf:pdfBase64, title:S.story?.titre||'noustalgie'})
-          }, 60000);
+          // Upload DIRECT navigateur -> Cloudinary (contourne la limite 4,5 Mo des fonctions Vercel)
+          const pdfBlob = base64ToBlob(pdfBase64, 'application/pdf');
+          const cloudForm = new FormData();
+          cloudForm.append('file', pdfBlob, (S.story?.titre||'noustalgie') + '.pdf');
+          cloudForm.append('upload_preset', 'noustalgie_unsigned');
+          cloudForm.append('resource_type', 'raw');
+          const uploadRes = await fetchWithTimeout('https://api.cloudinary.com/v1_1/daxkn7pyb/raw/upload', {
+            method:'POST', body: cloudForm
+          }, 90000);
           const uploadData = await uploadRes.json();
-          if(uploadData.url) pdfUrl = uploadData.url;
+          if(uploadData.secure_url) pdfUrl = uploadData.secure_url;
         } catch(uploadErr) {
           console.error('Upload PDF echoue:', uploadErr && uploadErr.message);
         }
