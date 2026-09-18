@@ -27,14 +27,23 @@ async function sendEmail({ to, subject, html }) {
 async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId, orderNumber }) {
   if (!process.env.PRODIGI_API_KEY) { console.log('PRODIGI_API_KEY manquante'); return null; }
   if (!pdfUrl) { console.log('Pas de PDF URL — commande Prodigi ignorée'); return null; }
-  const parts = (address || '').split(',').map(s => s.trim());
-  const line1 = parts[0] || '';
-  let postalCode = '', city = '', country = 'FR';
-  if (parts[1]) {
-    const m = parts[1].match(/^(\d{4,5})\s+(.+)$/);
-    if (m) { postalCode = m[1]; city = m[2]; } else { city = parts[1]; }
+  // Découpage robuste : on cherche le segment "code postal + ville" où qu'il soit,
+  // pour gérer les adresses avec ou sans complément (appartement, bâtiment...).
+  const parts = (address || '').split(',').map(s => s.trim()).filter(Boolean);
+  let postalCode = '', city = '', country = 'FR', postalIdx = -1;
+  for (let i = 0; i < parts.length; i++) {
+    const m = parts[i].match(/^(\d{4,5})\s+(.+)$/);
+    if (m) { postalCode = m[1]; city = m[2]; postalIdx = i; break; }
   }
-  if (parts[2]) { const cc = parts[2].toUpperCase(); country = cc.includes('BELG')?'BE':cc.includes('SUISS')?'CH':'FR'; }
+  // Tout ce qui précède le code postal = adresse (rue + complément éventuel réunis)
+  const addressParts = postalIdx >= 0 ? parts.slice(0, postalIdx) : parts.slice(0, Math.max(1, parts.length - 1));
+  const line1 = addressParts.join(', ') || (parts[0] || '');
+  // Tout ce qui suit le code postal = pays
+  const afterParts = postalIdx >= 0 ? parts.slice(postalIdx + 1) : [];
+  if (afterParts.length) {
+    const cc = afterParts.join(' ').toUpperCase();
+    country = cc.includes('BELG') ? 'BE' : cc.includes('SUISS') ? 'CH' : 'FR';
+  }
   const orderPayload = {
     merchantReference: orderNumber || `NOUST-${stripeSessionId||Date.now()}`,
     shippingMethod: 'Budget',
