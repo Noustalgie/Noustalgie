@@ -1056,7 +1056,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
             <label class="fl" data-i18n="pay_name_lbl">Votre prénom</label>
             <input type="text" id="payName" data-i18n-ph="pay_name_ph" placeholder="Votre prénom"/>
             <label class="fl" data-i18n="pay_email_lbl">Email (suivi de commande)</label>
-            <input type="email" id="payEmail" placeholder="emma@email.com"/>
+            <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true"/><input type="email" id="payEmail" placeholder="emma@email.com"/>
             <!-- Choix format -->
             <label class="fl">Format</label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;">
@@ -2978,6 +2978,8 @@ async function processPayment(){
   const email=document.getElementById('payEmail').value.trim();
   const format=document.getElementById('payFormat')?.value||'print'; // 'pdf' ou 'print'
 
+  // Anti-spam : si le champ piège est rempli, c'est un bot -> on bloque silencieusement
+  if(document.getElementById('hpField')?.value){ return; }
   // Validation prénom + email (les deux formats)
   if(!name||!email){ alert('Merci de renseigner votre prénom et votre email.'); return; }
   if(!email.includes('@')){ alert('Votre email semble invalide.'); return; }
