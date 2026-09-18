@@ -872,12 +872,12 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
           <div><label class="fl" data-i18n="since_lbl">Ensemble depuis</label><input type="text" id="meetDate" data-i18n-ph="since_ph" placeholder="ex : juin 2021"/></div>
           <div><label class="fl" data-i18n="occasion_lbl">Occasion du livre</label>
             <select id="occasion">
-              <option value="Surprise romantique" selected>Surprise romantique</option>
-              <option value="Saint-Valentin">Saint-Valentin</option>
-              <option value="Anniversaire de couple">Anniversaire de couple</option>
-              <option value="Noël">Noël</option>
-              <option value="Mariage">Mariage</option>
-              <option value="Cadeau pour un proche">Cadeau pour un proche</option>
+              <option value="Surprise romantique" selected data-i18n="occ1">Surprise romantique</option>
+              <option value="Saint-Valentin" data-i18n="occ2">Saint-Valentin</option>
+              <option value="Anniversaire de couple" data-i18n="occ3">Anniversaire de couple</option>
+              <option value="Noël" data-i18n="occ4">Noël</option>
+              <option value="Mariage" data-i18n="occ5">Mariage</option>
+              <option value="Cadeau pour un proche" data-i18n="occ6">Cadeau pour un proche</option>
             </select>
           </div>
         </div>
@@ -1214,6 +1214,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
 // ══════════════════════════════════════════
 const LANGS = {
   fr: {
+    occ1:'Surprise romantique', occ2:'Saint-Valentin', occ3:'Anniversaire de couple', occ4:'Noël', occ5:'Mariage', occ6:'Cadeau pour un proche',
     uploading:'Ajout de vos photos',
     gen_steps:['Analyse de vos photos...','Sélection de vos plus beaux moments...',"Rédaction de votre histoire d'amour...",'Composition des pages...','Mise en page de votre album...','Application des dernières touches...','Presque prêt...'],
     extra_hd:'Pour aller plus loin', extra_title:'Rendez votre album unique', extra_sub:'Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.', q_meet_lbl:'Où et comment vous êtes-vous rencontrés ?', q_meet_ph:'ex : à une soirée chez des amis, en septembre 2021...', q_memory_lbl:'Un souvenir qui compte particulièrement', q_memory_ph:'ex : notre premier voyage à Rome, le jour où...', q_habit_lbl:'Un surnom, une habitude ou un petit truc à vous', q_habit_ph:"ex : on s'appelle 'Doudou', nos soirées pizza du vendredi...", q_special_lbl:'Ce qui rend votre relation spéciale', q_special_ph:'ex : on se comprend sans parler, on rit de tout...',
@@ -1273,7 +1274,7 @@ const LANGS = {
     p0_hd:'Votre couple', p0_title:'Parlons de vous deux', p0_sub:'Ces informations personnalisent chaque ligne de votre livre.',
     name1_lbl:'Prénom 1', name1_ph:'Emma', name2_lbl:'Prénom 2', name2_ph:'Lucas',
     since_lbl:'Ensemble depuis', since_ph:'ex : juin 2021', occasion_lbl:'Occasion du livre',
-    occ1:'Surprise romantique', occ2:'Saint-Valentin', occ3:'Anniversaire de couple', occ4:'Noël', occ5:'Mariage', occ6:'Cadeau pour un proche',
+    
     ded_lbl:'Dédicace (première page)', ded_ph:'À toi, mon amour...', next_photos:'Suivant — Nos photos →',
     p1_hd:'Vos photos ensemble', dz_label:'Glissez vos photos ici ou cliquez', dz_sub:'JPG · PNG · WEBP · HEIC — minimum 15 photos',
     pgc_title:'Nombre de pages', pgc_sub:'Ajustez selon votre histoire. De 10 à 100 pages.',
@@ -1299,6 +1300,7 @@ const LANGS = {
     soon_eyebrow:'Bientôt', soon_title1:'Les premières histoires', soon_title2:'seront les vôtres', soon_sub:'Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album.', soon_cta:'Créer le premier album', soon_note:'Aperçu 100% gratuit — aucun engagement avant de voir le résultat',
   },
   en: {
+    occ1:'Romantic surprise', occ2:"Valentine's Day", occ3:'Couple anniversary', occ4:'Christmas', occ5:'Wedding', occ6:'Gift for a loved one',
     uploading:'Adding your photos',
     gen_steps:['Analysing your photos...','Selecting your most beautiful moments...','Writing your love story...','Composing the pages...','Laying out your album...','Adding the final touches...','Almost ready...'],
     extra_hd:'Go further', extra_title:'Make your album unique', extra_sub:'These questions are optional, but each answer makes your story more personal and more accurate. Write in your own words, even simply.', q_meet_lbl:'Where and how did you meet?', q_meet_ph:'e.g. at a friends party, in September 2021...', q_memory_lbl:'A memory that matters to you', q_memory_ph:'e.g. our first trip to Rome, the day when...', q_habit_lbl:'A nickname, a habit or a little thing of yours', q_habit_ph:"e.g. we call each other 'Bubs', our Friday pizza nights...", q_special_lbl:'What makes your relationship special', q_special_ph:'e.g. we understand each other without words, we laugh at everything...',
@@ -1358,7 +1360,7 @@ const LANGS = {
     p0_hd:'Your couple', p0_title:'Tell us about you two', p0_sub:'This information personalises every line of your book.',
     name1_lbl:'First name 1', name1_ph:'Emma', name2_lbl:'First name 2', name2_ph:'Lucas',
     since_lbl:'Together since', since_ph:'e.g. June 2021', occasion_lbl:'Book occasion',
-    occ1:'Valentine\'s Day 💝', occ2:'Anniversary 🥂', occ3:'Christmas 🎄', occ4:'Romantic surprise ✨', occ5:'Wedding 💒',
+    
     ded_lbl:'Dedication (first page)', ded_ph:'To you, my love...', next_photos:'Next — Our photos →',
     p1_hd:'Your photos together', dz_label:'Drag photos here or click to browse', dz_sub:'JPG · PNG · WEBP · HEIC — minimum 15 photos',
     pgc_title:'Number of pages', pgc_sub:'Adjust to match your story. From 10 to 100 pages.',
@@ -1384,6 +1386,7 @@ const LANGS = {
     soon_eyebrow:'Coming soon', soon_title1:'The first stories', soon_title2:'will be yours', soon_sub:'Noustalgie is launching soon. Be among the first to create your album.', soon_cta:'Create the first album', soon_note:'100% free preview — no commitment until you see the result',
   },
   de: {
+    occ1:'Romantische Überraschung', occ2:'Valentinstag', occ3:'Paar-Jahrestag', occ4:'Weihnachten', occ5:'Hochzeit', occ6:'Geschenk für einen geliebten Menschen',
     uploading:'Fotos werden hinzugefügt',
     gen_steps:['Eure Fotos werden analysiert...','Eure schönsten Momente werden ausgewählt...','Eure Liebesgeschichte wird geschrieben...','Die Seiten werden zusammengestellt...','Euer Album wird gestaltet...','Letzte Feinheiten...','Fast fertig...'],
     extra_hd:'Noch persönlicher', extra_title:'Macht euer Album einzigartig', extra_sub:'Diese Fragen sind optional, aber jede Antwort macht eure Geschichte persönlicher und stimmiger. Schreibt mit euren eigenen Worten, ganz einfach.', q_meet_lbl:'Wo und wie habt ihr euch kennengelernt?', q_meet_ph:'z. B. auf einer Party bei Freunden, im September 2021...', q_memory_lbl:'Eine Erinnerung, die euch besonders wichtig ist', q_memory_ph:'z. B. unsere erste Reise nach Rom, der Tag, als...', q_habit_lbl:'Ein Spitzname, eine Gewohnheit oder eine kleine Eigenart', q_habit_ph:"z. B. wir nennen uns 'Schatz', unsere Pizza-Freitage...", q_special_lbl:'Was eure Beziehung besonders macht', q_special_ph:'z. B. wir verstehen uns ohne Worte, wir lachen über alles...',
@@ -1443,7 +1446,7 @@ const LANGS = {
     p0_hd:'Euer Paar', p0_title:'Erzählt uns von euch', p0_sub:'Diese Infos personalisieren jede Zeile eures Buches.',
     name1_lbl:'Vorname 1', name1_ph:'Emma', name2_lbl:'Vorname 2', name2_ph:'Lucas',
     since_lbl:'Zusammen seit', since_ph:'z.B. Juni 2021', occasion_lbl:'Anlass des Buches',
-    occ1:'Valentinstag 💝', occ2:'Jahrestag 🥂', occ3:'Weihnachten 🎄', occ4:'Romantische Überraschung ✨', occ5:'Hochzeit 💒',
+    
     ded_lbl:'Widmung (erste Seite)', ded_ph:'Für dich, meine Liebe...', next_photos:'Weiter — Unsere Fotos →',
     p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — mindestens 15 Fotos',
     pgc_title:'Seitenanzahl', pgc_sub:'Anpassen an eure Geschichte. Von 10 bis 100 Seiten.',
@@ -1469,6 +1472,7 @@ const LANGS = {
     soon_eyebrow:'Demnächst', soon_title1:'Die ersten Geschichten', soon_title2:'werden eure sein', soon_sub:'Noustalgie ist im Start. Gehört zu den Ersten, die ihr Album erstellen.', soon_cta:'Das erste Album erstellen', soon_note:'100% kostenlose Vorschau — keine Verpflichtung bis ihr das Ergebnis seht',
   },
   es: {
+    occ1:'Sorpresa romántica', occ2:'San Valentín', occ3:'Aniversario de pareja', occ4:'Navidad', occ5:'Boda', occ6:'Regalo para un ser querido',
     uploading:'Añadiendo vuestras fotos',
     gen_steps:['Analizando vuestras fotos...','Seleccionando vuestros mejores momentos...','Escribiendo vuestra historia de amor...','Componiendo las páginas...','Maquetando vuestro álbum...','Aplicando los últimos detalles...','Casi listo...'],
     extra_hd:'Ir más lejos', extra_title:'Haced único vuestro álbum', extra_sub:'Estas preguntas son opcionales, pero cada respuesta hace vuestra historia más personal y más auténtica. Escribid con vuestras palabras, aunque sea de forma sencilla.', q_meet_lbl:'¿Dónde y cómo os conocisteis?', q_meet_ph:'ej: en una fiesta de amigos, en septiembre de 2021...', q_memory_lbl:'Un recuerdo que os importa especialmente', q_memory_ph:'ej: nuestro primer viaje a Roma, el día en que...', q_habit_lbl:'Un apodo, una costumbre o algo vuestro', q_habit_ph:"ej: nos llamamos 'Cari', nuestras noches de pizza de los viernes...", q_special_lbl:'Lo que hace especial vuestra relación', q_special_ph:'ej: nos entendemos sin hablar, nos reímos de todo...',
@@ -1528,7 +1532,7 @@ const LANGS = {
     p0_hd:'Vuestra pareja', p0_title:'Hablemos de vosotros dos', p0_sub:'Esta información personaliza cada línea de vuestro libro.',
     name1_lbl:'Nombre 1', name1_ph:'Emma', name2_lbl:'Nombre 2', name2_ph:'Lucas',
     since_lbl:'Juntos desde', since_ph:'ej: junio 2021', occasion_lbl:'Ocasión del libro',
-    occ1:'San Valentín 💝', occ2:'Aniversario de pareja 🥂', occ3:'Navidad 🎄', occ4:'Sorpresa romántica ✨', occ5:'Boda 💒',
+    
     ded_lbl:'Dedicatoria (primera página)', ded_ph:'Para ti, mi amor...', next_photos:'Siguiente — Nuestras fotos →',
     p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
     pgc_title:'Número de páginas', pgc_sub:'Ajustadlo a vuestra historia. De 10 a 100 páginas.',
@@ -1554,6 +1558,7 @@ const LANGS = {
     soon_eyebrow:'Próximamente', soon_title1:'Las primeras historias', soon_title2:'serán las vuestras', soon_sub:'Noustalgie está en lanzamiento. Sed de los primeros en crear vuestro álbum.', soon_cta:'Crear el primer álbum', soon_note:'Vista previa 100% gratis — sin compromiso hasta ver el resultado',
   },
   pt: {
+    occ1:'Surpresa romântica', occ2:'Dia dos Namorados', occ3:'Aniversário de casal', occ4:'Natal', occ5:'Casamento', occ6:'Presente para alguém querido',
     uploading:'A adicionar as vossas fotos',
     gen_steps:['A analisar as vossas fotos...','A selecionar os vossos melhores momentos...','A escrever a vossa história de amor...','A compor as páginas...','A criar o layout do vosso álbum...','A aplicar os últimos toques...','Quase pronto...'],
     extra_hd:'Ir mais longe', extra_title:'Tornem o vosso álbum único', extra_sub:'Estas perguntas são opcionais, mas cada resposta torna a vossa história mais pessoal e mais verdadeira. Escrevam com as vossas palavras, mesmo de forma simples.', q_meet_lbl:'Onde e como se conheceram?', q_meet_ph:'ex: numa festa de amigos, em setembro de 2021...', q_memory_lbl:'Uma memória que é especialmente importante', q_memory_ph:'ex: a nossa primeira viagem a Roma, o dia em que...', q_habit_lbl:'Uma alcunha, um hábito ou algo vosso', q_habit_ph:"ex: chamamo-nos 'Amor', as nossas noites de pizza à sexta...", q_special_lbl:'O que torna a vossa relação especial', q_special_ph:'ex: entendemo-nos sem falar, rimo-nos de tudo...',
@@ -1613,7 +1618,7 @@ const LANGS = {
     p0_hd:'O vosso casal', p0_title:'Falem-nos de vocês dois', p0_sub:'Esta informação personaliza cada linha do vosso livro.',
     name1_lbl:'Primeiro nome 1', name1_ph:'Emma', name2_lbl:'Primeiro nome 2', name2_ph:'Lucas',
     since_lbl:'Juntos desde', since_ph:'ex: junho 2021', occasion_lbl:'Ocasião do livro',
-    occ1:'Dia dos Namorados 💝', occ2:'Aniversário de casal 🥂', occ3:'Natal 🎄', occ4:'Surpresa romântica ✨', occ5:'Casamento 💒',
+    
     ded_lbl:'Dedicatória (primeira página)', ded_ph:'Para ti, meu amor...', next_photos:'Seguinte — As nossas fotos →',
     p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
     pgc_title:'Número de páginas', pgc_sub:'Ajustem à vossa história. De 10 a 100 páginas.',
