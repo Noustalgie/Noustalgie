@@ -802,17 +802,17 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
 <section class="ed-price" id="pricing">
   <div class="ed-sec-eyebrow" data-i18n="price_eyebrow">Nos tarifs</div>
   <div class="ed-price-grid">
-    <div class="ed-price-card" id="edPrice20" onclick="edPickPrice(20)">
+    <div class="ed-price-card" id="edPrice24" onclick="edPickPrice(24)">
       <div class="ed-price-tier" data-i18n="tier_essentiel">Essentiel</div>
-      <div class="ed-price-n">20</div>
-      <div class="ed-price-pages" data-i18n="price_pages_20">pages · 20 photos</div>
+      <div class="ed-price-n">24</div>
+      <div class="ed-price-pages" data-i18n="price_pages_20">pages · 24 photos</div>
       <div class="ed-price-v"><strong><span data-i18n="word_book">Livre</span> 39,99€</strong></div>
       <div class="ed-price-v" style="color:#999;">PDF 14,99€</div>
     </div>
-    <div class="ed-price-card feat" id="edPrice30" onclick="edPickPrice(30)">
+    <div class="ed-price-card feat" id="edPrice36" onclick="edPickPrice(36)">
       <div class="ed-price-tier" data-i18n="tier_classique">Classique</div>
-      <div class="ed-price-n">30</div>
-      <div class="ed-price-pages" data-i18n="price_pages_30">pages · 35 photos</div>
+      <div class="ed-price-n">36</div>
+      <div class="ed-price-pages" data-i18n="price_pages_30">pages · 42 photos</div>
       <div class="ed-price-v"><strong><span data-i18n="word_book">Livre</span> 49,99€</strong></div>
       <div class="ed-price-v" style="color:rgba(255,255,255,.6);">PDF 19,99€</div>
     </div>
@@ -917,13 +917,13 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
       <div style="margin:1rem 0;background:#fafafa;border:1px solid #e2e2e2;border-radius:0;padding:1rem;">
         <div style="font-size:.75rem;font-weight:600;color:#999;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;font-family:'Inter',sans-serif;">Choisir votre palier</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div id="pal20" onclick="selectPricing(20,null);highlightPal(20)" style="border:1.5px solid #ddd;border-radius:0;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;background:#fff;">
-            <div style="font-size:1.1rem;font-weight:700;color:#111;">20</div>
+          <div id="pal24" onclick="selectPricing(24,null);highlightPal(24)" style="border:1.5px solid #ddd;border-radius:0;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;background:#fff;">
+            <div style="font-size:1.1rem;font-weight:700;color:#111;">24</div>
             <div style="font-size:.625rem;color:#999;margin-bottom:4px;">pages</div>
             <div style="font-size:.6875rem;color:#111;font-weight:600;">39,99€</div>
           </div>
-          <div id="pal30" onclick="selectPricing(30,null);highlightPal(30)" style="border:1.5px solid #111;background:#fafafa;border-radius:0;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;">
-            <div style="font-size:1.1rem;font-weight:700;color:#111;">30</div>
+          <div id="pal36" onclick="selectPricing(36,null);highlightPal(36)" style="border:1.5px solid #111;background:#fafafa;border-radius:0;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;">
+            <div style="font-size:1.1rem;font-weight:700;color:#111;">36</div>
             <div style="font-size:.625rem;color:#999;margin-bottom:4px;">pages ⭐</div>
             <div style="font-size:.6875rem;color:#111;font-weight:600;">49,99€</div>
           </div>
@@ -1042,7 +1042,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
           <div class="pay-sub" data-i18n="pay_sub">Satisfait de l'aperçu ? Commandez votre livre photo premium, livré en 3-5 jours.</div>
           <div class="pay-price-box">
             <div class="pay-big"><span id="payFinalPrice">49,99</span><sup>€</sup></div>
-            <div class="pay-big-sub" id="payFinalDesc">Album Premium · 30 pages</div>
+            <div class="pay-big-sub" id="payFinalDesc">Album · 36 pages</div>
           </div>
           <ul class="pay-includes">
             <li data-i18n="pay_inc1">Histoire rédigée sur mesure</li>
@@ -1219,11 +1219,11 @@ const LANGS = {
     gen_steps:['Analyse de vos photos...','Sélection de vos plus beaux moments...',"Rédaction de votre histoire d'amour...",'Composition des pages...','Mise en page de votre album...','Application des dernières touches...','Presque prêt...'],
     extra_hd:'Pour aller plus loin', extra_title:'Rendez votre album unique', extra_sub:'Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.', q_meet_lbl:'Où et comment vous êtes-vous rencontrés ?', q_meet_ph:'ex : à une soirée chez des amis, en septembre 2021...', q_memory_lbl:'Un souvenir qui compte particulièrement', q_memory_ph:'ex : notre premier voyage à Rome, le jour où...', q_habit_lbl:'Un surnom, une habitude ou un petit truc à vous', q_habit_ph:"ex : on s'appelle 'Doudou', nos soirées pizza du vendredi...", q_special_lbl:'Ce qui rend votre relation spéciale', q_special_ph:'ex : on se comprend sans parler, on rit de tout...',
     hero_cap_l:'Édition limitée', hero_cap_q:'"Notre plus belle page"', how_d1:'Choisissez vos plus beaux clichés et renseignez vos prénoms.', how_d2:"L'album se compose sous vos yeux, page après page.", how_d3:'Imprimé sur papier photo, relié, livré en 3 à 5 jours.', stat_from:'Dès 15€',
-    tier_essentiel:'Essentiel', tier_classique:'Classique', tier_premium:'Premium', word_book:'Livre', price_pages_20:'pages · 20 photos', price_pages_30:'pages · 35 photos', price_pages_50:'pages · 60 photos',
+    tier_essentiel:'Essentiel', tier_classique:'Classique', tier_premium:'Premium', word_book:'Livre', price_pages_20:'pages · 24 photos', price_pages_30:'pages · 42 photos', price_pages_50:'pages · 60 photos',
     faq_head:'Vos questions', faq_title:"Tout ce qu'il faut savoir",
     faq_q1:'Combien de temps pour recevoir mon album ?', faq_a1:'Votre album imprimé est fabriqué avec le plus grand soin par notre atelier partenaire, puis expédié directement chez vous. Comptez en moyenne 3 à 5 jours ouvrés en France métropolitaine, et un peu plus selon les destinations européennes. La version PDF, elle, vous est envoyée par email immédiatement après votre paiement.',
     faq_q2:'Puis-je voir mon album avant de payer ?', faq_a2:"Oui, et c'est tout l'intérêt de Noustalgie. Vous composez votre album entièrement, puis vous en découvrez un aperçu complet, page par page, entièrement gratuit. Vous ne réglez votre commande que si le résultat vous plaît vraiment.",
-    faq_q3:'Combien de photos dois-je fournir ?', faq_a3:"Cela dépend du format choisi : jusqu'à 20 photos pour l'album 20 pages, 35 pour le 30 pages, et 60 pour le 50 pages. Choisissez vos plus beaux souvenirs : c'est la qualité et l'émotion qui feront la beauté de votre livre.",
+    faq_q3:'Combien de photos dois-je fournir ?', faq_a3:"Cela dépend du format choisi : jusqu'à 24 photos pour l'album 24 pages, 42 pour le 36 pages, et 60 pour le 50 pages. Choisissez vos plus beaux souvenirs : c'est la qualité et l'émotion qui feront la beauté de votre livre.",
     faq_q4:"Quelle est la qualité d'impression ?", faq_a4:'Nos albums sont imprimés sur papier photo professionnel épais, avec couverture rigide et reliure cousue. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années.',
     faq_q5:"Comment fonctionne la création de l'album ?", faq_a5:'Tout se passe en quelques minutes sur le site. Vous renseignez vos prénoms et votre histoire, importez vos photos, et notre système compose automatiquement un album élégant et personnalisé, que vous pouvez ensuite modifier à votre goût.',
     faq_q6:'Puis-je personnaliser les textes et les pages ?', faq_a6:"Bien sûr. Une fois votre album généré, un éditeur complet vous permet de modifier les textes, changer les photos, ajuster le cadrage et choisir la mise en page. Vous gardez la main sur l'ensemble du rendu.",
@@ -1305,7 +1305,7 @@ const LANGS = {
     gen_steps:['Analysing your photos...','Selecting your most beautiful moments...','Writing your love story...','Composing the pages...','Laying out your album...','Adding the final touches...','Almost ready...'],
     extra_hd:'Go further', extra_title:'Make your album unique', extra_sub:'These questions are optional, but each answer makes your story more personal and more accurate. Write in your own words, even simply.', q_meet_lbl:'Where and how did you meet?', q_meet_ph:'e.g. at a friends party, in September 2021...', q_memory_lbl:'A memory that matters to you', q_memory_ph:'e.g. our first trip to Rome, the day when...', q_habit_lbl:'A nickname, a habit or a little thing of yours', q_habit_ph:"e.g. we call each other 'Bubs', our Friday pizza nights...", q_special_lbl:'What makes your relationship special', q_special_ph:'e.g. we understand each other without words, we laugh at everything...',
     hero_cap_l:'Limited edition', hero_cap_q:'"Our most beautiful page"', how_d1:'Pick your best photos and enter your first names.', how_d2:'The album takes shape before your eyes, page by page.', how_d3:'Printed on photo paper, bound, delivered in 3 to 5 days.', stat_from:'From €15',
-    tier_essentiel:'Essential', tier_classique:'Classic', tier_premium:'Premium', word_book:'Book', price_pages_20:'pages · 20 photos', price_pages_30:'pages · 35 photos', price_pages_50:'pages · 60 photos',
+    tier_essentiel:'Essential', tier_classique:'Classic', tier_premium:'Premium', word_book:'Book', price_pages_20:'pages · 24 photos', price_pages_30:'pages · 42 photos', price_pages_50:'pages · 60 photos',
     faq_head:'Your questions', faq_title:'Everything you need to know',
     faq_q1:'How long until I receive my album?', faq_a1:'Your printed album is crafted with great care by our partner studio, then shipped directly to you. Expect 3 to 5 business days on average within mainland France, and a little longer for other European destinations. The PDF version is emailed to you immediately after payment.',
     faq_q2:'Can I preview my album before paying?', faq_a2:"Yes, that's the whole point of Noustalgie. You build your album entirely, then see a full preview, page by page, completely free. You only pay if you truly love the result.",
@@ -1391,7 +1391,7 @@ const LANGS = {
     gen_steps:['Eure Fotos werden analysiert...','Eure schönsten Momente werden ausgewählt...','Eure Liebesgeschichte wird geschrieben...','Die Seiten werden zusammengestellt...','Euer Album wird gestaltet...','Letzte Feinheiten...','Fast fertig...'],
     extra_hd:'Noch persönlicher', extra_title:'Macht euer Album einzigartig', extra_sub:'Diese Fragen sind optional, aber jede Antwort macht eure Geschichte persönlicher und stimmiger. Schreibt mit euren eigenen Worten, ganz einfach.', q_meet_lbl:'Wo und wie habt ihr euch kennengelernt?', q_meet_ph:'z. B. auf einer Party bei Freunden, im September 2021...', q_memory_lbl:'Eine Erinnerung, die euch besonders wichtig ist', q_memory_ph:'z. B. unsere erste Reise nach Rom, der Tag, als...', q_habit_lbl:'Ein Spitzname, eine Gewohnheit oder eine kleine Eigenart', q_habit_ph:"z. B. wir nennen uns 'Schatz', unsere Pizza-Freitage...", q_special_lbl:'Was eure Beziehung besonders macht', q_special_ph:'z. B. wir verstehen uns ohne Worte, wir lachen über alles...',
     hero_cap_l:'Limitierte Auflage', hero_cap_q:'"Unsere schönste Seite"', how_d1:'Wählen Sie Ihre schönsten Fotos und geben Sie Ihre Vornamen ein.', how_d2:'Das Album entsteht vor Ihren Augen, Seite für Seite.', how_d3:'Auf Fotopapier gedruckt, gebunden, in 3 bis 5 Tagen geliefert.', stat_from:'Ab 15€',
-    tier_essentiel:'Essential', tier_classique:'Klassik', tier_premium:'Premium', word_book:'Buch', price_pages_20:'Seiten · 20 Fotos', price_pages_30:'Seiten · 35 Fotos', price_pages_50:'Seiten · 60 Fotos',
+    tier_essentiel:'Essential', tier_classique:'Klassik', tier_premium:'Premium', word_book:'Buch', price_pages_20:'Seiten · 24 Fotos', price_pages_30:'Seiten · 42 Fotos', price_pages_50:'Seiten · 60 Fotos',
     faq_head:'Ihre Fragen', faq_title:'Alles, was Sie wissen müssen',
     faq_q1:'Wie lange dauert es, bis ich mein Album erhalte?', faq_a1:'Ihr gedrucktes Album wird mit größter Sorgfalt von unserem Partnerstudio gefertigt und direkt zu Ihnen geschickt. Rechnen Sie mit durchschnittlich 3 bis 5 Werktagen innerhalb Frankreichs, etwas länger für andere europäische Ziele. Die PDF-Version wird sofort nach der Zahlung per E-Mail zugesandt.',
     faq_q2:'Kann ich mein Album vor dem Bezahlen ansehen?', faq_a2:'Ja, das ist der Sinn von Noustalgie. Sie gestalten Ihr Album vollständig und sehen dann eine komplette Vorschau, Seite für Seite, völlig kostenlos. Sie zahlen nur, wenn Ihnen das Ergebnis wirklich gefällt.',
@@ -1477,7 +1477,7 @@ const LANGS = {
     gen_steps:['Analizando vuestras fotos...','Seleccionando vuestros mejores momentos...','Escribiendo vuestra historia de amor...','Componiendo las páginas...','Maquetando vuestro álbum...','Aplicando los últimos detalles...','Casi listo...'],
     extra_hd:'Ir más lejos', extra_title:'Haced único vuestro álbum', extra_sub:'Estas preguntas son opcionales, pero cada respuesta hace vuestra historia más personal y más auténtica. Escribid con vuestras palabras, aunque sea de forma sencilla.', q_meet_lbl:'¿Dónde y cómo os conocisteis?', q_meet_ph:'ej: en una fiesta de amigos, en septiembre de 2021...', q_memory_lbl:'Un recuerdo que os importa especialmente', q_memory_ph:'ej: nuestro primer viaje a Roma, el día en que...', q_habit_lbl:'Un apodo, una costumbre o algo vuestro', q_habit_ph:"ej: nos llamamos 'Cari', nuestras noches de pizza de los viernes...", q_special_lbl:'Lo que hace especial vuestra relación', q_special_ph:'ej: nos entendemos sin hablar, nos reímos de todo...',
     hero_cap_l:'Edición limitada', hero_cap_q:'"Nuestra página más bonita"', how_d1:'Elige tus mejores fotos e introduce vuestros nombres.', how_d2:'El álbum se compone ante tus ojos, página a página.', how_d3:'Impreso en papel fotográfico, encuadernado, entregado en 3 a 5 días.', stat_from:'Desde 15€',
-    tier_essentiel:'Esencial', tier_classique:'Clásico', tier_premium:'Premium', word_book:'Libro', price_pages_20:'páginas · 20 fotos', price_pages_30:'páginas · 35 fotos', price_pages_50:'páginas · 60 fotos',
+    tier_essentiel:'Esencial', tier_classique:'Clásico', tier_premium:'Premium', word_book:'Libro', price_pages_20:'páginas · 24 fotos', price_pages_30:'páginas · 42 fotos', price_pages_50:'páginas · 60 fotos',
     faq_head:'Tus preguntas', faq_title:'Todo lo que necesitas saber',
     faq_q1:'¿Cuánto tarda en llegar mi álbum?', faq_a1:'Tu álbum impreso se fabrica con el mayor cuidado en nuestro taller asociado y se envía directamente a ti. Cuenta con 3 a 5 días hábiles de media en Francia continental, y algo más para otros destinos europeos. La versión PDF se envía por email inmediatamente tras el pago.',
     faq_q2:'¿Puedo ver mi álbum antes de pagar?', faq_a2:'Sí, ese es el sentido de Noustalgie. Creas tu álbum por completo y luego ves una vista previa completa, página por página, totalmente gratis. Solo pagas si el resultado te encanta de verdad.',
@@ -1563,7 +1563,7 @@ const LANGS = {
     gen_steps:['A analisar as vossas fotos...','A selecionar os vossos melhores momentos...','A escrever a vossa história de amor...','A compor as páginas...','A criar o layout do vosso álbum...','A aplicar os últimos toques...','Quase pronto...'],
     extra_hd:'Ir mais longe', extra_title:'Tornem o vosso álbum único', extra_sub:'Estas perguntas são opcionais, mas cada resposta torna a vossa história mais pessoal e mais verdadeira. Escrevam com as vossas palavras, mesmo de forma simples.', q_meet_lbl:'Onde e como se conheceram?', q_meet_ph:'ex: numa festa de amigos, em setembro de 2021...', q_memory_lbl:'Uma memória que é especialmente importante', q_memory_ph:'ex: a nossa primeira viagem a Roma, o dia em que...', q_habit_lbl:'Uma alcunha, um hábito ou algo vosso', q_habit_ph:"ex: chamamo-nos 'Amor', as nossas noites de pizza à sexta...", q_special_lbl:'O que torna a vossa relação especial', q_special_ph:'ex: entendemo-nos sem falar, rimo-nos de tudo...',
     hero_cap_l:'Edição limitada', hero_cap_q:'"A nossa página mais bonita"', how_d1:'Escolha as suas melhores fotos e introduza os vossos nomes.', how_d2:'O álbum compõe-se diante dos seus olhos, página a página.', how_d3:'Impresso em papel fotográfico, encadernado, entregue em 3 a 5 dias.', stat_from:'Desde 15€',
-    tier_essentiel:'Essencial', tier_classique:'Clássico', tier_premium:'Premium', word_book:'Livro', price_pages_20:'páginas · 20 fotos', price_pages_30:'páginas · 35 fotos', price_pages_50:'páginas · 60 fotos',
+    tier_essentiel:'Essencial', tier_classique:'Clássico', tier_premium:'Premium', word_book:'Livro', price_pages_20:'páginas · 24 fotos', price_pages_30:'páginas · 42 fotos', price_pages_50:'páginas · 60 fotos',
     faq_head:'As suas perguntas', faq_title:'Tudo o que precisa de saber',
     faq_q1:'Quanto tempo até receber o meu álbum?', faq_a1:'O seu álbum impresso é feito com o maior cuidado pelo nosso ateliê parceiro e enviado diretamente para si. Conte com 3 a 5 dias úteis em média em França continental, e um pouco mais para outros destinos europeus. A versão PDF é enviada por email imediatamente após o pagamento.',
     faq_q2:'Posso ver o meu álbum antes de pagar?', faq_a2:'Sim, é esse o sentido da Noustalgie. Cria o seu álbum por completo e depois vê uma pré-visualização completa, página a página, totalmente grátis. Só paga se gostar mesmo do resultado.',
@@ -1681,16 +1681,16 @@ function setLang(lang) {
 // PRICING
 // ══════════════════════════════════════════
 const PRICES = {
-  20:  { pdf: 14.99, print: 39.99, name: 'Essentiel'   },
-  30:  { pdf: 19.99, print: 49.99, name: 'Classique'   },
+  24:  { pdf: 14.99, print: 39.99, name: 'Essentiel'   },
+  36:  { pdf: 19.99, print: 49.99, name: 'Classique'   },
   50:  { pdf: 24.99, print: 69.99, name: 'Premium'     },
 };
-const STEPS = [20, 30, 50];
-let selectedPages = 30;
+const STEPS = [24, 36, 50];
+let selectedPages = 36;
 
 
 function highlightPal(pages) {
-  [20,30,50].forEach(function(p) {
+  [24,36,50].forEach(function(p) {
     var el = document.getElementById('pal'+p);
     if(!el) return;
     if(p === pages) {
@@ -1794,7 +1794,7 @@ function saveDraft(){
       dedication: document.getElementById('dedication')?.value||'',
       payName: document.getElementById('payName')?.value||'',
       payEmail: document.getElementById('payEmail')?.value||'',
-      selectedPages: (typeof selectedPages!=='undefined')?selectedPages:30,
+      selectedPages: (typeof selectedPages!=='undefined')?selectedPages:36,
       captions: S.captions||{},
       savedAt: Date.now()
     };
@@ -1880,7 +1880,7 @@ function goTab(n) {
   } catch(e) { console.error('goTab error:', e); }
 }
 function edPickPrice(pages){
-  [20,30,50].forEach(function(p){var el=document.getElementById('edPrice'+p);if(el)el.classList.toggle('feat',p===pages);});
+  [24,36,50].forEach(function(p){var el=document.getElementById('edPrice'+p);if(el)el.classList.toggle('feat',p===pages);});
   selectedPages=pages;
   if(typeof selectPricing==='function')selectPricing(pages,null);
   if(typeof highlightPal==='function')highlightPal(pages);
@@ -2155,7 +2155,7 @@ async function runGeneration(){
   const occasion=document.getElementById('occasion').value;
   const names=n2?`${n1} et ${n2}`:n1;
   const pages=selectedPages;
-  const nbChapters=pages<=20?4:pages<=30?6:8;
+  const nbChapters=pages<=24?4:pages<=36?6:8;
   const withWishlist = true;
   const withMemoryBox = pages >= 30;
   const withLetterFutur = pages >= 20;
@@ -2404,7 +2404,7 @@ function renderBookPreview(){
   const ceQueJePasDir = story.ce_que_je_pas_dire || '';
 
   AV.pages = [];
-  const totalPages = selectedPages || 30;
+  const totalPages = selectedPages || 36;
 
   // ═══════════════════════════════════════════
   // 1. COUVERTURE — pleine page cinématique
@@ -2527,7 +2527,7 @@ function renderBookPreview(){
   // 10. "NOS DISPUTES PRÉFÉRÉES" — humour
   // ═══════════════════════════════════════════
   if(disputes.length > 0){
-    if(totalPages >= 30) AV.pages.push(pg('Nos désaccords préférés','#0a0806',`
+    if(totalPages >= 36) AV.pages.push(pg('Nos désaccords préférés','#0a0806',`
       <div style="width:100%;height:100%;background:#0a0806;padding:28px 22px;display:flex;flex-direction:column;">
         <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,160,90,.5);margin-bottom:8px;">avec amour & humour</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(15px,4vw,22px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;">Nos désaccords<br><em style="color:#c9a05a;">préférés</em></div>
@@ -2554,7 +2554,7 @@ function renderBookPreview(){
   // 12. "SI ON ÉTAIT UN FILM" — description cinématographique
   // ═══════════════════════════════════════════
   if(film){
-    if(totalPages >= 30) AV.pages.push(pg('Si on était un film','#1a2744',`
+    if(totalPages >= 36) AV.pages.push(pg('Si on était un film','#1a2744',`
       <div style="width:100%;height:100%;background:#1a2744;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;">
         <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,240,255,.3);margin-bottom:12px;">Genre : Romance</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#e8f0ff;line-height:.95;margin-bottom:16px;">Si on était<br><em style="color:#c9a05a;">un film</em></div>
@@ -2680,7 +2680,7 @@ function renderBookPreview(){
   // ═══════════════════════════════════════════
   const wishlistItems = story.wishlist || [];
   if(wishlistItems.length > 0){
-    if(totalPages >= 30) AV.pages.push(pg('Notre wishlist','#f7f3ed',`
+    if(totalPages >= 36) AV.pages.push(pg('Notre wishlist','#f7f3ed',`
       <div style="width:100%;height:100%;background:#f7f3ed;padding:24px 20px;display:flex;flex-direction:column;">
         <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#c9a05a;margin-bottom:10px;">rêves à deux</div>
         <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,4.5vw,23px);font-weight:700;color:#1a1208;margin-bottom:16px;">Notre wishlist</div>
@@ -3328,7 +3328,7 @@ function generateFinalPDF(){
 // ══════════════════════════════════════════
 const LEGAL={
   mentions:`<span class="eyebrow">Informations légales</span><h1 class="legal-title">Mentions légales</h1><p class="legal-sub">Conformément à la loi n°2004-575 du 21 juin 2004 (LCEN)</p><div class="legal-s"><h3>Éditeur du site</h3><p>Le site noustalgie.fr est édité par Gabin Bacquet, entrepreneur individuel (auto-entrepreneur).<br>Adresse : 14 rue des Arts, 59800 Lille, France.<br>SIRET : 100 004 738 00017 — SIREN : 100 004 738.<br>Contact : contact@noustalgie.fr.<br>Directeur de la publication : Gabin Bacquet.</p></div><div class="legal-s"><h3>TVA</h3><p>TVA non applicable, article 293 B du Code général des impôts (franchise en base de TVA).</p></div><div class="legal-s"><h3>Hébergement</h3><p>Le site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis — vercel.com.</p></div><div class="legal-s"><h3>Propriété intellectuelle</h3><p>L'ensemble des éléments du site (textes, mise en page, identité visuelle, code) est protégé par le droit d'auteur. Toute reproduction ou réutilisation sans autorisation écrite est interdite. Les photographies que vous importez restent votre propriété exclusive ; vous nous accordez uniquement le droit de les utiliser pour créer votre album.</p></div><div class="legal-s"><h3>Médiation de la consommation</h3><p>Conformément à l'article L612-1 du Code de la consommation, en cas de litige non résolu, vous pouvez recourir gratuitement à un médiateur de la consommation. La plateforme européenne de règlement des litiges est également disponible : ec.europa.eu/consumers/odr.</p></div>`,
-  cgv:`<span class="eyebrow">Conditions générales</span><h1 class="legal-title">Conditions générales de vente</h1><p class="legal-sub">En vigueur au 1er janvier 2026</p><div class="legal-s"><h3>1. Objet</h3><p>Les présentes conditions régissent la vente d'albums photo personnalisés (numériques ou imprimés) proposés par Gabin Bacquet (Noustalgie) sur noustalgie.fr. Toute commande implique l'acceptation pleine et entière des présentes CGV.</p></div><div class="legal-s"><h3>2. Produits et tarifs</h3><p>Format PDF numérique : 14,99€ (20 pages), 19,99€ (30 pages), 24,99€ (50 pages).<br>Format livre imprimé, livraison incluse : 39,99€ (20 pages), 49,99€ (30 pages), 69,99€ (50 pages).<br>Les prix sont indiqués en euros toutes taxes comprises (TVA non applicable, art. 293 B CGI). Les tarifs peuvent être modifiés à tout moment ; le prix appliqué est celui affiché au moment de la commande.</p></div><div class="legal-s"><h3>3. Commande et aperçu gratuit</h3><p>Vous composez votre album et bénéficiez d'un aperçu complet et gratuit avant tout paiement. La commande n'est ferme qu'après validation du paiement. Un email de confirmation vous est adressé.</p></div><div class="legal-s"><h3>4. Paiement</h3><p>Le paiement s'effectue en ligne par carte bancaire via notre prestataire Stripe, dans un environnement sécurisé. Aucune donnée bancaire n'est conservée par Noustalgie. La commande est traitée après encaissement effectif.</p></div><div class="legal-s"><h3>5. Livraison</h3><p>Les albums numériques (PDF) sont livrés par email ou lien de téléchargement après paiement. Les albums imprimés sont fabriqués et expédiés par notre imprimeur partenaire (Prodigi) et livrés sous 3 à 5 jours ouvrés en moyenne en France métropolitaine, délai indicatif pouvant varier selon la destination et le transporteur. La livraison est offerte. Les risques sont transférés au client à la remise du colis.</p></div><div class="legal-s"><h3>6. Droit de rétractation</h3><p>Conformément à l'article L221-28 3° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens confectionnés selon les spécifications du consommateur ou nettement personnalisés. Nos albums étant entièrement personnalisés (prénoms, photos, textes propres à chaque client), <strong>ils ne peuvent faire l'objet d'un droit de rétractation</strong> une fois la commande validée et le paiement effectué. En passant commande, vous reconnaissez expressément renoncer à votre droit de rétractation. Cette exclusion ne concerne pas les défauts couverts par la garantie ci-dessous.</p></div><div class="legal-s"><h3>7. Garantie et réclamations</h3><p>Vous bénéficiez des garanties légales de conformité (art. L217-3 et suivants du Code de la consommation) et contre les vices cachés. En cas d'album défectueux, endommagé lors du transport ou non conforme à l'aperçu validé, contactez-nous sous 14 jours à compter de la réception à contact@noustalgie.fr, photos à l'appui : nous procédons à une réimpression ou à un remboursement sans frais.</p></div><div class="legal-s"><h3>8. Responsabilité sur les contenus</h3><p>Vous êtes seul responsable des photographies et textes que vous importez et garantissez en détenir les droits. Noustalgie se réserve le droit de refuser toute commande dont le contenu serait illicite (notamment contenu à caractère haineux, violent ou pornographique, ou portant atteinte aux droits de tiers).</p></div><div class="legal-s"><h3>9. Droit applicable</h3><p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité (voir médiation dans les mentions légales) avant toute action judiciaire.</p></div>`,
+  cgv:`<span class="eyebrow">Conditions générales</span><h1 class="legal-title">Conditions générales de vente</h1><p class="legal-sub">En vigueur au 1er janvier 2026</p><div class="legal-s"><h3>1. Objet</h3><p>Les présentes conditions régissent la vente d'albums photo personnalisés (numériques ou imprimés) proposés par Gabin Bacquet (Noustalgie) sur noustalgie.fr. Toute commande implique l'acceptation pleine et entière des présentes CGV.</p></div><div class="legal-s"><h3>2. Produits et tarifs</h3><p>Format PDF numérique : 14,99€ (24 pages), 19,99€ (36 pages), 24,99€ (50 pages).<br>Format livre imprimé, livraison incluse : 39,99€ (24 pages), 49,99€ (36 pages), 69,99€ (50 pages).<br>Les prix sont indiqués en euros toutes taxes comprises (TVA non applicable, art. 293 B CGI). Les tarifs peuvent être modifiés à tout moment ; le prix appliqué est celui affiché au moment de la commande.</p></div><div class="legal-s"><h3>3. Commande et aperçu gratuit</h3><p>Vous composez votre album et bénéficiez d'un aperçu complet et gratuit avant tout paiement. La commande n'est ferme qu'après validation du paiement. Un email de confirmation vous est adressé.</p></div><div class="legal-s"><h3>4. Paiement</h3><p>Le paiement s'effectue en ligne par carte bancaire via notre prestataire Stripe, dans un environnement sécurisé. Aucune donnée bancaire n'est conservée par Noustalgie. La commande est traitée après encaissement effectif.</p></div><div class="legal-s"><h3>5. Livraison</h3><p>Les albums numériques (PDF) sont livrés par email ou lien de téléchargement après paiement. Les albums imprimés sont fabriqués et expédiés par notre imprimeur partenaire (Prodigi) et livrés sous 3 à 5 jours ouvrés en moyenne en France métropolitaine, délai indicatif pouvant varier selon la destination et le transporteur. La livraison est offerte. Les risques sont transférés au client à la remise du colis.</p></div><div class="legal-s"><h3>6. Droit de rétractation</h3><p>Conformément à l'article L221-28 3° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens confectionnés selon les spécifications du consommateur ou nettement personnalisés. Nos albums étant entièrement personnalisés (prénoms, photos, textes propres à chaque client), <strong>ils ne peuvent faire l'objet d'un droit de rétractation</strong> une fois la commande validée et le paiement effectué. En passant commande, vous reconnaissez expressément renoncer à votre droit de rétractation. Cette exclusion ne concerne pas les défauts couverts par la garantie ci-dessous.</p></div><div class="legal-s"><h3>7. Garantie et réclamations</h3><p>Vous bénéficiez des garanties légales de conformité (art. L217-3 et suivants du Code de la consommation) et contre les vices cachés. En cas d'album défectueux, endommagé lors du transport ou non conforme à l'aperçu validé, contactez-nous sous 14 jours à compter de la réception à contact@noustalgie.fr, photos à l'appui : nous procédons à une réimpression ou à un remboursement sans frais.</p></div><div class="legal-s"><h3>8. Responsabilité sur les contenus</h3><p>Vous êtes seul responsable des photographies et textes que vous importez et garantissez en détenir les droits. Noustalgie se réserve le droit de refuser toute commande dont le contenu serait illicite (notamment contenu à caractère haineux, violent ou pornographique, ou portant atteinte aux droits de tiers).</p></div><div class="legal-s"><h3>9. Droit applicable</h3><p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité (voir médiation dans les mentions légales) avant toute action judiciaire.</p></div>`,
   confidentialite:`<span class="eyebrow">Protection des données</span><h1 class="legal-title">Politique de confidentialité</h1><p class="legal-sub">Conformément au Règlement (UE) 2016/679 (RGPD)</p><div class="legal-s"><h3>Responsable du traitement</h3><p>Gabin Bacquet (Noustalgie), 14 rue des Arts, 59800 Lille — contact@noustalgie.fr.</p></div><div class="legal-s"><h3>Données que nous collectons</h3><p>Pour créer et livrer votre album, nous traitons : vos prénoms et informations saisies (date, occasion, dédicaces), votre email, votre adresse de livraison (pour les albums imprimés), et les photographies que vous importez. Aucune donnée bancaire n'est collectée ni stockée par nous : le paiement est géré directement par Stripe.</p></div><div class="legal-s"><h3>Comment vos photos sont traitées</h3><p>En toute transparence : vos photos et le contenu de votre album sont transmis à des prestataires techniques uniquement pour produire votre livre — génération du texte, création du fichier PDF et hébergement temporaire du fichier final destiné à l'impression. Vos photos ne sont jamais vendues, cédées à des tiers à des fins commerciales, ni utilisées pour autre chose que la création de votre album.</p></div><div class="legal-s"><h3>Nos sous-traitants</h3><p>Nous faisons appel à des prestataires respectant le RGPD : Stripe (paiement), OpenAI (génération de texte), PDFShift (création du PDF), Cloudinary (hébergement temporaire du fichier), Prodigi (impression et expédition), Resend (emails), Vercel (hébergement du site). Chacun n'accède qu'aux données strictement nécessaires à sa mission.</p></div><div class="legal-s"><h3>Durée de conservation</h3><p>Les photos et le fichier de votre album sont conservés au maximum 30 jours après la commande, afin de pouvoir gérer une éventuelle réclamation ou réimpression, puis supprimés. Les informations de commande (email, facture) sont conservées le temps légal requis en matière comptable.</p></div><div class="legal-s"><h3>Vos droits</h3><p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et de portabilité de vos données, ainsi que du droit de retirer votre consentement. Pour l'exercer, écrivez à contact@noustalgie.fr : nous répondons sous 30 jours. Vous pouvez également introduire une réclamation auprès de la CNIL (cnil.fr).</p></div><div class="legal-s"><h3>Cookies</h3><p>Le site utilise uniquement les cookies techniques strictement nécessaires à son fonctionnement et au paiement sécurisé. Aucun cookie publicitaire ou de traçage tiers n'est déposé sans votre consentement.</p></div>`,
   contact:`<span class="eyebrow">Nous contacter</span><h1 class="legal-title">Contact</h1><p class="legal-sub">Une question ? Nous répondons sous 24 à 48h ouvrées.</p><div class="legal-s"><h3>Email</h3><p>contact@noustalgie.fr</p></div><div class="legal-s"><h3>Éditeur</h3><p>Gabin Bacquet — Noustalgie<br>14 rue des Arts, 59800 Lille, France</p></div><div class="legal-s"><h3>Suivi de commande & réclamations</h3><p>Pour toute question sur une commande en cours, une livraison ou une réclamation, écrivez-nous en précisant votre nom et votre numéro de commande. En cas de défaut d'impression, joignez des photos : nous trouvons toujours une solution.</p></div><div class="legal-s"><h3>Livraison en Europe</h3><p>Noustalgie livre dans toute l'Europe via son imprimeur partenaire. Pour une commande hors France métropolitaine, précisez bien votre pays lors de la saisie de l'adresse.</p></div>`
 };
