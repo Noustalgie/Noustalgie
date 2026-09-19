@@ -3123,24 +3123,25 @@ async function generateAlbumPDF(){
   const photoMap = {};
   S.photos.forEach((p, i) => { photoMap[p.data] = compressedPhotos[i]; });
 
-  // Utiliser le HTML rendu incluant les éditions de l'éditeur
-  const pagesHtml = AV.pages.map((p, idx) => {
-    // Récupérer le HTML rendu depuis le DOM (inclut les éditions)
-    const renderedEl = document.querySelector('#avPage .av-slide-inner');
-    let html = p.html;
-    // Appliquer les éditions sauvegardées
-    const edit = AV.edits && AV.edits[idx] ? AV.edits[idx] : {};
-    if(edit.photo && S.photos[edit.photo]) {
-      const oldPhoto = S.photos[idx % S.photos.length]?.data;
-      const newPhoto = S.photos[edit.photo].data;
-      if(oldPhoto) html = html.split(oldPhoto).join(compressedPhotos[edit.photo] || newPhoto);
-    }
-    // Remplacer les photos par versions compressées
+  // Rendre chaque page EXACTEMENT comme le fait l'aperçu (avRender), pour capturer
+  // TOUTES les éditions réelles (textes, photos, filtres, mise en page, styles).
+  // Garantit que le PDF est toujours identique à ce que le client a validé à l'écran.
+  const savedCur = AV.cur;
+  const pagesHtmlArr = [];
+  for (let idx = 0; idx < AV.pages.length; idx++) {
+    AV.cur = idx;
+    avRender();
+    await new Promise(r => setTimeout(r, 220)); // laisse avRender appliquer slots/textes/styles
+    const box = document.getElementById('avPage');
+    let html = box ? box.innerHTML : (AV.pages[idx].html || '');
     S.photos.forEach((ph, i) => {
       if(ph.data && compressedPhotos[i]) html = html.split(ph.data).join(compressedPhotos[i]);
     });
-    return '<div class="page" style="background:'+p.bg+';">'+html+'</div>';
-  }).join('');
+    pagesHtmlArr.push('<div class="page" style="background:'+AV.pages[idx].bg+';">'+html+'</div>');
+  }
+  AV.cur = savedCur;
+  avRender();
+  const pagesHtml = pagesHtmlArr.join('');
 
   const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
     + '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>'
