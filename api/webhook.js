@@ -73,11 +73,15 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
           const body = JSON.parse(d);
           const orderId = body?.order?.id || body?.id;
           if (r.statusCode < 300) { console.log(`Commande Prodigi : ${orderId}`); resolve(orderId); }
-          else { console.error(`Prodigi ${r.statusCode}:`, d.slice(0,300)); resolve(null); }
-        } catch(e) { console.error('Prodigi parse error:', e.message); resolve(null); }
+          else {
+            console.error(`Prodigi ${r.statusCode}:`, d.slice(0,300));
+            global.__lastProdigiError = `HTTP ${r.statusCode} — ${d.slice(0,600)}`;
+            resolve(null);
+          }
+        } catch(e) { console.error('Prodigi parse error:', e.message); global.__lastProdigiError = 'Parse error: ' + e.message + ' | reponse: ' + String(d).slice(0,400); resolve(null); }
       });
     });
-    req.on('error', e => { console.error('Prodigi error:', e.message); resolve(null); });
+    req.on('error', e => { console.error('Prodigi error:', e.message); global.__lastProdigiError = 'Erreur reseau: ' + e.message; resolve(null); });
     req.write(buf); req.end();
   });
 }
@@ -189,7 +193,10 @@ module.exports = async (req, res) => {
     const NOTIFY = process.env.NOTIFY_EMAIL;
     if (NOTIFY) {
       const warn = (format === 'print' && !prodigiOrderId)
-        ? '<p style="color:red"><b>⚠️ Commande Prodigi NON créée — à traiter manuellement !</b></p>' : '';
+        ? '<p style="color:red"><b>⚠️ Commande Prodigi NON créée — à traiter manuellement !</b></p>'
+          + '<p style="color:#900;font-size:12px;background:#fee;padding:10px;border-radius:4px;"><b>Erreur Prodigi :</b><br>'
+          + String(global.__lastProdigiError || 'aucune erreur capturee').replace(/</g,'&lt;') + '</p>'
+        : '';
       await sendEmail({
         to: NOTIFY,
         subject: `🎉 Commande Noustalgie — ${name} — ${price}€${prodigiOrderId?' ✅ Prodigi':''}`,
