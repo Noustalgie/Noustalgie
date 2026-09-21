@@ -908,7 +908,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
           <input type="file" accept="image/*,.heic,.HEIC" multiple onchange="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
-          <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum 15 photos</div>
+          <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum selon le palier choisi</div>
         </div>
         <div class="photo-grid" id="photoGrid"></div>
         <div id="photoCount"></div>
@@ -1276,7 +1276,7 @@ const LANGS = {
     since_lbl:'Ensemble depuis', since_ph:'ex : juin 2021', occasion_lbl:'Occasion du livre',
     
     ded_lbl:'Dédicace (première page)', ded_ph:'À toi, mon amour...', next_photos:'Suivant — Nos photos →',
-    p1_hd:'Vos photos ensemble', dz_label:'Glissez vos photos ici ou cliquez', dz_sub:'JPG · PNG · WEBP · HEIC — minimum 15 photos',
+    p1_hd:'Vos photos ensemble', dz_label:'Glissez vos photos ici ou cliquez', dz_sub:'JPG · PNG · WEBP · HEIC — minimum selon le palier choisi',
     pgc_title:'Nombre de pages', pgc_sub:'Ajustez selon votre histoire. De 10 à 100 pages.',
     margin_lbl:'Livraison', photos_notice:'📸 1ère photo = couverture · Dernière = 4ème de couverture. Survolez pour ajouter une légende.',
     back:'← Retour', next_style:'Suivant — Style →',
@@ -1362,7 +1362,7 @@ const LANGS = {
     since_lbl:'Together since', since_ph:'e.g. June 2021', occasion_lbl:'Book occasion',
     
     ded_lbl:'Dedication (first page)', ded_ph:'To you, my love...', next_photos:'Next — Our photos →',
-    p1_hd:'Your photos together', dz_label:'Drag photos here or click to browse', dz_sub:'JPG · PNG · WEBP · HEIC — minimum 15 photos',
+    p1_hd:'Your photos together', dz_label:'Drag photos here or click to browse', dz_sub:'JPG · PNG · WEBP · HEIC — minimum selon le palier choisi',
     pgc_title:'Number of pages', pgc_sub:'Adjust to match your story. From 10 to 100 pages.',
     margin_lbl:'Delivery', photos_notice:'💡 Hover over each photo to add a personal caption.',
     back:'← Back', next_style:'Next — Style →',
@@ -1448,7 +1448,7 @@ const LANGS = {
     since_lbl:'Zusammen seit', since_ph:'z.B. Juni 2021', occasion_lbl:'Anlass des Buches',
     
     ded_lbl:'Widmung (erste Seite)', ded_ph:'Für dich, meine Liebe...', next_photos:'Weiter — Unsere Fotos →',
-    p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — mindestens 15 Fotos',
+    p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — Minimum je nach Paket',
     pgc_title:'Seitenanzahl', pgc_sub:'Anpassen an eure Geschichte. Von 10 bis 100 Seiten.',
     margin_lbl:'Versand', photos_notice:'💡 Bewegt euch über jedes Foto, um eine persönliche Bildunterschrift hinzuzufügen.',
     back:'← Zurück', next_style:'Weiter — Stil →',
@@ -1534,7 +1534,7 @@ const LANGS = {
     since_lbl:'Juntos desde', since_ph:'ej: junio 2021', occasion_lbl:'Ocasión del libro',
     
     ded_lbl:'Dedicatoria (primera página)', ded_ph:'Para ti, mi amor...', next_photos:'Siguiente — Nuestras fotos →',
-    p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
+    p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo según el nivel elegido',
     pgc_title:'Número de páginas', pgc_sub:'Ajustadlo a vuestra historia. De 10 a 100 páginas.',
     margin_lbl:'Envío', photos_notice:'💡 Pasad el ratón sobre cada foto para añadir un pie de foto personal.',
     back:'← Volver', next_style:'Siguiente — Estilo →',
@@ -1620,7 +1620,7 @@ const LANGS = {
     since_lbl:'Juntos desde', since_ph:'ex: junho 2021', occasion_lbl:'Ocasião do livro',
     
     ded_lbl:'Dedicatória (primeira página)', ded_ph:'Para ti, meu amor...', next_photos:'Seguinte — As nossas fotos →',
-    p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo 15 fotos',
+    p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo según el nivel elegido',
     pgc_title:'Número de páginas', pgc_sub:'Ajustem à vossa história. De 10 a 100 páginas.',
     margin_lbl:'Envio', photos_notice:'💡 Passem o rato sobre cada foto para adicionar uma legenda pessoal.',
     back:'← Voltar', next_style:'Seguinte — Estilo →',
@@ -1718,6 +1718,7 @@ function selectPricing(pages, el) {
   updateFormatPrices();
   // Refléter le choix dans le tunnel (palier inline)
   if(typeof highlightPal==='function') highlightPal(pages);
+  if(typeof renderPhotos==='function') renderPhotos();
   // Sync in-app slider
   const idx = STEPS.indexOf(pages);
   if(idx >= 0 && document.getElementById('inAppSlider')) onInAppSlider(idx+1);
@@ -2023,6 +2024,10 @@ function addPhotos(files){
   }
   processBatch();
 }
+function getMinPhotos(){
+  const mins = {24:20, 36:35, 50:45};
+  return mins[selectedPages] || 20;
+}
 function renderPhotos(){
   const T = LANGS[currentLang];
   document.getElementById('photoGrid').innerHTML=S.photos.map((p,i)=>`
@@ -2035,9 +2040,9 @@ function renderPhotos(){
       ${S.captions[i]?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(14,11,9,.88);font-family:var(--fs);font-size:8px;font-style:italic;padding:3px 5px;color:var(--gold);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">"${S.captions[i]}"</div>`:''}
     </div>`).join('');
   const c=document.getElementById('photoCount');
-  const ok=S.photos.length>=15; const heicCount=S.photos.filter(p=>p.heic).length;
+  const minPh=getMinPhotos(); const ok=S.photos.length>=minPh; const heicCount=S.photos.filter(p=>p.heic).length;
   c.className='count-bar '+(ok?'c-ok':'c-warn');
-  c.textContent=ok?`✓ ${S.photos.length}${T.photos_ok}`:`${S.photos.length}${T.photos_warn}${15-S.photos.length}${T.photos_warn2}`;
+  c.textContent=ok?`✓ ${S.photos.length}${T.photos_ok}`:`${S.photos.length}/${minPh}${T.photos_warn}${Math.max(0,minPh-S.photos.length)}${T.photos_warn2}`;
 }
 function removePhoto(i){S.photos.splice(i,1);const nc={};Object.keys(S.captions).forEach(k=>{const ki=parseInt(k);if(ki<i)nc[ki]=S.captions[ki];else if(ki>i)nc[ki-1]=S.captions[ki];});S.captions=nc;renderPhotos();}
 
@@ -2148,7 +2153,7 @@ async function runGeneration(){
   window._fakeProgressInterval = smoothInterval;
   // Helper pour franchir une vraie étape (monte le plafond)
   window._setStage = (cap) => { window._progressCap = cap; };
-  if(S.photos.length<15){alert('Il faut au moins 15 photos pour créer votre album.');return;}
+  if(S.photos.length<getMinPhotos()){alert('Il faut au moins '+getMinPhotos()+' photos pour ce palier ('+selectedPages+' pages). Ajoutez-en ou choisissez un palier plus petit.');return;}
   const n1=document.getElementById('name1').value.trim()||'you';
   const n2=document.getElementById('name2').value.trim()||'';
   const meetDate=document.getElementById('meetDate').value.trim();
