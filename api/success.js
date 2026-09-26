@@ -1,204 +1,75 @@
+// api/success.js — page de confirmation après paiement
+// Aucune action de production ici : tout est géré par le webhook Stripe (api/webhook.js).
+// Les infos affichées viennent de Stripe (pas de l'URL) et sont échappées.
 const https = require('https');
+const { escapeHtml } = require('./_lib/security');
 
-async function sendEmail({ to, subject, html }) {
-  const RESEND = process.env.RESEND_API_KEY;
-  if (!RESEND) { console.log('Email non envoyé (pas de RESEND_API_KEY):', to); return; }
-  const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <contact@noustalgie.fr>', to, subject, html }));
+function getSession(id) {
   return new Promise(resolve => {
-    const req = https.request({
-      hostname: 'api.resend.com', path: '/emails', method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + RESEND, 'Content-Type': 'application/json', 'Content-Length': buf.length }
-    }, r => { let d=''; r.on('data',c=>d+=c); r.on('end',()=>{ console.log('Email →',to,r.statusCode); resolve(); }); });
-    req.on('error', e => { console.error('Email error:', e.message); resolve(); });
-    req.write(buf); req.end();
-  });
-}
-
-async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId }) {
-  if (!process.env.PRODIGI_API_KEY) {
-    console.log('⚠️ PRODIGI_API_KEY manquante — commande non créée automatiquement');
-    return null;
-  }
-  if (!pdfUrl) { console.log('⚠️ Pas de PDF URL — commande Prodigi ignorée'); return null; }
-
-  // Parse adresse
-  const parts = (address || '').split(',').map(s => s.trim());
-  const line1 = parts[0] || '';
-  let postalCode = '', city = '', country = 'FR';
-  if (parts[1]) {
-    const m = parts[1].match(/^(\d{5})\s+(.+)$/);
-    if (m) { postalCode = m[1]; city = m[2]; } else { city = parts[1]; }
-  }
-  if (parts[2]) { const c = parts[2].toUpperCase(); country = c.includes('BELG')?'BE':c.includes('SUISS')?'CH':'FR'; }
-
-  const nameParts = (name||'').trim().split(' ');
-  const orderPayload = {
-    merchantRéférence: `NOUST-${stripeSessionId||Date.now()}`,
-    shippingMethod: 'Budget',
-    idempotencyKey: `noustalgie-${stripeSessionId||Date.now()}`,
-    recipient: {
-      name: name,
-      email: email,
-      address: { line1, postalOrZipCode: postalCode||'75001', countryCode: country, townOrCity: city||'Paris', isBusiness: false }
-    },
-    items: [{
-      merchantRéférence: `album-${Date.now()}`,
-      sku: 'BOOK-FE-8_3-SQ-HARD-G',
-      copies: 1,
-      sizing: 'fillPrintArea',
-      assets: [{ printArea: 'default', url: pdfUrl }]
-    }]
-  };
-
-  return new Promise((resolve) => {
-    const buf = Buffer.from(JSON.stringify(orderPayload));
-    const req = https.request({
-      hostname: 'api.prodigi.com', path: '/v4.0/orders', method: 'POST',
-      headers: { 'X-API-Key': process.env.PRODIGI_API_KEY, 'Content-Type': 'application/json', 'Content-Length': buf.length }
-    }, r => {
+    if (!id || !/^cs_[A-Za-z0-9_]+$/.test(id) || !process.env.STRIPE_SECRET_KEY) return resolve(null);
+    https.get({ hostname: 'api.stripe.com', path: `/v1/checkout/sessions/${id}`, headers: { Authorization: 'Bearer ' + process.env.STRIPE_SECRET_KEY } }, r => {
       let d = ''; r.on('data', c => d += c);
-      r.on('end', () => {
-        try {
-          const body = JSON.parse(d);
-          const orderId = body?.order?.id || body?.id;
-          if (r.statusCode < 300) { console.log(`✅ Commande Prodigi : ${orderId}`); resolve(orderId); }
-          else { console.error(`❌ Prodigi ${r.statusCode}:`, d.slice(0,200)); resolve(null); }
-        } catch(e) { console.error('Prodigi parse error:', e.message); resolve(null); }
-      });
-    });
-    req.on('error', e => { console.error('Prodigi error:', e.message); resolve(null); });
-    req.write(buf); req.end();
+      r.on('end', () => { try { resolve(JSON.parse(d)); } catch (e) { resolve(null); } });
+    }).on('error', () => resolve(null));
   });
 }
 
-function successHTML(name, pages, price, prodigiOrderId) {
-  const hasOrder = prodigiOrderId ? true : false;
+function page({ firstName, pages, price, format, email, paid }) {
+  const isPdf = format === 'pdf';
+  const rows = [
+    ['Produit', isPdf ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide'],
+    ['Pages', `${pages} pages`],
+    ['Montant payé', `${price} €`],
+    [isPdf ? 'Envoi' : 'Livraison estimée', isPdf ? 'Par email, dans quelques minutes' : '3 à 5 jours ouvrés'],
+  ];
+  const steps = isPdf
+    ? ['Votre album est envoyé à ' + email + '.', 'Téléchargez-le depuis le lien reçu (valable 14 jours).', 'Imprimez-le, partagez-le, gardez-le.']
+    : ['Votre album part à l’impression dans notre atelier partenaire.', 'Vous recevez le numéro de suivi par email dès l’expédition.', 'Livraison à votre porte sous 3 à 5 jours ouvrés.'];
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="robots" content="noindex"/>
 <title>Commande confirmée — Noustalgie</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Inter',sans-serif;background:#fff;color:#111;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}.box{max-width:500px;width:100%;text-align:center;}.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;margin-bottom:20px;}h1{font-family:'Times New Roman',Georgia,serif;font-size:2.6rem;font-weight:700;line-height:1;margin-bottom:18px;letter-spacing:-.02em;}h1 em{font-style:italic;}.sub{font-size:15px;color:#555;line-height:1.7;margin-bottom:2rem;}.card{background:#fff;border:1px solid #e2e2e2;padding:1.5rem;margin-bottom:2rem;text-align:left;}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}.row:last-child{border-bottom:none;}.lbl{color:#999;}.val{font-weight:500;color:#111;}.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:2rem;text-align:left;}.step{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:#555;line-height:1.5;}.sn{width:24px;height:24px;border-radius:50%;background:#111;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.btn{display:inline-block;padding:14px 32px;background:#111;color:#fff;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}.badge{display:inline-block;background:#111;color:#fff;padding:5px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem;}</style>
-</head><body><div class="box">
-<div class="eyebrow">Noustalgie — Commande</div>
-${hasOrder?'<div class="badge">Envoyee a l impression</div>':''}
-<h1>Merci<br><em>${name}</em></h1>
-<p class="sub">Votre commande est confirmée et bien enregistrée.${hasOrder?' Votre livre est deja en cours d impression.':''}<br>Un email de confirmation vous a été envoyé. Si vous ne le voyez pas, vérifiez vos spams.</p>
-<div class="card">
-<div class="row"><span class="lbl">Produit</span><span class="val">Album Noustalgie</span></div>
-<div class="row"><span class="lbl">Format</span><span class="val">Carré 21×21cm · Couverture rigide</span></div>
-<div class="row"><span class="lbl">Pages</span><span class="val">${pages} pages</span></div>
-<div class="row"><span class="lbl">Montant payé</span><span class="val">${price} €</span></div>
-<div class="row"><span class="lbl">Livraison estimée</span><span class="val">3 à 5 jours ouvrés</span></div>
-${prodigiOrderId?`<div class="row"><span class="lbl">Référence</span><span class="val" style="font-size:12px;color:#999;">${prodigiOrderId}</span></div>`:''}
-</div>
-<div class="steps">
-<div class="step"><div class="sn">1</div>Votre album est imprimé avec soin par notre atelier partenaire.</div>
-<div class="step"><div class="sn">2</div>Un email de suivi avec numéro de tracking vous sera envoye des l expedition.</div>
-<div class="step"><div class="sn">3</div>Livraison a votre adresse sous 3 à 5 jours ouvrés.</div>
-</div>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0e0b09;color:#f2ebe0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;-webkit-font-smoothing:antialiased}
+.box{max-width:480px;width:100%}
+h1{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.6rem);line-height:1.1;margin-bottom:1rem}
+h1 em{color:#c9a05a}
+.sub{color:rgba(242,235,224,.62);line-height:1.7;font-size:.95rem;margin-bottom:2rem}
+.card{border:1px solid rgba(210,175,120,.2);border-radius:4px;padding:.5rem 1.25rem;margin-bottom:2rem}
+.row{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 0;border-bottom:1px solid rgba(210,175,120,.1);font-size:.875rem}
+.row:last-child{border-bottom:none}.lbl{color:rgba(242,235,224,.45)}.val{text-align:right}
+ol{list-style:none;counter-reset:s;margin-bottom:2.25rem}
+li{counter-increment:s;display:flex;gap:.9rem;align-items:baseline;color:rgba(242,235,224,.72);font-size:.9rem;line-height:1.6;padding:.35rem 0}
+li::before{content:counter(s);font-family:'Playfair Display',Georgia,serif;color:#c9a05a;font-size:1.1rem;min-width:1rem}
+.btn{display:inline-block;padding:14px 28px;background:#c9a05a;color:#0e0b09;border-radius:2px;text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.04em}
+.btn:focus-visible{outline:2px solid #f5d898;outline-offset:3px}
+.help{margin-top:1.5rem;font-size:.8rem;color:rgba(242,235,224,.4)}.help a{color:rgba(242,235,224,.7)}
+</style></head><body><main class="box">
+<h1>${paid ? 'Merci' : 'Commande reçue'}${firstName ? `, <em>${firstName}</em>` : ''}</h1>
+<p class="sub">${paid ? 'Votre paiement est confirmé. Un email récapitulatif vient de vous être envoyé — pensez à regarder dans les spams s’il n’arrive pas.' : 'Nous vérifions votre paiement. Vous recevrez un email de confirmation dans quelques minutes.'}</p>
+${pages ? `<div class="card">${rows.map(([l, v]) => `<div class="row"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('')}</div>` : ''}
+<ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>
 <a href="/" class="btn">Créer un autre album</a>
-</div></body></html>`;
+<p class="help">Une question ? <a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></p>
+</main></body></html>`;
 }
 
 module.exports = async (req, res) => {
-  const p = new URLSearchParams(req.url.split('?')[1] || '');
-  const sessionId = p.get('session_id') || '';
-  const name  = p.get('name')  || '';
-  const pages = p.get('pages') || '30';
-  const price = p.get('price') || '39.99';
-  const pdfUrl = p.get('pdf_url') || '';
-
-  let prodigiOrderId = null;
-  let email = '', address = '', names = '', style = '';
-
-  if (sessionId && process.env.STRIPE_SECRET_KEY) {
-    try {
-      await new Promise(resolve => {
-        https.get(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`,
-          { headers: { 'Authorization': 'Bearer ' + process.env.STRIPE_SECRET_KEY } },
-          r => {
-            let d = ''; r.on('data', c => d += c);
-            r.on('end', async () => {
-              try {
-                const s = JSON.parse(d);
-                email   = s.customer_email || s.customer_details?.email || '';
-                address = s.metadata?.address || '';
-                names   = s.metadata?.names   || '';
-                style   = s.metadata?.style   || '';
-                const metaPdfUrl = s.metadata?.pdf_url || pdfUrl;
-                const format = s.metadata?.format || 'print';
-
-                // Si PDF seulement — envoyer le lien PDF au client par email
-                if(false && format === 'pdf' && metaPdfUrl && email) {
-                  sendEmail({
-                    to: email,
-                    subject: `Votre PDF Noustalgie est prêt ♥`,
-                    html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
-                      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:Arial,sans-serif;margin-bottom:8px;">Noustalgie</div><div style="width:30px;height:2px;background:#111;margin-bottom:20px;"></div>
-                      <h2>Bonjour ${name} ♥</h2>
-                      <p>Votre album PDF <b>${names}</b> est prêt ! Cliquez sur le bouton ci-dessous pour le télécharger.</p>
-                      <div style="text-align:center;margin:2rem 0;">
-                        <a href="${metaPdfUrl}" style="background:#111;color:#fff;padding:14px 28px;border-radius:4px;text-decoration:none;font-weight:600;font-size:14px;">Télécharger mon album PDF ↓</a>
-                      </div>
-                      <p style="color:#888;font-size:12px;">Ce lien est valide 14 jours.</p>
-                      <p style="margin-top:1.5rem;">Merci ! ♥<br><b>L'équipe Noustalgie</b></p>
-                    </div>`
-                  });
-                }
-
-                console.log(`✅ Paiement confirmé : ${name} (${email}) — ${pages}p — ${price}€`);
-
-                // NOTE: création Prodigi désormais gérée UNIQUEMENT par le webhook Stripe
-                // (api/webhook.js) pour éviter les doublons. Désactivé ici.
-                // if (metaPdfUrl) { prodigiOrderId = await createProdigiOrder(...); }
-                prodigiOrderId = null;
-
-                // Email propriétaire
-                const NOTIFY = process.env.NOTIFY_EMAIL;
-                if (false && NOTIFY) {
-                  await sendEmail({
-                    to: NOTIFY,
-                    subject: `🎉 Commande Noustalgie — ${name} — ${price}€${prodigiOrderId?' ✅ Prodigi envoyé':''}`,
-                    html: `<h2>Nouvelle commande !</h2>
-                      <p><b>Client :</b> ${name} (${email})</p>
-                      <p><b>Couple :</b> ${names}</p><p><b>Style :</b> ${style}</p>
-                      <p><b>Pages :</b> ${pages}</p><p><b>Montant :</b> ${price}€</p>
-                      <p><b>Adresse :</b> ${address}</p>
-                      <p><b>PDF URL :</b> ${metaPdfUrl||'Non disponible'}</p>
-                      ${prodigiOrderId?`<p style="color:green"><b>✅ Commande Prodigi : ${prodigiOrderId}</b></p>`:'<p style="color:orange"><b>⚠️ Commande Prodigi non créée automatiquement (PRODIGI_API_KEY manquante ou PDF manquant)</b></p>'}
-                      <p><a href="https://dashboard.stripe.com">Voir sur Stripe</a></p>`
-                  });
-                }
-
-                // Email client -> géré par le webhook désormais
-                if (false && email) {
-                  await sendEmail({
-                    to: email,
-                    subject: `Votre livre Noustalgie est en préparation ♥`,
-                    html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
-                      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#999;font-family:Arial,sans-serif;margin-bottom:8px;">Noustalgie</div><div style="width:30px;height:2px;background:#111;margin-bottom:20px;"></div>
-                      <h2>Bonjour ${name} ♥</h2>
-                      <p>Votre commande est confirmée. Votre livre <b>${names}</b> est en cours d'impression.</p>
-                      <table style="width:100%;margin:1rem 0;border-collapse:collapse;">
-                        <tr><td style="padding:8px 0;color:#888;border-bottom:1px solid #eee;">Format</td><td style="padding:8px 0;font-weight:bold;border-bottom:1px solid #eee;">Carré 21×21cm · Couverture rigide</td></tr>
-                        <tr><td style="padding:8px 0;color:#888;border-bottom:1px solid #eee;">Pages</td><td style="padding:8px 0;font-weight:bold;border-bottom:1px solid #eee;">${pages}</td></tr>
-                        <tr><td style="padding:8px 0;color:#888;border-bottom:1px solid #eee;">Montant</td><td style="padding:8px 0;font-weight:bold;border-bottom:1px solid #eee;">${price}€</td></tr>
-                        <tr><td style="padding:8px 0;color:#888;">Livraison</td><td style="padding:8px 0;font-weight:bold;">3 à 5 jours ouvrés</td></tr>
-                      </table>
-                      <p style="color:#888;font-size:13px;">Vous recevrez un email de suivi à l'expédition avec le numéro de tracking.</p>
-                      <p style="margin-top:1.5rem;">Merci pour votre confiance 🎉<br><b>L'équipe Noustalgie</b></p>
-                    </div>`
-                  });
-                }
-              } catch(e) { console.error(e.message); }
-              resolve();
-            });
-          }).on('error', e => { console.error(e.message); resolve(); });
-      });
-    } catch(e) { console.error(e.message); }
-  }
-
-  const priceFormatted = parseFloat(price).toFixed(2).replace('.', ',');
+  const qs = new URLSearchParams((req.url || '').split('?')[1] || '');
+  const s = await getSession(qs.get('session_id') || '');
+  const m = (s && s.metadata) || {};
+  const price = s && typeof s.amount_total === 'number' ? (s.amount_total / 100).toFixed(2).replace('.', ',') : '';
+  const html = page({
+    firstName: escapeHtml(String(m.name || '').trim().split(' ')[0]),
+    pages: escapeHtml(m.pages || ''),
+    price: escapeHtml(price),
+    format: m.format === 'pdf' ? 'pdf' : 'print',
+    email: escapeHtml(s ? (s.customer_details?.email || s.customer_email || '') : ''),
+    paid: !!(s && s.payment_status === 'paid'),
+  });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(successHTML(name, pages, priceFormatted, prodigiOrderId));
+  res.setHeader('Cache-Control', 'no-store');
+  return res.status(200).send(html);
 };

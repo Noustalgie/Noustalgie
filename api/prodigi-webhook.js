@@ -1,105 +1,69 @@
-// api/prodigi-webhook.js
-// Reçoit les callbacks Prodigi. Quand une commande est expédiée (shipment avec tracking),
-// envoie automatiquement le numéro de suivi au client par email.
+// api/prodigi-webhook.js — callbacks Prodigi (expédition → email de suivi au client)
+// Sécurité : on ne fait PAS confiance au contenu reçu. On relit la commande
+// directement chez Prodigi avec notre clé API avant d'envoyer quoi que ce soit.
 const https = require('https');
+const { escapeHtml: h } = require('./_lib/security');
 
 async function sendEmail({ to, subject, html }) {
   const RESEND = process.env.RESEND_API_KEY;
-  if (!RESEND) { console.log('Email non envoyé (pas de RESEND_API_KEY):', to); return; }
-  const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <contact@noustalgie.fr>', to, subject, html }));
+  if (!RESEND) return;
+  const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <contact@noustalgie.fr>', reply_to: 'contact@noustalgie.fr', to, subject, html }));
   return new Promise(resolve => {
-    const req = https.request({
-      hostname: 'api.resend.com', path: '/emails', method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + RESEND, 'Content-Type': 'application/json', 'Content-Length': buf.length }
-    }, r => { let d=''; r.on('data',c=>d+=c); r.on('end',()=>{ console.log('Email →',to,r.statusCode); resolve(); }); });
-    req.on('error', e => { console.error('Email error:', e.message); resolve(); });
-    req.write(buf); req.end();
+    const req = https.request({ hostname: 'api.resend.com', path: '/emails', method: 'POST',
+      headers: { Authorization: 'Bearer ' + RESEND, 'Content-Type': 'application/json', 'Content-Length': buf.length } },
+      r => { r.on('data', () => {}); r.on('end', resolve); });
+    req.on('error', () => resolve()); req.write(buf); req.end();
   });
 }
 
 function readRawBody(req) {
-  return new Promise((resolve) => {
-    let data = '';
-    req.on('data', c => data += c);
-    req.on('end', () => resolve(data));
-    req.on('error', () => resolve(''));
+  return new Promise(resolve => { let d = ''; req.on('data', c => d += c); req.on('end', () => resolve(d)); req.on('error', () => resolve('')); });
+}
+
+function fetchOrder(id) {
+  return new Promise(resolve => {
+    if (!/^ord_[A-Za-z0-9]+$/.test(id || '') || !process.env.PRODIGI_API_KEY) return resolve(null);
+    https.get({ hostname: 'api.prodigi.com', path: `/v4.0/orders/${id}`, headers: { 'X-API-Key': process.env.PRODIGI_API_KEY } }, r => {
+      let d = ''; r.on('data', c => d += c);
+      r.on('end', () => { try { resolve(r.statusCode < 300 ? (JSON.parse(d).order || null) : null); } catch (e) { resolve(null); } });
+    }).on('error', () => resolve(null));
   });
 }
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
-
-  const rawBody = await readRawBody(req);
   let event;
-  try { event = JSON.parse(rawBody); }
-  catch(e) { return res.status(400).send('Invalid JSON'); }
+  try { event = JSON.parse(await readRawBody(req)); } catch (e) { return res.status(400).send('Invalid JSON'); }
 
-  // Le callback Prodigi est un CloudEvent : { type, data: { order: {...} } }
-  const type = event.type || '';
-  const order = event.data?.order || event.data || {};
-  const shipments = order.shipments || [];
-  const recipient = order.recipient || {};
-  const email = recipient.email || '';
-  const name = (recipient.name || '').split(' ')[0] || '';
-  const merchantRef = order.merchantReference || '';
+  const claimedId = event?.data?.order?.id || event?.data?.id || '';
+  const order = await fetchOrder(claimedId);
+  if (!order) return res.status(200).json({ received: true, ignored: 'unverified' });
+  // Uniquement nos commandes
+  if (!String(order.merchantReference || '').startsWith('NOUST-')) return res.status(200).json({ received: true, ignored: 'foreign' });
 
-  console.log(`Prodigi callback: ${type} — order ${order.id} — ${shipments.length} shipment(s)`);
+  const tracking = (order.shipments || []).map(s => s.tracking).find(t => t && (t.number || t.url));
+  const email = order.recipient?.email || '';
+  if (!tracking || !email) return res.status(200).json({ received: true });
 
-  // Chercher un shipment expédié avec un tracking
-  let tracking = null;
-  for (const s of shipments) {
-    if (s.tracking && (s.tracking.number || s.tracking.url)) {
-      tracking = s.tracking;
-      break;
-    }
+  const first = String(order.recipient?.name || '').split(' ')[0];
+  const url = /^https:\/\//.test(tracking.url || '') ? tracking.url : '';
+  await sendEmail({
+    to: email,
+    subject: 'Votre livre Noustalgie est en route ♥',
+    html: `<div style="background:#0e0b09;padding:32px 16px;font-family:Georgia,serif;"><div style="max-width:480px;margin:0 auto;background:#141008;border:1px solid rgba(210,175,120,.2);padding:32px 28px;color:#f2ebe0;">
+<div style="font-size:20px;margin-bottom:24px;">Nous<em style="color:#c9a05a;">talgie</em></div>
+<h2 style="font-weight:400;font-size:22px;margin:0 0 16px;">Bonjour ${h(first)},</h2>
+<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:rgba(242,235,224,.8);">
+<p>Votre livre vient d’être expédié.</p>
+${tracking.number ? `<p>N° de suivi : <b style="color:#f2ebe0;">${h(tracking.number)}</b></p>` : ''}
+${url ? `<div style="margin:24px 0;"><a href="${h(url)}" style="background:#c9a05a;color:#0e0b09;padding:14px 26px;text-decoration:none;font-weight:600;display:inline-block;">Suivre mon colis</a></div>` : ''}
+<p style="color:rgba(242,235,224,.5);font-size:12px;">Le suivi peut mettre quelques heures à s’activer. Commande ${h(order.merchantReference)}.</p>
+</div></div></div>`,
+  });
+  if (process.env.NOTIFY_EMAIL) {
+    await sendEmail({ to: process.env.NOTIFY_EMAIL, subject: `📦 Expédié — ${h(order.merchantReference)}`,
+      html: `<p>${h(order.recipient?.name)} (${h(email)}) — suivi ${h(tracking.number || '—')} ${url ? `<a href="${h(url)}">lien</a>` : ''}</p>` });
   }
-
-  // On envoie le mail de suivi UNIQUEMENT si :
-  // - il y a un tracking disponible
-  // - il y a un email client
-  // - c'est un événement d'expédition ou de complétion
-  const isShipEvent = /shipment/i.test(type) || /Complete/i.test(type) || /shipping/i.test(type);
-
-  if (tracking && email && (isShipEvent || shipments.length > 0)) {
-    const trackNumber = tracking.number || '';
-    const trackUrl = tracking.url || '';
-    // Éviter les doublons : on pourrait stocker un flag, mais Prodigi n'envoie
-    // le shipment qu'une fois normalement. On envoie donc directement.
-    await sendEmail({
-      to: email,
-      subject: 'Votre livre Noustalgie a été expédié ! ♥',
-      html: `<div style="font-family:'Times New Roman',Georgia,serif;max-width:480px;margin:0 auto;color:#111;border:1px solid #e2e2e2;padding:2rem;">
-        <h1 style="color:#111;">Noustalgie</h1>
-        <h2>Bonjour ${name} ♥</h2>
-        <p>Bonne nouvelle : votre livre a été expédié et est en route vers vous ! 📦</p>
-        ${trackNumber?`<table style="width:100%;margin:1rem 0;border-collapse:collapse;">
-          <tr><td style="padding:8px 0;color:#888;border-bottom:1px solid #eee;">Numéro de suivi</td><td style="padding:8px 0;font-weight:bold;border-bottom:1px solid #eee;">${trackNumber}</td></tr>
-        </table>`:''}
-        ${trackUrl?`<div style="text-align:center;margin:1.5rem 0;">
-          <a href="${trackUrl}" style="background:#111;color:#fff;padding:14px 28px;border-radius:4px;text-decoration:none;font-weight:600;">Suivre mon colis →</a>
-        </div>`:''}
-        <p style="color:#888;font-size:13px;">La livraison prend généralement 3 à 5 jours ouvrés. Le suivi peut mettre quelques heures à s'activer.</p>
-        <p style="margin-top:1.5rem;">Merci pour votre confiance 🎉<br><b>L'équipe Noustalgie</b></p>
-      </div>`
-    });
-
-    // Notifier le propriétaire aussi
-    const NOTIFY = process.env.NOTIFY_EMAIL;
-    if (NOTIFY) {
-      await sendEmail({
-        to: NOTIFY,
-        subject: `📦 Expédié — ${recipient.name||''} — ${trackNumber||'sans n°'}`,
-        html: `<h2>Commande expédiée</h2>
-          <p><b>Client :</b> ${recipient.name} (${email})</p>
-          <p><b>Réf :</b> ${merchantRef}</p>
-          <p><b>Tracking :</b> ${trackNumber||'—'}</p>
-          <p><b>URL :</b> ${trackUrl||'—'}</p>
-          <p>Email de suivi envoyé au client automatiquement ✅</p>`
-      });
-    }
-  }
-
-  // Toujours répondre 200 rapidement (Prodigi attend une réponse rapide)
   return res.status(200).json({ received: true });
 };
 

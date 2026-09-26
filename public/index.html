@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMTExMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk48L3RleHQ+PC9zdmc+"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Noustalgie — Album photo couple personnalisé par IA | Cadeau original</title><meta name="description" content="Créez un album photo unique pour votre couple. L'IA rédige votre histoire d'amour et livre un livre photo premium en 3-5 jours. Apercu gratuit. Dès 19€."/><meta name="keywords" content="album photo couple, cadeau original couple, livre photo personnalisé, cadeau saint valentin, album photo mariage"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://noustalgie.fr"/><meta property="og:type" content="website"/><meta property="og:url" content="https://noustalgie.fr"/><meta property="og:title" content="Noustalgie — Album photo couple par IA"/><meta property="og:description" content="Créez un album photo unique. Apercu gratuit. Dès 19€."/><meta property="og:site_name" content="Noustalgie"/>
+<title>Noustalgie — Album photo couple personnalisé par IA | Cadeau original</title><meta name="description" content="Créez l'album photo de votre couple en quelques minutes : vos photos, votre histoire mise en mots, un livre 21×21 cm à couverture rigide livré en 3 à 5 jours. Aperçu gratuit avant paiement."/><meta name="keywords" content="album photo couple, cadeau original couple, livre photo personnalisé, cadeau saint valentin, album photo mariage"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://noustalgie.fr"/><meta property="og:type" content="website"/><meta property="og:url" content="https://noustalgie.fr"/><meta property="og:title" content="Noustalgie — Album photo couple par IA"/><meta property="og:description" content="Vos photos, votre histoire, un vrai livre relié. Aperçu gratuit avant paiement."/><meta property="og:site_name" content="Noustalgie"/>
 <meta property="og:image" content="https://noustalgie.fr/og-image.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -12,7 +12,7 @@
 <meta property="og:locale" content="fr_FR"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Noustalgie — L'album qui raconte votre histoire"/>
-<meta name="twitter:description" content="Un livre photo unique pour votre couple. Aperçu gratuit avant paiement. Dès 19€."/>
+<meta name="twitter:description" content="Vos photos, votre histoire, un vrai livre relié. Aperçu gratuit avant paiement."/>
 <meta name="twitter:image" content="https://noustalgie.fr/og-image.png"/>
 <meta name="theme-color" content="#111111"/>
 <meta name="author" content="Noustalgie"/>
@@ -34,10 +34,10 @@
   }
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link rel="preconnect" href="https://images.unsplash.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
 <style>
 :root {
   --bg:#0e0b09; --bg2:#141008; --bg3:#1c1610; --bg4:#221c14;
@@ -714,7 +714,121 @@ html body #edTextStyles{
 }
 html body #edTextStyles div{ color:#c9a05a !important; }
 html body #edTextStyles button{ color:#f2ebe0 !important; }
+
+/* ═══ v1.1 — accessibilité & confort ═══ */
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px;border-radius:2px;}
+button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none;}
+img{max-width:100%;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}
+}
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Organization",
+ "name": "Noustalgie",
+ "url": "https://noustalgie.fr",
+ "logo": "https://noustalgie.fr/og-image.png",
+ "email": "contact@noustalgie.fr",
+ "address": {
+  "@type": "PostalAddress",
+  "streetAddress": "14 rue des Arts",
+  "postalCode": "59800",
+  "addressLocality": "Lille",
+  "addressCountry": "FR"
+ }
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Combien de temps pour recevoir mon album ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Votre album imprimé est fabriqué avec le plus grand soin par notre atelier partenaire, puis expédié directement chez vous. Comptez en moyenne 3 à 5 jours ouvrés en France métropolitaine, et un peu plus selon les destinations européennes. La version PDF, elle, vous est envoyée par email immédiatement après votre paiement."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Puis-je voir mon album avant de payer ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Oui, et c'est tout l'intérêt de Noustalgie. Vous composez votre album entièrement, puis vous en découvrez un aperçu complet, page par page, entièrement gratuit. Vous ne réglez votre commande que si le résultat vous plaît vraiment."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Combien de photos dois-je fournir ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Cela dépend du format choisi : jusqu'à 24 photos pour l'album 24 pages, 42 pour le 36 pages, et 60 pour le 50 pages. Choisissez vos plus beaux souvenirs : c'est la qualité et l'émotion qui feront la beauté de votre livre."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Quelle est la qualité d'impression ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Nos albums sont imprimés sur papier photo professionnel épais, avec couverture rigide et reliure cousue. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Comment fonctionne la création de l'album ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Tout se passe en quelques minutes sur le site. Vous renseignez vos prénoms et votre histoire, importez vos photos, et notre système compose automatiquement un album élégant et personnalisé, que vous pouvez ensuite modifier à votre goût."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Puis-je personnaliser les textes et les pages ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Bien sûr. Une fois votre album généré, un éditeur complet vous permet de modifier les textes, changer les photos, ajuster le cadrage et choisir la mise en page. Vous gardez la main sur l'ensemble du rendu."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Mes photos sont-elles en sécurité ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "La confidentialité de vos souvenirs est une priorité. Vos photos servent uniquement à créer votre album, ne sont jamais vendues ni partagées, et sont automatiquement supprimées 30 jours après votre commande."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Que se passe-t-il si mon livre arrive abîmé ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "En cas de défaut d'impression ou de colis endommagé, contactez-nous sous 14 jours à contact@noustalgie.fr avec quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Puis-je modifier ma commande après le paiement ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Une fois le paiement validé, votre album part rapidement en impression. Vérifiez bien votre aperçu avant de payer. En cas d'erreur, écrivez-nous vite : si l'impression n'a pas démarré, nous ferons notre possible."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Livrez-vous en dehors de la France ?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Oui, nous livrons dans toute l'Europe via notre réseau d'imprimeurs. Indiquez simplement votre pays lors de la saisie de l'adresse. Vous recevrez un email de suivi avec tracking dès l'expédition."
+   }
+  }
+ ]
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -772,7 +886,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
     </div>
   </div>
   <div class="ed-hero-img">
-    <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=80" alt="Couple" onerror="this.style.display='none'"/>
+    <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=80&auto=format" alt="Couple enlacé, photo en noir et blanc" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
     <div class="ed-hero-cap"><div class="l" data-i18n="hero_cap_l">Édition limitée</div><div class="q" data-i18n="hero_cap_q">"Notre plus belle page"</div></div>
   </div>
 </section>
@@ -793,10 +907,10 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
 </section>
 
 <div class="ed-gallery">
-  <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80" alt="Couple souriant en noir et blanc" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400&q=80" alt="Couple enlacé, moment de tendresse" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80" alt="Couple élégant, portrait en extérieur" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80" alt="Couple heureux, complicité et amour" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple souriant en noir et blanc" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple enlacé, moment de tendresse" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple élégant, portrait en extérieur" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple heureux, complicité et amour" onerror="this.style.display='none'"/>
 </div>
 
 <section class="ed-price" id="pricing">
@@ -1121,7 +1235,7 @@ html body #edTextStyles button{ color:#f2ebe0 !important; }
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q3">Combien de photos dois-je fournir ?</span><span class="ed-faq-sign">+</span></button>
-      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a3">Cela dépend du format que vous choisissez. L'album 20 pages accueille jusqu'à 20 photos, le 30 pages jusqu'à 35, et le 50 pages jusqu'à 60. Nous vous conseillons de sélectionner vos plus beaux souvenirs plutôt que de chercher à remplir chaque emplacement : c'est la qualité et l'émotion de vos clichés qui feront la beauté de votre livre, pas leur nombre.</div></div>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a3">Cela dépend du format que vous choisissez. L'album 24 pages accueille jusqu'à 24 photos, le 36 pages jusqu'à 42, et le 50 pages jusqu'à 60. Nous vous conseillons de sélectionner vos plus beaux souvenirs plutôt que de chercher à remplir chaque emplacement : c'est la qualité et l'émotion de vos clichés qui feront la beauté de votre livre, pas leur nombre.</div></div>
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q4">Quelle est la qualité d'impression ?</span><span class="ed-faq-sign">+</span></button>
@@ -1243,7 +1357,7 @@ const LANGS = {
     step3_name:'Votre histoire', step3_desc:'Histoire d\'amour rédigée sur mesure à partir de vos moments.',
     step4_name:'Aperçu complet', step4_desc:'Visualisez l\'intégralité de votre album. Satisfaits, vous commandez.',
     step5_name:'Impression & livraison', step5_desc:'Livre pro livré en 3 à 5 jours ouvrés.',
-    free:'Gratuit', from19:'Dès 19€',
+    free:'Gratuit', from19:'Dès 14,99€',
     feat_eyebrow:'Ce qui nous rend uniques', feat_title1:'Plus qu\'un album.', feat_title2:'Une œuvre à deux.',
     feat1_name:'Histoire sur mesure', feat1_desc:'Votre histoire d\'amour rédigée à partir de vos photos. 100% unique.',
     feat2_name:'6 ambiances visuelles', feat2_desc:'Cinéma, Luxury, Vintage, Conte de fées, Épique ou Poétique.',
@@ -1329,7 +1443,7 @@ const LANGS = {
     step3_name:'Your story', step3_desc:'Your love story written from scratch based on your shared moments.',
     step4_name:'Full preview', step4_desc:'View your complete album before ordering.',
     step5_name:'Print & delivery', step5_desc:'Pro book printed on premium photo paper, delivered in 3-5 days.',
-    free:'Free', from19:'From €19',
+    free:'Free', from19:'From €14.99',
     feat_eyebrow:'What makes us unique', feat_title1:'More than an album.', feat_title2:'A work of art for two.',
     feat1_name:'Tailored story', feat1_desc:'Your love story written from your photos. 100% unique every time.',
     feat2_name:'6 visual moods', feat2_desc:'Romantic Cinema, Luxury, Vintage, Fairy Tale, Epic or Poetic.',
@@ -1415,7 +1529,7 @@ const LANGS = {
     step3_name:'Eure Geschichte', step3_desc:'Liebesgeschichte maßgefertigt aus euren gemeinsamen Momenten.',
     step4_name:'Vollständige Vorschau', step4_desc:'Seht euer komplettes Album vor der Bestellung.',
     step5_name:'Druck & Lieferung', step5_desc:'Professionelles Buch auf Premium-Fotopapier, in 5-7 Tagen.',
-    free:'Kostenlos', from19:'Ab 19€',
+    free:'Kostenlos', from19:'Ab 14,99€',
     feat_eyebrow:'Was uns einzigartig macht', feat_title1:'Mehr als ein Album.', feat_title2:'Ein Kunstwerk zu zweit.',
     feat1_name:'Maßgefertigte Geschichte', feat1_desc:'Eure Liebesgeschichte aus euren Fotos geschrieben. 100% einzigartig.',
     feat2_name:'6 visuelle Stimmungen', feat2_desc:'Romantisches Kino, Luxury, Vintage, Märchen, Episch oder Poetisch.',
@@ -1481,7 +1595,7 @@ const LANGS = {
     faq_head:'Tus preguntas', faq_title:'Todo lo que necesitas saber',
     faq_q1:'¿Cuánto tarda en llegar mi álbum?', faq_a1:'Tu álbum impreso se fabrica con el mayor cuidado en nuestro taller asociado y se envía directamente a ti. Cuenta con 3 a 5 días hábiles de media en Francia continental, y algo más para otros destinos europeos. La versión PDF se envía por email inmediatamente tras el pago.',
     faq_q2:'¿Puedo ver mi álbum antes de pagar?', faq_a2:'Sí, ese es el sentido de Noustalgie. Creas tu álbum por completo y luego ves una vista previa completa, página por página, totalmente gratis. Solo pagas si el resultado te encanta de verdad.',
-    faq_q3:'¿Cuántas fotos debo aportar?', faq_a3:'Depende del formato: hasta 20 fotos para el álbum de 20 páginas, 35 para el de 30 y 60 para el de 50. Elige tus mejores recuerdos: la calidad y la emoción son lo que embellece tu libro.',
+    faq_q3:'¿Cuántas fotos debo aportar?', faq_a3:'Depende del formato: hasta 24 fotos para el álbum de 24 páginas, 42 para el de 36 y 60 para el de 50. Elige tus mejores recuerdos: la calidad y la emoción son lo que embellece tu libro.',
     faq_q4:'¿Cómo es la calidad de impresión?', faq_a4:'Nuestros álbumes se imprimen en papel fotográfico profesional grueso, con tapa dura y encuadernación cosida. El formato cuadrado de 21×21 cm realza tus fotos. Un verdadero objeto para conservar y regalar durante años.',
     faq_q5:'¿Cómo funciona la creación del álbum?', faq_a5:'Todo ocurre en unos minutos en la web. Introduces tus nombres y vuestra historia, subes tus fotos, y nuestro sistema compone automáticamente un álbum elegante y personalizado que luego puedes editar a tu gusto.',
     faq_q6:'¿Puedo personalizar los textos y las páginas?', faq_a6:'Por supuesto. Una vez generado tu álbum, un editor completo te permite cambiar los textos, sustituir fotos, ajustar el encuadre y elegir el diseño. Mantienes el control de todo el resultado.',
@@ -1501,7 +1615,7 @@ const LANGS = {
     step3_name:'Vuestra historia', step3_desc:'Historia de amor escrita a medida a partir de vuestros momentos.',
     step4_name:'Vista previa completa', step4_desc:'Visualizad el álbum completo antes de pedir.',
     step5_name:'Impresión & entrega', step5_desc:'Libro profesional en papel fotográfico premium, en 5-7 días.',
-    free:'Gratis', from19:'Desde 19€',
+    free:'Gratis', from19:'Desde 14,99€',
     feat_eyebrow:'Lo que nos hace únicos', feat_title1:'Más que un álbum.', feat_title2:'Una obra de arte para dos.',
     feat1_name:'Historia a medida', feat1_desc:'Vuestra historia de amor escrita a partir de vuestras fotos. 100% única.',
     feat2_name:'6 estilos visuales', feat2_desc:'Cine romántico, Luxury, Vintage, Cuento de hadas, Épico o Poético.',
@@ -1567,7 +1681,7 @@ const LANGS = {
     faq_head:'As suas perguntas', faq_title:'Tudo o que precisa de saber',
     faq_q1:'Quanto tempo até receber o meu álbum?', faq_a1:'O seu álbum impresso é feito com o maior cuidado pelo nosso ateliê parceiro e enviado diretamente para si. Conte com 3 a 5 dias úteis em média em França continental, e um pouco mais para outros destinos europeus. A versão PDF é enviada por email imediatamente após o pagamento.',
     faq_q2:'Posso ver o meu álbum antes de pagar?', faq_a2:'Sim, é esse o sentido da Noustalgie. Cria o seu álbum por completo e depois vê uma pré-visualização completa, página a página, totalmente grátis. Só paga se gostar mesmo do resultado.',
-    faq_q3:'Quantas fotos devo fornecer?', faq_a3:'Depende do formato: até 20 fotos para o álbum de 20 páginas, 35 para o de 30 e 60 para o de 50. Escolha as suas melhores memórias: são a qualidade e a emoção que tornam o seu livro bonito.',
+    faq_q3:'Quantas fotos devo fornecer?', faq_a3:'Depende do formato: até 24 fotos para o álbum de 24 páginas, 42 para o de 36 e 60 para o de 50. Escolha as suas melhores memórias: são a qualidade e a emoção que tornam o seu livro bonito.',
     faq_q4:'Qual é a qualidade de impressão?', faq_a4:'Os nossos álbuns são impressos em papel fotográfico profissional espesso, com capa dura e encadernação cosida. O formato quadrado de 21×21 cm valoriza as suas fotos. Um verdadeiro objeto para guardar e oferecer durante anos.',
     faq_q5:'Como funciona a criação do álbum?', faq_a5:'Tudo acontece em poucos minutos no site. Introduz os seus nomes e a vossa história, carrega as fotos, e o nosso sistema compõe automaticamente um álbum elegante e personalizado, que pode depois editar a seu gosto.',
     faq_q6:'Posso personalizar os textos e as páginas?', faq_a6:'Claro. Depois de gerado o álbum, um editor completo permite alterar textos, trocar fotos, ajustar o enquadramento e escolher o layout. Mantém o controlo de todo o resultado.',
@@ -1587,7 +1701,7 @@ const LANGS = {
     step3_name:'A vossa história', step3_desc:'História de amor escrita à medida a partir dos vossos momentos.',
     step4_name:'Pré-visualização completa', step4_desc:'Vejam o álbum completo antes de encomendar.',
     step5_name:'Impressão & entrega', step5_desc:'Livro profissional em papel fotográfico premium, em 5-7 dias.',
-    free:'Grátis', from19:'A partir de 19€',
+    free:'Grátis', from19:'A partir de 14,99€',
     feat_eyebrow:'O que nos torna únicos', feat_title1:'Mais do que um álbum.', feat_title2:'Uma obra de arte a dois.',
     feat1_name:'História personalizada', feat1_desc:'A vossa história de amor escrita a partir das vossas fotos. 100% única.',
     feat2_name:'6 ambientes visuais', feat2_desc:'Cinema Romântico, Luxury, Vintage, Conto de Fadas, Épico ou Poético.',
@@ -3060,7 +3174,7 @@ async function processPayment(){
       } catch(pdfErr) {
         console.error('Generation PDF echouee:', pdfErr && pdfErr.message);
         btn.disabled=false; btn.innerHTML='Payer & commander';
-        alert('Un souci est survenu lors de la preparation de votre livre. Merci de reessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
+        alert('Un souci est survenu lors de la préparation de votre livre. Merci de réessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
         return;
       }
     }
@@ -3068,7 +3182,7 @@ async function processPayment(){
     // Si livre imprime et PDF absent -> bloquer le paiement
     if(!pdfUrl){
       btn.disabled=false; btn.innerHTML='Payer & commander';
-      alert('Un souci est survenu lors de la preparation de votre livre. Merci de reessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
+      alert('Un souci est survenu lors de la préparation de votre livre. Merci de réessayer dans quelques instants. Si le probleme persiste, contactez contact@noustalgie.fr — vous ne serez pas debite.');
       return;
     }
     btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.3);border-top-color:#0a0806;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Redirection paiement...';
@@ -3355,7 +3469,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
     dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');addPhotos(e.dataTransfer.files);});
   }
-  // Init pricing — STEPS = [20, 30, 50], index 2 = 30 pages (défaut)
+  // Init pricing — STEPS = [24, 36, 50], index 2 = 36 pages (défaut)
   onSlider(2);
   onInAppSlider(2);
   // Init options panel

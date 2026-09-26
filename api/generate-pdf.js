@@ -1,65 +1,46 @@
+// api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
 const https = require('https');
+const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
+
+const MAX_HTML = 30 * 1024 * 1024; // photos compressées incluses
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  applyCors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST') return res.status(405).end();
+  if (!isAllowedOrigin(req)) return res.status(403).json({ error: 'Origine non autorisée.' });
+  if (!rateLimit(req, 'pdf', 8, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de demandes, réessayez dans quelques minutes.' });
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { html, title } = body;
-    if (!html) return res.status(400).json({ error: 'HTML manquant' });
+    const { html } = parseBody(req);
+    if (!html || typeof html !== 'string') return res.status(400).json({ error: 'HTML manquant' });
+    if (html.length > MAX_HTML) return res.status(413).json({ error: 'Album trop lourd.' });
 
-    const PDFSHIFT_KEY = process.env.PDFSHIFT_API_KEY;
-    if (!PDFSHIFT_KEY) return res.status(500).json({ error: 'PDFSHIFT_API_KEY manquante' });
+    const KEY = process.env.PDFSHIFT_API_KEY;
+    if (!KEY) return res.status(500).json({ error: 'Configuration PDF incomplète.' });
 
-    const payload = JSON.stringify({
-      source: html,
-      format: '210mmx210mm',
-      margin: '0',
-      use_print: true,
-      sandbox: false
-    });
-
+    const payload = Buffer.from(JSON.stringify({ source: html, format: '210mmx210mm', margin: '0', use_print: true, sandbox: false }));
     const result = await new Promise((resolve, reject) => {
-      const auth = Buffer.from('api:' + PDFSHIFT_KEY).toString('base64');
-      const buf = Buffer.from(payload);
-      const req2 = https.request({
-        hostname: 'api.pdfshift.io',
-        path: '/v3/convert/pdf',
-        method: 'POST',
-        headers: {
-          'Authorization': 'Basic ' + auth,
-          'Content-Type': 'application/json',
-          'Content-Length': buf.length
-        },
-        timeout: 50000
+      const r2 = https.request({
+        hostname: 'api.pdfshift.io', path: '/v3/convert/pdf', method: 'POST',
+        headers: { Authorization: 'Basic ' + Buffer.from('api:' + KEY).toString('base64'), 'Content-Type': 'application/json', 'Content-Length': payload.length },
+        timeout: 50000,
       }, r => {
         const chunks = [];
         r.on('data', c => chunks.push(c));
         r.on('end', () => {
-          if (r.statusCode === 200) {
-            resolve({ success: true, pdf: Buffer.concat(chunks).toString('base64') });
-          } else {
-            resolve({ success: false, error: `PDFShift ${r.statusCode}: ${Buffer.concat(chunks).toString().slice(0,300)}` });
-          }
+          const buf = Buffer.concat(chunks);
+          resolve(r.statusCode === 200 ? { ok: true, pdf: buf.toString('base64') } : { ok: false, error: `PDFShift ${r.statusCode}: ${buf.toString().slice(0, 300)}` });
         });
       });
-      req2.on('error', reject);
-      req2.on('timeout', () => { req2.destroy(); reject(new Error('Timeout PDFShift')); });
-      req2.write(buf);
-      req2.end();
+      r2.on('error', reject);
+      r2.on('timeout', () => { r2.destroy(); reject(new Error('Timeout PDFShift')); });
+      r2.write(payload); r2.end();
     });
-
-    if (result.success) {
-      console.log('PDF OK via PDFShift');
-      return res.json({ pdf: result.pdf });
-    } else {
-      throw new Error(result.error);
-    }
-  } catch(e) {
-    console.error('PDF error:', e.message);
-    return res.status(500).json({ error: e.message });
+    if (!result.ok) throw new Error(result.error);
+    return res.json({ pdf: result.pdf });
+  } catch (e) {
+    console.error('generate-pdf:', e.message);
+    return res.status(500).json({ error: 'La génération du PDF a échoué.' });
   }
 };
