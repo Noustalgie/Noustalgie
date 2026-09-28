@@ -32,9 +32,10 @@ function detectCountry(text) {
   return 'FR';
 }
 
-async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId, orderNumber, pages }) {
+async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId, orderNumber, pages }) {
   if (!process.env.PRODIGI_API_KEY) { global.__lastProdigiError = 'PRODIGI_API_KEY manquante'; return null; }
   if (!pdfUrl) { global.__lastProdigiError = 'Pas de PDF'; return null; }
+  const structured = addr && addr.line1 && addr.postal && addr.city && addr.country;
   const parts = (address || '').split(',').map(s => s.trim()).filter(Boolean);
   let postalCode = '', city = '', postalIdx = -1;
   for (let i = 0; i < parts.length; i++) {
@@ -45,11 +46,14 @@ async function createProdigiOrder({ pdfUrl, name, email, address, stripeSessionI
   const line1 = addressParts.join(', ') || (parts[0] || '');
   const country = detectCountry(postalIdx >= 0 ? parts.slice(postalIdx + 1).join(' ') : parts[parts.length - 1]);
 
+  const recipientAddress = structured
+    ? { line1: addr.line1, line2: addr.line2 || undefined, postalOrZipCode: addr.postal, countryCode: addr.country, townOrCity: addr.city, isBusiness: false }
+    : { line1, postalOrZipCode: postalCode, countryCode: country, townOrCity: city, isBusiness: false };
   const orderPayload = {
     merchantReference: orderNumber,
     shippingMethod: 'Budget',
     idempotencyKey: `noustalgie-${stripeSessionId}`,
-    recipient: { name, email, address: { line1, postalOrZipCode: postalCode, countryCode: country, townOrCity: city, isBusiness: false } },
+    recipient: { name, email, address: recipientAddress },
     items: [{
       merchantReference: `album-${stripeSessionId}`,
       sku: 'BOOK-FE-8_3-SQ-HARD-G',
@@ -159,7 +163,8 @@ module.exports = async (req, res) => {
     }
 
     if (format === 'print' && pdfUrl) {
-      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, stripeSessionId: session.id, orderNumber, pages });
+      const addr = { line1: m.addr_line1, line2: m.addr_line2, postal: m.addr_postal, city: m.addr_city, country: m.addr_country };
+      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId: session.id, orderNumber, pages });
     }
 
     const NOTIFY = process.env.NOTIFY_EMAIL;

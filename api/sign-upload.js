@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
   // Une signature couvre un dossier de commande unique : toutes les photos d'un album
   const timestamp = Math.floor(Date.now() / 1000);
   const folder = `noustalgie/photos/${new Date().toISOString().slice(0, 10)}-${crypto.randomBytes(5).toString('hex')}`;
-  const params = { folder, timestamp };
-  return res.json({ cloud, apiKey: key, timestamp, folder, signature: sign(params, secret) });
+  // Signés avec la requête : seuls des fichiers image sont acceptés, redimensionnés à 2600 px max dès l'arrivée
+  const params = { allowed_formats: 'jpg,jpeg,png,webp', folder, timestamp, transformation: 'c_limit,w_2600,h_2600' };
+  return res.json({ cloud, apiKey: key, ...params, signature: sign(params, secret) });
 };

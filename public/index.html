@@ -846,6 +846,8 @@ img{max-width:100%;}
 }
 @keyframes nstUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.nst-tools.sheet{animation:none;}}
+.nst-page.nst-blank{background:#fff;}
+.nst-spread.two .nst-blank{box-shadow:inset -18px 0 22px -18px rgba(0,0,0,.12);}
 /* ═══ v2.2 — système de design du site ═══ */
 :root{--n-ink:#1c1a18;--n-mut:#5f5a54;--n-line:#d9d4cc;--n-soft:#f6f4f0;}
 /* Boutons : principal = noir plein, secondaire = contour */
@@ -1516,7 +1518,7 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
                 <input type="text" id="payAddrPostal" placeholder="75001" maxlength="10"/>
                 <input type="text" id="payAddrCity" placeholder="Paris"/>
               </div>
-              <input type="text" id="payAddrCountry" placeholder="France" style="margin-bottom:0;"/>
+              <select id="payAddrCountry" aria-label="Pays" style="margin-bottom:0;"><option value="FR" selected>France</option><option value="BE">Belgique</option><option value="LU">Luxembourg</option><option value="MC">Monaco</option><option value="CH">Suisse</option><option value="DE">Allemagne</option><option value="AT">Autriche</option><option value="NL">Pays-Bas</option><option value="ES">Espagne</option><option value="PT">Portugal</option><option value="IT">Italie</option><option value="IE">Irlande</option></select>
               <input type="hidden" id="payAddress"/>
             </div>
           </div>
@@ -3475,7 +3477,7 @@ async function processPayment(){
           const pdfBlob = base64ToBlob(pdfBase64, 'application/pdf');
           const cloudForm = new FormData();
           cloudForm.append('file', pdfBlob, (S.story?.titre||'noustalgie') + '.pdf');
-          cloudForm.append('upload_preset', 'noustalgie_unsigned');
+          cloudForm.append('upload_preset', '');
           cloudForm.append('resource_type', 'raw');
           const uploadRes = await fetchWithTimeout('https://api.cloudinary.com/v1_1/daxkn7pyb/raw/upload', {
             method:'POST', body: cloudForm
@@ -3854,7 +3856,7 @@ const photos = () => CTX.photos || (typeof S !== 'undefined' && S.photos) || [];
 
 function printSrc(p, cssW) {
   if (p.pid && p.cloud) {
-    const w = clamp(Math.ceil(cssW / PX * 2480), 600, 2200); // ~300 dpi, plafonné
+    const w = clamp(Math.ceil(cssW / PX * 2480), 600, 2480); // 300 dpi (limité à la résolution de la photo)
     return `https://res.cloudinary.com/${p.cloud}/image/upload/c_limit,w_${w},q_86,f_jpg/${p.pid}`;
   }
   return p.full || p.data;
@@ -4740,13 +4742,16 @@ function redo() { if (!NA.fut.length) return; NA.hist.push(snap()); restore(NA.f
 function updUndo() { const u = $('nstUndo'), r = $('nstRedo'); if (u) u.disabled = !NA.hist.length; if (r) r.disabled = !NA.fut.length; }
 
 // Pages visibles : couverture seule, puis doubles pages (2-3, 4-5…) sur grand écran
+// Comme le livre imprimé : couverture seule ; page 2 seule à droite (face à la feuille de garde) ;
+// puis 3-4, 5-6… ; la dernière page intérieure seule à gauche si besoin ; 4e de couverture seule.
 function visible() {
-  const c = NA.cur, n = NA.pages.length;
-  if (!isWide() || c === 0) return [c];
-  const l = c % 2 === 1 ? c : c - 1;
-  return [l, l + 1].filter(i => i < n);
+  const c = NA.cur, last = NA.pages.length - 1;
+  if (!isWide() || c === 0 || c === last) return [c];
+  if (c === 1) return [null, 1];
+  const l = c % 2 === 0 ? c : c - 1, r = l + 1;
+  return [l, r < last ? r : null];
 }
-
+const pageName = i => i === 0 ? 'Couverture' : i === NA.pages.length - 1 ? '4e de couverture' : `Page ${i + 1}`;
 function mountPage(host, i, editing) {
   host.innerHTML = NA.renderPage(NA.pages[i], { editing, inline: editing && isWide() });
   host.dataset.page = i;
@@ -4765,11 +4770,12 @@ function drawStage() {
   const stage = $('nstSpread'); if (!stage) return;
   const v = visible();
   stage.className = 'nst-spread' + (v.length === 2 ? ' two' : '') + (NA.cur === 0 ? ' cover' : '');
-  stage.innerHTML = v.map(i => `<div class="nst-page" data-page="${i}"></div>`).join('');
-  stage.querySelectorAll('.nst-page').forEach(h => mountPage(h, +h.dataset.page, true));
+  stage.innerHTML = v.map(i => i == null ? `<div class="nst-page nst-blank" aria-hidden="true"></div>` : `<div class="nst-page" data-page="${i}"></div>`).join('');
+  stage.querySelectorAll('.nst-page[data-page]').forEach(h => mountPage(h, +h.dataset.page, true));
   highlightSel();
-  const ctr = $('nstCtr'); if (ctr) ctr.textContent = v.length === 2 ? `Pages ${v[0] + 1}–${v[1] + 1} / ${NA.pages.length}` : `Page ${v[0] + 1} / ${NA.pages.length}`;
-  $('nstPrev').disabled = NA.cur === 0; $('nstNext').disabled = v[v.length - 1] >= NA.pages.length - 1;
+  const vv = v.filter(x => x != null), ctr = $('nstCtr');
+  if (ctr) ctr.textContent = vv.length === 2 ? `Pages ${vv[0] + 1}–${vv[1] + 1} / ${NA.pages.length}` : `${pageName(vv[0])} / ${NA.pages.length}`;
+  $('nstPrev').disabled = NA.cur === 0; $('nstNext').disabled = Math.max(...vv) >= NA.pages.length - 1;
 }
 function drawThumb(i) {
   const h = document.querySelector(`#nstStrip .nst-th[data-page="${i}"] .nst-th-in`);
@@ -4777,7 +4783,8 @@ function drawThumb(i) {
 }
 function drawStrip() {
   const s = $('nstStrip'); if (!s) return;
-  s.innerHTML = NA.pages.map((p, i) => `<button class="nst-th" data-page="${i}" aria-label="Page ${i + 1}"><div class="nst-th-in"></div><span>${i + 1}</span></button>`).join('');
+  const last = NA.pages.length - 1;
+  s.innerHTML = NA.pages.map((p, i) => `<button class="nst-th" data-page="${i}" aria-label="${pageName(i)}"><div class="nst-th-in"></div><span>${i === 0 ? 'Couv.' : i === last ? 'Dos' : i + 1}</span></button>`).join('');
   NA.pages.forEach((_, i) => drawThumb(i));
   markStrip();
 }
@@ -4802,8 +4809,8 @@ function refreshPage(i) { drawStage(); drawThumb(i); drawTools(); ED.dirty.add(i
 
 function go(i) { NA.cur = Math.max(0, Math.min(NA.pages.length - 1, i)); ED.sel = null; drawStage(); markStrip(); drawTools(); }
 function step(d) {
-  const v = visible();
-  if (d > 0) go(v[v.length - 1] + 1); else go(isWide() && NA.cur > 0 ? Math.max(0, v[0] - 2) : NA.cur - 1);
+  const v = visible().filter(x => x != null);
+  if (d > 0) go(Math.max(...v) + 1); else go(Math.min(...v) - 1);
 }
 
 function highlightSel() {
@@ -4829,7 +4836,7 @@ function drawTools() {
     return;
   }
   const pg = NA.pages[sel.page], L = NA.LAYOUTS[pg.layout];
-  let html = `<div class="nst-grip" aria-hidden="true"></div><div class="nst-tools-hd"><b>Page ${sel.page + 1}</b><span>${esc(L && L.name ? L.name : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
+  let html = `<div class="nst-grip" aria-hidden="true"></div><div class="nst-tools-hd"><b>${pageName(sel.page)}</b><span>${esc(L && L.name ? L.name : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
 
   if (sel.slot != null) {
     const s = pg.slots[sel.slot];
@@ -4852,7 +4859,7 @@ function drawTools() {
   if (alts.length > 1) {
     html += `<div class="nst-sec"><label>Mise en page</label><div class="nst-chips">${alts.map(k => `<button class="nst-chip${pg.layout === k ? ' on' : ''}" data-layout="${k}">${NA.LAYOUTS[k].name}</button>`).join('')}</div></div>`;
   }
-  if (sel.page > 0) {
+  if (sel.page > 0 && sel.page < NA.pages.length - 1) {
     html += `<div class="nst-sec nst-row"><button class="nst-link" data-act="left" ${sel.page <= 1 ? 'disabled' : ''}>← Avancer la page</button><button class="nst-link" data-act="right" ${sel.page >= NA.pages.length - 1 ? 'disabled' : ''}>Reculer la page →</button></div>`;
   }
   box.innerHTML = html;
@@ -4888,7 +4895,7 @@ function swapPhoto(photoIdx) {
 }
 function movePage(d) {
   const i = ED.sel.page, j = i + d;
-  if (j < 1 || j >= NA.pages.length) return;
+  if (j < 1 || j >= NA.pages.length - 1 || i >= NA.pages.length - 1) return; // couverture et 4e de couverture restent en place
   commit();
   [NA.pages[i], NA.pages[j]] = [NA.pages[j], NA.pages[i]];
   ED.sel.page = j; NA.cur = j; drawStage(); drawStrip(); drawTools();
@@ -5135,6 +5142,8 @@ async function uploadPhotos(onProgress) {
       const fd = new FormData();
       fd.append('file', dataUrlToBlob(p.full || p.data), `photo-${i}.jpg`);
       fd.append('api_key', sig.apiKey); fd.append('timestamp', sig.timestamp); fd.append('folder', sig.folder); fd.append('signature', sig.signature);
+      if (sig.allowed_formats) fd.append('allowed_formats', sig.allowed_formats);
+      if (sig.transformation) fd.append('transformation', sig.transformation);
       for (let a = 0; a < 3; a++) {
         try {
           const r = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloud}/image/upload`, { method: 'POST', body: fd });
@@ -5162,8 +5171,8 @@ window.generateAlbumPDF = async function (onStep) {
   onStep('Mise en page de votre livre…');
   const res = await fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ html: printHtml(), mode: 'url' }) });
   const j = await res.json().catch(() => ({}));
-  if (!j.url) throw new Error(j.error || 'PDF');
-  return j.url;
+  if (!j.url || !j.proof) throw new Error(j.error || 'PDF');
+  return { url: j.url, proof: j.proof };
 };
 NA.printHtml = printHtml;
 
@@ -5174,7 +5183,9 @@ window.processPayment = async function () {
   if ($('hpField') && $('hpField').value) return;
   if (!name || !email) { alert('Merci de renseigner votre prénom et votre email.'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert('Votre email semble invalide.'); return; }
-  const line1 = val('payAddrLine1'), line2 = val('payAddrLine2'), postal = val('payAddrPostal'), city = val('payAddrCity'), country = val('payAddrCountry') || 'France';
+  const line1 = val('payAddrLine1'), line2 = val('payAddrLine2'), postal = val('payAddrPostal'), city = val('payAddrCity');
+  const cSel = $('payAddrCountry'), countryCode = (cSel && cSel.value) || 'FR';
+  const country = cSel && cSel.options ? cSel.options[cSel.selectedIndex].text : 'France';
   const address = [line1, line2, (postal + ' ' + city).trim(), country].filter(Boolean).join(', ');
   if (format === 'print' && (!line1 || !postal || !city)) { alert('Merci de renseigner votre adresse complète (rue, code postal, ville) pour la livraison.'); return; }
   if (!NA.pages.length) { alert('Votre album n’est pas encore composé.'); return; }
@@ -5183,11 +5194,11 @@ window.processPayment = async function () {
   btn.disabled = true;
   try {
     say('Préparation de votre livre…');
-    const pdfUrl = await window.generateAlbumPDF(say);
+    const pdf = await window.generateAlbumPDF(say), pdfUrl = pdf.url;
     say('Redirection vers le paiement…');
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, address, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, promoCode: (promo() && promo().code) || '' }) });
+      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, promoCode: (promo() && promo().code) || '' }) });
     const d = await r.json();
     if (d.url) { window.location.href = d.url; return; }
     throw new Error(d.error || 'paiement');

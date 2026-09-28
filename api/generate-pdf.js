@@ -4,7 +4,7 @@
 const https = require('https');
 const crypto = require('crypto');
 const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
-const { uploadRemote } = require('./_lib/cloudinary');
+const { uploadRemote, pdfProof } = require('./_lib/cloudinary');
 
 const MAX_HTML = 4 * 1024 * 1024;
 
@@ -43,13 +43,16 @@ module.exports = async (req, res) => {
     const base = { source: html, format: '210mmx210mm', margin: '0', use_print: true, sandbox: false };
 
     if (mode === 'url') {
+      const pages = (html.match(/class="page"/g) || []).length;
+      if (![24, 36, 50].includes(pages)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
       const ref = `album-${new Date().toISOString().slice(0, 10)}-${crypto.randomBytes(5).toString('hex')}`;
       const out = await pdfshift({ ...base, filename: ref + '.pdf', wait_for: 'nstReady' }, KEY);
       let j = null; try { j = JSON.parse(out.body.toString()); } catch (e) {}
       if (out.status !== 200 || !j || !j.url) throw new Error(`PDFShift ${out.status}: ${out.body.toString().slice(0, 300)}`);
       // Copie durable chez nous (30 jours, cf. cron cleanup). Si ça échoue, le lien PDFShift reste valable.
       const copy = await uploadRemote({ url: j.url, resourceType: 'raw', folder: 'noustalgie/pdf', publicId: ref + '.pdf' });
-      return res.json({ url: (copy && copy.secure_url) || j.url, pages: j.pdf_pages || null, size: j.filesize || null });
+      const url = (copy && copy.secure_url) || j.url;
+      return res.json({ url, pages, proof: pdfProof(url, pages), size: j.filesize || null });
     }
 
     // Ancien mode (compatibilité) : PDF renvoyé en base64

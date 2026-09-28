@@ -30,4 +30,13 @@ function uploadRemote({ url, resourceType = 'raw', folder, publicId }) {
     req.write(body); req.end();
   });
 }
-module.exports = { cfg, sign, uploadRemote };
+// Preuve que ce PDF a été généré par notre serveur avec ce nombre de pages exact
+function pdfProof(url, pages) {
+  return crypto.createHmac('sha256', 'nst-pdf:' + (process.env.CLOUDINARY_API_SECRET || '')).update(`${url}|${pages}`).digest('hex');
+}
+function checkProof(url, pages, proof) {
+  if (!proof || typeof proof !== 'string' || !process.env.CLOUDINARY_API_SECRET) return false;
+  const a = Buffer.from(pdfProof(url, pages)), b = Buffer.from(proof);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+module.exports = { cfg, sign, uploadRemote, pdfProof, checkProof };
