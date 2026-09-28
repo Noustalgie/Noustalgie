@@ -896,6 +896,50 @@ img{max-width:100%;}
 /* l'action « suivant » de chaque étape est toujours l'action principale */
 .btn-row>.btn:last-child{background:var(--n-ink)!important;color:#fff!important;border-color:var(--n-ink)!important;}
 .btn-row>.btn:last-child:hover{background:#000!important;}
+/* ═══ v2.3 — boutons pilule ═══ */
+.btn,.btn-gold,.btn-pay,.ed-btn-dark,.ed-btn-out,#payBtn,.btn-hero,.btn-outline,.nst-pick-btn,.nst-sticky-btn{
+  border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;font:500 15px/1.2 'Inter',system-ui,sans-serif!important;padding:0 28px!important;}
+.ed-nav-cta{border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;font:500 14px/1 'Inter',system-ui,sans-serif!important;}
+#payBtn{font-size:16px!important;}
+.nst-btn,.nst-chip,.nst-theme{border-radius:999px!important;}
+.nst-theme{padding-left:6px!important;}.nst-theme i{border-radius:50%;}
+.nst-resume{border-radius:999px;}.nst-resume button{border-radius:999px;}
+.nst-issue .nst-btn{background:#fff;}
+/* ═══ v2.3 — galerie de vraies pages ═══ */
+.nst-gal{padding:72px 0 64px;border-top:1px solid #111;background:#FBFAF7;}
+.nst-gal-hd{max-width:640px;margin:0 auto 36px;padding:0 24px;text-align:center;}
+.nst-gal-hd h2{font:400 clamp(28px,4vw,40px)/1.15 'Playfair Display',Georgia,serif;margin:10px 0 12px;color:#1c1a18;}
+.nst-gal-hd h2 em{font-style:italic;}
+.nst-gal-hd p{font:400 15px/1.7 'Inter',system-ui,sans-serif;color:#5f5a54;margin:0;}
+.nst-gal-row{display:flex;gap:28px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px max(24px,calc((100vw - 1180px)/2)) 20px;scrollbar-width:thin;}
+.nst-gal-item{flex:0 0 min(560px,86vw);min-width:0;margin:0;scroll-snap-align:center;}
+.nst-gal-book{display:flex;width:100%;aspect-ratio:2/1;overflow:hidden;box-shadow:0 22px 44px -22px rgba(40,30,20,.5),0 2px 6px rgba(40,30,20,.1);}
+.nst-gal-book .nst-page{flex:1 1 0;min-width:0;}
+.nst-gal-book .nst-page:first-child .nst-canvas::after{content:"";position:absolute;top:0;bottom:0;right:0;width:60px;background:linear-gradient(to left,rgba(0,0,0,.14),rgba(0,0,0,0));}
+.nst-gal-book .nst-page:last-child .nst-canvas::after{content:"";position:absolute;top:0;bottom:0;left:0;width:60px;background:linear-gradient(to right,rgba(0,0,0,.16),rgba(0,0,0,0));}
+.nst-gal-item figcaption{margin-top:14px;font:500 13px 'Inter',sans-serif;color:#77726b;text-align:center;}
+/* ═══ v2.3 — garanties ═══ */
+.nst-guar{display:grid;grid-template-columns:repeat(4,auto);justify-content:center;gap:10px 28px;padding:18px 24px;border-bottom:1px solid #111;background:#fff;}
+@media (max-width:1180px){.nst-guar{grid-template-columns:repeat(2,auto);}}
+.nst-guar-i{display:flex;align-items:center;gap:8px;font:500 13px/1.4 'Inter',system-ui,sans-serif;color:#1c1a18;}
+.nst-guar-i svg{flex:0 0 auto;color:#1c1a18;}
+@media (max-width:640px){.nst-gal-item{flex-basis:92vw;}.nst-gal-row{gap:16px;}.nst-guar{grid-template-columns:1fr;justify-content:start;gap:10px;padding:18px 22px;}}
+/* ═══ v2.3 — tarifs actionnables ═══ */
+.nst-pick-btn{margin-top:16px;min-height:44px;width:100%;background:#fff!important;color:#1c1a18!important;border:1px solid #1c1a18!important;cursor:pointer;}
+.ed-price-card.feat .nst-pick-btn{background:#fff!important;color:#1c1a18!important;border-color:#fff!important;}
+.nst-pick-btn:hover{background:#f6f4f0!important;}
+/* ═══ v2.3 — barre d'action mobile ═══ */
+.nst-sticky{display:none;}
+@media (max-width:760px){
+  .nst-sticky{display:block;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:7000;transform:translateY(140%);transition:transform .25s ease;}
+  .nst-sticky.on{transform:none;}
+  .nst-sticky-btn{width:100%;min-height:54px;display:flex!important;align-items:center;justify-content:center;gap:10px;background:#1c1a18!important;color:#fff!important;border:0!important;box-shadow:0 10px 28px -8px rgba(0,0,0,.45);cursor:pointer;}
+  .nst-sticky-btn small{font:400 13px 'Inter',sans-serif;opacity:.7;}
+}
+@media (prefers-reduced-motion:reduce){.nst-sticky{transition:none;}}
+html body .app-section .btn,html body .app-section .btn-gold,html body .app-section .btn-buy,html body .app-section .btn-hero,html body .app-section #payBtn,html body .app-section .btn-pay{border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;}
+html body button[onclick^="applyPromo"]{border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;font:500 14px 'Inter',system-ui,sans-serif!important;min-height:48px;margin-left:8px;}
+html body .legal-close-btn{border-radius:999px!important;border:1px solid #1c1a18!important;background:#fff!important;color:#1c1a18!important;padding:10px 20px!important;font:500 14px 'Inter',system-ui,sans-serif!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;}
 </style>
 <script type="application/ld+json">
 {
@@ -4780,6 +4824,92 @@ window.processPayment = async function () {
     var w = document.querySelector('.app-wrap'); if (w) w.classList.toggle('nst-wide', n === 3);
     if (n !== 3) { document.body.classList.remove('nst-sheet-open'); var tl = document.getElementById('nstTools'); if (tl) tl.classList.remove('sheet'); }
   };
+})();
+
+/* Noustalgie v2.3 — accueil : galerie de vraies pages, garanties, barre d'action mobile */
+(function () {
+  if (!window.NA) return;
+  const TXT = {
+    fr: { eyebrow: 'À quoi ressemble votre livre', title: 'De vraies pages, <em>pas des modèles</em>', sub: 'Chaque album est composé à partir de vos photos et de votre histoire. Voici quelques doubles pages, dans trois des quatre styles.',
+          g: ['Aperçu complet et gratuit avant de payer', 'Livraison offerte, 3 à 5 jours ouvrés', 'Réimpression ou remboursement si le livre arrive abîmé', 'Vos photos supprimées après 30 jours'],
+          cta: 'Composer mon album', from: 'dès 39,99€', choose: 'Choisir', themes: ['Style Galerie', 'Style Argentique', 'Style Nuit'] },
+    en: { eyebrow: 'What your book looks like', title: 'Real pages, <em>not templates</em>', sub: 'Every album is composed from your photos and your story. Here are a few spreads in three of the four styles.',
+          g: ['Full free preview before you pay', 'Free delivery, 3 to 5 business days', 'Reprint or refund if your book arrives damaged', 'Your photos deleted after 30 days'],
+          cta: 'Create my album', from: 'from €39.99', choose: 'Choose', themes: ['Gallery style', 'Film style', 'Night style'] },
+    de: { eyebrow: 'So sieht euer Buch aus', title: 'Echte Seiten, <em>keine Vorlagen</em>', sub: 'Jedes Album entsteht aus euren Fotos und eurer Geschichte. Hier einige Doppelseiten in drei der vier Stile.',
+          g: ['Vollständige Gratis-Vorschau vor dem Bezahlen', 'Kostenloser Versand, 3 bis 5 Werktage', 'Neudruck oder Erstattung bei Beschädigung', 'Eure Fotos werden nach 30 Tagen gelöscht'],
+          cta: 'Album gestalten', from: 'ab 39,99€', choose: 'Wählen', themes: ['Stil Galerie', 'Stil Analog', 'Stil Nacht'] },
+    es: { eyebrow: 'Así es vuestro libro', title: 'Páginas reales, <em>no plantillas</em>', sub: 'Cada álbum se compone con vuestras fotos y vuestra historia. Aquí algunas dobles páginas en tres de los cuatro estilos.',
+          g: ['Vista previa completa y gratuita antes de pagar', 'Envío gratis, de 3 a 5 días laborables', 'Reimpresión o reembolso si llega dañado', 'Vuestras fotos se borran a los 30 días'],
+          cta: 'Crear mi álbum', from: 'desde 39,99€', choose: 'Elegir', themes: ['Estilo Galería', 'Estilo Analógico', 'Estilo Noche'] },
+    pt: { eyebrow: 'Assim é o vosso livro', title: 'Páginas reais, <em>não modelos</em>', sub: 'Cada álbum é composto com as vossas fotos e a vossa história. Eis algumas páginas duplas em três dos quatro estilos.',
+          g: ['Pré-visualização completa e gratuita antes de pagar', 'Envio grátis, 3 a 5 dias úteis', 'Reimpressão ou reembolso se chegar danificado', 'As vossas fotos apagadas após 30 dias'],
+          cta: 'Criar o meu álbum', from: 'desde 39,99€', choose: 'Escolher', themes: ['Estilo Galeria', 'Estilo Analógico', 'Estilo Noite'] },
+  };
+  const lang = () => (typeof currentLang !== 'undefined' && TXT[currentLang]) ? currentLang : 'fr';
+  const U = id => ({ data: `https://images.unsplash.com/photo-${id}?w=900&q=78&auto=format`, orient: 'portrait', focalY: 40 });
+  const P = [U('1518621736915-f3b1c41bfd00'), U('1522673607200-164d1b6ce486'), U('1494774157365-9e04c6720e47'), U('1469371670807-013ccf25f16a'), U('1516589178581-6cd7833ae3b2')];
+  const pg = (layout, slots, t, v) => ({ layout, v: v || 0, slots: slots.map(p => ({ p, z: 1, f: 'none' })), t });
+  const SPREADS = [
+    { theme: 'galerie', pages: [pg('chapterp', [0], { num: 'II', title: 'Nos jours ordinaires', text: 'Le café trop fort du matin, les fous rires dans l’escalier. C’est là, dans l’ordinaire, que tout s’est construit.' }, 0), pg('duo', [1, 2], { cap: 'Un après-midi sans montre' })] },
+    { theme: 'argentique', pages: [pg('list', [], { title: 'Ce que j’aime chez toi', items: 'Le bruit de tes clés le soir\nTes chansons inventées sous la douche\nTa patience avec mes plantes\nTon rire qui arrive avant le mien\nLes petits mots sur le frigo\nTa façon de dire mon prénom' }), pg('frame', [3], { cap: 'La lumière des dimanches' }, 1)] },
+    { theme: 'nuit', pages: [pg('quote', [], { text: 'On ne tombe pas amoureux une fois : on recommence chaque matin, en faisant le café.' }), pg('full', [4], { cap: 'Juste avant de rire' })] },
+  ];
+  const scaleAll = root => root.querySelectorAll('.nst-page').forEach(h => { const c = h.firstElementChild; if (c) { c.style.transform = `scale(${h.clientWidth / NA.PX})`; c.style.transformOrigin = '0 0'; } });
+
+  // 1) Galerie de vraies doubles pages (remplace les photos de stock)
+  const gal = document.querySelector('.ed-gallery');
+  if (gal) {
+    const sec = document.createElement('section'); sec.className = 'nst-gal'; sec.id = 'exemples';
+    sec.innerHTML = `<div class="nst-gal-hd"><div class="ed-sec-eyebrow" data-nst="eyebrow"></div><h2 data-nst-html="title"></h2><p data-nst="sub"></p></div>
+      <div class="nst-gal-row">${SPREADS.map((s, i) => `<figure class="nst-gal-item"><div class="nst-gal-book">${s.pages.map(p => `<div class="nst-page">${NA.renderPage(p, { photos: P, theme: s.theme })}</div>`).join('')}</div><figcaption data-nst-theme="${i}"></figcaption></figure>`).join('')}</div>`;
+    gal.replaceWith(sec);
+    requestAnimationFrame(() => scaleAll(sec));
+    if (window.ResizeObserver) new ResizeObserver(() => scaleAll(sec)).observe(sec);
+  }
+
+  // 2) Bandeau de garanties sous les chiffres clés
+  const stats = document.querySelector('.ed-stats');
+  if (stats) {
+    const g = document.createElement('div'); g.className = 'nst-guar';
+    g.innerHTML = [0, 1, 2, 3].map(i => `<div class="nst-guar-i"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-nst-g="${i}"></span></div>`).join('');
+    stats.insertAdjacentElement('afterend', g);
+  }
+
+  // 3) Tarifs : chaque carte lance la création avec son palier
+  [24, 36, 50].forEach(n => {
+    const card = document.getElementById('edPrice' + n); if (!card || card.querySelector('.nst-pick-btn')) return;
+    const b = document.createElement('button'); b.className = 'nst-pick-btn'; b.type = 'button'; b.dataset.nst = 'choose';
+    b.addEventListener('click', e => { e.stopPropagation(); if (typeof edPickPrice === 'function') edPickPrice(n); if (typeof startApp === 'function') startApp(); });
+    card.appendChild(b);
+  });
+
+  // 4) Barre d'action collante sur mobile
+  const bar = document.createElement('div'); bar.className = 'nst-sticky'; bar.setAttribute('aria-hidden', 'true');
+  bar.innerHTML = `<button type="button" class="nst-sticky-btn"><span data-nst="cta"></span><small data-nst="from"></small></button>`;
+  bar.querySelector('button').addEventListener('click', () => { if (typeof startApp === 'function') startApp(); });
+  document.body.appendChild(bar);
+  const hero = document.querySelector('.ed-hero'), app = document.getElementById('app'), foot = document.querySelector('footer');
+  const vis = new Map();
+  const upd = () => {
+    const show = !vis.get(hero) && !vis.get(app) && !vis.get(foot) && !document.querySelector('.nst-resume');
+    bar.classList.toggle('on', show); bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+  };
+  if (window.IntersectionObserver) {
+    const io = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target, e.isIntersecting)); upd(); }, { threshold: 0.05 });
+    [hero, app, foot].filter(Boolean).forEach(el => { vis.set(el, el === hero); io.observe(el); });
+  }
+
+  // Textes dans la langue choisie
+  const apply = () => {
+    const T = TXT[lang()];
+    document.querySelectorAll('[data-nst]').forEach(el => { el.textContent = T[el.dataset.nst]; });
+    document.querySelectorAll('[data-nst-html]').forEach(el => { el.innerHTML = T[el.dataset.nstHtml]; });
+    document.querySelectorAll('[data-nst-g]').forEach(el => { el.textContent = T.g[+el.dataset.nstG]; });
+    document.querySelectorAll('[data-nst-theme]').forEach(el => { el.textContent = T.themes[+el.dataset.nstTheme]; });
+  };
+  apply();
+  if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function (l) { const r = o.apply(this, arguments); try { apply(); } catch (e) {} return r; }; }
 })();
 
 </script>
