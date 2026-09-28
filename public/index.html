@@ -1109,6 +1109,91 @@ html body .nst-how{padding:88px 24px 80px!important;border-top:1px solid #111!im
 /* ═══ v3 — indications sous les questions ═══ */
 html body #app .nst-qhint{display:flex;align-items:center;gap:7px;margin:-2px 0 8px;font:500 12.5px/1.4 'Inter',system-ui,sans-serif;color:#5f5a54;}
 html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14px;background:no-repeat center/14px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 2.5h7.5L13 5v8.5H3z' fill='none' stroke='%235f5a54' stroke-width='1.3'/%3E%3Cpath d='M5.5 7h5M5.5 9.5h5' stroke='%235f5a54' stroke-width='1.3'/%3E%3C/svg%3E");}
+/* ═══ v4 — livre 3D ═══ */
+.b3d{position:relative;width:var(--s);height:var(--s);perspective:1700px;flex:0 0 auto;}
+.b3d-in{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(24deg) rotateX(4deg);transition:transform .7s cubic-bezier(.2,.7,.2,1);}
+.b3d-face{position:absolute;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.b3d-front{inset:0;transform:translateZ(calc(var(--d) / 2));border-radius:2px 5px 5px 2px;overflow:hidden;background:#fff;}
+.b3d-front::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.22) 0,rgba(0,0,0,.05) 2.2%,rgba(255,255,255,.18) 3.4%,rgba(0,0,0,0) 6%),linear-gradient(115deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%);}
+.b3d-cv{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;}
+.b3d-cv.on{opacity:1;}
+.b3d-cv .nst-page{position:absolute;inset:0;overflow:hidden;}
+.b3d-cv .nst-canvas{position:absolute;left:0;top:0;}
+.b3d-spine{top:0;height:100%;width:var(--d);left:calc(50% - var(--d) / 2);transform:rotateY(-90deg) translateZ(calc(var(--s) / 2));display:flex;align-items:center;justify-content:center;overflow:hidden;transition:background .9s ease,color .9s ease;box-shadow:inset -2px 0 3px rgba(0,0,0,.25),inset 2px 0 2px rgba(255,255,255,.08);}
+.b3d-spine span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font:500 calc(var(--d) * .42)/1 'Inter',sans-serif;letter-spacing:.08em;}
+.b3d-edge{top:1.5%;height:97%;width:calc(var(--d) - 2px);left:calc(50% - var(--d) / 2 + 1px);transform:rotateY(90deg) translateZ(calc(var(--s) / 2 - 4px));background:repeating-linear-gradient(90deg,#f6f3ec 0 1px,#e3ded5 1px 2px);}
+.b3d-top,.b3d-bottom{left:1px;width:calc(100% - 5px);height:calc(var(--d) - 2px);top:calc(50% - var(--d) / 2 + 1px);background:repeating-linear-gradient(0deg,#f6f3ec 0 1px,#e3ded5 1px 2px);}
+.b3d-top{transform:rotateX(90deg) translateZ(calc(var(--s) / 2 - 3px));}
+.b3d-bottom{transform:rotateX(-90deg) translateZ(calc(var(--s) / 2 - 3px));}
+.b3d-back{inset:0;transform:rotateY(180deg) translateZ(calc(var(--d) / 2));border-radius:5px 2px 2px 5px;}
+.b3d-shadow{position:absolute;left:6%;right:-6%;bottom:-9%;height:16%;background:radial-gradient(ellipse at center,rgba(40,30,20,.34),rgba(40,30,20,0) 70%);filter:blur(8px);pointer-events:none;}
+.b3d-hero{cursor:pointer;}
+.b3d-hero .b3d-in{transform:rotateY(30deg) rotateX(5deg);}
+.b3d-hero .b3d-shadow{bottom:-11%;height:18%;}
+.ed-hero-img.has-demo .nst-demo{flex-direction:column;gap:28px;}
+.ed-hero-img.has-demo .nst-demo-cap{position:static;width:min(420px,90%);}
+@media (prefers-reduced-motion:reduce){.b3d-in,.b3d-cv{transition:none;}}
+/* ═══ v4 — tarifs : épaisseur réelle ═══ */
+.nst-price-book{display:flex;justify-content:center;padding:6px 0 18px;}
+.nst-price-book .b3d-in{transform:rotateY(30deg) rotateX(4deg);}
+.ed-price-card:hover .nst-price-book .b3d-in{transform:rotateY(18deg) rotateX(2deg) translateY(-3px);}
+/* ═══ v4 — aperçu en direct ═══ */
+.app-wrap.nst-live-wide{max-width:1120px;}
+.nst-flow.live{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start;}
+.nst-live{display:none;}
+.nst-flow.live .nst-live{display:block;position:sticky;top:96px;background:#fbfaf7;border:1px solid #e4dfd7;border-radius:20px;padding:22px 22px 24px;font-family:'Inter',system-ui,sans-serif;}
+.nst-live-hd b{display:block;font:400 22px/1.2 'Playfair Display',Georgia,serif;color:#1c1a18;}
+.nst-live-hd span{display:block;margin-top:4px;font-size:13px;color:#5f5a54;}
+.nst-live-book{display:flex;justify-content:center;padding:26px 0 30px;}
+.nst-live-ded{font:italic 400 15px/1.55 'Playfair Display',Georgia,serif;color:#1c1a18;text-align:center;padding:14px 12px;border-top:1px solid #ece8e2;border-bottom:1px solid #ece8e2;max-height:120px;overflow:hidden;}
+.nst-live-ded.empty{color:#a39d95;}
+.nst-live-meta{margin-top:12px;text-align:center;font-size:13px;color:#5f5a54;}
+/* ═══ v4 — photos ═══ */
+.nst-photo-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 10px;}
+.nst-photo-bar .nst-note{margin:0;font:400 13px/1.4 'Inter',sans-serif;color:#5f5a54;}
+.nst-photo-bar .nst-chip{padding:9px 14px;border:1px solid #d9d4cc;background:#fff;border-radius:999px;font:500 13px 'Inter',sans-serif;color:#1c1a18;cursor:pointer;}
+.nst-photo-bar .nst-chip:hover{border-color:#1c1a18;}
+#photoGrid .photo-item[draggable="true"]{cursor:grab;}
+#photoGrid .photo-item.nst-dragging{opacity:.35;}
+#photoGrid .photo-item.nst-drop{outline:2px dashed #1c1a18;outline-offset:2px;}
+.ov-cover{background:rgba(255,255,255,.92)!important;color:#1c1a18!important;border:0;border-radius:999px;min-width:30px;min-height:30px;font-size:14px;cursor:pointer;}
+@media (hover:none){.ov-cover{min-width:36px;min-height:34px;}}
+/* ═══ v4 — génération vivante ═══ */
+.nst-gen{margin:-1rem auto 28px;max-width:420px;}
+.nst-gen-title{font:400 22px/1.2 'Playfair Display',Georgia,serif;color:#1c1a18;margin-bottom:18px;}
+.nst-gen-book{display:flex;aspect-ratio:2/1;background:#fbfaf7;border:1px solid #e4dfd7;border-radius:4px;box-shadow:0 20px 40px -24px rgba(40,30,20,.5);position:relative;}
+.nst-gen-book::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:36px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.08) 50%,rgba(0,0,0,0));pointer-events:none;}
+.nst-gen-pg{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;padding:12px;transition:opacity .4s ease;}
+.nst-gen-pg.fade{opacity:0;}
+.nst-gen-ph{background:#e9e5df center/cover no-repeat;border-radius:2px;animation:nstPhIn .5s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes nstPhIn{from{opacity:0;transform:translateY(-14px) scale(.92) rotate(-2deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.nst-gen-ph{animation:none;}}
+/* ═══ v4 — récapitulatif de commande ═══ */
+.nst-sum{display:flex;align-items:center;gap:26px;margin:0 0 26px;padding:22px 24px;background:#fbfaf7;border:1px solid #e4dfd7;border-radius:20px;text-align:left;}
+.nst-sum-book{flex:0 0 auto;padding:4px 12px 10px 4px;}
+.nst-sum-txt{display:flex;flex-direction:column;gap:4px;font:400 14px/1.5 'Inter',system-ui,sans-serif;color:#5f5a54;min-width:0;}
+.nst-sum-eb{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#77726b;}
+.nst-sum-txt b{font:italic 400 21px/1.25 'Playfair Display',Georgia,serif;color:#1c1a18;}
+.nst-sum-txt .nst-link{align-self:flex-start;margin-top:6px;}
+@media (max-width:520px){.nst-sum{flex-direction:column;text-align:center;}.nst-sum-txt{align-items:center;}.nst-sum-txt .nst-link{align-self:center;}}
+/* ═══ v4 — étapes ═══ */
+html body #app .prog{display:flex;gap:6px;background:none!important;border:0!important;border-radius:0!important;padding:0!important;}
+html body #app .p-step{flex:1;border:1px solid #e4dfd7!important;border-radius:999px!important;background:#fff!important;padding:9px 6px!important;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,border-color .2s;}
+html body #app .p-step .p-dot{width:22px;height:22px;font-size:11px;border-radius:50%;border:1px solid #d9d4cc!important;background:#fff!important;color:#5f5a54!important;display:flex;align-items:center;justify-content:center;margin:0!important;}
+html body #app .p-step.active{background:#1c1a18!important;border-color:#1c1a18!important;}
+html body #app .p-step.active .p-dot{background:#fff!important;color:#1c1a18!important;border-color:#fff!important;}
+html body #app .p-step.done .p-dot{background:#1c1a18!important;color:#fff!important;border-color:#1c1a18!important;}
+html body #app .p-step .p-lbl{margin:0!important;font:500 12.5px 'Inter',sans-serif!important;}
+/* ═══ v4 — apparition au défilement et page tournée ═══ */
+.nst-rv{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);}
+.nst-rv.in{opacity:1;transform:none;}
+.nst-spread[data-turn="next"] .nst-page:not(.nst-blank){animation:nstTurnN .42s cubic-bezier(.2,.7,.2,1) both;}
+.nst-spread[data-turn="prev"] .nst-page:not(.nst-blank){animation:nstTurnP .42s cubic-bezier(.2,.7,.2,1) both;}
+.nst-spread[data-turn] .nst-page:nth-child(2){animation-delay:.05s;}
+@keyframes nstTurnN{from{opacity:.25;transform:perspective(1400px) rotateY(-14deg) translateX(18px)}to{opacity:1;transform:none}}
+@keyframes nstTurnP{from{opacity:.25;transform:perspective(1400px) rotateY(14deg) translateX(-18px)}to{opacity:1;transform:none}}
+.nst-flow.live .nst-live-book{background:#ece8e2;border-radius:14px;margin:16px 0 14px;padding:28px 0 34px;}
+.b3d-front{box-shadow:0 0 0 1px rgba(0,0,0,.05);}
 </style>
 <script type="application/ld+json">
 {
@@ -1161,7 +1246,7 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
    "name": "Quelle est la qualité d'impression ?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Nos albums sont imprimés sur papier photo professionnel épais, avec couverture rigide et reliure cousue. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années."
+    "text": "Nos albums sont imprimés sur papier photo professionnel, avec une couverture rigide et une reliure PUR solide et durable. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années."
    }
   },
   {
@@ -1511,7 +1596,7 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
             <li data-i18n="pay_inc2">Vos photos imprimées en haute définition</li>
             <li data-i18n="pay_inc3">Vos dédicaces & légendes intégrées</li>
             <li data-i18n="pay_inc4">Impression professionnelle sur papier photo</li>
-            <li data-i18n="pay_inc5">Couverture rigide + reliure cousue</li>
+            <li data-i18n="pay_inc5">Couverture rigide, reliure PUR solide</li>
             <li data-i18n="pay_inc6">Livraison offerte</li>
           </ul>
           <div class="pay-form">
@@ -1587,7 +1672,7 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q4">Quelle est la qualité d'impression ?</span><span class="ed-faq-sign">+</span></button>
-      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a4">Nos albums sont imprimés sur du papier photo professionnel épais, avec une couverture rigide et une reliure cousue et soignée. Le format carré de 21 par 21 centimètres met parfaitement en valeur vos photos. Chaque exemplaire est pensé comme un véritable objet à conserver, que vous aurez plaisir à feuilleter et à offrir pendant de nombreuses années.</div></div>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a4">Nos albums sont imprimés sur papier photo professionnel, avec une couverture rigide et une reliure PUR solide et durable. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années.</div></div>
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q5">Comment fonctionne la création de l'album ?</span><span class="ed-faq-sign">+</span></button>
@@ -1686,7 +1771,7 @@ const LANGS = {
     faq_q1:'Combien de temps pour recevoir mon album ?', faq_a1:'Votre album imprimé est fabriqué avec le plus grand soin par notre atelier partenaire, puis expédié directement chez vous. Comptez environ 10 à 12 jours en France métropolitaine, et un peu plus selon les destinations européennes. La version PDF, elle, vous est envoyée par email immédiatement après votre paiement.',
     faq_q2:'Puis-je voir mon album avant de payer ?', faq_a2:"Oui, et c'est tout l'intérêt de Noustalgie. Vous composez votre album entièrement, puis vous en découvrez un aperçu complet, page par page, entièrement gratuit. Vous ne réglez votre commande que si le résultat vous plaît vraiment.",
     faq_q3:'Combien de photos dois-je fournir ?', faq_a3:"Il en faut au moins 14 pour l'album 24 pages, 20 pour le 36 pages et 31 pour le 50 pages. Vous pouvez en ajouter davantage : les pages accueillent alors deux, trois ou quatre photos. Chaque photo n'apparaît qu'une seule fois.",
-    faq_q4:"Quelle est la qualité d'impression ?", faq_a4:'Nos albums sont imprimés sur papier photo professionnel épais, avec couverture rigide et reliure cousue. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années.',
+    faq_q4:"Quelle est la qualité d'impression ?", faq_a4:"Nos albums sont imprimés sur papier photo professionnel, avec une couverture rigide et une reliure PUR solide et durable. Le format carré 21×21 cm met vos photos en valeur. Un véritable objet à conserver et à offrir pendant de nombreuses années.",
     faq_q5:"Comment fonctionne la création de l'album ?", faq_a5:'Tout se passe en quelques minutes sur le site. Vous renseignez vos prénoms et votre histoire, importez vos photos, et notre système compose automatiquement un album élégant et personnalisé, que vous pouvez ensuite modifier à votre goût.',
     faq_q6:'Puis-je personnaliser les textes et les pages ?', faq_a6:"Bien sûr. Une fois votre album généré, un éditeur complet vous permet de modifier les textes, changer les photos, ajuster le cadrage et choisir la mise en page. Vous gardez la main sur l'ensemble du rendu.",
     faq_q7:'Mes photos sont-elles en sécurité ?', faq_a7:'La confidentialité de vos souvenirs est une priorité. Vos photos servent uniquement à créer votre album, ne sont jamais vendues ni partagées, et sont automatiquement supprimées 30 jours après votre commande.',
@@ -1711,7 +1796,7 @@ const LANGS = {
     feat2_name:'6 ambiances visuelles', feat2_desc:'Cinéma, Luxury, Vintage, Conte de fées, Épique ou Poétique.',
     feat3_name:'Vos mots partout', feat3_desc:'Dédicaces, légendes photo, message de clôture. Votre voix à chaque page.',
     feat4_name:'De 10 à 100 pages', feat4_desc:'Choisissez le nombre de pages. Le prix s\'ajuste de façon transparente.',
-    feat5_name:"Impression professionnelle", feat5_desc:'Papier photo qualité pro, reliure cousue, couverture rigide.',
+    feat5_name:"Impression professionnelle", feat5_desc:"Papier photo qualité pro, reliure PUR, couverture rigide.",
     feat6_name:'Vos photos privées', feat6_desc:'Aucun stockage sur nos serveurs. Traitement uniquement en local.',
     price_eyebrow:'Nos tarifs', price_title1:'Un prix juste,', price_title2:'selon votre histoire', price_sub:'De 10 à 100 pages — le prix s\'adapte progressivement.',
     slider_lbl:'Faites glisser pour choisir', pages_word:'pages', popular:'Populaire',
@@ -1749,7 +1834,7 @@ const LANGS = {
     back_modify:'← Modifier', see_preview:'Voir l\'aperçu →',
     p4_hd:'Aperçu de votre livre', fullscreen:'Plein écran ↗', order_btn:'Commander →',
     pay_title:'Votre livre est prêt', pay_sub:'Satisfait de l\'aperçu ? Commandez votre livre photo premium.',
-    pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier photo", pay_inc5:'Couverture rigide + reliure cousue', pay_inc6:'Livraison offerte',
+    pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier photo", pay_inc5:"Couverture rigide, reliure PUR solide", pay_inc6:'Livraison offerte',
     pay_name_lbl:'Votre prénom', pay_name_ph:'Emma', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
     pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Livraison dans 10 à 12 jours.', dl_pdf:'Télécharger aussi le PDF ↗',
@@ -1772,7 +1857,7 @@ const LANGS = {
     faq_q1:'How long until I receive my album?', faq_a1:'Your printed album is crafted with great care by our partner studio, then shipped directly to you. Expect 10 to 12 days on average within mainland France, and a little longer for other European destinations. The PDF version is emailed to you immediately after payment.',
     faq_q2:'Can I preview my album before paying?', faq_a2:"Yes, that's the whole point of Noustalgie. You build your album entirely, then see a full preview, page by page, completely free. You only pay if you truly love the result.",
     faq_q3:'How many photos do I need to provide?', faq_a3:"At least 14 for the 24-page album, 20 for the 36-page and 31 for the 50-page. You can add more: pages then hold two, three or four photos. Each photo appears only once.",
-    faq_q4:'What is the print quality like?', faq_a4:'Our albums are printed on thick professional photo paper, with a hardcover and sewn binding. The square 21×21 cm format showcases your photos. A real keepsake to treasure and gift for years.',
+    faq_q4:'What is the print quality like?', faq_a4:"Our albums are printed on professional photo paper, with a hardcover and a strong, durable PUR binding. The square 21×21 cm format showcases your photos. A real keepsake to treasure and gift for years.",
     faq_q5:'How does creating the album work?', faq_a5:'It all takes just a few minutes on the site. You enter your names and your story, upload your photos, and our system automatically composes an elegant, personalised album that you can then edit as you wish.',
     faq_q6:'Can I customise the text and pages?', faq_a6:'Of course. Once your album is generated, a full editor lets you change the text, swap photos, adjust framing and choose the layout. You stay in control of the entire result.',
     faq_q7:'Are my photos safe?', faq_a7:'The privacy of your memories is a priority. Your photos are used only to create your album, never sold or shared, and are automatically deleted 30 days after your order.',
@@ -1797,7 +1882,7 @@ const LANGS = {
     feat2_name:'6 visual moods', feat2_desc:'Romantic Cinema, Luxury, Vintage, Fairy Tale, Epic or Poetic.',
     feat3_name:'Your words everywhere', feat3_desc:'Dedication, photo captions, closing message. Your voice on every page.',
     feat4_name:'From 10 to 100 pages', feat4_desc:'Choose the number of pages. Price adjusts transparently.',
-    feat5_name:"Professional printing", feat5_desc:'Pro-quality photo paper, sewn binding, hard cover.',
+    feat5_name:"Professional printing", feat5_desc:"Pro-quality photo paper, PUR binding, hard cover.",
     feat6_name:'Your photos stay private', feat6_desc:'No server storage. Photos processed locally on your device.',
     price_eyebrow:'Our pricing', price_title1:'A fair price,', price_title2:'based on your story', price_sub:'From 10 to 100 pages — price scales progressively with your book size.',
     slider_lbl:'Slide to choose', pages_word:'pages', popular:'Popular',
@@ -1835,7 +1920,7 @@ const LANGS = {
     back_modify:'← Edit', see_preview:'See the preview →',
     p4_hd:'Your book preview', fullscreen:'Full screen ↗', order_btn:'Order →',
     pay_title:'Your book is ready', pay_sub:'Happy with the preview? Order your premium photo book.',
-    pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on photo paper", pay_inc5:'Hard cover + sewn binding', pay_inc6:'Free delivery',
+    pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on photo paper", pay_inc5:"Hard cover, durable PUR binding", pay_inc6:'Free delivery',
     pay_name_lbl:'Your first name', pay_name_ph:'Emma', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
     pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. Delivery in 5 to 7 working days.', dl_pdf:'Download the PDF too ↗',
@@ -1858,7 +1943,7 @@ const LANGS = {
     faq_q1:'Wie lange dauert es, bis ich mein Album erhalte?', faq_a1:'Ihr gedrucktes Album wird mit größter Sorgfalt von unserem Partnerstudio gefertigt und direkt zu Ihnen geschickt. Rechnen Sie mit durchschnittlich 10 bis 12 Tagen innerhalb Frankreichs, etwas länger für andere europäische Ziele. Die PDF-Version wird sofort nach der Zahlung per E-Mail zugesandt.',
     faq_q2:'Kann ich mein Album vor dem Bezahlen ansehen?', faq_a2:'Ja, das ist der Sinn von Noustalgie. Sie gestalten Ihr Album vollständig und sehen dann eine komplette Vorschau, Seite für Seite, völlig kostenlos. Sie zahlen nur, wenn Ihnen das Ergebnis wirklich gefällt.',
     faq_q3:'Wie viele Fotos muss ich bereitstellen?', faq_a3:"Mindestens 14 für das 24-Seiten-Album, 20 für das 36-Seiten- und 31 für das 50-Seiten-Album. Gerne mehr: Dann zeigen die Seiten zwei, drei oder vier Fotos. Jedes Foto erscheint nur einmal.",
-    faq_q4:'Wie ist die Druckqualität?', faq_a4:'Unsere Alben werden auf dickem, professionellem Fotopapier mit festem Einband und genähter Bindung gedruckt. Das quadratische Format 21×21 cm bringt Ihre Fotos zur Geltung. Ein echtes Erinnerungsstück für viele Jahre.',
+    faq_q4:'Wie ist die Druckqualität?', faq_a4:"Unsere Alben werden auf professionellem Fotopapier gedruckt, mit festem Einband und robuster, langlebiger PUR-Bindung. Das quadratische Format 21×21 cm bringt eure Fotos zur Geltung. Ein echtes Erinnerungsstück für viele Jahre.",
     faq_q5:'Wie funktioniert die Erstellung des Albums?', faq_a5:'Alles dauert nur wenige Minuten auf der Website. Sie geben Ihre Namen und Ihre Geschichte ein, laden Ihre Fotos hoch, und unser System erstellt automatisch ein elegantes, personalisiertes Album, das Sie anschließend bearbeiten können.',
     faq_q6:'Kann ich Texte und Seiten anpassen?', faq_a6:'Natürlich. Sobald Ihr Album erstellt ist, können Sie mit einem umfassenden Editor Texte ändern, Fotos austauschen, den Bildausschnitt anpassen und das Layout wählen. Sie behalten die volle Kontrolle.',
     faq_q7:'Sind meine Fotos sicher?', faq_a7:'Der Schutz Ihrer Erinnerungen hat Priorität. Ihre Fotos dienen nur der Erstellung Ihres Albums, werden nie verkauft oder geteilt und 30 Tage nach Ihrer Bestellung automatisch gelöscht.',
@@ -1883,7 +1968,7 @@ const LANGS = {
     feat2_name:'6 visuelle Stimmungen', feat2_desc:'Romantisches Kino, Luxury, Vintage, Märchen, Episch oder Poetisch.',
     feat3_name:'Eure Worte überall', feat3_desc:'Widmung, Bildunterschriften, Abschlussnachricht auf jeder Seite.',
     feat4_name:'Von 10 bis 100 Seiten', feat4_desc:'Wählt die Seitenanzahl. Der Preis passt sich transparent an.',
-    feat5_name:"Professioneller Druck", feat5_desc:'Profi-Fotopapier, gebundener Rücken, Hardcover.',
+    feat5_name:"Professioneller Druck", feat5_desc:"Fotopapier in Profiqualität, PUR-Bindung, fester Einband.",
     feat6_name:'Eure Fotos bleiben privat', feat6_desc:'Keine Serverspeicherung. Lokale Verarbeitung.',
     price_eyebrow:'Unsere Preise', price_title1:'Ein fairer Preis,', price_title2:'je nach eurer Geschichte', price_sub:'Von 10 bis 100 Seiten — der Preis wächst mit eurem Buch.',
     slider_lbl:'Schieben um auszuwählen', pages_word:'Seiten', popular:'Beliebt',
@@ -1921,7 +2006,7 @@ const LANGS = {
     back_modify:'← Bearbeiten', see_preview:'Vorschau sehen →',
     p4_hd:'Vorschau eures Buches', fullscreen:'Vollbild ↗', order_btn:'Bestellen →',
     pay_title:'Euer Buch ist fertig', pay_sub:'Zufrieden mit der Vorschau? Bestellt euer Premium-Fotobuch.',
-    pay_inc1:'Maßgefertigte Geschichte', pay_inc2:"Eure Fotos in hoher Auflösung gedruckt", pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:"Professioneller Druck auf Fotopapier", pay_inc5:'Hardcover + gebundener Rücken', pay_inc6:'Kostenloser Versand',
+    pay_inc1:'Maßgefertigte Geschichte', pay_inc2:"Eure Fotos in hoher Auflösung gedruckt", pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:"Professioneller Druck auf Fotopapier", pay_inc5:"Fester Einband, robuste PUR-Bindung", pay_inc6:'Kostenloser Versand',
     pay_name_lbl:'Euer Vorname', pay_name_ph:'Emma', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
     pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL',
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Lieferung in 5 bis 7 Werktagen.', dl_pdf:'PDF auch herunterladen ↗',
@@ -1944,7 +2029,7 @@ const LANGS = {
     faq_q1:'¿Cuánto tarda en llegar mi álbum?', faq_a1:'Tu álbum impreso se fabrica con el mayor cuidado en nuestro taller asociado y se envía directamente a ti. Cuenta con 10 a 12 días de media en Francia continental, y algo más para otros destinos europeos. La versión PDF se envía por email inmediatamente tras el pago.',
     faq_q2:'¿Puedo ver mi álbum antes de pagar?', faq_a2:'Sí, ese es el sentido de Noustalgie. Creas tu álbum por completo y luego ves una vista previa completa, página por página, totalmente gratis. Solo pagas si el resultado te encanta de verdad.',
     faq_q3:'¿Cuántas fotos debo aportar?', faq_a3:"Al menos 14 para el álbum de 24 páginas, 20 para el de 36 y 31 para el de 50. Puedes añadir más: las páginas mostrarán entonces dos, tres o cuatro fotos. Cada foto aparece una sola vez.",
-    faq_q4:'¿Cómo es la calidad de impresión?', faq_a4:'Nuestros álbumes se imprimen en papel fotográfico profesional grueso, con tapa dura y encuadernación cosida. El formato cuadrado de 21×21 cm realza tus fotos. Un verdadero objeto para conservar y regalar durante años.',
+    faq_q4:'¿Cómo es la calidad de impresión?', faq_a4:"Nuestros álbumes se imprimen en papel fotográfico profesional, con tapa dura y encuadernación PUR resistente y duradera. El formato cuadrado de 21×21 cm realza tus fotos. Un verdadero objeto para conservar y regalar durante años.",
     faq_q5:'¿Cómo funciona la creación del álbum?', faq_a5:'Todo ocurre en unos minutos en la web. Introduces tus nombres y vuestra historia, subes tus fotos, y nuestro sistema compone automáticamente un álbum elegante y personalizado que luego puedes editar a tu gusto.',
     faq_q6:'¿Puedo personalizar los textos y las páginas?', faq_a6:'Por supuesto. Una vez generado tu álbum, un editor completo te permite cambiar los textos, sustituir fotos, ajustar el encuadre y elegir el diseño. Mantienes el control de todo el resultado.',
     faq_q7:'¿Están seguras mis fotos?', faq_a7:'La privacidad de tus recuerdos es una prioridad. Tus fotos solo sirven para crear tu álbum, nunca se venden ni se comparten, y se eliminan automáticamente 30 días después de tu pedido.',
@@ -1969,7 +2054,7 @@ const LANGS = {
     feat2_name:'6 estilos visuales', feat2_desc:'Cine romántico, Luxury, Vintage, Cuento de hadas, Épico o Poético.',
     feat3_name:'Vuestras palabras en todo', feat3_desc:'Dedicatoria, pies de foto, mensaje final en cada página.',
     feat4_name:'De 10 a 100 páginas', feat4_desc:'Elegid el número de páginas. El precio se adapta de forma transparente.',
-    feat5_name:"Impresión profesional", feat5_desc:'Papel fotográfico de calidad profesional, encuadernación cosida, tapa dura.',
+    feat5_name:"Impresión profesional", feat5_desc:"Papel fotográfico de calidad profesional, encuadernación PUR, tapa dura.",
     feat6_name:'Vuestras fotos privadas', feat6_desc:'Sin almacenamiento en servidores. Procesamiento local en vuestro dispositivo.',
     price_eyebrow:'Nuestros precios', price_title1:'Un precio justo,', price_title2:'según vuestra historia', price_sub:'De 10 a 100 páginas — el precio crece progresivamente.',
     slider_lbl:'Deslizad para elegir', pages_word:'páginas', popular:'Popular',
@@ -2007,7 +2092,7 @@ const LANGS = {
     back_modify:'← Editar', see_preview:'Ver la vista previa →',
     p4_hd:'Vista previa de vuestro libro', fullscreen:'Pantalla completa ↗', order_btn:'Pedir →',
     pay_title:'Vuestro libro está listo', pay_sub:'¿Satisfechos con la vista previa? Pedid vuestro libro fotográfico premium.',
-    pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel fotográfico", pay_inc5:'Tapa dura + encuadernación cosida', pay_inc6:'Envío gratuito',
+    pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel fotográfico", pay_inc5:"Tapa dura, encuadernación PUR resistente", pay_inc6:'Envío gratuito',
     pay_name_lbl:'Vuestro nombre', pay_name_ph:'Emma', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
     pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro está siendo impreso. Entrega en 5 a 7 días laborables.', dl_pdf:'Descargar también el PDF ↗',
@@ -2030,7 +2115,7 @@ const LANGS = {
     faq_q1:'Quanto tempo até receber o meu álbum?', faq_a1:'O seu álbum impresso é feito com o maior cuidado pelo nosso ateliê parceiro e enviado diretamente para si. Conte com 10 a 12 dias em média em França continental, e um pouco mais para outros destinos europeus. A versão PDF é enviada por email imediatamente após o pagamento.',
     faq_q2:'Posso ver o meu álbum antes de pagar?', faq_a2:'Sim, é esse o sentido da Noustalgie. Cria o seu álbum por completo e depois vê uma pré-visualização completa, página a página, totalmente grátis. Só paga se gostar mesmo do resultado.',
     faq_q3:'Quantas fotos devo fornecer?', faq_a3:"Pelo menos 14 para o álbum de 24 páginas, 20 para o de 36 e 31 para o de 50. Pode adicionar mais: as páginas passam a mostrar duas, três ou quatro fotos. Cada foto aparece apenas uma vez.",
-    faq_q4:'Qual é a qualidade de impressão?', faq_a4:'Os nossos álbuns são impressos em papel fotográfico profissional espesso, com capa dura e encadernação cosida. O formato quadrado de 21×21 cm valoriza as suas fotos. Um verdadeiro objeto para guardar e oferecer durante anos.',
+    faq_q4:'Qual é a qualidade de impressão?', faq_a4:"Os nossos álbuns são impressos em papel fotográfico profissional, com capa dura e encadernação PUR resistente e duradoura. O formato quadrado 21×21 cm valoriza as vossas fotos. Um verdadeiro objeto para guardar e oferecer durante muitos anos.",
     faq_q5:'Como funciona a criação do álbum?', faq_a5:'Tudo acontece em poucos minutos no site. Introduz os seus nomes e a vossa história, carrega as fotos, e o nosso sistema compõe automaticamente um álbum elegante e personalizado, que pode depois editar a seu gosto.',
     faq_q6:'Posso personalizar os textos e as páginas?', faq_a6:'Claro. Depois de gerado o álbum, um editor completo permite alterar textos, trocar fotos, ajustar o enquadramento e escolher o layout. Mantém o controlo de todo o resultado.',
     faq_q7:'As minhas fotos estão seguras?', faq_a7:'A privacidade das suas memórias é uma prioridade. As suas fotos servem apenas para criar o álbum, nunca são vendidas nem partilhadas, e são automaticamente eliminadas 30 dias após a encomenda.',
@@ -2055,7 +2140,7 @@ const LANGS = {
     feat2_name:'6 ambientes visuais', feat2_desc:'Cinema Romântico, Luxury, Vintage, Conto de Fadas, Épico ou Poético.',
     feat3_name:'As vossas palavras em todo', feat3_desc:'Dedicatória, legendas, mensagem final em cada página.',
     feat4_name:'De 10 a 100 páginas', feat4_desc:'Escolham o número de páginas. O preço ajusta-se de forma transparente.',
-    feat5_name:"Impressão profissional", feat5_desc:'Papel fotográfico de qualidade profissional, encadernação cosida, capa dura.',
+    feat5_name:"Impressão profissional", feat5_desc:"Papel fotográfico de qualidade profissional, encadernação PUR, capa dura.",
     feat6_name:'As vossas fotos privadas', feat6_desc:'Sem armazenamento em servidores. Processamento local no vosso dispositivo.',
     price_eyebrow:'Os nossos preços', price_title1:'Um preço justo,', price_title2:'de acordo com a vossa história', price_sub:'De 10 a 100 páginas — o preço cresce progressivamente.',
     slider_lbl:'Deslizem para escolher', pages_word:'páginas', popular:'Popular',
@@ -2093,7 +2178,7 @@ const LANGS = {
     back_modify:'← Editar', see_preview:'Ver pré-visualização →',
     p4_hd:'Pré-visualização do vosso livro', fullscreen:'Ecrã inteiro ↗', order_btn:'Encomendar →',
     pay_title:'O vosso livro está pronto', pay_sub:'Satisfeitos com a pré-visualização? Encomendai o vosso livro fotográfico premium.',
-    pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel fotográfico", pay_inc5:'Capa dura + encadernação cosida', pay_inc6:'Envio gratuito',
+    pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel fotográfico", pay_inc5:"Capa dura, encadernação PUR resistente", pay_inc6:'Envio gratuito',
     pay_name_lbl:'O vosso primeiro nome', pay_name_ph:'Emma', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
     pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Entrega em 5 a 7 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
@@ -4420,37 +4505,6 @@ window.NA = window.NA || {};
 Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_VERSION });
 })();
 
-/* Noustalgie v2.4 — hero : la couverture du livre dans les 4 styles (la galerie montre l'intérieur) */
-(function () {
-  const host = document.getElementById('nstDemo'); if (!host || !window.NA) return;
-  const P = [{ data: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=78&auto=format', orient: 'portrait', focalY: 40 }];
-  const LBL = { fr: 'Style', en: 'Style', de: 'Stil', es: 'Estilo', pt: 'Estilo' };
-  const lang = () => (typeof currentLang !== 'undefined' && LBL[currentLang]) ? currentLang : 'fr';
-  const cover = { layout: 'cover', slots: [{ p: 0, z: 1, f: 'none' }], t: { title: 'La lumière des dimanches', names: 'Léa & Hugo · 2026' } };
-  const THEMES = [['galerie', 'Galerie'], ['nuit', 'Nuit'], ['argentique', 'Argentique'], ['encre', 'Encre']];
-  const book = document.createElement('div'); book.className = 'nst-cover-book';
-  book.innerHTML = THEMES.map(([k], i) => `<div class="nst-cover${i ? '' : ' on'}" aria-hidden="${i ? 'true' : 'false'}"><div class="nst-page">${NA.renderPage(cover, { photos: P, theme: k })}</div></div>`).join('');
-  const cap = document.createElement('div'); cap.className = 'nst-demo-cap';
-  cap.innerHTML = `<span id="nstDemoName"></span><div class="nst-demo-dots">${THEMES.map((t, i) => `<button type="button" aria-label="${t[1]}"${i ? '' : ' class="on"'}></button>`).join('')}</div>`;
-  host.appendChild(book); host.appendChild(cap);
-  host.parentElement.classList.add('has-demo');
-  const scale = () => host.querySelectorAll('.nst-page').forEach(h => { const c = h.firstElementChild; if (c) { c.style.transform = `scale(${h.clientWidth / NA.PX})`; c.style.transformOrigin = '0 0'; } });
-  scale(); if (window.ResizeObserver) new ResizeObserver(scale).observe(book); else window.addEventListener('resize', scale);
-  let cur = 0, timer;
-  const name = () => { document.getElementById('nstDemoName').textContent = `${LBL[lang()]} ${THEMES[cur][1]}`; };
-  const show = i => {
-    cur = (i + THEMES.length) % THEMES.length;
-    book.querySelectorAll('.nst-cover').forEach((e, k) => { e.classList.toggle('on', k === cur); e.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
-    cap.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === cur));
-    name();
-  };
-  const auto = () => { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => show(cur + 1), 3800); };
-  cap.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show([...cap.querySelectorAll('button')].indexOf(b)); auto(); } });
-  book.addEventListener('click', () => { show(cur + 1); auto(); });
-  name(); auto();
-  if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function () { const r = o.apply(this, arguments); try { name(); } catch (e) {} return r; }; }
-})();
-
 </script>
 <script>
 /* ════════════════════════════════════════════════════════════════
@@ -5893,6 +5947,8 @@ function removePhoto(idx) {
   recompose(n, true);
 }
 
+NA.syncStory = syncStory; NA.recomposeAlbum = recompose; NA.removePhotoFromAlbum = removePhoto;
+
 /* ── Événements du panneau d'outils ── */
 const tools = $('nstTools');
 if (tools) {
@@ -6031,6 +6087,297 @@ if (location.hash === '#suivi') window.addEventListener('load', () => setTimeout
 window.addEventListener('hashchange', () => { if (location.hash === '#suivi') trackOverlay(); });
 
 applyUI();
+})();
+
+/* ════════════════════════════════════════════════════════════════
+   NOUSTALGIE — v4 « expérience » : livre 3D, aperçu en direct,
+   photos (date de prise de vue, couverture, glisser-déposer),
+   génération vivante, récapitulatif de commande, finitions.
+   ════════════════════════════════════════════════════════════════ */
+(function () {
+'use strict';
+if (!window.NA || !NA._ed) return;
+const $ = id => document.getElementById(id);
+const t = NA.t, E = NA._ed, esc = NA.esc;
+const lang = () => (typeof currentLang !== 'undefined' && currentLang) || 'fr';
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Textes (5 langues) ── */
+Object.entries({
+  fr: { sort_date: 'Trier par date de prise de vue', set_cover: 'Mettre en couverture', drag_photos: 'Glissez les photos pour changer leur ordre : la première devient la couverture.', live_title: 'Votre livre', live_sub: 'Il prend forme à mesure que vous écrivez.', live_ph: 'Vos prénoms', live_meta: '{0} pages · {1} photos', live_ded: 'Votre dédicace apparaîtra ici.', gen_title: 'Votre livre se compose', sum_title: 'Votre livre', sum_meta: '{0} pages · style {1}', sum_spec: 'Couverture rigide · 21 × 21 cm · papier photo', sum_edit: 'Revoir l’album', style: 'Style', sorted: 'Photos triées de la plus ancienne à la plus récente.' },
+  en: { sort_date: 'Sort by date taken', set_cover: 'Use as cover', drag_photos: 'Drag photos to change their order: the first one becomes the cover.', live_title: 'Your book', live_sub: 'It takes shape as you write.', live_ph: 'Your names', live_meta: '{0} pages · {1} photos', live_ded: 'Your dedication will appear here.', gen_title: 'Your book is coming together', sum_title: 'Your book', sum_meta: '{0} pages · {1} style', sum_spec: 'Hardcover · 21 × 21 cm · photo paper', sum_edit: 'Review the album', style: 'Style', sorted: 'Photos sorted from oldest to newest.' },
+  de: { sort_date: 'Nach Aufnahmedatum sortieren', set_cover: 'Als Cover verwenden', drag_photos: 'Zieht die Fotos, um die Reihenfolge zu ändern: das erste wird zum Cover.', live_title: 'Euer Buch', live_sub: 'Es nimmt Gestalt an, während ihr schreibt.', live_ph: 'Eure Vornamen', live_meta: '{0} Seiten · {1} Fotos', live_ded: 'Eure Widmung erscheint hier.', gen_title: 'Euer Buch entsteht', sum_title: 'Euer Buch', sum_meta: '{0} Seiten · Stil {1}', sum_spec: 'Hardcover · 21 × 21 cm · Fotopapier', sum_edit: 'Album ansehen', style: 'Stil', sorted: 'Fotos vom ältesten zum neuesten sortiert.' },
+  es: { sort_date: 'Ordenar por fecha de la foto', set_cover: 'Usar como portada', drag_photos: 'Arrastra las fotos para cambiar su orden: la primera será la portada.', live_title: 'Vuestro libro', live_sub: 'Toma forma mientras escribís.', live_ph: 'Vuestros nombres', live_meta: '{0} páginas · {1} fotos', live_ded: 'Vuestra dedicatoria aparecerá aquí.', gen_title: 'Vuestro libro se compone', sum_title: 'Vuestro libro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Tapa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Revisar el álbum', style: 'Estilo', sorted: 'Fotos ordenadas de la más antigua a la más reciente.' },
+  pt: { sort_date: 'Ordenar pela data da foto', set_cover: 'Usar como capa', drag_photos: 'Arrasta as fotos para mudar a ordem: a primeira será a capa.', live_title: 'O vosso livro', live_sub: 'Ganha forma à medida que escrevem.', live_ph: 'Os vossos nomes', live_meta: '{0} páginas · {1} fotos', live_ded: 'A vossa dedicatória aparecerá aqui.', gen_title: 'O vosso livro está a ganhar forma', sum_title: 'O vosso livro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Capa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Rever o álbum', style: 'Estilo', sorted: 'Fotos ordenadas da mais antiga à mais recente.' },
+}).forEach(([l, d]) => Object.assign(NA.UI[l], d));
+
+/* ════ 1. Livre 3D réutilisable ════ */
+function spineColors(theme) {
+  const T = NA.THEMES[theme] || NA.THEMES.galerie, night = theme === 'nuit';
+  return { bg: night ? T.paper : T.ink, fg: night ? T.accent : T.paper };
+}
+NA.book3d = function ({ cover, photos, theme, spine, size, depth, fronts }) {
+  const el = document.createElement('div');
+  el.className = 'b3d';
+  el.style.setProperty('--s', size + 'px'); el.style.setProperty('--d', depth + 'px');
+  const sc = spineColors(theme);
+  const covers = fronts || [{ cover, theme }];
+  el.innerHTML = `<div class="b3d-in">
+      <div class="b3d-face b3d-front">${covers.map((c, i) => `<div class="b3d-cv${i ? '' : ' on'}" data-theme="${c.theme}"><div class="nst-page">${NA.renderPage(c.cover || cover, { photos, theme: c.theme })}</div></div>`).join('')}</div>
+      <div class="b3d-face b3d-spine" style="background:${sc.bg};color:${sc.fg}"><span>${esc(spine || '')}</span></div>
+      <div class="b3d-face b3d-edge"></div><div class="b3d-face b3d-top"></div><div class="b3d-face b3d-bottom"></div>
+      <div class="b3d-face b3d-back" style="background:${sc.bg}"></div>
+    </div><div class="b3d-shadow"></div>`;
+  requestAnimationFrame(() => el.querySelectorAll('.nst-canvas').forEach(c => { c.style.transform = `scale(${size / NA.PX})`; c.style.transformOrigin = '0 0'; }));
+  el.showTheme = i => {
+    el.querySelectorAll('.b3d-cv').forEach((c, k) => c.classList.toggle('on', k === i));
+    const s2 = spineColors(covers[i].theme), sp = el.querySelector('.b3d-spine'); sp.style.background = s2.bg; sp.style.color = s2.fg;
+    el.querySelector('.b3d-back').style.background = s2.bg;
+  };
+  return el;
+};
+const SAMPLE_PHOTO = [{ data: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=78&auto=format', orient: 'portrait', focalY: 40 }];
+const sampleCover = { layout: 'cover', slots: [{ p: 0, z: 1, f: 'none' }], t: { title: 'La lumière des dimanches', names: 'Léa & Hugo · 2026' } };
+
+/* ── Hero : livre 3D qui change de style et suit la souris ── */
+(function hero() {
+  const host = $('nstDemo'); if (!host) return;
+  host.innerHTML = '';
+  const THEMES = [['galerie', 'Galerie'], ['nuit', 'Nuit'], ['argentique', 'Argentique'], ['encre', 'Encre']];
+  host.parentElement.classList.add('has-demo');            // la zone doit être visible avant de la mesurer
+  const size = Math.round(Math.min(400, Math.max(230, (host.clientWidth || 600) * 0.52)));
+  const book = NA.book3d({ cover: sampleCover, photos: SAMPLE_PHOTO, theme: 'galerie', spine: 'Léa & Hugo · 2026', size, depth: Math.round(size * 0.055), fronts: THEMES.map(([k]) => ({ cover: sampleCover, theme: k })) });
+  book.classList.add('b3d-hero');
+  const cap = document.createElement('div'); cap.className = 'nst-demo-cap';
+  cap.innerHTML = `<span id="nstDemoName"></span><div class="nst-demo-dots">${THEMES.map((x, i) => `<button type="button" aria-label="${x[1]}"${i ? '' : ' class="on"'}></button>`).join('')}</div>`;
+  host.appendChild(book); host.appendChild(cap); host.parentElement.classList.add('has-demo');
+  let cur = 0, timer;
+  const name = () => { const n = $('nstDemoName'); if (n) n.textContent = `${t('style')} ${THEMES[cur][1]}`; };
+  const show = i => { cur = (i + THEMES.length) % THEMES.length; book.showTheme(cur); cap.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === cur)); name(); };
+  const auto = () => { clearInterval(timer); if (!RM) timer = setInterval(() => show(cur + 1), 4000); };
+  cap.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show([...cap.querySelectorAll('button')].indexOf(b)); auto(); } });
+  book.addEventListener('click', () => { show(cur + 1); auto(); });
+  const zone = host.parentElement, inner = book.querySelector('.b3d-in');
+  if (!RM && window.matchMedia('(hover: hover)').matches) {
+    zone.addEventListener('pointermove', e => {
+      const r = zone.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      inner.style.transform = `rotateY(${24 + x * 18}deg) rotateX(${4 - y * 10}deg)`;
+    });
+    zone.addEventListener('pointerleave', () => { inner.style.transform = ''; });
+  }
+  name(); auto();
+  NA.heroName = name;
+})();
+
+/* ── Tarifs : un petit livre par format, épaisseur réelle ── */
+[[24, 7], [36, 10], [50, 14]].forEach(([n, d]) => {
+  const card = $('edPrice' + n); if (!card || card.querySelector('.b3d')) return;
+  const wrap = document.createElement('div'); wrap.className = 'nst-price-book';
+  wrap.appendChild(NA.book3d({ cover: sampleCover, photos: SAMPLE_PHOTO, theme: 'galerie', spine: '', size: 96, depth: d }));
+  card.insertBefore(wrap, card.firstChild);
+});
+
+/* ════ 2. Aperçu en direct pendant la création (ordinateur) ════ */
+const wrapEl = document.querySelector('.app-wrap');
+const panels = wrapEl ? [...wrapEl.querySelectorAll(':scope > .panel')] : [];
+let live = null;
+if (wrapEl && panels.length) {
+  const flow = document.createElement('div'); flow.className = 'nst-flow';
+  const main = document.createElement('div'); main.className = 'nst-flow-main';
+  panels[0].parentNode.insertBefore(flow, panels[0]);
+  flow.appendChild(main); panels.forEach(p => main.appendChild(p));
+  live = document.createElement('aside'); live.className = 'nst-live'; live.setAttribute('aria-live', 'polite');
+  flow.appendChild(live);
+}
+const year = new Date().getFullYear();
+function names() { const a = ($('name1') || {}).value || '', b = ($('name2') || {}).value || ''; return [a.trim(), b.trim()].filter(Boolean).join(' & '); }
+function renderLive() {
+  if (!live) return;
+  const nm = names(), n = E.nPagesSel(), ph = (typeof S !== 'undefined' && S.photos) || [];
+  const cover = { layout: 'cover', slots: ph.length ? [{ p: 0, z: 1, f: 'none' }] : [], t: { title: nm || t('live_ph'), names: `${nm || t('live_ph')} · ${year}` } };
+  const ded = (($('dedication') || {}).value || '').trim();
+  const depth = { 24: 8, 36: 11, 50: 15 }[n] || 11;
+  live.innerHTML = `<div class="nst-live-hd"><b>${t('live_title')}</b><span>${t('live_sub')}</span></div><div class="nst-live-book"></div>
+    <div class="nst-live-ded${ded ? '' : ' empty'}">${ded ? esc(ded) : t('live_ded')}</div>
+    <div class="nst-live-meta">${t('live_meta', n, ph.length)}</div>`;
+  live.querySelector('.nst-live-book').appendChild(NA.book3d({ cover, photos: ph, theme: NA.theme || 'galerie', spine: nm ? `${nm} · ${year}` : '', size: 210, depth }));
+}
+let lt; const liveSoon = () => { clearTimeout(lt); lt = setTimeout(renderLive, 140); };
+['name1', 'name2', 'dedication'].forEach(id => { const f = $(id); if (f) f.addEventListener('input', liveSoon); });
+function flowMode(n) {
+  const flow = document.querySelector('.nst-flow'); if (!flow) return;
+  const on = (n === 0 || n === 1) && window.matchMedia('(min-width: 1100px)').matches;
+  flow.classList.toggle('live', on); wrapEl.classList.toggle('nst-live-wide', on);
+  if (on) renderLive();
+}
+
+/* ════ 3. Photos : date de prise de vue, couverture, glisser-déposer ════ */
+// Date EXIF (DateTimeOriginal) lue directement dans le fichier JPEG
+async function exifDate(file) {
+  try {
+    const buf = await file.slice(0, 262144).arrayBuffer(), v = new DataView(buf);
+    if (v.getUint16(0) !== 0xFFD8) return null;
+    let o = 2;
+    while (o + 4 < v.byteLength) {
+      const m = v.getUint16(o), len = v.getUint16(o + 2);
+      if (m === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) {
+        const tiff = o + 10, le = v.getUint16(tiff) === 0x4949;
+        const u16 = p => v.getUint16(p, le), u32 = p => v.getUint32(p, le);
+        const readAscii = (p, n) => { let s = ''; for (let i = 0; i < n - 1; i++) s += String.fromCharCode(v.getUint8(p + i)); return s; };
+        const scan = (ifd, tag) => { const n = u16(ifd); for (let i = 0; i < n; i++) { const e = ifd + 2 + i * 12; if (u16(e) === tag) return e; } return null; };
+        const ifd0 = tiff + u32(tiff + 4);
+        let date = null;
+        const exifPtr = scan(ifd0, 0x8769);
+        if (exifPtr) { const e = scan(tiff + u32(exifPtr + 8), 0x9003); if (e) date = readAscii(tiff + u32(e + 8), u32(e + 4)); }
+        if (!date) { const e = scan(ifd0, 0x0132); if (e) date = readAscii(tiff + u32(e + 8), u32(e + 4)); }
+        if (!date) return null;
+        const m2 = date.match(/(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+        return m2 ? new Date(+m2[1], m2[2] - 1, +m2[3], +m2[4], +m2[5], +m2[6]).getTime() : null;
+      }
+      if ((m & 0xFF00) !== 0xFF00) break;
+      o += 2 + len;
+    }
+  } catch (e) {}
+  return null;
+}
+const origAdd = window.addPhotos;
+window.addPhotos = async function (files) {
+  const list = Array.from(files || []);
+  const dates = await Promise.all(list.map(async f => [f.name, (await exifDate(f)) || f.lastModified || null]));
+  const byName = new Map(dates);
+  const before = S.photos.length;
+  await origAdd.call(this, list);
+  S.photos.slice(before).forEach(p => { if (p && p.date == null) p.date = byName.get(p.name) || null; });
+  renderPhotosPlus(); liveSoon();
+};
+function remap(map, order) { const o = {}; order.forEach((oldI, newI) => { if (map && map[oldI] != null) o[newI] = map[oldI]; }); return o; }
+function applyOrder(order) {                 // order[newIndex] = oldIndex
+  const albumExists = NA.pages && NA.pages.length && NA.recomposeAlbum;
+  if (albumExists) NA.syncStory();
+  S.photos = order.map(i => S.photos[i]);
+  S.captions = remap(S.captions, order);
+  if (NA.info && NA.info.captions) NA.info.captions = remap(NA.info.captions, order);
+  if (S.story && Array.isArray(S.story.captions)) S.story.captions = order.map(i => S.story.captions[i]);
+  if (typeof renderPhotos === 'function') renderPhotos();
+  if (albumExists) NA.recomposeAlbum(E.nPagesSel(), true); else NA.pages = [];
+  liveSoon();
+}
+function movePhoto(from, to) {
+  const order = S.photos.map((_, i) => i); const [x] = order.splice(from, 1); order.splice(to, 0, x); applyOrder(order);
+}
+function sortByDate() {
+  const order = S.photos.map((p, i) => i).sort((a, b) => {
+    const da = S.photos[a].date, db = S.photos[b].date;
+    if (da && db) return da - db || a - b; if (da) return -1; if (db) return 1; return a - b;
+  });
+  applyOrder(order);
+  const note = $('nstPhotoNote'); if (note) note.textContent = t('sorted');
+}
+// Ajouts dans la grille : bouton « couverture », glisser-déposer, barre d'outils
+function renderPhotosPlus() {
+  const grid = $('photoGrid'); if (!grid) return;
+  if (!$('nstPhotoBar')) {
+    const bar = document.createElement('div'); bar.id = 'nstPhotoBar'; bar.className = 'nst-photo-bar';
+    bar.innerHTML = `<button type="button" class="nst-chip" id="nstSortDate"></button><span class="nst-note" id="nstPhotoNote"></span>`;
+    grid.parentNode.insertBefore(bar, grid);
+    $('nstSortDate').addEventListener('click', sortByDate);
+  }
+  $('nstSortDate').textContent = t('sort_date');
+  $('nstPhotoBar').style.display = S.photos.length > 1 ? '' : 'none';
+  const note = $('nstPhotoNote'); if (note && !note.dataset.sorted) note.textContent = t('drag_photos');
+  grid.querySelectorAll('.photo-item').forEach((it, i) => {
+    it.setAttribute('draggable', 'true'); it.dataset.i = i;
+    const ov = it.querySelector('.photo-ov');
+    if (ov && i > 0 && !ov.querySelector('.ov-cover')) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'ov-cover'; b.title = t('set_cover'); b.setAttribute('aria-label', t('set_cover')); b.textContent = '★';
+      b.addEventListener('click', e => { e.stopPropagation(); movePhoto(i, 0); });
+      ov.insertBefore(b, ov.firstChild);
+    }
+  });
+}
+const origRender = window.renderPhotos;
+if (typeof origRender === 'function') window.renderPhotos = function () { const r = origRender.apply(this, arguments); try { renderPhotosPlus(); } catch (e) {} return r; };
+const origRemove = window.removePhoto;
+if (typeof origRemove === 'function') window.removePhoto = function (i) {
+  // Album déjà composé : on recompose proprement au lieu de laisser des pages pointer sur de mauvaises photos
+  if (NA.pages && NA.pages.length && NA.removePhotoFromAlbum) return NA.removePhotoFromAlbum(i);
+  const r = origRemove.apply(this, arguments); liveSoon(); return r;
+};
+(function photoDnD() {
+  const grid = $('photoGrid'); if (!grid) return;
+  let from = null;
+  grid.addEventListener('dragstart', e => { const it = e.target.closest('.photo-item'); if (!it) return; from = +it.dataset.i; it.classList.add('nst-dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(from)); } catch (x) {} });
+  grid.addEventListener('dragover', e => { const it = e.target.closest('.photo-item'); if (from == null || !it) return; e.preventDefault(); grid.querySelectorAll('.nst-drop').forEach(x => x.classList.remove('nst-drop')); it.classList.add('nst-drop'); });
+  grid.addEventListener('dragend', () => { from = null; grid.querySelectorAll('.nst-drop,.nst-dragging').forEach(x => x.classList.remove('nst-drop', 'nst-dragging')); });
+  grid.addEventListener('drop', e => { const it = e.target.closest('.photo-item'); if (from == null || !it) return; e.preventDefault(); const to = +it.dataset.i; const f = from; from = null; if (to !== f) movePhoto(f, to); });
+})();
+
+/* ════ 4. Génération vivante : leurs photos se posent dans un livre ════ */
+let genTimer = null;
+function startGenAnim() {
+  const card = document.querySelector('#panel2 .card'); if (!card) return;
+  let st = card.querySelector('.nst-gen');
+  if (!st) {
+    st = document.createElement('div'); st.className = 'nst-gen';
+    st.innerHTML = `<div class="nst-gen-title"></div><div class="nst-gen-book"><div class="nst-gen-pg"></div><div class="nst-gen-pg"></div></div>`;
+    card.insertBefore(st, card.firstChild);
+  }
+  st.querySelector('.nst-gen-title').textContent = t('gen_title');
+  const pgs = st.querySelectorAll('.nst-gen-pg'), ph = (S.photos || []).filter(p => p && p.data);
+  if (!ph.length) return;
+  let k = 0, slot = 0;
+  const tick = () => {
+    if (slot === 8) { pgs.forEach(p => p.classList.add('fade')); setTimeout(() => { pgs.forEach(p => { p.innerHTML = ''; p.classList.remove('fade'); }); }, 420); slot = 0; return; }
+    const img = document.createElement('div'); img.className = 'nst-gen-ph'; img.style.backgroundImage = `url("${ph[k % ph.length].data}")`;
+    pgs[slot < 4 ? 0 : 1].appendChild(img); slot++; k++;
+  };
+  pgs.forEach(p => { p.innerHTML = ''; });
+  clearInterval(genTimer); tick(); genTimer = setInterval(tick, RM ? 1200 : 520);
+}
+function stopGenAnim() { clearInterval(genTimer); genTimer = null; }
+const origGen = window.runGeneration;
+window.runGeneration = async function () { startGenAnim(); try { return await origGen.apply(this, arguments); } finally { stopGenAnim(); } };
+
+/* ════ 5. Récapitulatif de commande avec LEUR couverture ════ */
+function renderSummary() {
+  const form = $('payForm'); if (!form || !NA.pages || !NA.pages.length) return;
+  let box = $('nstSum');
+  if (!box) { box = document.createElement('div'); box.id = 'nstSum'; box.className = 'nst-sum'; form.insertBefore(box, form.firstChild); }
+  const n = NA.pages.length, th = (NA.THEMES[NA.theme] || NA.THEMES.galerie).name, sp = NA.spineText != null ? NA.spineText : ((NA.info && NA.info.names) ? `${NA.info.names} · ${year}` : '');
+  box.innerHTML = `<div class="nst-sum-book"></div><div class="nst-sum-txt"><span class="nst-sum-eb">${t('sum_title')}</span><b>${esc((NA.pages[0].t && NA.pages[0].t.title) || '')}</b>
+    <span>${t('sum_meta', n, th)}</span><span>${t('sum_spec')}</span><button type="button" class="nst-link" id="nstSumEdit">${t('sum_edit')}</button></div>`;
+  box.querySelector('.nst-sum-book').appendChild(NA.book3d({ cover: NA.pages[0], photos: S.photos, theme: NA.theme, spine: sp, size: 132, depth: { 24: 7, 36: 10, 50: 14 }[n] || 10 }));
+  $('nstSumEdit').addEventListener('click', () => goTab(3));
+}
+
+/* ── Navigation : aperçu en direct, récapitulatif ── */
+const og = window.goTab;
+window.goTab = function (n) { const r = og.apply(this, arguments); try { flowMode(n); if (n === 4) renderSummary(); } catch (e) {} return r; };
+window.addEventListener('resize', () => { const a = document.querySelector('.panel.active'); if (a) flowMode(+a.id.replace('panel', '')); });
+['pal24', 'pal36', 'pal50'].forEach(id => { const x = $(id); if (x) x.addEventListener('click', liveSoon); });
+
+/* ════ 6. Finitions : apparition au défilement, page tournée ════ */
+if (!RM && window.IntersectionObserver) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  ['#how .nst-how-hd', '#how .nst-fr', '#how .nst-fr-facts', '#exemples .nst-gal-hd', '#exemples .nst-gal-row', '#pricing', '.ed-faq, #faq'].forEach(sel => document.querySelectorAll(sel).forEach(el => {
+    if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('nst-rv'); io.observe(el); }
+  }));
+}
+(function pageTurn() {
+  const stage = $('nstSpread'); if (!stage || RM) return;
+  const mark = d => { stage.dataset.turn = d; clearTimeout(stage.__tt); stage.__tt = setTimeout(() => { delete stage.dataset.turn; }, 480); };
+  const nx = $('nstNext'), pv = $('nstPrev');
+  if (nx) nx.addEventListener('click', () => mark('next'), true);
+  if (pv) pv.addEventListener('click', () => mark('prev'), true);
+  document.addEventListener('keydown', e => { if (!$('panel3') || !$('panel3').classList.contains('active')) return; if (e.key === 'ArrowRight') mark('next'); if (e.key === 'ArrowLeft') mark('prev'); }, true);
+})();
+
+if (typeof window.setLang === 'function') {
+  const o = window.setLang;
+  window.setLang = function () { const r = o.apply(this, arguments); try { renderPhotosPlus(); if (NA.heroName) NA.heroName(); const a = document.querySelector('.panel.active'); if (a) { flowMode(+a.id.replace('panel', '')); if (a.id === 'panel4') renderSummary(); } } catch (e) {} return r; };
+}
+renderPhotosPlus();
+const act = document.querySelector('.panel.active'); if (act) flowMode(+act.id.replace('panel', ''));
 })();
 
 </script>
