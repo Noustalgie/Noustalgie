@@ -824,6 +824,78 @@ img{max-width:100%;}
 .nst-demo-book{cursor:pointer;}
 @media (prefers-reduced-motion:reduce){.nst-demo-spread{transition:none;}}
 .nst-issue{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#fbf3e4;border:1px solid #ecd9b5;padding:12px 14px;margin-bottom:12px;font:14px/1.5 'Inter',sans-serif;color:#4a3b22;}.nst-issue span{flex:1 1 320px;}.nst-issue small{flex-basis:100%;color:#8a7650;font-size:12px;}
+/* ═══ v2.2 — édition au doigt ═══ */
+.nst-page .nst-slot.sel{touch-action:none;}
+.nst-page .nst-t:not([contenteditable]){cursor:pointer;}
+.nst-page .nst-t.sel-t{box-shadow:0 0 0 3px #1c1a18;}
+.nst-grip{display:none;}
+.nst-sec textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);padding:10px 12px;font:16px/1.5 'Inter',system-ui,sans-serif;color:var(--ink);background:#fff;border-radius:2px;resize:vertical;min-height:88px;}
+.nst-sec textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
+@media (max-width:899px){
+  .nst-tools.sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;max-height:58vh;overflow:auto;-webkit-overflow-scrolling:touch;border:0;border-radius:16px 16px 0 0;box-shadow:0 -12px 32px rgba(20,15,10,.22);padding:8px 18px calc(18px + env(safe-area-inset-bottom));animation:nstUp .22s ease-out;}
+  .nst-tools.sheet .nst-grip{display:block;width:40px;height:4px;border-radius:2px;background:#d6d1ca;margin:4px auto 12px;}
+  body.nst-sheet-open{padding-bottom:58vh;}
+  .nst-chip{min-height:42px;padding:10px 14px;font-size:14px;}
+  .nst-btn{min-height:42px;}
+  .nst-x{width:44px;height:44px;margin:-10px -10px -10px 0;font-size:26px;}
+  .nst-link{min-height:44px;font-size:14px;}
+  .nst-pick{grid-template-columns:repeat(4,1fr);gap:6px;max-height:none;}
+  .nst-th{width:72px;}.nst-th-in{width:72px;height:72px;}
+  .nst-nav{width:44px;height:44px;font-size:20px;}
+  .nst-sec input[type=range]{height:32px;}
+}
+@keyframes nstUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.nst-tools.sheet{animation:none;}}
+/* ═══ v2.2 — système de design du site ═══ */
+:root{--n-ink:#1c1a18;--n-mut:#5f5a54;--n-line:#d9d4cc;--n-soft:#f6f4f0;}
+/* Boutons : principal = noir plein, secondaire = contour */
+.btn,.btn-gold,.btn-pay,.ed-btn-dark,.ed-btn-out,.ed-nav-cta,#payBtn,.btn-hero,.btn-outline{
+  display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 26px!important;
+  font:600 12.5px/1.2 'Inter',system-ui,sans-serif!important;letter-spacing:.1em!important;text-transform:uppercase;
+  border-radius:2px!important;cursor:pointer;transition:background .15s,color .15s,border-color .15s,transform .1s;white-space:nowrap;text-decoration:none;}
+.btn-gold,.btn-pay,.ed-btn-dark,#payBtn,.btn-hero{background:var(--n-ink)!important;color:#fff!important;border:1px solid var(--n-ink)!important;}
+.btn-gold:hover,.btn-pay:hover,.ed-btn-dark:hover,#payBtn:hover,.btn-hero:hover{background:#000!important;opacity:1!important;transform:none!important;}
+.btn:not(.btn-gold),.ed-btn-out,.btn-outline{background:#fff!important;color:var(--n-ink)!important;border:1px solid var(--n-ink)!important;}
+.btn:not(.btn-gold):hover,.ed-btn-out:hover,.btn-outline:hover{background:var(--n-soft)!important;}
+.btn:active,.btn-gold:active,.ed-btn-dark:active,.ed-btn-out:active,#payBtn:active{transform:translateY(1px)!important;}
+.btn:disabled,#payBtn:disabled{opacity:.45!important;cursor:not-allowed;}
+.ed-nav-cta{min-height:40px;padding:0 18px!important;font-size:11.5px!important;background:#fff!important;color:var(--n-ink)!important;border:1px solid var(--n-ink)!important;}
+.ed-nav-cta:hover{background:var(--n-ink)!important;color:#fff!important;}
+#payBtn{width:100%;min-height:56px;font-size:13px!important;letter-spacing:.06em!important;}
+.btn-row{gap:10px!important;align-items:stretch;}
+/* Formulaires */
+.fl{color:var(--n-mut)!important;font:500 13px/1.4 'Inter',system-ui,sans-serif!important;letter-spacing:.01em!important;margin-bottom:7px!important;}
+#app input[type=text],#app input[type=email],#app input:not([type]),#app select,#app textarea{
+  font-size:16px!important;min-height:48px;border:1px solid var(--n-line)!important;background:#fff!important;border-radius:2px!important;color:var(--n-ink)!important;box-sizing:border-box;}
+#app textarea{min-height:96px;line-height:1.5;}
+#app select{font-family:'Inter',system-ui,sans-serif!important;padding:0 40px 0 14px!important;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%231c1a18' stroke-width='1.5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 14px center!important;}
+#app input:focus,#app select:focus,#app textarea:focus{outline:none!important;border-color:var(--n-ink)!important;box-shadow:0 0 0 1px var(--n-ink)!important;}
+#app ::placeholder{color:#a39d95!important;opacity:1;}
+/* Photos : actions visibles au doigt, couverture signalée */
+.photo-item{border-radius:3px!important;}
+.photo-item:first-child::after{content:"Couverture";position:absolute;left:6px;top:6px;background:rgba(255,255,255,.92);color:var(--n-ink);font:600 10px/1 'Inter',sans-serif;letter-spacing:.06em;padding:5px 7px;pointer-events:none;}
+@media (hover:none){
+  .photo-ov{opacity:1!important;inset:auto 0 0 0!important;flex-direction:row!important;justify-content:space-between!important;padding:22px 4px 2px!important;background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,0))!important;}
+  .ov-msg,.ov-rm{min-width:40px;min-height:36px;color:#fff!important;font-size:15px!important;}
+  .photo-item:hover img{transform:none!important;}
+}
+/* Chiffres clés */
+@media (max-width:560px){.ed-stat-n{font-size:20px!important;white-space:nowrap;}.ed-stat-l{font-size:10px!important;}}
+/* Mobile : actions d'étape en pleine largeur, action principale en bas */
+@media (max-width:640px){
+  .btn-row{flex-direction:column-reverse!important;}
+  .btn-row>.btn{width:100%;}
+  .ed-hero .ed-btn-dark,.ed-hero .ed-btn-out{width:100%;margin:0 0 10px!important;}
+}
+/* Paiement */
+#panel4 .fl{margin-top:16px!important;}
+/* Pied de page lisible */
+.footer-made,.footer-bottom,.footer-copy,.footer-legal{color:#77726b!important;opacity:1!important;}
+.footer-made a,.footer-bottom a{color:#1c1a18!important;}
+/* l'action « suivant » de chaque étape est toujours l'action principale */
+.btn-row>.btn:last-child{background:var(--n-ink)!important;color:#fff!important;border-color:var(--n-ink)!important;}
+.btn-row>.btn:last-child:hover{background:#000!important;}
 </style>
 <script type="application/ld+json">
 {
@@ -1150,7 +1222,7 @@ img{max-width:100%;}
           </div>
         </div>
       </div>
-      <div class="notice" data-i18n="photos_notice">📸 La première photo devient la couverture, les autres gardent votre ordre : ajoutez-les de la plus ancienne à la plus récente. Survolez une photo pour lui écrire une légende.</div>
+      <div class="notice" data-i18n="photos_notice">📸 La première photo devient la couverture, les autres gardent votre ordre : ajoutez-les de la plus ancienne à la plus récente. Touchez 💬 sur une photo pour lui écrire une légende.</div>
       <div class="btn-row">
         <button class="btn" onclick="goTab(0)" data-i18n="back">← Retour</button>
         <button class="btn btn-gold" id="btnGen" onclick="runGeneration()" data-i18n="gen_btn">Créer notre histoire →</button>
@@ -1224,9 +1296,9 @@ img{max-width:100%;}
           </div>
           <ul class="pay-includes">
             <li data-i18n="pay_inc1">Histoire rédigée sur mesure</li>
-            <li data-i18n="pay_inc2">Photos sublimées dans votre style</li>
+            <li data-i18n="pay_inc2">Vos photos imprimées en haute définition</li>
             <li data-i18n="pay_inc3">Vos dédicaces & légendes intégrées</li>
-            <li data-i18n="pay_inc4">Impression pro Prodigi (papier photo)</li>
+            <li data-i18n="pay_inc4">Impression professionnelle sur papier photo</li>
             <li data-i18n="pay_inc5">Couverture rigide + reliure cousue</li>
             <li data-i18n="pay_inc6">Livraison offerte</li>
           </ul>
@@ -1427,7 +1499,7 @@ const LANGS = {
     feat2_name:'6 ambiances visuelles', feat2_desc:'Cinéma, Luxury, Vintage, Conte de fées, Épique ou Poétique.',
     feat3_name:'Vos mots partout', feat3_desc:'Dédicaces, légendes photo, message de clôture. Votre voix à chaque page.',
     feat4_name:'De 10 à 100 pages', feat4_desc:'Choisissez le nombre de pages. Le prix s\'ajuste de façon transparente.',
-    feat5_name:'Impression pro Prodigi', feat5_desc:'Papier photo qualité pro, reliure cousue, couverture rigide.',
+    feat5_name:"Impression professionnelle", feat5_desc:'Papier photo qualité pro, reliure cousue, couverture rigide.',
     feat6_name:'Vos photos privées', feat6_desc:'Aucun stockage sur nos serveurs. Traitement uniquement en local.',
     price_eyebrow:'Nos tarifs', price_title1:'Un prix juste,', price_title2:'selon votre histoire', price_sub:'De 10 à 100 pages — le prix s\'adapte progressivement.',
     slider_lbl:'Faites glisser pour choisir', pages_word:'pages', popular:'Populaire',
@@ -1437,7 +1509,7 @@ const LANGS = {
     choose_btn:'Choisir →',
     prem_name:'Album Premium', prem_desc:'Livre imprimé sur papier photo pro, livré en 3-5 jours.',
     print_per:'/livre imprimé', free_delivery:'Livraison offerte',
-    prem_f1:'Tout de l\'Essentiel inclus', prem_f2:'Photos sublimées incluses', prem_f3:'Impression pro Prodigi', prem_f4:'Couverture rigide premium', prem_f5:'Livraison offerte',
+    prem_f1:'Tout de l\'Essentiel inclus', prem_f2:"Photos en haute définition", prem_f3:"Impression professionnelle", prem_f4:'Couverture rigide premium', prem_f5:'Livraison offerte',
     create_btn:'Créer notre album',
     cmp_show:'Voir le tableau comparatif ↓', cmp_hide:'Masquer le tableau ↑',
     cmp_tier:'Palier', pdf_only:'PDF seul', printed_book:'Livre imprimé', delivery_col:'Livraison', included:'Offerte',
@@ -1456,7 +1528,7 @@ const LANGS = {
     ded_lbl:'Dédicace (première page)', ded_ph:'À toi, mon amour...', next_photos:'Suivant — Nos photos →',
     p1_hd:'Vos photos ensemble', dz_label:'Glissez vos photos ici ou cliquez', dz_sub:'JPG · PNG · WEBP · HEIC — minimum selon le palier choisi',
     pgc_title:'Nombre de pages', pgc_sub:'Ajustez selon votre histoire. De 10 à 100 pages.',
-    margin_lbl:'Livraison', photos_notice:"📸 La première photo devient la couverture, les autres gardent votre ordre : ajoutez-les de la plus ancienne à la plus récente. Survolez une photo pour lui écrire une légende.",
+    margin_lbl:'Livraison', photos_notice:"📸 La première photo devient la couverture, les autres gardent votre ordre : ajoutez-les de la plus ancienne à la plus récente. Touchez 💬 sur une photo pour lui écrire une légende.",
     back:'← Retour', next_style:'Suivant — Style →',
     p2_hd:'L\'ambiance de votre album',
     style1:'Cinéma', style1d:'Dramatique, golden hour', style2:'Luxury', style2d:'Élégant, haut de gamme', style3:'Vintage', style3d:'Argentique, nostalgie', style4:'Conte de Fées', style4d:'Magique, féerique', style5:'Épique', style5d:'Grand, cinématographique', style6:'Poétique', style6d:'Lyrique, aquarelle',
@@ -1465,7 +1537,7 @@ const LANGS = {
     back_modify:'← Modifier', see_preview:'Voir l\'aperçu →',
     p4_hd:'Aperçu de votre livre', fullscreen:'Plein écran ↗', order_btn:'Commander →',
     pay_title:'Votre livre est prêt', pay_sub:'Satisfait de l\'aperçu ? Commandez votre livre photo premium.',
-    pay_inc1:'Histoire rédigée sur mesure', pay_inc2:'Photos sublimées dans votre style', pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:'Impression pro Prodigi (papier photo)', pay_inc5:'Couverture rigide + reliure cousue', pay_inc6:'Livraison offerte',
+    pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier photo", pay_inc5:'Couverture rigide + reliure cousue', pay_inc6:'Livraison offerte',
     pay_name_lbl:'Votre prénom', pay_name_ph:'Emma', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
     pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Livraison dans 3 à 5 jours.', dl_pdf:'Télécharger aussi le PDF ↗',
@@ -1513,7 +1585,7 @@ const LANGS = {
     feat2_name:'6 visual moods', feat2_desc:'Romantic Cinema, Luxury, Vintage, Fairy Tale, Epic or Poetic.',
     feat3_name:'Your words everywhere', feat3_desc:'Dedication, photo captions, closing message. Your voice on every page.',
     feat4_name:'From 10 to 100 pages', feat4_desc:'Choose the number of pages. Price adjusts transparently.',
-    feat5_name:'Pro Prodigi printing', feat5_desc:'Pro-quality photo paper, sewn binding, hard cover.',
+    feat5_name:"Professional printing", feat5_desc:'Pro-quality photo paper, sewn binding, hard cover.',
     feat6_name:'Your photos stay private', feat6_desc:'No server storage. Photos processed locally on your device.',
     price_eyebrow:'Our pricing', price_title1:'A fair price,', price_title2:'based on your story', price_sub:'From 10 to 100 pages — price scales progressively with your book size.',
     slider_lbl:'Slide to choose', pages_word:'pages', popular:'Popular',
@@ -1523,7 +1595,7 @@ const LANGS = {
     choose_btn:'Choose →',
     prem_name:'Premium Album', prem_desc:'Printed photo book on pro paper, delivered to your door in 3-5 days.',
     print_per:'/printed book', free_delivery:'Free delivery',
-    prem_f1:'Everything in Essential', prem_f2:'Enhanced photos included', prem_f3:'Pro Prodigi printing', prem_f4:'Premium hard cover', prem_f5:'Free delivery',
+    prem_f1:'Everything in Essential', prem_f2:"High-definition photos", prem_f3:"Professional printing", prem_f4:'Premium hard cover', prem_f5:'Free delivery',
     create_btn:'Create our album',
     cmp_show:'View full comparison table ↓', cmp_hide:'Hide table ↑',
     cmp_tier:'Tier', pdf_only:'PDF only', printed_book:'Printed book', delivery_col:'Delivery', included:'Free',
@@ -1542,7 +1614,7 @@ const LANGS = {
     ded_lbl:'Dedication (first page)', ded_ph:'To you, my love...', next_photos:'Next — Our photos →',
     p1_hd:'Your photos together', dz_label:'Drag photos here or click to browse', dz_sub:'JPG · PNG · WEBP · HEIC — minimum selon le palier choisi',
     pgc_title:'Number of pages', pgc_sub:'Adjust to match your story. From 10 to 100 pages.',
-    margin_lbl:'Delivery', photos_notice:"📸 The first photo becomes the cover and the others keep your order, so add them from oldest to newest. Hover over a photo to write a caption.",
+    margin_lbl:'Delivery', photos_notice:"📸 The first photo becomes the cover and the others keep your order, so add them from oldest to newest. Tap 💬 on a photo to write a caption.",
     back:'← Back', next_style:'Next — Style →',
     p2_hd:'Your album\'s mood',
     style1:'Cinema', style1d:'Dramatic, golden hour', style2:'Luxury', style2d:'Elegant, high-end', style3:'Vintage', style3d:'Film grain, nostalgia', style4:'Fairy Tale', style4d:'Magical, ethereal', style5:'Epic', style5d:'Grand, cinematic', style6:'Poetic', style6d:'Lyrical, watercolour',
@@ -1551,7 +1623,7 @@ const LANGS = {
     back_modify:'← Edit', see_preview:'See the preview →',
     p4_hd:'Your book preview', fullscreen:'Full screen ↗', order_btn:'Order →',
     pay_title:'Your book is ready', pay_sub:'Happy with the preview? Order your premium photo book.',
-    pay_inc1:'Custom-written story', pay_inc2:'Enhanced photos in your style', pay_inc3:'Your dedications & captions', pay_inc4:'Pro Prodigi printing (photo paper)', pay_inc5:'Hard cover + sewn binding', pay_inc6:'Free delivery',
+    pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on photo paper", pay_inc5:'Hard cover + sewn binding', pay_inc6:'Free delivery',
     pay_name_lbl:'Your first name', pay_name_ph:'Emma', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
     pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. Delivery in 5 to 7 working days.', dl_pdf:'Download the PDF too ↗',
@@ -1599,7 +1671,7 @@ const LANGS = {
     feat2_name:'6 visuelle Stimmungen', feat2_desc:'Romantisches Kino, Luxury, Vintage, Märchen, Episch oder Poetisch.',
     feat3_name:'Eure Worte überall', feat3_desc:'Widmung, Bildunterschriften, Abschlussnachricht auf jeder Seite.',
     feat4_name:'Von 10 bis 100 Seiten', feat4_desc:'Wählt die Seitenanzahl. Der Preis passt sich transparent an.',
-    feat5_name:'Prodigi-Profidruck', feat5_desc:'Profi-Fotopapier, gebundener Rücken, Hardcover.',
+    feat5_name:"Professioneller Druck", feat5_desc:'Profi-Fotopapier, gebundener Rücken, Hardcover.',
     feat6_name:'Eure Fotos bleiben privat', feat6_desc:'Keine Serverspeicherung. Lokale Verarbeitung.',
     price_eyebrow:'Unsere Preise', price_title1:'Ein fairer Preis,', price_title2:'je nach eurer Geschichte', price_sub:'Von 10 bis 100 Seiten — der Preis wächst mit eurem Buch.',
     slider_lbl:'Schieben um auszuwählen', pages_word:'Seiten', popular:'Beliebt',
@@ -1609,7 +1681,7 @@ const LANGS = {
     choose_btn:'Wählen →',
     prem_name:'Premium-Album', prem_desc:'Gedrucktes Fotobuch auf Profi-Fotopapier, an eure Tür geliefert.',
     print_per:'/gedrucktes Buch', free_delivery:'Kostenloser Versand',
-    prem_f1:'Alles aus Basis inklusive', prem_f2:'Verbesserte Fotos inklusive', prem_f3:'Prodigi-Profidruck', prem_f4:'Premium Hardcover', prem_f5:'Kostenloser Versand',
+    prem_f1:'Alles aus Basis inklusive', prem_f2:"Fotos in hoher Auflösung", prem_f3:"Professioneller Druck", prem_f4:'Premium Hardcover', prem_f5:'Kostenloser Versand',
     create_btn:'Unser Album erstellen',
     cmp_show:'Vollständige Vergleichstabelle ↓', cmp_hide:'Tabelle ausblenden ↑',
     cmp_tier:'Stufe', pdf_only:'Nur PDF', printed_book:'Gedrucktes Buch', delivery_col:'Versand', included:'Gratis',
@@ -1628,7 +1700,7 @@ const LANGS = {
     ded_lbl:'Widmung (erste Seite)', ded_ph:'Für dich, meine Liebe...', next_photos:'Weiter — Unsere Fotos →',
     p1_hd:'Eure Fotos zusammen', dz_label:'Fotos hierher ziehen oder klicken', dz_sub:'JPG · PNG · WEBP · HEIC — Minimum je nach Paket',
     pgc_title:'Seitenanzahl', pgc_sub:'Anpassen an eure Geschichte. Von 10 bis 100 Seiten.',
-    margin_lbl:'Versand', photos_notice:"📸 Das erste Foto wird zum Cover, die anderen behalten eure Reihenfolge – am besten vom ältesten zum neuesten. Fahrt über ein Foto, um eine Bildunterschrift zu schreiben.",
+    margin_lbl:'Versand', photos_notice:"📸 Das erste Foto wird zum Cover, die anderen behalten eure Reihenfolge – am besten vom ältesten zum neuesten. Tippt auf 💬, um eine Bildunterschrift zu schreiben.",
     back:'← Zurück', next_style:'Weiter — Stil →',
     p2_hd:'Die Stimmung eures Albums',
     style1:'Kino', style1d:'Dramatisch, goldene Stunde', style2:'Luxury', style2d:'Elegant, hochwertig', style3:'Vintage', style3d:'Filmkorn, Nostalgie', style4:'Märchen', style4d:'Magisch, ätherisch', style5:'Episch', style5d:'Groß, cineastisch', style6:'Poetisch', style6d:'Lyrisch, Aquarell',
@@ -1637,7 +1709,7 @@ const LANGS = {
     back_modify:'← Bearbeiten', see_preview:'Vorschau sehen →',
     p4_hd:'Vorschau eures Buches', fullscreen:'Vollbild ↗', order_btn:'Bestellen →',
     pay_title:'Euer Buch ist fertig', pay_sub:'Zufrieden mit der Vorschau? Bestellt euer Premium-Fotobuch.',
-    pay_inc1:'Maßgefertigte Geschichte', pay_inc2:'Verbesserte Fotos', pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:'Prodigi-Profidruck', pay_inc5:'Hardcover + gebundener Rücken', pay_inc6:'Kostenloser Versand',
+    pay_inc1:'Maßgefertigte Geschichte', pay_inc2:"Eure Fotos in hoher Auflösung gedruckt", pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:"Professioneller Druck auf Fotopapier", pay_inc5:'Hardcover + gebundener Rücken', pay_inc6:'Kostenloser Versand',
     pay_name_lbl:'Euer Vorname', pay_name_ph:'Emma', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
     pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL',
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Lieferung in 5 bis 7 Werktagen.', dl_pdf:'PDF auch herunterladen ↗',
@@ -1685,7 +1757,7 @@ const LANGS = {
     feat2_name:'6 estilos visuales', feat2_desc:'Cine romántico, Luxury, Vintage, Cuento de hadas, Épico o Poético.',
     feat3_name:'Vuestras palabras en todo', feat3_desc:'Dedicatoria, pies de foto, mensaje final en cada página.',
     feat4_name:'De 10 a 100 páginas', feat4_desc:'Elegid el número de páginas. El precio se adapta de forma transparente.',
-    feat5_name:'Impresión pro Prodigi', feat5_desc:'Papel fotográfico de calidad profesional, encuadernación cosida, tapa dura.',
+    feat5_name:"Impresión profesional", feat5_desc:'Papel fotográfico de calidad profesional, encuadernación cosida, tapa dura.',
     feat6_name:'Vuestras fotos privadas', feat6_desc:'Sin almacenamiento en servidores. Procesamiento local en vuestro dispositivo.',
     price_eyebrow:'Nuestros precios', price_title1:'Un precio justo,', price_title2:'según vuestra historia', price_sub:'De 10 a 100 páginas — el precio crece progresivamente.',
     slider_lbl:'Deslizad para elegir', pages_word:'páginas', popular:'Popular',
@@ -1695,7 +1767,7 @@ const LANGS = {
     choose_btn:'Elegir →',
     prem_name:'Álbum Premium', prem_desc:'Libro impreso en papel fotográfico pro, entregado en 5-7 días.',
     print_per:'/libro impreso', free_delivery:'Envío gratuito',
-    prem_f1:'Todo lo del Esencial incluido', prem_f2:'Fotos mejoradas incluidas', prem_f3:'Impresión pro Prodigi', prem_f4:'Tapa dura premium', prem_f5:'Envío gratuito',
+    prem_f1:'Todo lo del Esencial incluido', prem_f2:"Fotos en alta definición", prem_f3:"Impresión profesional", prem_f4:'Tapa dura premium', prem_f5:'Envío gratuito',
     create_btn:'Crear nuestro álbum',
     cmp_show:'Ver tabla comparativa completa ↓', cmp_hide:'Ocultar tabla ↑',
     cmp_tier:'Nivel', pdf_only:'Solo PDF', printed_book:'Libro impreso', delivery_col:'Envío', included:'Gratis',
@@ -1714,7 +1786,7 @@ const LANGS = {
     ded_lbl:'Dedicatoria (primera página)', ded_ph:'Para ti, mi amor...', next_photos:'Siguiente — Nuestras fotos →',
     p1_hd:'Vuestras fotos juntos', dz_label:'Arrastrad fotos aquí o haced clic', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo según el nivel elegido',
     pgc_title:'Número de páginas', pgc_sub:'Ajustadlo a vuestra historia. De 10 a 100 páginas.',
-    margin_lbl:'Envío', photos_notice:"📸 La primera foto será la portada y las demás siguen vuestro orden: añadidlas de la más antigua a la más reciente. Pasad el ratón sobre una foto para escribirle un pie.",
+    margin_lbl:'Envío', photos_notice:"📸 La primera foto será la portada y las demás siguen vuestro orden: añadidlas de la más antigua a la más reciente. Tocad 💬 en una foto para escribirle un pie.",
     back:'← Volver', next_style:'Siguiente — Estilo →',
     p2_hd:'El ambiente de vuestro álbum',
     style1:'Cine', style1d:'Dramático, hora dorada', style2:'Luxury', style2d:'Elegante, de lujo', style3:'Vintage', style3d:'Grano de película, nostalgia', style4:'Cuento de Hadas', style4d:'Mágico, etéreo', style5:'Épico', style5d:'Grandioso, cinematográfico', style6:'Poético', style6d:'Lírico, acuarela',
@@ -1723,7 +1795,7 @@ const LANGS = {
     back_modify:'← Editar', see_preview:'Ver la vista previa →',
     p4_hd:'Vista previa de vuestro libro', fullscreen:'Pantalla completa ↗', order_btn:'Pedir →',
     pay_title:'Vuestro libro está listo', pay_sub:'¿Satisfechos con la vista previa? Pedid vuestro libro fotográfico premium.',
-    pay_inc1:'Historia escrita a medida', pay_inc2:'Fotos mejoradas en vuestro estilo', pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:'Impresión pro Prodigi (papel fotográfico)', pay_inc5:'Tapa dura + encuadernación cosida', pay_inc6:'Envío gratuito',
+    pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel fotográfico", pay_inc5:'Tapa dura + encuadernación cosida', pay_inc6:'Envío gratuito',
     pay_name_lbl:'Vuestro nombre', pay_name_ph:'Emma', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
     pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro está siendo impreso. Entrega en 5 a 7 días laborables.', dl_pdf:'Descargar también el PDF ↗',
@@ -1771,7 +1843,7 @@ const LANGS = {
     feat2_name:'6 ambientes visuais', feat2_desc:'Cinema Romântico, Luxury, Vintage, Conto de Fadas, Épico ou Poético.',
     feat3_name:'As vossas palavras em todo', feat3_desc:'Dedicatória, legendas, mensagem final em cada página.',
     feat4_name:'De 10 a 100 páginas', feat4_desc:'Escolham o número de páginas. O preço ajusta-se de forma transparente.',
-    feat5_name:'Impressão pro Prodigi', feat5_desc:'Papel fotográfico de qualidade profissional, encadernação cosida, capa dura.',
+    feat5_name:"Impressão profissional", feat5_desc:'Papel fotográfico de qualidade profissional, encadernação cosida, capa dura.',
     feat6_name:'As vossas fotos privadas', feat6_desc:'Sem armazenamento em servidores. Processamento local no vosso dispositivo.',
     price_eyebrow:'Os nossos preços', price_title1:'Um preço justo,', price_title2:'de acordo com a vossa história', price_sub:'De 10 a 100 páginas — o preço cresce progressivamente.',
     slider_lbl:'Deslizem para escolher', pages_word:'páginas', popular:'Popular',
@@ -1781,7 +1853,7 @@ const LANGS = {
     choose_btn:'Escolher →',
     prem_name:'Álbum Premium', prem_desc:'Livro impresso em papel fotográfico pro, entregue em 5-7 dias.',
     print_per:'/livro impresso', free_delivery:'Envio gratuito',
-    prem_f1:'Tudo do Essencial incluído', prem_f2:'Fotos melhoradas incluídas', prem_f3:'Impressão pro Prodigi', prem_f4:'Capa dura premium', prem_f5:'Envio gratuito',
+    prem_f1:'Tudo do Essencial incluído', prem_f2:"Fotos em alta definição", prem_f3:"Impressão profissional", prem_f4:'Capa dura premium', prem_f5:'Envio gratuito',
     create_btn:'Criar o nosso álbum',
     cmp_show:'Ver tabela comparativa completa ↓', cmp_hide:'Ocultar tabela ↑',
     cmp_tier:'Nível', pdf_only:'Só PDF', printed_book:'Livro impresso', delivery_col:'Envio', included:'Grátis',
@@ -1800,7 +1872,7 @@ const LANGS = {
     ded_lbl:'Dedicatória (primeira página)', ded_ph:'Para ti, meu amor...', next_photos:'Seguinte — As nossas fotos →',
     p1_hd:'As vossas fotos juntos', dz_label:'Arrastem fotos aqui ou cliquem', dz_sub:'JPG · PNG · WEBP · HEIC — mínimo según el nivel elegido',
     pgc_title:'Número de páginas', pgc_sub:'Ajustem à vossa história. De 10 a 100 páginas.',
-    margin_lbl:'Envio', photos_notice:"📸 A primeira foto será a capa e as outras seguem a vossa ordem: adicionem-nas da mais antiga à mais recente. Passem o rato sobre uma foto para lhe escrever uma legenda.",
+    margin_lbl:'Envio', photos_notice:"📸 A primeira foto será a capa e as outras seguem a vossa ordem: adicionem-nas da mais antiga à mais recente. Toquem em 💬 numa foto para lhe escrever uma legenda.",
     back:'← Voltar', next_style:'Seguinte — Estilo →',
     p2_hd:'O ambiente do vosso álbum',
     style1:'Cinema', style1d:'Dramático, hora dourada', style2:'Luxury', style2d:'Elegante, luxuoso', style3:'Vintage', style3d:'Grão de filme, nostalgia', style4:'Conto de Fadas', style4d:'Mágico, etéreo', style5:'Épico', style5d:'Grandioso, cinematográfico', style6:'Poético', style6d:'Lírico, aquarela',
@@ -1809,7 +1881,7 @@ const LANGS = {
     back_modify:'← Editar', see_preview:'Ver pré-visualização →',
     p4_hd:'Pré-visualização do vosso livro', fullscreen:'Ecrã inteiro ↗', order_btn:'Encomendar →',
     pay_title:'O vosso livro está pronto', pay_sub:'Satisfeitos com a pré-visualização? Encomendai o vosso livro fotográfico premium.',
-    pay_inc1:'História escrita à medida', pay_inc2:'Fotos melhoradas no vosso estilo', pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:'Impressão pro Prodigi (papel fotográfico)', pay_inc5:'Capa dura + encadernação cosida', pay_inc6:'Envio gratuito',
+    pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel fotográfico", pay_inc5:'Capa dura + encadernação cosida', pay_inc6:'Envio gratuito',
     pay_name_lbl:'O vosso primeiro nome', pay_name_ph:'Emma', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
     pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Entrega em 5 a 7 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
@@ -3602,7 +3674,7 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
 /* ── Contexte de rendu ──────────────────────────────────────────── */
 // print=true → images servies par Cloudinary en haute définition
-let CTX = { print: false, editing: false, photos: null, theme: null };
+let CTX = { print: false, editing: false, inline: false, photos: null, theme: null };
 const themeKey = () => CTX.theme || NA.theme;
 const theme = () => THEMES[themeKey()] || THEMES.galerie;
 const photos = () => CTX.photos || (typeof S !== 'undefined' && S.photos) || [];
@@ -3637,7 +3709,8 @@ function slot(pg, i, x, y, w, h, o = {}) {
 function tx(pg, key, css, ph) {
   const v = pg.t[key] == null ? '' : String(pg.t[key]);
   if (!v && !CTX.editing) return '';
-  return `<div class="nst-t" data-t="${key}" data-ph="${esc(ph || '')}" style="${css}">${esc(v).replace(/\n/g, '<br>')}</div>`;
+  const ce = CTX.inline ? ' contenteditable="true" spellcheck="true"' : '';
+  return `<div class="nst-t" data-t="${key}" data-ph="${esc(ph || '')}"${ce} style="${css}">${esc(v).replace(/\n/g, '<br>')}</div>`;
 }
 // Taille de police qui se réduit avec la longueur du texte
 const fit = (s, big, small, from, to) => { const n = String(s || '').length; if (n <= from) return big; if (n >= to) return small; return Math.round(big - (big - small) * (n - from) / (to - from)); };
@@ -3731,6 +3804,25 @@ const LAYOUTS = {
     const v = pg.t.text || '';
     return tx(pg, 'text', `position:absolute;left:${M + 20}px;bottom:${M + 60}px;width:560px;color:${T.ink};font:italic 400 ${fit(v, 36, 24, 50, 220)}px/1.45 ${T.display};`, 'Un mot doux…');
   } },
+  chapterp: { n: 1, text: true, hybrid: 'chapter', name: 'Chapitre avec photo', render(pg, T) {
+    const s = (T.bodyScale || 1), half = PX / 2, left = !(pg.v % 2);
+    const tx0 = left ? half + 44 : M, tw = half - 44 - M;
+    return slot(pg, 0, left ? 0 : half, 0, half, PX, { border: 0 })
+      + `<div style="position:absolute;left:${tx0 - 4}px;top:${M - 8}px;color:${T.accent};font:italic 400 110px/1 ${T.display};">${esc(pg.t.num || '')}</div>`
+      + tx(pg, 'title', `position:absolute;left:${tx0}px;top:300px;width:${tw}px;color:${T.ink};font:${T.titleItalic ? 'italic ' : ''}400 ${fit(pg.t.title, 38, 28, 14, 36)}px/1.12 ${T.display};`, 'Titre du chapitre')
+      + tx(pg, 'text', `position:absolute;left:${tx0}px;top:420px;width:${tw}px;color:${T.ink};opacity:.86;font:400 ${Math.round(fit(pg.t.text, 16, 13.5, 160, 420) * s)}px/1.75 ${T.body};`, 'Quelques lignes…');
+  } },
+  notep: { n: 1, text: true, hybrid: 'note', name: 'Mot doux avec photo', render(pg, T) {
+    const v = pg.t.text || '', o = orientOf(pg, 0);
+    if (o === 'portrait') {
+      const pw = 400;
+      return slot(pg, 0, M, M, pw, W)
+        + tx(pg, 'text', `position:absolute;left:${M + pw + 36}px;bottom:${M}px;width:${W - pw - 36}px;color:${T.ink};font:italic 400 ${fit(v, 24, 18, 50, 200)}px/1.45 ${T.display};`, 'Un mot doux…');
+    }
+    const ph = 440;
+    return slot(pg, 0, M, M, W, ph)
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:${M + ph + 36}px;width:580px;color:${T.ink};font:italic 400 ${fit(v, 28, 20, 50, 220)}px/1.45 ${T.display};`, 'Un mot doux…');
+  } },
   quote: { n: 0, text: true, render(pg, T) {
     const v = pg.t.text || '';
     return `<div style="position:absolute;left:${PX / 2 - 24}px;top:250px;width:48px;height:1px;background:${T.accent};"></div>`
@@ -3776,7 +3868,7 @@ const LAYOUTS = {
 const PHOTO_LAYOUTS = n => Object.keys(LAYOUTS).filter(k => !LAYOUTS[k].text && LAYOUTS[k].n === n);
 
 function renderPage(pg, opts = {}) {
-  const prev = CTX; CTX = Object.assign({ print: false, editing: false, photos: null, theme: null }, opts);
+  const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, photos: null, theme: null }, opts);
   const T = theme(), Ly = LAYOUTS[pg.layout] || LAYOUTS.frame;
   let html;
   try { html = Ly.render(pg, T); } catch (e) { console.error('render', pg.layout, e); html = ''; }
@@ -3785,14 +3877,18 @@ function renderPage(pg, opts = {}) {
 }
 
 /* ── Planificateur ─────────────────────────────────────────────── */
+// Pages sans photo réduites au strict nécessaire ; chapitres et mots doux reçoivent une photo
+// dès qu'il y en a assez. Les pages de réserve (film, désaccords…) ne servent que si les photos manquent.
 const TIERS = {
   24: { chapters: 3, notes: 2, extras: ['love', 'quote'], end: ['letter'] },
-  36: { chapters: 4, notes: 3, extras: ['love', 'quote', 'film', 'disputes', 'wish'], end: ['letter', 'journal'] },
-  50: { chapters: 5, notes: 4, extras: ['love', 'quote', 'film', 'disputes', 'wish', 'weather'], end: ['letter', 'journal'] },
+  36: { chapters: 4, notes: 3, extras: ['love', 'quote', 'wish'], end: ['letter'] },
+  50: { chapters: 5, notes: 4, extras: ['love', 'quote', 'wish', 'film'], end: ['letter', 'journal'] },
 };
+const RESERVE = ['film', 'disputes', 'weather', 'journal'];
+const MIN_PHOTOS = { 24: 14, 36: 20, 50: 31 };
 function tierOf(n) { return TIERS[n] || TIERS[36]; }
 function photoPageCount(nPages) { const t = tierOf(nPages); return nPages - 3 - t.chapters - t.notes - t.extras.length - t.end.length; }
-function minPhotos(nPages) { return photoPageCount(nPages) + 1; }
+function minPhotos(nPages) { return MIN_PHOTOS[nPages] || photoPageCount(nPages) + 1; }
 
 // Répartit M photos sur K pages (1 à 4 par page) avec du rythme
 function distribute(M, K) {
@@ -3822,16 +3918,29 @@ function mkPage(layout, idxs, t) {
 
 function plan(nPages, story, info) {
   const ph = photos(), t = tierOf(nPages), names = info.names;
-  let K = photoPageCount(nPages);
   const pool = ph.map((_, i) => i);
   const coverIdx = pool.shift();
-  const extraPages = Math.max(0, K - pool.length); // si pas assez de photos : pages d'écriture en plus
-  K -= extraPages;
-  const usable = pool.slice(0, K * 4);
+  const H = t.chapters + t.notes;                 // pages chapitre / mot doux
+  let K = photoPageCount(nPages);                 // pages 100 % photo
+  // Peu de photos : on remplace des pages photo par des pages de réserve
+  const reserveN = Math.max(0, K - pool.length);
+  K -= reserveN;
+  // Photos restantes : d'abord une par chapitre / mot doux, puis des pages à plusieurs photos
+  const spare = Math.max(0, pool.length - K);
+  const hybridN = Math.min(H, spare);
+  const multi = pool.slice(0, pool.length - hybridN).slice(0, K * 4);
+  const hybridPhotos = pool.slice(pool.length - hybridN);
+  // les photos des chapitres/mots doux sont prises régulièrement dans la chronologie
+  const every = hybridN ? Math.floor(pool.length / (hybridN + 1)) : 0;
+  const hp = [], rest = [];
+  if (hybridN) {
+    const picks = new Set(Array.from({ length: hybridN }, (_, i) => pool[Math.min(pool.length - 1, (i + 1) * every)]));
+    pool.forEach(p => (picks.has(p) && hp.length < hybridN ? hp : rest).push(p));
+  } else rest.push(...pool);
+  const usable = rest.slice(0, K * 4);
   const counts = K > 0 ? distribute(usable.length, K) : [];
   const cap = i => (info.captions && info.captions[i]) || (story.captions && story.captions[i]) || '';
 
-  // Pages photos
   let cursor = 0, singles = 0;
   const photoPages = counts.map((n, k) => {
     const idxs = usable.slice(cursor, cursor + n); cursor += n;
@@ -3841,9 +3950,9 @@ function plan(nPages, story, info) {
     return pg;
   });
 
-  // Pages de texte
-  const ch = story.chapters || [];
-  const notes = story.notes || [];
+  const ch = story.chapters || [], notes = story.notes || [];
+  let hi = 0;
+  const takePhoto = () => (hi < hp.length ? hp[hi++] : null);
   const extra = {
     love: () => mkPage('list', [], { title: lab('love'), items: (story.love || []).slice(0, 8).join('\n') }),
     quote: () => mkPage('quote', [], { text: story.quote || '' }),
@@ -3851,14 +3960,19 @@ function plan(nPages, story, info) {
     disputes: () => mkPage('list', [], { title: lab('disputes'), items: (story.disputes || []).slice(0, 5).join('\n') }),
     wish: () => mkPage('checklist', [], { title: lab('wish'), items: (story.wishlist || []).slice(0, 6).join('\n') }),
     weather: () => mkPage('prose', [], { title: lab('weather'), text: story.weather || '' }),
+    journal: () => mkPage('journal', [], { title: lab('journal'), text: story.journal_prompt || '' }),
   };
-  const interludes = [...notes.slice(0, t.notes).map(n => mkPage('note', [], { text: n })), ...t.extras.map(k => extra[k]())];
-  // Alternance note / page spéciale
+  const noteP = [];
+  for (let k = 0; k < t.notes; k++) {
+    const p = takePhoto(), text = notes[k] || '';
+    noteP.push(p != null ? Object.assign(mkPage('notep', [p], { text }), {}) : mkPage('note', [], { text }));
+  }
+  const reserveKeys = RESERVE.filter(k => !t.extras.includes(k) && !t.end.includes(k));
+  const reserve = Array.from({ length: reserveN }, (_, i) => extra[reserveKeys[i]] ? extra[reserveKeys[i]]() : mkPage('journal', [], { title: lab('journal'), text: '' }));
+  const specials = [...t.extras.map(k => extra[k]()), ...reserve];
   const inter = [];
-  const a = interludes.filter(p => p.layout === 'note'), b = interludes.filter(p => p.layout !== 'note');
-  while (a.length || b.length) { if (b.length) inter.push(b.shift()); if (a.length) inter.push(a.shift()); }
+  while (noteP.length || specials.length) { if (specials.length) inter.push(specials.shift()); if (noteP.length) inter.push(noteP.shift()); }
 
-  // Assemblage par chapitres
   const C = t.chapters, out = [];
   out.push(mkPage('cover', [coverIdx], { title: story.title || names, names: `${names} · ${new Date().getFullYear()}` }));
   out.push(info.dedication
@@ -3867,27 +3981,37 @@ function plan(nPages, story, info) {
   let pi = 0, ii = 0;
   for (let c = 0; c < C; c++) {
     const chap = ch[c] || {};
-    out.push(mkPage('chapter', [], { num: ROMAN[c], title: chap.title || '', text: chap.text || '' }));
+    const p = c === 0 ? null : takePhoto(); // le chapitre I suit la dédicace : texte seul, plus aéré
+    const cp = p != null ? mkPage('chapterp', [p], { num: ROMAN[c], title: chap.title || '', text: chap.text || '' }) : mkPage('chapter', [], { num: ROMAN[c], title: chap.title || '', text: chap.text || '' });
+    cp.v = c;
+    out.push(cp);
     const nPh = Math.floor((c + 1) * photoPages.length / C) - Math.floor(c * photoPages.length / C);
     const nIn = Math.floor((c + 1) * inter.length / C) - Math.floor(c * inter.length / C);
     const chunk = photoPages.slice(pi, pi + nPh); pi += nPh;
     const ins = inter.slice(ii, ii + nIn); ii += nIn;
-    // intercale les pages texte régulièrement entre les pages photos
     const step = ins.length ? Math.max(1, Math.floor(chunk.length / (ins.length + 1))) : 0;
     chunk.forEach((p, k) => { out.push(p); if (step && (k + 1) % step === 0 && ins.length && k < chunk.length - 1) out.push(ins.shift()); });
     ins.forEach(p => out.push(p));
   }
-  for (let e = 0; e < extraPages; e++) out.push(mkPage('journal', [], { title: lab('journal'), text: '' }));
+  // photos non placées (chapitre I sans photo) : on les ajoute aux pages photo les moins remplies
+  while (hi < hp.length) {
+    const p = hp[hi++];
+    const target = out.filter(x => !NA_LAYOUT_TEXT(x.layout) && x.slots.length < 4).sort((a, b) => a.slots.length - b.slots.length)[0];
+    if (!target) break;
+    target.slots.push({ p, x: null, y: null, z: 1, f: 'none' });
+    target.layout = chooseLayout(target.slots.map(s => s.p), target.slots.length);
+    if (target.layout === 'frame') target.v = 0;
+  }
   t.end.forEach(k => {
     if (k === 'letter') out.push(mkPage('prose', [], { title: lab('letter'), text: story.letter || '', foot: names }));
-    if (k === 'journal') out.push(mkPage('journal', [], { title: lab('journal'), text: story.journal_prompt || '' }));
+    if (k === 'journal') out.push(extra.journal());
   });
   out.push(mkPage('closing', [], { text: story.closing || '', names: `${lab('belongs')}\n${names}\n${new Date().getFullYear()}` }));
-  // Garantie du nombre exact de pages
   while (out.length > nPages) { const k = out.findIndex((p, i) => i > 1 && p.layout === 'note'); out.splice(k > 0 ? k : out.length - 2, 1); }
-  while (out.length < nPages) out.splice(out.length - 1, 0, mkPage('journal', [], { title: lab('journal'), text: '' }));
+  while (out.length < nPages) out.splice(out.length - 1, 0, extra.journal());
   return out;
 }
+const NA_LAYOUT_TEXT = l => !!(LAYOUTS[l] && LAYOUTS[l].text);
 
 /* ── Export ────────────────────────────────────────────────────── */
 window.NA = window.NA || {};
@@ -4198,7 +4322,7 @@ function visible() {
 }
 
 function mountPage(host, i, editing) {
-  host.innerHTML = NA.renderPage(NA.pages[i], { editing });
+  host.innerHTML = NA.renderPage(NA.pages[i], { editing, inline: editing && isWide() });
   host.dataset.page = i;
   scaleHost(host);
 }
@@ -4241,6 +4365,12 @@ function drawThemes() {
   h.innerHTML = Object.entries(NA.THEMES).map(([k, t]) =>
     `<button class="nst-theme${NA.theme === k ? ' on' : ''}" data-theme="${k}" style="--p:${t.paper};--i:${t.ink};--a:${t.accent}"><i></i>${t.name}</button>`).join('');
 }
+function revealStage() {
+  if (isWide()) return;
+  const st = document.querySelector('.nst-stagewrap'); if (!st) return;
+  const top = st.getBoundingClientRect().top;
+  if (top < 0 || top > 80) window.scrollBy({ top: top - 64, behavior: 'smooth' });
+}
 function drawAll() { drawThemes(); drawStage(); drawStrip(); drawTools(); updUndo(); }
 function refreshPage(i) { drawStage(); drawThumb(i); drawTools(); ED.dirty.add(i); saveLocalSoon(); }
 
@@ -4263,25 +4393,32 @@ function highlightSel() {
 function drawTools() {
   const box = $('nstTools'); if (!box) return;
   const sel = ED.sel;
+  const sheet = !!sel && !isWide();
+  box.classList.toggle('sheet', sheet);
+  document.body.classList.toggle('nst-sheet-open', sheet);
   if (!sel) {
-    box.innerHTML = `<p class="nst-hint">Touchez une photo pour la changer ou la recadrer, touchez un texte pour l’écrire.</p>`;
+    box.innerHTML = isWide()
+      ? `<p class="nst-hint">Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.</p>`
+      : `<p class="nst-hint">Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.</p>`;
     return;
   }
   const pg = NA.pages[sel.page], L = NA.LAYOUTS[pg.layout];
-  let html = `<div class="nst-tools-hd"><b>Page ${sel.page + 1}</b><span>${esc(L && L.name ? L.name : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
+  let html = `<div class="nst-grip" aria-hidden="true"></div><div class="nst-tools-hd"><b>Page ${sel.page + 1}</b><span>${esc(L && L.name ? L.name : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
 
   if (sel.slot != null) {
     const s = pg.slots[sel.slot];
     const used = new Map(); NA.pages.forEach((p, pi) => p.slots.forEach((sl, si) => used.set(sl.p, [pi, si])));
-    html += `<div class="nst-sec"><label>Photo</label><div class="nst-pick">${S.photos.map((p, i) =>
-      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" title="${used.has(i) && s.p !== i ? 'Déjà utilisée page ' + (used.get(i)[0] + 1) + ' : les deux seront échangées' : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
-      <p class="nst-note">Une photo déjà placée ailleurs sera échangée avec celle-ci. Faites glisser la photo sur la page pour la recadrer.</p></div>
-      <div class="nst-sec"><label for="nstZoom">Zoom</label><input id="nstZoom" type="range" min="1" max="2.5" step="0.01" value="${s.z || 1}"/></div>
+    html += `<div class="nst-sec"><label for="nstZoom">Zoom</label><input id="nstZoom" type="range" min="1" max="2.5" step="0.01" value="${s.z || 1}"/></div>
       <div class="nst-sec"><label>Rendu</label><div class="nst-chips">${[['none', 'Original'], ['bw', 'Noir & blanc'], ['warm', 'Chaud'], ['soft', 'Doux']].map(([k, n]) => `<button class="nst-chip${(s.f || 'none') === k ? ' on' : ''}" data-filter="${k}">${n}</button>`).join('')}</div></div>
       <div class="nst-sec"><button class="nst-link" data-act="recenter">Recentrer la photo</button></div>`;
+    html += `<div class="nst-sec"><label>Changer la photo</label><div class="nst-pick">${S.photos.map((p, i) =>
+      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" title="${used.has(i) && s.p !== i ? 'Déjà utilisée page ' + (used.get(i)[0] + 1) + ' : les deux seront échangées' : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
+      <p class="nst-note">Une photo déjà placée ailleurs sera échangée avec celle-ci. ${isWide() ? 'Faites glisser la photo sur la page pour la recadrer, molette pour zoomer.' : 'Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.'}</p></div>`;
+
   }
   if (sel.text) {
-    html += `<div class="nst-sec"><label>Texte</label><p class="nst-note">Écrivez directement sur la page. Pour une autre formulation :</p>
+    const isList = pg.layout === 'list' || pg.layout === 'checklist';
+    html += `<div class="nst-sec"><label for="nstTxt">Texte${isList ? ' (une ligne par élément)' : ''}</label><textarea id="nstTxt" rows="${isList ? 7 : 4}">${esc(pg.t[sel.text] || '')}</textarea><p class="nst-note">Autre formulation par l’IA :</p>
       <div class="nst-chips">${[['shorter', 'Plus court'], ['tender', 'Plus tendre'], ['funny', 'Plus drôle'], ['again', 'Autre version']].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
       <p class="nst-note" id="nstAiMsg"></p></div>`;
   }
@@ -4309,7 +4446,7 @@ async function rewrite(kind) {
 Current text:
 """${cur}"""
 Return ONLY JSON: {"text": "..."}` }] }, 2);
-    if (j && j.text) { commit(); pg.t[sel.text] = String(j.text).trim(); refreshPage(sel.page); if ($('nstAiMsg')) $('nstAiMsg').textContent = ''; }
+    if (j && j.text) { commit(); pg.t[sel.text] = String(j.text).trim(); refreshPage(sel.page); if ($('nstAiMsg')) $('nstAiMsg').textContent = ''; if ($('nstTxt')) $('nstTxt').value = pg.t[sel.text]; }
   } catch (e) { if (m) m.textContent = 'Réécriture indisponible pour le moment.'; }
 }
 
@@ -4347,18 +4484,33 @@ function bindEditor() {
 
   const stage = $('nstSpread');
   // Sélection d'une photo ou d'un texte
+  ED.pts = new Map();
   stage.addEventListener('pointerdown', e => {
     const host = e.target.closest('.nst-page'); if (!host) return;
     const page = +host.dataset.page;
     const t = e.target.closest('.nst-t');
-    if (t) { if (!ED.sel || ED.sel.page !== page || ED.sel.text !== t.dataset.t) { ED.sel = { page, text: t.dataset.t }; highlightSel(); drawTools(); } return; }
+    if (t) {
+      if (!ED.sel || ED.sel.page !== page || ED.sel.text !== t.dataset.t) { ED.sel = { page, text: t.dataset.t }; highlightSel(); drawTools(); revealStage(); }
+      return;
+    }
     const s = e.target.closest('.nst-slot');
     if (s) {
       const slotI = +s.dataset.slot;
-      if (!ED.sel || ED.sel.page !== page || ED.sel.slot !== slotI) { ED.sel = { page, slot: slotI }; highlightSel(); drawTools(); }
+      const already = ED.sel && ED.sel.page === page && ED.sel.slot === slotI;
+      if (!already) { ED.sel = { page, slot: slotI }; highlightSel(); drawTools(); revealStage(); }
+      // Sur téléphone : 1er toucher = sélection ; on recadre ensuite (sinon le geste servirait à tourner la page)
+      if (!already && !isWide()) return;
       const pg = NA.pages[page], sl = pg.slots[slotI], ph = S.photos[sl.p];
       if (!ph) return;
-      ED.drag = { x0: e.clientX, y0: e.clientY, sx: sl.x != null ? sl.x : 50, sy: sl.y != null ? sl.y : ph.focalY, w: s.getBoundingClientRect().width, h: s.getBoundingClientRect().height, sl, page, moved: false, el: s.querySelector('img') };
+      ED.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const r = s.getBoundingClientRect();
+      if (ED.pts.size === 2) {
+        const [p1, p2] = [...ED.pts.values()];
+        ED.pinch = { d0: Math.hypot(p1.x - p2.x, p1.y - p2.y) || 1, z0: sl.z || 1, sl, page, el: s.querySelector('img') };
+        ED.drag = null; commit();
+      } else {
+        ED.drag = { x0: e.clientX, y0: e.clientY, sx: sl.x != null ? sl.x : 50, sy: sl.y != null ? sl.y : ph.focalY, w: r.width, h: r.height, sl, page, moved: false, el: s.querySelector('img') };
+      }
       try { s.setPointerCapture(e.pointerId); } catch (err) {}
       e.preventDefault();
       return;
@@ -4366,6 +4518,15 @@ function bindEditor() {
     ED.sel = { page }; highlightSel(); drawTools();
   });
   stage.addEventListener('pointermove', e => {
+    if (ED.pts.has(e.pointerId)) ED.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const pz = ED.pinch;
+    if (pz && ED.pts.size === 2) {
+      const [p1, p2] = [...ED.pts.values()];
+      pz.sl.z = Math.max(1, Math.min(2.5, pz.z0 * Math.hypot(p1.x - p2.x, p1.y - p2.y) / pz.d0));
+      if (pz.el) pz.el.style.transform = `scale(${pz.sl.z})`;
+      const zr = $('nstZoom'); if (zr) zr.value = pz.sl.z;
+      return;
+    }
     const d = ED.drag; if (!d) return;
     const dx = e.clientX - d.x0, dy = e.clientY - d.y0;
     if (!d.moved && Math.hypot(dx, dy) < 4) return;
@@ -4375,7 +4536,11 @@ function bindEditor() {
     d.sl.y = Math.max(0, Math.min(100, d.sy - dy / d.h * 100 / z));
     if (d.el) { d.el.style.objectPosition = `${d.sl.x}% ${d.sl.y}%`; d.el.style.transformOrigin = `${d.sl.x}% ${d.sl.y}%`; }
   });
-  const end = () => { const d = ED.drag; ED.drag = null; if (d && d.moved) { drawThumb(d.page); saveLocalSoon(); } };
+  const end = e => {
+    ED.pts.delete(e.pointerId);
+    const pz = ED.pinch; if (pz && ED.pts.size < 2) { ED.pinch = null; drawThumb(pz.page); saveLocalSoon(); }
+    const d = ED.drag; ED.drag = null; if (d && d.moved) { drawThumb(d.page); saveLocalSoon(); }
+  };
   stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
   stage.addEventListener('wheel', e => {
     if (!ED.sel || ED.sel.slot == null || !e.target.closest('.nst-slot.sel')) return;
@@ -4393,6 +4558,7 @@ function bindEditor() {
     const t = e.target.closest('.nst-t'); if (!t) return;
     const page = +t.closest('.nst-page').dataset.page;
     NA.pages[page].t[t.dataset.t] = t.innerText.replace(/\n{3,}/g, '\n\n').replace(/\s+$/, '');
+    const ta = $('nstTxt'); if (ta && document.activeElement !== ta) ta.value = NA.pages[page].t[t.dataset.t];
     clearTimeout(ED.tt); ED.tt = setTimeout(() => { drawThumb(page); saveLocalSoon(); }, 400);
   });
   stage.addEventListener('focusout', e => {
@@ -4415,11 +4581,27 @@ function bindEditor() {
     if (b.dataset.rewrite) return rewrite(b.dataset.rewrite);
     const a = b.dataset.act;
     if (a === 'close') { ED.sel = null; highlightSel(); drawTools(); }
+    if (a === 'done') { ED.sel = null; highlightSel(); drawTools(); }
     if (a === 'recenter') { commit(); const s = pg.slots[ED.sel.slot]; s.x = s.y = null; s.z = 1; refreshPage(ED.sel.page); }
     if (a === 'left') movePage(-1);
     if (a === 'right') movePage(1);
   });
+  $('nstTools').addEventListener('focusin', e => { if (e.target.id === 'nstTxt') ED.textBefore = snap(); });
+  $('nstTools').addEventListener('focusout', e => {
+    if (e.target.id !== 'nstTxt') return;
+    if (ED.textBefore && ED.textBefore !== snap()) { NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
+    ED.textBefore = null;
+    if (ED.sel) { const i = ED.sel.page; drawStage(); drawThumb(i); }
+  });
   $('nstTools').addEventListener('input', e => {
+    if (e.target.id === 'nstTxt' && ED.sel && ED.sel.text) {
+      const i = ED.sel.page, key = ED.sel.text;
+      NA.pages[i].t[key] = e.target.value.replace(/\n{3,}/g, '\n\n');
+      const node = document.querySelector(`#nstSpread .nst-page[data-page="${i}"] .nst-t[data-t="${key}"]`);
+      if (node) node.innerText = NA.pages[i].t[key];
+      clearTimeout(ED.tt); ED.tt = setTimeout(() => { drawThumb(i); saveLocalSoon(); }, 400);
+      return;
+    }
     if (e.target.id !== 'nstZoom' || !ED.sel) return;
     const sl = NA.pages[ED.sel.page].slots[ED.sel.slot];
     if (!ED.zoomCommitted) { commit(); ED.zoomCommitted = true; }
@@ -4436,7 +4618,7 @@ function bindEditor() {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); }
   });
   let tx0 = null;
-  stage.addEventListener('touchstart', e => { tx0 = e.target.closest('.nst-slot, .nst-t') ? null : e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchstart', e => { tx0 = (e.touches.length > 1 || e.target.closest('.nst-slot.sel, .nst-t[contenteditable]')) ? null : e.touches[0].clientX; }, { passive: true });
   stage.addEventListener('touchend', e => { if (tx0 == null) return; const d = tx0 - e.changedTouches[0].clientX; if (Math.abs(d) > 50) step(d > 0 ? 1 : -1); tx0 = null; }, { passive: true });
 
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if ($('panel3').classList.contains('active')) { drawStage(); document.querySelectorAll('#nstStrip .nst-th-in').forEach(scaleHost); } }, 150); });
@@ -4596,6 +4778,7 @@ window.processPayment = async function () {
   window.goTab = function(n){
     og(n);
     var w = document.querySelector('.app-wrap'); if (w) w.classList.toggle('nst-wide', n === 3);
+    if (n !== 3) { document.body.classList.remove('nst-sheet-open'); var tl = document.getElementById('nstTools'); if (tl) tl.classList.remove('sheet'); }
   };
 })();
 
