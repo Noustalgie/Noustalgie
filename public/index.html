@@ -1213,6 +1213,26 @@ html body #app .nst-addr-lbl{display:block;text-align:left;}
 .nst-toast.on{opacity:1;transform:translate(-50%,0);}
 .dz input[type=file]{font-size:16px;}
 .ph-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(14,11,9,.82);font:italic 9px/1.3 'Playfair Display',Georgia,serif;padding:3px 6px;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+#photoGrid .photo-item.pending{background:#efebe5;}
+.ph-wait{position:absolute;inset:0;background:linear-gradient(100deg,#efebe5 30%,#f8f6f2 50%,#efebe5 70%);background-size:220% 100%;animation:nstShim 1.1s linear infinite;}
+@keyframes nstShim{from{background-position:120% 0}to{background-position:-120% 0}}
+@media (prefers-reduced-motion:reduce){.ph-wait{animation:none;}}
+
+/* ═══ v4.7 — correctifs téléphone ═══ */
+@media (max-width:760px){
+  html body #app .prog{display:none!important;}            /* le bandeau à 5 étapes ne tient pas : la barre mobile prend le relais */
+  html body #app .mob-prog{display:block!important;}
+}
+html body #app #promoCode,html body #promoCode{font-size:16px!important;}
+.nst-demo-dots button{position:relative;}
+.nst-demo-dots button::after{content:"";position:absolute;inset:-14px -8px;}  /* zone de toucher de 36 px autour du point */
+.nst-demo-dots{gap:14px!important;}
+html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:24px!important;}
+.ov-cover{min-width:40px!important;min-height:40px!important;}
+#photoGrid{overflow-anchor:none;}
+#photoGrid .ov-cover{position:absolute;top:4px;right:4px;z-index:3;min-width:34px!important;min-height:34px!important;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:.92;}
+@media (hover:hover){#photoGrid .ov-cover{opacity:0;transition:opacity .2s;}#photoGrid .photo-item:hover .ov-cover{opacity:1;}}
+#photoGrid .ov-cover::after{content:"";position:absolute;inset:-5px;}
 </style>
 <script type="application/ld+json">
 {
@@ -1640,7 +1660,7 @@ html body #app .nst-addr-lbl{display:block;text-align:left;}
             <input type="hidden" id="payFormat" value="print"/>
             <div style="margin-top:14px;">
               <div style="display:flex;gap:0;border:1px solid #ddd;border-radius:0;overflow:hidden;transition:border-color .2s;" id="promoWrap">
-                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:.85rem !important;letter-spacing:.05em;margin:0 !important;font-family:'Inter',sans-serif;color:#111 !important;outline:none;"/>
+                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:16px !important;letter-spacing:.05em;margin:0 !important;font-family:'Inter',sans-serif;color:#111 !important;outline:none;"/>
                 <button type="button" onclick="applyPromo()" style="background:#111;color:#fff;border:none;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Appliquer</button>
               </div>
             </div>
@@ -4049,7 +4069,7 @@ function cropCost(p, a) {
 
 /* Emplacement photo : recadrage (x,y en %), zoom z, filtre f */
 function slot(pg, i, x, y, w, h, o = {}) {
-  const T = theme(), s = pg.slots[i], p = s && photos()[s.p];
+  const T = theme(), s = pg.slots[i], p0 = s && photos()[s.p], p = p0 && p0.data ? p0 : null; // photo encore en préparation : emplacement neutre
   const b = o.border != null ? o.border : T.border;
   let inner;
   if (p) {
@@ -4717,7 +4737,7 @@ const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.te
 async function decodeFile(file) {
   // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : on s'en sert pour décoder
   const url = URL.createObjectURL(file);
-  try { const img = await loadImage(url); return { img, done: () => URL.revokeObjectURL(url) }; }
+  try { const img = await loadImage(url); return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; }
   catch (e) { URL.revokeObjectURL(url); return null; }
 }
 async function importFile(f) {
@@ -4747,33 +4767,50 @@ function toast(msg, ms) {
   clearTimeout(el.__t); el.__t = setTimeout(() => el.classList.remove('on'), ms || 6000);
 }
 NA.toast = toast;
-window.addPhotos = async function (files) {
+let importJob = Promise.resolve();
+NA.photosReady = () => importJob;
+async function fillPhoto(p) { const r = await importFile(p.file); if (!r) return false; delete r.name; Object.assign(p, r); p.pending = false; return true; }
+function dropPhoto(p) {
+  const i = S.photos.indexOf(p); if (i < 0) return;
+  S.photos.splice(i, 1);
+  const shift = m => { const o = {}; Object.keys(m || {}).forEach(k => { const n = +k; if (n < i) o[n] = m[k]; else if (n > i) o[n - 1] = m[k]; }); return o; };
+  S.captions = shift(S.captions);
+}
+window.addPhotos = function (files) {
   const all = Array.from(files || []);
   const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
-  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return; }
-  if (typeof showUploadLoader === 'function') showUploadLoader(0, list.length);
-  const step = TOUCH ? 2 : 4;
-  let done = 0, fails = 0, lastDraw = 0;
-  for (let i = 0; i < list.length; i += step) {
-    const res = await Promise.all(list.slice(i, i + step).map(importFile));
-    res.forEach(p => { if (p) S.photos.push(p); else fails++; });
-    done = Math.min(i + step, list.length);
-    if (typeof showUploadLoader === 'function') showUploadLoader(done, list.length);
-    const now = Date.now();                                         // grille redessinée au plus toutes les 0,5 s
-    if (now - lastDraw > 500 && typeof renderPhotos === 'function') { renderPhotos(); lastDraw = now; }
-    await sleep(0);
-  }
-  if (typeof hideUploadLoader === 'function') hideUploadLoader();
+  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return importJob; }
+  // 1) Toutes les photos apparaissent tout de suite (tuiles en préparation)
+  const added = list.map(f => ({ name: f.name || 'photo.jpg', file: f, pending: true }));
+  added.forEach(p => S.photos.push(p));
+  NA.pages = [];                                                   // les photos ont changé : l'album sera recomposé
   if (typeof renderPhotos === 'function') renderPhotos();
-  if (fails) toast(NA.t('ph_fail', fails), 9000);
-  NA.pages = []; // les photos ont changé : l'album sera recomposé
-  // Visages et sujets : en arrière-plan sur ordinateur ; sur téléphone, pendant la génération (évite de ralentir l'écran)
-  if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600);
+  if (typeof showUploadLoader === 'function') showUploadLoader(0, added.length);
+  // 2) Préparation en arrière-plan : une à la fois sur téléphone, 3 sur ordinateur ; nouvel essai pour celles qui échouent
+  importJob = importJob.then(async () => {
+    let done = 0, lastDraw = 0;
+    const failed = [], queue = added.slice(), workers = TOUCH ? 1 : 3;
+    const tick = () => { done++; if (typeof showUploadLoader === 'function') showUploadLoader(done, added.length);
+      const now = Date.now(); if (now - lastDraw > 400 && typeof renderPhotos === 'function') { renderPhotos(); lastDraw = now; } };
+    await Promise.all(Array.from({ length: workers }, async () => {
+      while (queue.length) { const p = queue.shift(); if (S.photos.indexOf(p) < 0) { tick(); continue; } if (!(await fillPhoto(p))) failed.push(p); tick(); await sleep(0); }
+    }));
+    for (const p of failed.slice()) {                              // 2e essai, après une pause (mémoire libérée)
+      await sleep(300);
+      if (S.photos.indexOf(p) >= 0 && await fillPhoto(p)) failed.splice(failed.indexOf(p), 1);
+    }
+    failed.forEach(dropPhoto);
+    if (typeof hideUploadLoader === 'function') hideUploadLoader();
+    if (typeof renderPhotos === 'function') renderPhotos();
+    if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
+    if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600); // visages : en arrière-plan sur ordinateur, pendant la génération sur téléphone
+  });
+  return importJob;
 };
 window.renderPhotos = function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const grid = document.getElementById('photoGrid'); if (!grid) return;
-  grid.innerHTML = S.photos.map((p, i) => `<div class="photo-item"><img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>
+  grid.innerHTML = S.photos.map((p, i) => `<div class="photo-item${p.pending ? ' pending' : ''}">${p.pending ? '<div class="ph-wait" aria-hidden="true"></div>' : `<img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>`}
       <div class="photo-ov"><button class="ov-rm" type="button" aria-label="×" onclick="removePhoto(${i})">×</button><button class="ov-msg" type="button" onclick="openMsgModal(${i})">${S.captions[i] ? '✎' : '💬'}</button></div>
       ${S.captions[i] ? `<div class="ph-cap">"${esc(S.captions[i])}"</div>` : ''}</div>`).join('');
   const c = document.getElementById('photoCount'); if (!c) return;
@@ -4978,6 +5015,7 @@ function defaultStory(info) {
 window.runGeneration = async function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const nPages = nPagesSel();
+  if (NA.photosReady) await NA.photosReady();
   const min = NA.minPhotos(nPages);
   if (S.photos.length < min) { alert(NA.t('gen_min', min, nPages, S.photos.length)); return; }
   const btn = $('btnGen'); if (btn) btn.disabled = true;
@@ -5107,7 +5145,8 @@ function drawStrip() {
 function markStrip() {
   const v = visible();
   document.querySelectorAll('#nstStrip .nst-th').forEach(b => b.classList.toggle('on', v.includes(+b.dataset.page)));
-  const on = document.querySelector('#nstStrip .nst-th.on'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  const on = document.querySelector('#nstStrip .nst-th.on'), s = $('nstStrip');
+  if (on && s) s.scrollTo({ left: Math.max(0, on.offsetLeft - (s.clientWidth - on.offsetWidth) / 2), behavior: 'smooth' }); // la bande seule, jamais la page
 }
 function drawThemes() {
   const h = $('nstThemes'); if (!h) return;
@@ -6332,18 +6371,19 @@ async function exifDate(file) {
   return null;
 }
 const origAdd = window.addPhotos;
-window.addPhotos = async function (files) {
+window.addPhotos = function (files) {
   const list = Array.from(files || []);
-  if (list.length && typeof showUploadLoader === 'function') showUploadLoader(0, list.length);   // retour immédiat
-  const dates = await Promise.all(list.map(async f => [f.name, (await exifDate(f)) || f.lastModified || null]));
-  const byName = new Map(dates);
   const before = S.photos.length;
-  await origAdd.call(this, list);
-  S.photos.slice(before).forEach(p => { if (p && p.date == null) p.date = byName.get(p.name) || null; });
-  renderPhotosPlus(); liveSoon();
+  const job = origAdd.call(this, list);                            // les tuiles apparaissent immédiatement
+  const added = S.photos.slice(before);
+  added.forEach(async p => { if (p.file) p.date = (await exifDate(p.file)) || p.file.lastModified || null; });   // date lue en parallèle
+  liveSoon();
+  return Promise.resolve(job).then(() => { renderPhotosPlus(); liveSoon(); });
 };
 function remap(map, order) { const o = {}; order.forEach((oldI, newI) => { if (map && map[oldI] != null) o[newI] = map[oldI]; }); return o; }
 function applyOrder(order) {                 // order[newIndex] = oldIndex
+  const y = window.scrollY;                  // la page ne doit pas bouger quand on réordonne
+  requestAnimationFrame(() => requestAnimationFrame(() => { if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y); }));
   const albumExists = NA.pages && NA.pages.length && NA.recomposeAlbum;
   if (albumExists) NA.syncStory();
   S.photos = order.map(i => S.photos[i]);
@@ -6379,11 +6419,10 @@ function renderPhotosPlus() {
   const note = $('nstPhotoNote'); if (note && !note.dataset.sorted) note.textContent = t('drag_photos');
   grid.querySelectorAll('.photo-item').forEach((it, i) => {
     it.setAttribute('draggable', 'true'); it.dataset.i = i;
-    const ov = it.querySelector('.photo-ov');
-    if (ov && i > 0 && !ov.querySelector('.ov-cover')) {
+    if (i > 0 && !it.querySelector('.ov-cover')) {   // étoile dans le coin de la vignette, hors de la barre de boutons
       const b = document.createElement('button'); b.type = 'button'; b.className = 'ov-cover'; b.title = t('set_cover'); b.setAttribute('aria-label', t('set_cover')); b.textContent = '★';
       b.addEventListener('click', e => { e.stopPropagation(); movePhoto(i, 0); });
-      ov.insertBefore(b, ov.firstChild);
+      it.appendChild(b);
     }
   });
 }
