@@ -968,6 +968,58 @@ html body .mob-prog-bar{background:#e4dfd7!important;}
 html body #app .dz-s{color:#5f5a54!important;}
 html body #photoCount{color:#2f6b3a!important;}
 .nst-ctr{color:#5f5a54!important;}
+/* ═══ v2.5 — sélecteur de langue ═══ */
+html body .lang-toggle{display:inline-flex!important;align-items:center;gap:8px;min-height:40px;padding:0 16px!important;border-radius:999px!important;border:1px solid #d9d4cc!important;background:#fff!important;color:#1c1a18!important;font:500 14px/1 'Inter',system-ui,sans-serif!important;letter-spacing:0!important;cursor:pointer;transition:border-color .15s;}
+html body .lang-toggle:hover,html body .lang-toggle[aria-expanded="true"]{border-color:#1c1a18!important;}
+.lg-chev{transition:transform .15s;}.lang-toggle[aria-expanded="true"] .lg-chev{transform:rotate(180deg);}
+html body .lang-menu{top:calc(100% + 8px)!important;min-width:190px;padding:6px!important;border:1px solid #e4dfd7!important;border-radius:14px!important;box-shadow:0 14px 34px -10px rgba(30,25,20,.22)!important;z-index:9500;}
+html body .lang-menu button{display:flex!important;align-items:center;gap:10px;min-height:42px;padding:0 12px!important;border-radius:9px!important;font:500 14px 'Inter',system-ui,sans-serif!important;color:#1c1a18!important;background:none!important;}
+html body .lang-menu button small{margin-left:auto;font:500 11.5px 'Inter',sans-serif;color:#5f5a54;}
+html body .lang-menu button:hover{background:#f6f4f0!important;}
+html body .lang-menu button.active{background:#f6f4f0!important;}
+.lang-menu .lg-check{visibility:hidden;color:#1c1a18;}.lang-menu button.active .lg-check{visibility:visible;}
+/* ═══ v2.5 — pages d'information ═══ */
+html body .legal-overlay.lg{background:#fbfaf7!important;overflow-y:auto;z-index:9800;}
+.lg-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px max(16px,calc((100vw - 760px)/2));background:rgba(251,250,247,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid #e4dfd7;}
+.lg-tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;}
+.lg-tabs button{flex:0 0 auto;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid transparent;background:none;font:500 14px 'Inter',system-ui,sans-serif;color:#5f5a54;cursor:pointer;white-space:nowrap;}
+.lg-tabs button:hover{color:#1c1a18;background:#f1eee9;}
+.lg-tabs button.on{background:#1c1a18;color:#fff;}
+.lg-close{flex:0 0 auto;min-height:40px;padding:0 18px;border-radius:999px;border:1px solid #1c1a18;background:#fff;color:#1c1a18;font:500 14px 'Inter',system-ui,sans-serif;cursor:pointer;}
+.lg-close:hover{background:#1c1a18;color:#fff;}
+html body .legal-overlay.lg .legal-inner{max-width:720px!important;margin:0 auto!important;padding:48px 24px 96px!important;font:400 16px/1.75 'Inter',system-ui,sans-serif!important;color:#2b2926!important;}
+.legal-overlay.lg .lg-eyebrow{margin:0 0 10px;font:500 12px 'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#77726b;}
+.legal-overlay.lg h1{margin:0 0 10px;font:400 clamp(32px,5vw,44px)/1.1 'Playfair Display',Georgia,serif;color:#1c1a18;}
+.legal-overlay.lg .lg-maj{margin:0 0 32px;color:#5f5a54;font-size:14px;}
+.legal-overlay.lg h2{margin:40px 0 12px;font:400 23px/1.3 'Playfair Display',Georgia,serif;color:#1c1a18;scroll-margin-top:90px;}
+.legal-overlay.lg p{margin:0 0 14px;}
+.legal-overlay.lg ul{margin:0 0 16px;padding-left:20px;}.legal-overlay.lg li{margin:0 0 8px;}
+.legal-overlay.lg a{color:#1c1a18;text-decoration:underline;text-underline-offset:3px;}
+.legal-overlay.lg b{font-weight:600;color:#1c1a18;}
+.lg-note{margin:0 0 8px;padding:16px 18px;background:#fff;border:1px solid #e4dfd7;border-radius:14px;color:#1c1a18;}
+.lg-table{overflow-x:auto;margin:0 0 16px;border:1px solid #e4dfd7;border-radius:14px;background:#fff;}
+.lg-table table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px;}
+.lg-table th,.lg-table td{text-align:left;padding:12px 14px;border-bottom:1px solid #eee9e2;vertical-align:top;}
+.lg-table th{font-weight:600;color:#1c1a18;background:#f8f6f2;}
+.lg-table tr:last-child td{border-bottom:0;}
+.lg-toc{margin:0 0 8px;padding:18px 20px;background:#fff;border:1px solid #e4dfd7;border-radius:14px;}
+.lg-toc p{margin:0 0 8px;font:600 13px 'Inter',sans-serif;color:#1c1a18;}
+.lg-toc ol{margin:0;padding-left:20px;columns:2;column-gap:28px;font-size:14.5px;}
+.lg-toc li{margin:0 0 6px;break-inside:avoid;}
+.lg-toc a{text-decoration:none!important;}.lg-toc a:hover{text-decoration:underline!important;}
+.lg-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0 0 12px;}
+.legal-overlay.lg .lg-card{display:block;padding:18px;border:1px solid #e4dfd7;border-radius:14px;background:#fff;text-decoration:none;color:#2b2926;transition:border-color .15s;}
+.legal-overlay.lg .lg-card:hover{border-color:#1c1a18;}
+.lg-card b{display:block;margin-bottom:6px;font-size:15px;}
+.lg-card span{font-size:14px;line-height:1.55;color:#5f5a54;}
+@media (max-width:640px){.lg-bar{padding:10px 12px;}.lg-tabs button{padding:0 12px;font-size:13.5px;}.lg-close{padding:0 14px;}.lg-toc ol{columns:1;}.legal-overlay.lg .legal-inner{padding:32px 20px 80px!important;}}
+.legal-overlay.lg:focus{outline:none;}
+.lg-close-i{display:none;font-size:24px;line-height:1;}
+.lg-tabs button:focus{outline:none;}.lg-tabs button:focus-visible{outline:2px solid #1c1a18;outline-offset:2px;}
+@media (max-width:640px){.lg-close{width:40px;padding:0!important;justify-content:center;display:inline-flex;align-items:center;}.lg-close-t{display:none;}.lg-close-i{display:inline;}
+  .lg-tabs{padding-right:44px;-webkit-mask-image:linear-gradient(to right,#000 86%,transparent);mask-image:linear-gradient(to right,#000 86%,transparent);}}
+/* pied de page */
+.footer-mail{font-style:normal!important;}
 </style>
 <script type="application/ld+json">
 {
@@ -1052,7 +1104,7 @@ html body #photoCount{color:#2f6b3a!important;}
    "name": "Que se passe-t-il si mon livre arrive abîmé ?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "En cas de défaut d'impression ou de colis endommagé, contactez-nous sous 14 jours à contact@noustalgie.fr avec quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais."
+    "text": "En cas de défaut d'impression ou de colis endommagé, écrivez-nous dès que possible à contact@noustalgie.fr avec votre numéro de commande et quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais pour vous. Vos garanties légales restent bien sûr acquises."
    }
   },
   {
@@ -1463,7 +1515,7 @@ html body #photoCount{color:#2f6b3a!important;}
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q8">Que se passe-t-il si mon livre arrive abîmé ?</span><span class="ed-faq-sign">+</span></button>
-      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a8">Si votre album présente un défaut d'impression ou si le colis a été endommagé pendant le transport, contactez-nous dans les 14 jours suivant la réception à contact@noustalgie.fr, en joignant quelques photos du problème. Nous procédons alors à une réimpression complète ou à un remboursement, sans frais supplémentaires pour vous. Votre satisfaction est notre priorité.</div></div>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a8">En cas de défaut d'impression ou de colis endommagé, écrivez-nous dès que possible à contact@noustalgie.fr avec votre numéro de commande et quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais pour vous. Vos garanties légales restent bien sûr acquises.</div></div>
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q9">Puis-je modifier ma commande après le paiement ?</span><span class="ed-faq-sign">+</span></button>
@@ -1503,7 +1555,7 @@ html body #photoCount{color:#2f6b3a!important;}
     </div>
     <div class="footer-bottom">
       <div class="footer-copy" data-i18n="footer_copy">© 2026 Noustalgie — Tous droits réservés</div>
-      <div class="footer-made" data-i18n="footer_made">Fait avec</div>
+      <div class="footer-made" data-i18n="footer_made">Fait à Lille</div>
     </div>
   </div>
 </footer>
@@ -1550,7 +1602,7 @@ const LANGS = {
     faq_q5:"Comment fonctionne la création de l'album ?", faq_a5:'Tout se passe en quelques minutes sur le site. Vous renseignez vos prénoms et votre histoire, importez vos photos, et notre système compose automatiquement un album élégant et personnalisé, que vous pouvez ensuite modifier à votre goût.',
     faq_q6:'Puis-je personnaliser les textes et les pages ?', faq_a6:"Bien sûr. Une fois votre album généré, un éditeur complet vous permet de modifier les textes, changer les photos, ajuster le cadrage et choisir la mise en page. Vous gardez la main sur l'ensemble du rendu.",
     faq_q7:'Mes photos sont-elles en sécurité ?', faq_a7:'La confidentialité de vos souvenirs est une priorité. Vos photos servent uniquement à créer votre album, ne sont jamais vendues ni partagées, et sont automatiquement supprimées 30 jours après votre commande.',
-    faq_q8:'Que se passe-t-il si mon livre arrive abîmé ?', faq_a8:"En cas de défaut d'impression ou de colis endommagé, contactez-nous sous 14 jours à contact@noustalgie.fr avec quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais.",
+    faq_q8:'Que se passe-t-il si mon livre arrive abîmé ?', faq_a8:"En cas de défaut d'impression ou de colis endommagé, écrivez-nous dès que possible à contact@noustalgie.fr avec votre numéro de commande et quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais pour vous. Vos garanties légales restent bien sûr acquises.",
     faq_q9:'Puis-je modifier ma commande après le paiement ?', faq_a9:"Une fois le paiement validé, votre album part rapidement en impression. Vérifiez bien votre aperçu avant de payer. En cas d'erreur, écrivez-nous vite : si l'impression n'a pas démarré, nous ferons notre possible.",
     faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:"Oui, nous livrons dans toute l'Europe via notre réseau d'imprimeurs. Indiquez simplement votre pays lors de la saisie de l'adresse. Vous recevrez un email de suivi avec tracking dès l'expédition.",
     nav_how:'Comment ça marche', nav_pricing:'Tarifs', nav_create:'Créer notre album', nav_cta:'Commencer',
@@ -1615,7 +1667,7 @@ const LANGS = {
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Livraison dans 3 à 5 jours.', dl_pdf:'Télécharger aussi le PDF ↗',
     footer_tag:'L\'album photo de votre histoire d\'amour.', footer_info:'Informations', footer_product:'Produit',
     legal_mentions:'Mentions légales', legal_cgv:'CGV', legal_privacy:'Confidentialité', legal_contact:'Contact',
-    footer_copy:'© 2026 Noustalgie — Tous droits réservés', footer_made:'Fait avec', create_album:'Créer mon album',
+    footer_copy:'© 2026 Noustalgie — Tous droits réservés', footer_made:"Fait à Lille", create_album:'Créer mon album',
     close_btn:'← Fermer', modal_title:'Votre petit mot 💌', modal_sub:'Cette légende apparaîtra sous cette photo.', modal_lbl:'Légende personnelle', modal_ph:'Notre premier soir à Paris...', cancel:'Annuler', save_word:'Sauvegarder',
     log_analyzing:'Analyse de vos photos...', log_analyzed:'Analyse terminée ✓', log_themes:'Thèmes :', log_writing:'Rédaction de votre histoire d\'amour...', log_ready:'Votre album est prêt ✓', log_error:'Erreur :', log_server_tip:'Réessaie dans quelques secondes ou contacte contact@noustalgie.fr',
     photos_ok:' photos prêtes', photos_warn:' · il reste ', photos_warn2:' photos minimum à ajouter',
@@ -1636,7 +1688,7 @@ const LANGS = {
     faq_q5:'How does creating the album work?', faq_a5:'It all takes just a few minutes on the site. You enter your names and your story, upload your photos, and our system automatically composes an elegant, personalised album that you can then edit as you wish.',
     faq_q6:'Can I customise the text and pages?', faq_a6:'Of course. Once your album is generated, a full editor lets you change the text, swap photos, adjust framing and choose the layout. You stay in control of the entire result.',
     faq_q7:'Are my photos safe?', faq_a7:'The privacy of your memories is a priority. Your photos are used only to create your album, never sold or shared, and are automatically deleted 30 days after your order.',
-    faq_q8:'What if my book arrives damaged?', faq_a8:"If your album has a printing defect or arrives damaged, contact us within 14 days at contact@noustalgie.fr with a few photos. We'll reprint or refund, free of charge.",
+    faq_q8:'What if my book arrives damaged?', faq_a8:"If your album has a printing defect or arrives damaged, email us as soon as possible at contact@noustalgie.fr with your order number and a few photos. We'll reprint or refund, free of charge. Your statutory rights remain unaffected.",
     faq_q9:'Can I change my order after paying?', faq_a9:"Once payment is confirmed, your album goes to print quickly. Please check your preview carefully before paying. If there's a mistake, email us fast: if printing hasn't started, we'll do our best to help.",
     faq_q10:'Do you ship outside France?', faq_a10:"Yes, we ship across Europe through our printing network. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
     nav_how:'How it works', nav_pricing:'Pricing', nav_create:'Create our album', nav_cta:'Start',
@@ -1701,7 +1753,7 @@ const LANGS = {
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. Delivery in 5 to 7 working days.', dl_pdf:'Download the PDF too ↗',
     footer_tag:'The photo book of your love story.', footer_info:'Information', footer_product:'Product',
     legal_mentions:'Legal notice', legal_cgv:'T&Cs', legal_privacy:'Privacy', legal_contact:'Contact',
-    footer_copy:'© 2026 Noustalgie — All rights reserved', footer_made:'Made with', create_album:'Create my album',
+    footer_copy:'© 2026 Noustalgie — All rights reserved', footer_made:"Made in Lille", create_album:'Create my album',
     close_btn:'← Close', modal_title:'Your personal note 💌', modal_sub:'This caption will appear under the photo in your book.', modal_lbl:'Personal caption', modal_ph:'Our first night in Paris...', cancel:'Cancel', save_word:'Save',
     log_analyzing:'Analysing your photos...', log_analyzed:'Analysis complete ✓', log_themes:'Themes:', log_writing:'Writing your love story...', log_ready:'Your album is ready ✓', log_error:'Error:', log_server_tip:'Please try again in a few seconds.',
     photos_ok:' photos ready', photos_warn:' · at least ', photos_warn2:' more photos needed',
@@ -1722,7 +1774,7 @@ const LANGS = {
     faq_q5:'Wie funktioniert die Erstellung des Albums?', faq_a5:'Alles dauert nur wenige Minuten auf der Website. Sie geben Ihre Namen und Ihre Geschichte ein, laden Ihre Fotos hoch, und unser System erstellt automatisch ein elegantes, personalisiertes Album, das Sie anschließend bearbeiten können.',
     faq_q6:'Kann ich Texte und Seiten anpassen?', faq_a6:'Natürlich. Sobald Ihr Album erstellt ist, können Sie mit einem umfassenden Editor Texte ändern, Fotos austauschen, den Bildausschnitt anpassen und das Layout wählen. Sie behalten die volle Kontrolle.',
     faq_q7:'Sind meine Fotos sicher?', faq_a7:'Der Schutz Ihrer Erinnerungen hat Priorität. Ihre Fotos dienen nur der Erstellung Ihres Albums, werden nie verkauft oder geteilt und 30 Tage nach Ihrer Bestellung automatisch gelöscht.',
-    faq_q8:'Was, wenn mein Buch beschädigt ankommt?', faq_a8:'Bei einem Druckfehler oder beschädigtem Paket kontaktieren Sie uns innerhalb von 14 Tagen unter contact@noustalgie.fr mit einigen Fotos. Wir drucken neu oder erstatten den Betrag, kostenlos.',
+    faq_q8:'Was, wenn mein Buch beschädigt ankommt?', faq_a8:"Bei einem Druckfehler oder beschädigtem Paket schreibt uns bitte so bald wie möglich an contact@noustalgie.fr mit eurer Bestellnummer und einigen Fotos. Wir drucken kostenlos neu oder erstatten den Betrag. Eure gesetzlichen Rechte bleiben unberührt.",
     faq_q9:'Kann ich meine Bestellung nach der Zahlung ändern?', faq_a9:'Nach bestätigter Zahlung geht Ihr Album schnell in den Druck. Bitte prüfen Sie Ihre Vorschau vor dem Bezahlen. Bei einem Fehler schreiben Sie uns schnell: Ist der Druck noch nicht gestartet, helfen wir gerne.',
     faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, wir liefern europaweit über unser Drucknetzwerk. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
     nav_how:'So funktioniert\'s', nav_pricing:'Preise', nav_create:'Unser Album erstellen', nav_cta:'Loslegen',
@@ -1787,7 +1839,7 @@ const LANGS = {
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Lieferung in 5 bis 7 Werktagen.', dl_pdf:'PDF auch herunterladen ↗',
     footer_tag:'Das Fotobuch eurer Liebesgeschichte.', footer_info:'Informationen', footer_product:'Produkt',
     legal_mentions:'Impressum', legal_cgv:'AGB', legal_privacy:'Datenschutz', legal_contact:'Kontakt',
-    footer_copy:'© 2026 Noustalgie — Alle Rechte vorbehalten', footer_made:'Mit gemacht', create_album:'Mein Album erstellen',
+    footer_copy:'© 2026 Noustalgie — Alle Rechte vorbehalten', footer_made:"Gemacht in Lille", create_album:'Mein Album erstellen',
     close_btn:'← Schließen', modal_title:'Eure persönliche Notiz 💌', modal_sub:'Diese Bildunterschrift erscheint unter dem Foto.', modal_lbl:'Persönliche Bildunterschrift', modal_ph:'Unser erster Abend in Paris...', cancel:'Abbrechen', save_word:'Speichern',
     log_analyzing:'Fotos werden analysiert...', log_analyzed:'Analyse abgeschlossen ✓', log_themes:'Themen:', log_writing:'Liebesgeschichte wird geschrieben...', log_ready:'Eure Geschichte ist fertig', log_error:'Fehler:', log_server_tip:'Bitte versuche es in einigen Sekunden erneut.',
     photos_ok:' Fotos bereit', photos_warn:' · mindestens noch ', photos_warn2:' Fotos erforderlich',
@@ -1808,7 +1860,7 @@ const LANGS = {
     faq_q5:'¿Cómo funciona la creación del álbum?', faq_a5:'Todo ocurre en unos minutos en la web. Introduces tus nombres y vuestra historia, subes tus fotos, y nuestro sistema compone automáticamente un álbum elegante y personalizado que luego puedes editar a tu gusto.',
     faq_q6:'¿Puedo personalizar los textos y las páginas?', faq_a6:'Por supuesto. Una vez generado tu álbum, un editor completo te permite cambiar los textos, sustituir fotos, ajustar el encuadre y elegir el diseño. Mantienes el control de todo el resultado.',
     faq_q7:'¿Están seguras mis fotos?', faq_a7:'La privacidad de tus recuerdos es una prioridad. Tus fotos solo sirven para crear tu álbum, nunca se venden ni se comparten, y se eliminan automáticamente 30 días después de tu pedido.',
-    faq_q8:'¿Qué pasa si mi libro llega dañado?', faq_a8:'Si tu álbum tiene un defecto de impresión o llega dañado, contáctanos en 14 días en contact@noustalgie.fr con algunas fotos. Reimprimimos o reembolsamos, sin coste alguno.',
+    faq_q8:'¿Qué pasa si mi libro llega dañado?', faq_a8:"Si tu álbum tiene un defecto de impresión o llega dañado, escríbenos cuanto antes a contact@noustalgie.fr con tu número de pedido y algunas fotos. Reimprimimos o reembolsamos, sin coste alguno. Tus garantías legales se mantienen.",
     faq_q9:'¿Puedo modificar mi pedido tras pagar?', faq_a9:'Una vez confirmado el pago, tu álbum entra rápido en impresión. Revisa bien tu vista previa antes de pagar. Si hay un error, escríbenos rápido: si la impresión no ha empezado, haremos lo posible.',
     faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, enviamos a toda Europa a través de nuestra red de impresión. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
     nav_how:'Cómo funciona', nav_pricing:'Precios', nav_create:'Crear nuestro álbum', nav_cta:'Empezar',
@@ -1873,7 +1925,7 @@ const LANGS = {
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro está siendo impreso. Entrega en 5 a 7 días laborables.', dl_pdf:'Descargar también el PDF ↗',
     footer_tag:'El álbum fotográfico de vuestra historia de amor.', footer_info:'Información', footer_product:'Producto',
     legal_mentions:'Aviso legal', legal_cgv:'Condiciones', legal_privacy:'Privacidad', legal_contact:'Contacto',
-    footer_copy:'© 2026 Noustalgie — Todos los derechos reservados', footer_made:'Hecho con', create_album:'Crear mi álbum',
+    footer_copy:'© 2026 Noustalgie — Todos los derechos reservados', footer_made:"Hecho en Lille", create_album:'Crear mi álbum',
     close_btn:'← Cerrar', modal_title:'Vuestro pequeño mensaje 💌', modal_sub:'Este pie de foto aparecerá bajo la foto en vuestro libro.', modal_lbl:'Pie de foto personal', modal_ph:'Nuestra primera noche en París...', cancel:'Cancelar', save_word:'Guardar',
     log_analyzing:'Analizando vuestras fotos...', log_analyzed:'Análisis completado ✓', log_themes:'Temas:', log_writing:'Escribiendo vuestra historia de amor...', log_ready:'¡Vuestra historia está lista', log_error:'Error:', log_server_tip:'Por favor, inténtalo de nuevo en unos segundos.',
     photos_ok:' fotos listas', photos_warn:' · faltan al menos ', photos_warn2:' fotos como mínimo',
@@ -1894,7 +1946,7 @@ const LANGS = {
     faq_q5:'Como funciona a criação do álbum?', faq_a5:'Tudo acontece em poucos minutos no site. Introduz os seus nomes e a vossa história, carrega as fotos, e o nosso sistema compõe automaticamente um álbum elegante e personalizado, que pode depois editar a seu gosto.',
     faq_q6:'Posso personalizar os textos e as páginas?', faq_a6:'Claro. Depois de gerado o álbum, um editor completo permite alterar textos, trocar fotos, ajustar o enquadramento e escolher o layout. Mantém o controlo de todo o resultado.',
     faq_q7:'As minhas fotos estão seguras?', faq_a7:'A privacidade das suas memórias é uma prioridade. As suas fotos servem apenas para criar o álbum, nunca são vendidas nem partilhadas, e são automaticamente eliminadas 30 dias após a encomenda.',
-    faq_q8:'E se o meu livro chegar danificado?', faq_a8:'Em caso de defeito de impressão ou embalagem danificada, contacte-nos em 14 dias para contact@noustalgie.fr com algumas fotos. Reimprimimos ou reembolsamos, sem custos.',
+    faq_q8:'E se o meu livro chegar danificado?', faq_a8:"Em caso de defeito de impressão ou embalagem danificada, escreva-nos o quanto antes para contact@noustalgie.fr com o número da encomenda e algumas fotos. Reimprimimos ou reembolsamos, sem custos. As suas garantias legais mantêm-se.",
     faq_q9:'Posso alterar a encomenda após pagar?', faq_a9:'Após confirmado o pagamento, o álbum segue rapidamente para impressão. Verifique bem a pré-visualização antes de pagar. Se houver um erro, escreva-nos depressa: se a impressão não começou, faremos o possível.',
     faq_q10:'Entregam fora de França?', faq_a10:'Sim, entregamos em toda a Europa através da nossa rede de impressão. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
     nav_how:'Como funciona', nav_pricing:'Preços', nav_create:'Criar o nosso álbum', nav_cta:'Começar',
@@ -1959,7 +2011,7 @@ const LANGS = {
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Entrega em 5 a 7 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
     footer_tag:'O álbum fotográfico da vossa história de amor.', footer_info:'Informações', footer_product:'Produto',
     legal_mentions:'Aviso legal', legal_cgv:'CGV', legal_privacy:'Privacidade', legal_contact:'Contacto',
-    footer_copy:'© 2026 Noustalgie — Todos os direitos reservados', footer_made:'Feito com', create_album:'Criar o meu álbum',
+    footer_copy:'© 2026 Noustalgie — Todos os direitos reservados', footer_made:"Feito em Lille", create_album:'Criar o meu álbum',
     close_btn:'← Fechar', modal_title:'A vossa mensagem pessoal 💌', modal_sub:'Esta legenda aparecerá sob a foto no vosso livro.', modal_lbl:'Legenda pessoal', modal_ph:'A nossa primeira noite em Paris...', cancel:'Cancelar', save_word:'Guardar',
     log_analyzing:'A analisar as vossas fotos...', log_analyzed:'Análise concluída ✓', log_themes:'Temas:', log_writing:'A escrever a vossa história de amor...', log_ready:'A vossa história está pronta', log_error:'Erro:', log_server_tip:'Por favor, tente novamente em alguns segundos.',
     photos_ok:' fotos prontas', photos_warn:' · faltam pelo menos ', photos_warn2:' fotos no mínimo',
@@ -3657,12 +3709,7 @@ function generateFinalPDF(){
 // ══════════════════════════════════════════
 // LEGAL
 // ══════════════════════════════════════════
-const LEGAL={
-  mentions:`<span class="eyebrow">Informations légales</span><h1 class="legal-title">Mentions légales</h1><p class="legal-sub">Conformément à la loi n°2004-575 du 21 juin 2004 (LCEN)</p><div class="legal-s"><h3>Éditeur du site</h3><p>Le site noustalgie.fr est édité par Gabin Bacquet, entrepreneur individuel (auto-entrepreneur).<br>Adresse : 14 rue des Arts, 59800 Lille, France.<br>SIRET : 100 004 738 00017 — SIREN : 100 004 738.<br>Contact : contact@noustalgie.fr.<br>Directeur de la publication : Gabin Bacquet.</p></div><div class="legal-s"><h3>TVA</h3><p>TVA non applicable, article 293 B du Code général des impôts (franchise en base de TVA).</p></div><div class="legal-s"><h3>Hébergement</h3><p>Le site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis — vercel.com.</p></div><div class="legal-s"><h3>Propriété intellectuelle</h3><p>L'ensemble des éléments du site (textes, mise en page, identité visuelle, code) est protégé par le droit d'auteur. Toute reproduction ou réutilisation sans autorisation écrite est interdite. Les photographies que vous importez restent votre propriété exclusive ; vous nous accordez uniquement le droit de les utiliser pour créer votre album.</p></div><div class="legal-s"><h3>Médiation de la consommation</h3><p>Conformément à l'article L612-1 du Code de la consommation, en cas de litige non résolu, vous pouvez recourir gratuitement à un médiateur de la consommation. La plateforme européenne de règlement des litiges est également disponible : ec.europa.eu/consumers/odr.</p></div>`,
-  cgv:`<span class="eyebrow">Conditions générales</span><h1 class="legal-title">Conditions générales de vente</h1><p class="legal-sub">En vigueur au 1er janvier 2026</p><div class="legal-s"><h3>1. Objet</h3><p>Les présentes conditions régissent la vente d'albums photo personnalisés (numériques ou imprimés) proposés par Gabin Bacquet (Noustalgie) sur noustalgie.fr. Toute commande implique l'acceptation pleine et entière des présentes CGV.</p></div><div class="legal-s"><h3>2. Produits et tarifs</h3><p>Format PDF numérique : 14,99€ (24 pages), 19,99€ (36 pages), 24,99€ (50 pages).<br>Format livre imprimé, livraison incluse : 39,99€ (24 pages), 49,99€ (36 pages), 69,99€ (50 pages).<br>Les prix sont indiqués en euros toutes taxes comprises (TVA non applicable, art. 293 B CGI). Les tarifs peuvent être modifiés à tout moment ; le prix appliqué est celui affiché au moment de la commande.</p></div><div class="legal-s"><h3>3. Commande et aperçu gratuit</h3><p>Vous composez votre album et bénéficiez d'un aperçu complet et gratuit avant tout paiement. La commande n'est ferme qu'après validation du paiement. Un email de confirmation vous est adressé.</p></div><div class="legal-s"><h3>4. Paiement</h3><p>Le paiement s'effectue en ligne par carte bancaire via notre prestataire Stripe, dans un environnement sécurisé. Aucune donnée bancaire n'est conservée par Noustalgie. La commande est traitée après encaissement effectif.</p></div><div class="legal-s"><h3>5. Livraison</h3><p>Les albums numériques (PDF) sont livrés par email ou lien de téléchargement après paiement. Les albums imprimés sont fabriqués et expédiés par notre imprimeur partenaire (Prodigi) et livrés sous 3 à 5 jours ouvrés en moyenne en France métropolitaine, délai indicatif pouvant varier selon la destination et le transporteur. La livraison est offerte. Les risques sont transférés au client à la remise du colis.</p></div><div class="legal-s"><h3>6. Droit de rétractation</h3><p>Conformément à l'article L221-28 3° du Code de la consommation, le droit de rétractation ne s'applique pas aux biens confectionnés selon les spécifications du consommateur ou nettement personnalisés. Nos albums étant entièrement personnalisés (prénoms, photos, textes propres à chaque client), <strong>ils ne peuvent faire l'objet d'un droit de rétractation</strong> une fois la commande validée et le paiement effectué. En passant commande, vous reconnaissez expressément renoncer à votre droit de rétractation. Cette exclusion ne concerne pas les défauts couverts par la garantie ci-dessous.</p></div><div class="legal-s"><h3>7. Garantie et réclamations</h3><p>Vous bénéficiez des garanties légales de conformité (art. L217-3 et suivants du Code de la consommation) et contre les vices cachés. En cas d'album défectueux, endommagé lors du transport ou non conforme à l'aperçu validé, contactez-nous sous 14 jours à compter de la réception à contact@noustalgie.fr, photos à l'appui : nous procédons à une réimpression ou à un remboursement sans frais.</p></div><div class="legal-s"><h3>8. Responsabilité sur les contenus</h3><p>Vous êtes seul responsable des photographies et textes que vous importez et garantissez en détenir les droits. Noustalgie se réserve le droit de refuser toute commande dont le contenu serait illicite (notamment contenu à caractère haineux, violent ou pornographique, ou portant atteinte aux droits de tiers).</p></div><div class="legal-s"><h3>9. Droit applicable</h3><p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité (voir médiation dans les mentions légales) avant toute action judiciaire.</p></div>`,
-  confidentialite:`<span class="eyebrow">Protection des données</span><h1 class="legal-title">Politique de confidentialité</h1><p class="legal-sub">Conformément au Règlement (UE) 2016/679 (RGPD)</p><div class="legal-s"><h3>Responsable du traitement</h3><p>Gabin Bacquet (Noustalgie), 14 rue des Arts, 59800 Lille — contact@noustalgie.fr.</p></div><div class="legal-s"><h3>Données que nous collectons</h3><p>Pour créer et livrer votre album, nous traitons : vos prénoms et informations saisies (date, occasion, dédicaces), votre email, votre adresse de livraison (pour les albums imprimés), et les photographies que vous importez. Aucune donnée bancaire n'est collectée ni stockée par nous : le paiement est géré directement par Stripe.</p></div><div class="legal-s"><h3>Comment vos photos sont traitées</h3><p>En toute transparence : vos photos et le contenu de votre album sont transmis à des prestataires techniques uniquement pour produire votre livre — génération du texte, création du fichier PDF et hébergement temporaire du fichier final destiné à l'impression. Vos photos ne sont jamais vendues, cédées à des tiers à des fins commerciales, ni utilisées pour autre chose que la création de votre album.</p></div><div class="legal-s"><h3>Nos sous-traitants</h3><p>Nous faisons appel à des prestataires respectant le RGPD : Stripe (paiement), OpenAI (génération de texte), PDFShift (création du PDF), Cloudinary (hébergement temporaire du fichier), Prodigi (impression et expédition), Resend (emails), Vercel (hébergement du site). Chacun n'accède qu'aux données strictement nécessaires à sa mission.</p></div><div class="legal-s"><h3>Durée de conservation</h3><p>Les photos et le fichier de votre album sont conservés au maximum 30 jours après la commande, afin de pouvoir gérer une éventuelle réclamation ou réimpression, puis supprimés. Les informations de commande (email, facture) sont conservées le temps légal requis en matière comptable.</p></div><div class="legal-s"><h3>Vos droits</h3><p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et de portabilité de vos données, ainsi que du droit de retirer votre consentement. Pour l'exercer, écrivez à contact@noustalgie.fr : nous répondons sous 30 jours. Vous pouvez également introduire une réclamation auprès de la CNIL (cnil.fr).</p></div><div class="legal-s"><h3>Cookies</h3><p>Le site utilise uniquement les cookies techniques strictement nécessaires à son fonctionnement et au paiement sécurisé. Aucun cookie publicitaire ou de traçage tiers n'est déposé sans votre consentement.</p></div>`,
-  contact:`<span class="eyebrow">Nous contacter</span><h1 class="legal-title">Contact</h1><p class="legal-sub">Une question ? Nous répondons sous 24 à 48h ouvrées.</p><div class="legal-s"><h3>Email</h3><p>contact@noustalgie.fr</p></div><div class="legal-s"><h3>Éditeur</h3><p>Gabin Bacquet — Noustalgie<br>14 rue des Arts, 59800 Lille, France</p></div><div class="legal-s"><h3>Suivi de commande & réclamations</h3><p>Pour toute question sur une commande en cours, une livraison ou une réclamation, écrivez-nous en précisant votre nom et votre numéro de commande. En cas de défaut d'impression, joignez des photos : nous trouvons toujours une solution.</p></div><div class="legal-s"><h3>Livraison en Europe</h3><p>Noustalgie livre dans toute l'Europe via son imprimeur partenaire. Pour une commande hors France métropolitaine, précisez bien votre pays lors de la saisie de l'adresse.</p></div>`
-};
+const LEGAL={};
 function openLegal(p){document.getElementById('legalContent').innerHTML=LEGAL[p]||'';document.getElementById('legalOverlay').style.display='block';document.body.style.overflow='hidden';}
 function closeLegal(){document.getElementById('legalOverlay').style.display='none';document.body.style.overflow='';}
 document.getElementById('legalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('legalOverlay'))closeLegal();});
@@ -4940,6 +4987,241 @@ window.processPayment = async function () {
   };
   apply();
   if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function (l) { const r = o.apply(this, arguments); try { apply(); } catch (e) {} return r; }; }
+})();
+
+/* ════════════════════════════════════════════════════════════════
+   NOUSTALGIE — Informations légales v2.5
+   Remplace le contenu et l'affichage de : Mentions légales, CGV,
+   Confidentialité, Contact.
+   ════════════════════════════════════════════════════════════════ */
+(function () {
+'use strict';
+
+/* ── À compléter par Gabin : chaque ligne vide est simplement masquée ── */
+const CFG = {
+  maj: '28 septembre 2026',
+  telephone: '',                 // obligatoire (LCEN) : ex. '06 12 34 56 78'
+  rcs: '',                       // ex. 'RCS Lille Métropole 100 004 738' si immatriculé
+  mediateur: { nom: '', site: '', adresse: '' }, // obligatoire (Code conso, L616-1)
+};
+
+const E = 'contact@noustalgie.fr';
+const mail = (subj, label) => `<a href="mailto:${E}?subject=${encodeURIComponent(subj)}">${label || E}</a>`;
+const tel = CFG.telephone ? `<br>Téléphone : ${CFG.telephone}` : '';
+const rcs = CFG.rcs ? `<br>${CFG.rcs}` : '';
+const med = CFG.mediateur.nom
+  ? `Vous pouvez saisir gratuitement le médiateur de la consommation dont nous relevons : <b>${CFG.mediateur.nom}</b>${CFG.mediateur.site ? `, <a href="${CFG.mediateur.site}" target="_blank" rel="noopener">${CFG.mediateur.site.replace(/^https?:\/\//, '')}</a>` : ''}${CFG.mediateur.adresse ? `, ${CFG.mediateur.adresse}` : ''}.`
+  : `Vous pouvez recourir gratuitement à un médiateur de la consommation ; ses coordonnées vous sont communiquées sur simple demande à ${mail('Médiation', E)}.`;
+
+const PAGES = {
+/* ───────────────────────── Mentions légales ───────────────────────── */
+mentions: { tab: 'Mentions légales', html: `
+<p class="lg-eyebrow">Informations légales</p>
+<h1>Mentions légales</h1>
+<p class="lg-maj">Dernière mise à jour : ${CFG.maj}</p>
+<h2>Éditeur du site</h2>
+<p>Le site noustalgie.fr est édité par <b>Gabin Bacquet, entrepreneur individuel (EI)</b>, exerçant sous le nom commercial Noustalgie.<br>
+14 rue des Arts, 59800 Lille, France<br>
+SIRET : 100 004 738 00017 — SIREN : 100 004 738${rcs}<br>
+Email : ${mail('Contact', E)}${tel}</p>
+<p>Directeur de la publication : Gabin Bacquet.</p>
+<h2>TVA</h2>
+<p>TVA non applicable, article 293 B du Code général des impôts (franchise en base).</p>
+<h2>Hébergement</h2>
+<p>Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis — vercel.com.</p>
+<h2>Propriété intellectuelle</h2>
+<p>La marque Noustalgie, les textes, la mise en page, les styles d'album, l'identité visuelle et le code du site sont protégés. Toute reproduction ou réutilisation sans autorisation écrite est interdite.</p>
+<p>Les photographies que vous importez restent votre propriété. Vous nous autorisez uniquement à les utiliser pour composer, fabriquer et vous livrer votre album.</p>
+<p>Photographies d'illustration du site : Unsplash.</p>
+<h2>Médiation de la consommation</h2>
+<p>En cas de litige, contactez-nous d'abord à ${mail('Réclamation', E)} : nous cherchons toujours une solution amiable. ${med}</p>
+<p>Pour un litige avec un professionnel situé dans un autre pays de l'Union européenne, le Centre Européen des Consommateurs France peut vous accompagner (europe-consommateurs.eu).</p>
+` },
+
+/* ───────────────────────── CGV ───────────────────────── */
+cgv: { tab: 'CGV', toc: true, html: `
+<p class="lg-eyebrow">Conditions générales</p>
+<h1>Conditions générales de vente</h1>
+<p class="lg-maj">En vigueur au ${CFG.maj}. Toute commande implique l'acceptation des présentes conditions.</p>
+<h2 id="cgv-1">1. Objet</h2>
+<p>Les présentes conditions régissent la vente, sur noustalgie.fr, d'albums photo personnalisés au format numérique (PDF) ou imprimé, par Gabin Bacquet, entrepreneur individuel (Noustalgie), 14 rue des Arts, 59800 Lille — SIRET 100 004 738 00017 — ${E}.</p>
+<h2 id="cgv-2">2. Produits</h2>
+<p>Chaque album est composé à partir des photos, prénoms et informations fournis par le client, avec des textes rédigés automatiquement puis modifiables librement avant la commande.</p>
+<ul>
+<li><b>Livre imprimé</b> : format carré 21 × 21 cm, couverture rigide, papier photo, 24, 36 ou 50 pages.</li>
+<li><b>Album numérique</b> : fichier PDF haute définition des mêmes pages, à télécharger.</li>
+</ul>
+<p>Un nombre minimum de photos est requis selon le format (14, 20 ou 31). Les couleurs d'un écran et d'une impression peuvent légèrement différer ; la netteté du livre dépend de la qualité des photos importées.</p>
+<h2 id="cgv-3">3. Prix et codes promotionnels</h2>
+<div class="lg-table"><table>
+<thead><tr><th>Format</th><th>24 pages</th><th>36 pages</th><th>50 pages</th></tr></thead>
+<tbody><tr><td>Livre imprimé, livraison incluse</td><td>39,99 €</td><td>49,99 €</td><td>69,99 €</td></tr>
+<tr><td>Album numérique (PDF)</td><td>14,99 €</td><td>19,99 €</td><td>24,99 €</td></tr></tbody></table></div>
+<p>Prix en euros, toutes taxes comprises (TVA non applicable, art. 293 B du CGI). Le prix applicable est celui affiché au moment de la commande.</p>
+<p>Les codes promotionnels sont personnels, à usage unique, non cumulables et ne peuvent être échangés contre de l'argent. Leurs conditions sont indiquées lors de leur remise.</p>
+<h2 id="cgv-4">4. Commande et aperçu</h2>
+<p>Le client compose son album et en consulte gratuitement un aperçu complet, page par page, avant tout paiement. Il lui appartient de relire les textes (orthographe, prénoms, dates) et de vérifier les photos et leur cadrage : <b>l'album est fabriqué exactement tel qu'il a été validé</b>.</p>
+<p>La commande devient ferme après confirmation du paiement ; un email récapitulatif est alors envoyé. Une fois la fabrication lancée, l'album ne peut plus être modifié.</p>
+<h2 id="cgv-5">5. Paiement</h2>
+<p>Le paiement s'effectue en ligne, en une fois, par carte bancaire via notre prestataire Stripe, dans un environnement sécurisé. Noustalgie n'a jamais accès à vos données bancaires.</p>
+<h2 id="cgv-6">6. Fabrication et livraison</h2>
+<p><b>Album numérique</b> : un lien de téléchargement est envoyé par email après le paiement. Pensez à enregistrer votre fichier : le lien reste actif au moins 14 jours.</p>
+<p><b>Livre imprimé</b> : il est fabriqué à la commande par notre imprimeur partenaire, puis expédié à l'adresse indiquée. La livraison est offerte. Les délais communiqués sont indicatifs et peuvent varier selon la destination et le transporteur ; un numéro de suivi est envoyé par email à l'expédition. Le client veille à l'exactitude de l'adresse saisie.</p>
+<p>En cas de retard important, de colis perdu ou endommagé, contactez-nous : nous réglons la situation avec le transporteur et, si nécessaire, procédons à une réimpression ou à un remboursement.</p>
+<h2 id="cgv-7">7. Droit de rétractation</h2>
+<p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux biens confectionnés selon les spécifications du consommateur ou nettement personnalisés (3°), ni aux contenus numériques fournis sans support matériel dont l'exécution a commencé avec l'accord du consommateur (13°). Chaque album étant unique (photos, prénoms et textes propres au client), il n'est pas soumis au droit de rétractation ; le client le reconnaît expressément en passant commande. Cette exclusion ne limite en rien les garanties légales ci-dessous.</p>
+<h2 id="cgv-8">8. Garanties légales</h2>
+<p><b>Garantie légale de conformité</b> (articles L217-3 et suivants du Code de la consommation ; articles L224-25-12 et suivants pour l'album numérique). Le client dispose de deux ans à compter de la livraison pour agir. Il peut obtenir la réparation ou le remplacement du bien, ou à défaut une réduction du prix ou la résolution de la vente. Les défauts apparaissant dans ce délai sont présumés exister au moment de la livraison.</p>
+<p><b>Garantie des vices cachés</b> (articles 1641 et suivants du Code civil). L'action doit être engagée dans les deux ans suivant la découverte du vice ; le client peut choisir entre la résolution de la vente et une réduction du prix.</p>
+<p>Pour toute réclamation (défaut d'impression, livre abîmé, non-conformité avec l'aperçu validé), écrivez à ${mail('Réclamation commande', E)} avec votre numéro de commande et quelques photos. Plus la demande est rapide, plus nous pouvons agir vite auprès du transporteur ; la réimpression ou le remboursement est sans frais pour vous.</p>
+<h2 id="cgv-9">9. Contenus du client et textes générés</h2>
+<p>Le client garantit détenir les droits sur les photos et textes qu'il importe, et que ceux-ci ne portent pas atteinte aux droits de tiers (droit à l'image notamment). Noustalgie peut refuser ou annuler, avec remboursement, toute commande au contenu illicite, haineux, violent ou pornographique.</p>
+<p>Les textes proposés automatiquement sont générés à partir des informations du client, qui reste libre de les modifier et en est responsable une fois l'album validé. Ils peuvent être utilisés librement à titre personnel.</p>
+<h2 id="cgv-10">10. Force majeure</h2>
+<p>Noustalgie ne saurait être tenu responsable d'un retard ou d'une inexécution résultant d'un cas de force majeure au sens de l'article 1218 du Code civil (notamment grève des transporteurs, panne majeure des prestataires techniques).</p>
+<h2 id="cgv-11">11. Données personnelles</h2>
+<p>Les données collectées pour la commande sont traitées conformément à notre <a href="#" data-lg="confidentialite">politique de confidentialité</a>.</p>
+<h2 id="cgv-12">12. Litiges et droit applicable</h2>
+<p>Les présentes conditions sont soumises au droit français. En cas de difficulté, une solution amiable est recherchée en priorité. ${med} À défaut, les tribunaux compétents sont ceux prévus par la loi.</p>
+` },
+
+/* ───────────────────────── Confidentialité ───────────────────────── */
+confidentialite: { tab: 'Confidentialité', html: `
+<p class="lg-eyebrow">Protection des données</p>
+<h1>Politique de confidentialité</h1>
+<p class="lg-maj">Dernière mise à jour : ${CFG.maj} — conforme au Règlement (UE) 2016/679 (RGPD).</p>
+<div class="lg-note">En bref : vos photos servent uniquement à fabriquer votre album. Elles ne sont jamais vendues ni utilisées pour autre chose, et sont supprimées de nos serveurs 30 jours après leur envoi.</div>
+<h2>Responsable du traitement</h2>
+<p>Gabin Bacquet (Noustalgie), 14 rue des Arts, 59800 Lille — ${mail('Données personnelles', E)}.</p>
+<h2>Données traitées, finalités et durées</h2>
+<div class="lg-table"><table>
+<thead><tr><th>Données</th><th>Pourquoi</th><th>Base légale</th><th>Conservation</th></tr></thead>
+<tbody>
+<tr><td>Photos, prénoms, informations sur votre histoire, dédicace</td><td>Composer et fabriquer votre album</td><td>Exécution du contrat</td><td>30 jours sur nos serveurs</td></tr>
+<tr><td>Email, nom, adresse de livraison</td><td>Traiter, livrer et suivre votre commande</td><td>Exécution du contrat</td><td>Durée de la relation, puis archivage légal</td></tr>
+<tr><td>Justificatifs de commande et de paiement</td><td>Obligations comptables</td><td>Obligation légale</td><td>10 ans</td></tr>
+<tr><td>Statistiques de visite anonymes</td><td>Améliorer le site</td><td>Intérêt légitime</td><td>Données agrégées, sans cookie</td></tr>
+</tbody></table></div>
+<p>Aucune donnée bancaire n'est collectée par Noustalgie : le paiement est traité directement par Stripe.</p>
+<h2>Le parcours de vos photos</h2>
+<ul>
+<li><b>Pendant la création</b>, vos photos restent dans votre navigateur. Pour que vous ne perdiez pas votre travail, une copie de votre album en cours est gardée sur votre appareil ; elle est effacée si vous videz les données du site.</li>
+<li><b>Pour écrire les légendes</b>, des miniatures basse résolution de vos photos sont transmises à OpenAI. Selon ses conditions pour les services professionnels, ces données ne servent pas à entraîner ses modèles.</li>
+<li><b>Au moment de la commande</b>, vos photos sont envoyées en haute définition à Cloudinary, puis le fichier d'impression est créé par PDFShift et transmis à notre imprimeur partenaire, Prodigi.</li>
+<li><b>30 jours après</b>, photos et fichiers d'album sont automatiquement supprimés de nos serveurs. Ce délai permet de traiter une éventuelle réclamation ou réimpression.</li>
+</ul>
+<h2>Nos prestataires</h2>
+<p>Stripe (paiement), OpenAI (rédaction des textes et légendes), Cloudinary (stockage temporaire des photos et fichiers), PDFShift (création du fichier d'impression), Prodigi (impression et expédition), Resend (emails de commande), Vercel (hébergement et mesure d'audience anonyme). Chacun n'accède qu'aux données nécessaires à sa mission.</p>
+<p>Certains de ces prestataires sont situés hors de l'Union européenne, notamment aux États-Unis et au Royaume-Uni. Ces transferts sont encadrés par des garanties reconnues par la Commission européenne (décision d'adéquation, dont le Data Privacy Framework, ou clauses contractuelles types).</p>
+<h2>Cookies et mesure d'audience</h2>
+<p>Le site n'utilise aucun cookie publicitaire ni de traçage. La mesure d'audience fonctionne sans cookie et ne permet pas de vous identifier. Des cookies techniques peuvent être déposés par Stripe sur la page de paiement, uniquement pour sécuriser la transaction.</p>
+<h2>Vos droits</h2>
+<p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données. Écrivez à ${mail('Exercice de mes droits RGPD', E)} : nous répondons sous un mois. Vous pouvez aussi introduire une réclamation auprès de la CNIL (cnil.fr).</p>
+<h2>Sécurité</h2>
+<p>Les échanges sont chiffrés (HTTPS), l'accès à nos services est restreint et les clés techniques ne sont jamais exposées dans le site.</p>
+` },
+
+/* ───────────────────────── Contact ───────────────────────── */
+contact: { tab: 'Contact', html: `
+<p class="lg-eyebrow">Nous contacter</p>
+<h1>Contact</h1>
+<p class="lg-maj">Une vraie personne vous répond, en général sous 24 à 48 h ouvrées.</p>
+<div class="lg-cards">
+  <a class="lg-card" href="mailto:${E}?subject=${encodeURIComponent('Question sur ma commande')}"><b>Une commande en cours</b><span>Suivi, livraison, adresse. Indiquez votre numéro de commande (NOUST-…).</span></a>
+  <a class="lg-card" href="mailto:${E}?subject=${encodeURIComponent('Réclamation commande')}"><b>Un problème avec mon livre</b><span>Défaut d'impression ou colis abîmé : joignez quelques photos, nous trouvons une solution.</span></a>
+  <a class="lg-card" href="mailto:${E}?subject=${encodeURIComponent('Question avant commande')}"><b>Une question avant de commander</b><span>Formats, photos, délais, cadeau pour une date précise.</span></a>
+</div>
+<h2>Email</h2>
+<p>${mail('Contact', E)}${tel}</p>
+<h2>Adresse</h2>
+<p>Noustalgie — Gabin Bacquet (EI)<br>14 rue des Arts, 59800 Lille, France</p>
+<h2>Livraison hors de France</h2>
+<p>Noustalgie livre en France et dans de nombreux pays d'Europe. Saisissez précisément votre pays dans l'adresse de livraison ; pour une destination particulière, écrivez-nous avant de commander.</p>
+` },
+};
+
+/* ── Affichage : onglets, sommaire, fermeture (Échap), focus ── */
+const ov = document.getElementById('legalOverlay'), box = document.getElementById('legalContent');
+if (!ov || !box) return;
+ov.classList.add('lg');
+ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Informations légales');
+const oldClose = ov.querySelector('.legal-close-btn'); if (oldClose) oldClose.remove();
+const bar = document.createElement('div'); bar.className = 'lg-bar';
+bar.innerHTML = `<div class="lg-tabs" role="navigation" aria-label="Pages d'information">${Object.entries(PAGES).map(([k, p]) => `<button type="button" data-lg="${k}">${p.tab}</button>`).join('')}</div><button type="button" class="lg-close" aria-label="Fermer"><span class="lg-close-t">Fermer</span><span class="lg-close-i" aria-hidden="true">×</span></button>`;
+ov.insertBefore(bar, box);
+let last = null;
+
+function toc(page) {
+  const hs = [...box.querySelectorAll('h2[id]')];
+  if (!page.toc || !hs.length) return;
+  const n = document.createElement('div'); n.className = 'lg-toc'; n.setAttribute('role', 'navigation'); n.setAttribute('aria-label', 'Sommaire');
+  n.innerHTML = `<p>Sommaire</p><ol>${hs.map(h => `<li><a href="#${h.id}">${h.textContent.replace(/^\d+\.\s*/, '')}</a></li>`).join('')}</ol>`;
+  box.querySelector('.lg-maj').insertAdjacentElement('afterend', n);
+}
+function show(key) {
+  const page = PAGES[key] || PAGES.mentions;
+  box.innerHTML = page.html; toc(page);
+  bar.querySelectorAll('[data-lg]').forEach(b => { const on = b.dataset.lg === key; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'page' : 'false'); if (on) { const tabs = bar.querySelector('.lg-tabs'); tabs.scrollTo({ left: b.offsetLeft - (tabs.clientWidth - b.offsetWidth) / 2 }); } });
+  ov.scrollTop = 0;
+}
+window.openLegal = function (key) {
+  last = document.activeElement;
+  ov.style.display = 'block'; document.body.style.overflow = 'hidden';
+  show(key);
+  ov.tabIndex = -1; setTimeout(() => ov.focus({ preventScroll: true }), 30);
+};
+window.closeLegal = function () {
+  ov.style.display = 'none'; document.body.style.overflow = '';
+  if (last && last.focus) last.focus();
+};
+bar.addEventListener('click', e => {
+  const b = e.target.closest('[data-lg]'); if (b) return show(b.dataset.lg);
+  if (e.target.closest('.lg-close')) closeLegal();
+});
+box.addEventListener('click', e => {
+  const a = e.target.closest('a[data-lg]'); if (a) { e.preventDefault(); show(a.dataset.lg); return; }
+  const t = e.target.closest('.lg-toc a'); if (t) { e.preventDefault(); const h = document.querySelector(t.getAttribute('href')); if (h) ov.scrollTo({ top: h.offsetTop - 90, behavior: 'smooth' }); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.style.display === 'block') closeLegal(); });
+
+/* ── Pied de page : email direct ── */
+const info = document.querySelector('[data-i18n="footer_info"]');
+const links = info && info.parentElement.querySelector('.footer-links');
+if (links && !links.querySelector('.footer-mail')) {
+  const a = document.createElement('a'); a.className = 'footer-link footer-mail'; a.href = `mailto:${E}`; a.textContent = E;
+  links.appendChild(a);
+}
+})();
+
+/* Noustalgie v2.5 — sélecteur de langue assorti aux boutons pilule */
+(function () {
+  const tg = document.getElementById('langToggle'), menu = document.getElementById('langMenu');
+  if (!tg || !menu) return;
+  const NAMES = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español', pt: 'Português' };
+  const chev = '<svg class="lg-chev" viewBox="0 0 12 8" width="10" height="7" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+  const check = '<svg class="lg-check" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+  const cur = () => (typeof currentLang !== 'undefined' && NAMES[currentLang]) ? currentLang : 'fr';
+  tg.setAttribute('aria-haspopup', 'true'); tg.setAttribute('aria-expanded', 'false'); tg.setAttribute('aria-controls', 'langMenu');
+  menu.setAttribute('role', 'menu');
+  // Libellés sobres : nom de la langue + coche, sans drapeaux
+  menu.querySelectorAll('button').forEach(b => {
+    const m = (b.getAttribute('onclick') || '').match(/setLang\('([a-z]{2})'\)/); if (!m) return;
+    b.dataset.lang = m[1]; b.setAttribute('role', 'menuitemradio');
+    b.innerHTML = `<span>${NAMES[m[1]]}</span><small>${m[1].toUpperCase()}</small>${check}`;
+  });
+  const paint = () => {
+    const l = cur();
+    tg.innerHTML = `<span>${l.toUpperCase()}</span>${chev}`;
+    tg.setAttribute('aria-label', `Langue : ${NAMES[l]}`);
+    menu.querySelectorAll('button[data-lang]').forEach(b => { const on = b.dataset.lang === l; b.classList.toggle('active', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  };
+  const setOpen = o => { menu.classList.toggle('open', o); tg.setAttribute('aria-expanded', o ? 'true' : 'false'); };
+  window.toggleLangMenu = () => setOpen(!menu.classList.contains('open'));
+  window.pickLang = () => { setOpen(false); paint(); tg.focus(); };
+  document.addEventListener('click', e => { if (!e.target.closest('.lang-bar')) setOpen(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) { setOpen(false); tg.focus(); } });
+  if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function () { const r = o.apply(this, arguments); try { paint(); } catch (e) {} return r; }; }
+  paint();
 })();
 
 </script>
