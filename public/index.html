@@ -1207,6 +1207,11 @@ html body #app .p-step .p-lbl{margin:0!important;font:500 12.5px 'Inter',sans-se
 .nst-addr-hint[data-state="none"]{color:#8a5a12;}
 html body #app input.nst-filled{background:#f3f8f2!important;transition:background .6s ease;}
 html body #app .nst-addr-lbl{display:block;text-align:left;}
+
+/* ═══ v4.5 — message d'import ═══ */
+.nst-toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:9900;max-width:min(440px,calc(100vw - 32px));padding:12px 18px;border-radius:14px;background:#1c1a18;color:#fff;font:500 14px/1.45 'Inter',system-ui,sans-serif;text-align:center;box-shadow:0 14px 34px -10px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;}
+.nst-toast.on{opacity:1;transform:translate(-50%,0);}
+.dz input[type=file]{font-size:16px;}
 </style>
 <script type="application/ld+json">
 {
@@ -1503,7 +1508,7 @@ html body #app .nst-addr-lbl{display:block;text-align:left;}
       <div class="card">
         <div class="card-hd" data-i18n="p1_hd">Vos photos ensemble</div>
         <div class="dz" id="dz">
-          <input type="file" accept="image/*,.heic,.HEIC" multiple onchange="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
+          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onchange="addPhotos(this.files);this.value=''" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
           <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum selon le palier choisi</div>
@@ -4527,6 +4532,7 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
+  ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
   undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
@@ -4554,6 +4560,7 @@ fr: {
   tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
 },
 en: {
+  ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
   undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
@@ -4581,6 +4588,7 @@ en: {
   tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
 },
 de: {
+  ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
   undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
@@ -4608,6 +4616,7 @@ de: {
   tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
+  ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
   undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
@@ -4635,6 +4644,7 @@ es: {
   tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
+  ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
   undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
@@ -4699,38 +4709,62 @@ function toJpeg(img, max, q) {
   x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, c.width, c.height);
   return c.toDataURL('image/jpeg', q);
 }
+// Import robuste, pensé pour les téléphones : lecture native, une photo à la fois, erreurs visibles
+const TOUCH = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
+const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
+async function decodeFile(file) {
+  // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : on s'en sert pour décoder
+  const url = URL.createObjectURL(file);
+  try { const img = await loadImage(url); return { img, done: () => URL.revokeObjectURL(url) }; }
+  catch (e) { URL.revokeObjectURL(url); return null; }
+}
 async function importFile(f) {
   try {
-    if (typeof ensureConvertible === 'function') f = await ensureConvertible(f);
-    const url = URL.createObjectURL(f);
-    const img = await loadImage(url);
-    const ratio = img.width / img.height;
-    const orient = ratio > 1.25 ? 'paysage' : ratio < 0.8 ? 'portrait' : 'carre';
-    let focalY = null;
-    try { if (typeof detectFocalY === 'function') focalY = await detectFocalY(img, orient); } catch (e) {}
-    if (focalY == null) focalY = orient === 'portrait' ? 38 : orient === 'carre' ? 42 : 48;
-    const p = { name: f.name, w: img.width, h: img.height, ratio, orient, focalY,
-      data: toJpeg(img, 1200, 0.86),   // écran : léger et rapide
-      full: toJpeg(img, 2400, 0.92) }; // impression : ~290 dpi en pleine page
-    URL.revokeObjectURL(url);
+    let d = await decodeFile(f);                                   // Safari/iOS lit le HEIC nativement
+    if (!d && isHeic(f) && typeof ensureConvertible === 'function') { // dernier recours : conversion JavaScript
+      const g = await ensureConvertible(f);
+      if (g && g !== f) d = await decodeFile(g);
+    }
+    if (!d) return null;
+    const img = d.img, w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+    if (!w || !h) { d.done(); return null; }
+    const ratio = w / h, orient = ratio > 1.25 ? 'paysage' : ratio < 0.8 ? 'portrait' : 'carre';
+    const focalY = orient === 'portrait' ? 38 : orient === 'carre' ? 42 : 48;
+    const p = { name: f.name || 'photo.jpg', w, h, ratio, orient, focalY,
+      data: toJpeg(img, 1200, 0.86),                               // écran : léger et rapide
+      full: toJpeg(img, TOUCH ? 2200 : 2400, 0.9) };               // impression : ~270-290 dpi en pleine page
+    d.done();
     return p;
   } catch (e) { console.warn('photo ignorée', f && f.name, e); return null; }
 }
+function toast(msg, ms) {
+  let el = document.getElementById('nstToast');
+  if (!el) { el = document.createElement('div'); el.id = 'nstToast'; el.className = 'nst-toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add('on');
+  clearTimeout(el.__t); el.__t = setTimeout(() => el.classList.remove('on'), ms || 6000);
+}
+NA.toast = toast;
 window.addPhotos = async function (files) {
-  const list = Array.from(files || []).filter(f => (f.type || '').startsWith('image/') || /\.(heic|heif)$/i.test(f.name));
-  if (!list.length) return;
+  const all = Array.from(files || []);
+  const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
+  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return; }
   if (typeof showUploadLoader === 'function') showUploadLoader(0, list.length);
-  for (let i = 0; i < list.length; i += 4) {
-    const res = await Promise.all(list.slice(i, i + 4).map(importFile));
-    res.filter(Boolean).forEach(p => S.photos.push(p));
-    if (typeof showUploadLoader === 'function') showUploadLoader(Math.min(i + 4, list.length), list.length);
+  const step = TOUCH ? 1 : 3;
+  let done = 0, fails = 0;
+  for (let i = 0; i < list.length; i += step) {
+    const res = await Promise.all(list.slice(i, i + step).map(importFile));
+    res.forEach(p => { if (p) S.photos.push(p); else fails++; });
+    done = Math.min(i + step, list.length);
+    if (typeof showUploadLoader === 'function') showUploadLoader(done, list.length);
     if (typeof renderPhotos === 'function') renderPhotos();
-    await sleep(30);
+    await sleep(TOUCH ? 40 : 20);                                   // laisse respirer l'interface
   }
   if (typeof hideUploadLoader === 'function') hideUploadLoader();
   if (typeof renderPhotos === 'function') renderPhotos();
+  if (fails) toast(NA.t('ph_fail', fails), 9000);
   NA.pages = []; // les photos ont changé : l'album sera recomposé
-  if (NA.analyzeAll) NA.analyzeAll();       // visages et sujets, en arrière-plan
+  if (NA.analyzeAll) setTimeout(() => NA.analyzeAll(), 600);       // visages et sujets, en arrière-plan
 };
 window.getMinPhotos = () => NA.minPhotos(nPagesSel());
 
@@ -5891,7 +5925,7 @@ NA.albumPanel = function () {
   const n = E.nPagesSel();
   const opts = [24, 36, 50].map(v => `<option value="${v}"${v === n ? ' selected' : ''}>${t('format_opt', v)}</option>`).join('');
   return `<div class="nst-sec"><label for="nstFormat">${t('format_lbl')}</label><select id="nstFormat" class="nst-input">${opts}</select></div>
-  <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button><input type="file" id="nstAddFile" accept="image/*,.heic,.heif" multiple hidden/>
+  <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button><input type="file" id="nstAddFile" accept="image/*" multiple hidden/>
     ${E.isWide() ? `<p class="nst-note">${t('drag_hint')}</p>` : ''}</div>
   <div class="nst-sec nst-save"><label for="nstSaveEmail">${t('save_title')}</label><p class="nst-note" style="margin:0 0 10px">${t('save_sub')}</p>
     <input id="nstSaveEmail" class="nst-input" type="email" autocomplete="email" placeholder="${t('save_email')}" value="${esc(NA.saveEmail || '')}"/>
@@ -5991,7 +6025,7 @@ if (tools) {
       e.target.disabled = true; await recompose(n);
     }
     if (e.target.id === 'nstAddFile' && e.target.files && e.target.files.length) {
-      const files = Array.from(e.target.files); const n = E.nPagesSel();
+      const files = Array.from(e.target.files); e.target.value = ''; const n = E.nPagesSel();
       syncStory();
       const keep = { pages: NA.pages, story: S.story, info: NA.info };
       await window.addPhotos(files);                     // (addPhotos vide l'album : on le recompose aussitôt)
@@ -6268,6 +6302,7 @@ async function exifDate(file) {
 const origAdd = window.addPhotos;
 window.addPhotos = async function (files) {
   const list = Array.from(files || []);
+  if (list.length && typeof showUploadLoader === 'function') showUploadLoader(0, list.length);   // retour immédiat
   const dates = await Promise.all(list.map(async f => [f.name, (await exifDate(f)) || f.lastModified || null]));
   const byName = new Map(dates);
   const before = S.photos.length;
