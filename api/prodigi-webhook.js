@@ -20,6 +20,18 @@ function readRawBody(req) {
   return new Promise(resolve => { let d = ''; req.on('data', c => d += c); req.on('end', () => resolve(d)); req.on('error', () => resolve('')); });
 }
 
+// Marque la commande chez Prodigi une fois l'email de suivi envoyé (évite les doublons, sans base de données)
+function markSent(order, trackingNumber) {
+  const meta = Object.assign({}, order.metadata || {}, { noustalgieShipEmail: String(trackingNumber || 'sent') });
+  const buf = Buffer.from(JSON.stringify({ metadata: meta }));
+  return new Promise(resolve => {
+    const req = https.request({ hostname: 'api.prodigi.com', path: `/v4.0/orders/${order.id}/actions/updateMetadata`, method: 'POST', timeout: 10000,
+      headers: { 'X-API-Key': process.env.PRODIGI_API_KEY, 'Content-Type': 'application/json', 'Content-Length': buf.length } }, r => { r.on('data', () => {}); r.on('end', resolve); });
+    req.on('timeout', () => { req.destroy(); resolve(); }); req.on('error', () => resolve());
+    req.write(buf); req.end();
+  });
+}
+
 function fetchOrder(id) {
   return new Promise(resolve => {
     if (!/^ord_[A-Za-z0-9]+$/.test(id || '') || !process.env.PRODIGI_API_KEY) return resolve(null);
@@ -35,7 +47,8 @@ module.exports = async (req, res) => {
   let event;
   try { event = JSON.parse(await readRawBody(req)); } catch (e) { return res.status(400).send('Invalid JSON'); }
 
-  const claimedId = event?.data?.order?.id || event?.data?.id || '';
+  // Format CloudEvents : l'identifiant de commande est dans data.order.id, data.id ou subject
+  const claimedId = event?.data?.order?.id || event?.data?.id || event?.subject || '';
   const order = await fetchOrder(claimedId);
   if (!order) return res.status(200).json({ received: true, ignored: 'unverified' });
   // Uniquement nos commandes
@@ -44,6 +57,8 @@ module.exports = async (req, res) => {
   const tracking = (order.shipments || []).map(s => s.tracking).find(t => t && (t.number || t.url));
   const email = order.recipient?.email || '';
   if (!tracking || !email) return res.status(200).json({ received: true });
+  const key = String(tracking.number || tracking.url || 'sent');
+  if (order.metadata && order.metadata.noustalgieShipEmail === key) return res.status(200).json({ received: true, already: true });
 
   const first = String(order.recipient?.name || '').split(' ')[0];
   const url = /^https:\/\//.test(tracking.url || '') ? tracking.url : '';
@@ -60,6 +75,7 @@ ${url ? `<div style="margin:24px 0;"><a href="${h(url)}" style="background:#c9a0
 <p style="color:rgba(242,235,224,.5);font-size:12px;">Le suivi peut mettre quelques heures à s’activer. Commande ${h(order.merchantReference)}.</p>
 </div></div></div>`,
   });
+  await markSent(order, key);
   if (process.env.NOTIFY_EMAIL) {
     await sendEmail({ to: process.env.NOTIFY_EMAIL, subject: `📦 Expédié — ${h(order.merchantReference)}`,
       html: `<p>${h(order.recipient?.name)} (${h(email)}) — suivi ${h(tracking.number || '—')} ${url ? `<a href="${h(url)}">lien</a>` : ''}</p>` });

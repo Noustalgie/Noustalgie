@@ -79,7 +79,8 @@ async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSe
     ? { line1: addr.line1, line2: addr.line2 || undefined, postalOrZipCode: addr.postal, countryCode: addr.country, townOrCity: addr.city, isBusiness: false }
     : { line1, postalOrZipCode: postalCode, countryCode: country, townOrCity: city, isBusiness: false };
   const n = parseInt(pages, 10) || 36;
-  const base = { merchantReference: orderNumber, shippingMethod: 'Budget', recipient: { name, email, address: recipientAddress } };
+  // callbackUrl : Prodigi nous prévient à chaque étape (expédition → email de suivi au client)
+  const base = { merchantReference: orderNumber, shippingMethod: 'Budget', callbackUrl: 'https://noustalgie.fr/api/prodigi-webhook', recipient: { name, email, address: recipientAddress } };
   const item = assets => [{ merchantReference: `album-${stripeSessionId}`, sku: SKU, copies: 1, sizing: 'fillPrintArea', assets }];
   let note = '';
 
