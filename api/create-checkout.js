@@ -48,7 +48,8 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'checkout', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez dans quelques minutes.' });
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).json({ error: 'Configuration de paiement incomplète.' });
 
-  const { name, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine } = parseBody(req);
+  const { name, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album } = parseBody(req);
+  const rem = album && album.reminder && album.reminder.id && checkProof(String(album.reminder.id), 'reminder', album.reminder.sig) ? String(album.reminder.id) : '';
 
   if (!email || !EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'Email invalide.' });
 
@@ -90,6 +91,7 @@ module.exports = async (req, res) => {
   const priceStr = priceEuros.toFixed(2);
   const meta = {
     name: cut(name, 200), email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
+    reminder_id: cut(rem, 100),
     cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
     names: cut(names, 200), style: cut(style, 100), pdf_url: cut(pdfUrl, 480), format: fmt, price: priceStr, promo: appliedPromo,

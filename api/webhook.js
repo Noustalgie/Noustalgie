@@ -172,6 +172,14 @@ module.exports = async (req, res) => {
   const orderNumber = `NOUST-${ymd}-${crypto.createHash('sha1').update(session.id).digest('hex').slice(0, 5).toUpperCase()}`;
 
   let prodigiOrderId = null, prodigi = { id: null, note: '' };
+  // Commande payée : la relance « album en attente » n'a plus lieu d'être
+  if (m.reminder_id && process.env.RESEND_API_KEY) {
+    await new Promise(resolve => {
+      const q = https.request({ hostname: 'api.resend.com', path: `/emails/${encodeURIComponent(m.reminder_id)}/cancel`, method: 'POST', timeout: 8000,
+        headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY } }, r => { r.on('data', () => {}); r.on('end', resolve); });
+      q.on('error', resolve); q.on('timeout', () => { q.destroy(); resolve(); }); q.end();
+    });
+  }
   try {
     if (format === 'pdf' && pdfUrl && email) {
       await sendEmail({
@@ -212,7 +220,7 @@ module.exports = async (req, res) => {
         subject: 'Votre livre Noustalgie part à l’impression ♥',
         html: mail(`Bonjour ${h(first)},`, `<p>Votre commande est confirmée : le livre <b>${h(names)}</b> part à l’impression.</p>
           <p>N° de commande : <b style="color:#f2ebe0;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 10 à 12 jours environ</p>
-          <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>`),
+          <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>${btn('https://noustalgie.fr/#suivi', 'Suivre ma commande')}`),
       });
     }
   } catch (e) {

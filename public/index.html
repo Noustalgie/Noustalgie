@@ -851,6 +851,35 @@ img{max-width:100%;}
 .nst-spine-prev{flex:0 0 5.5%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:500 11px/1 'Inter',sans-serif;letter-spacing:.08em;white-space:nowrap;overflow:hidden;border-radius:3px 0 0 3px;}
 .nst-input{width:100%;box-sizing:border-box;border:1px solid var(--line);padding:10px 12px;font:16px/1.4 'Inter',system-ui,sans-serif;color:var(--ink);background:#fff;border-radius:2px;}
 .nst-input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
+
+/* ═══ v3.3 — album : lien, format, photos, glisser-déposer, suivi ═══ */
+.nst-btn-dark{background:#1c1a18!important;color:#fff!important;border-color:#1c1a18!important;margin-top:10px;}
+.nst-btn:disabled{opacity:.45;}
+.nst-danger{color:#9b2c1f!important;}
+.nst-check{display:flex!important;align-items:center;gap:8px;margin:10px 0 0!important;font:400 13.5px/1.4 'Inter',sans-serif!important;color:var(--ink)!important;letter-spacing:0!important;cursor:pointer;}
+.nst-check input{width:18px;height:18px;accent-color:#1c1a18;flex:0 0 auto;}
+.nst-note.nst-ok{color:#2f6b3a;font-weight:500;}
+.nst-save .nst-input{margin-top:2px;}
+select.nst-input{appearance:auto;}
+.nst-th[draggable="true"]{cursor:grab;}
+.nst-th.nst-dragging{opacity:.4;}
+.nst-th.nst-drop .nst-th-in{outline:2px dashed #1c1a18;outline-offset:3px;}
+.nst-track{position:fixed;inset:0;z-index:9700;background:rgba(20,17,14,.55);display:none;align-items:center;justify-content:center;padding:16px;}
+.nst-track.on{display:flex;}
+.nst-tr-box{position:relative;width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;background:#fbfaf7;border-radius:20px;padding:28px 24px;font:400 15px/1.6 'Inter',system-ui,sans-serif;color:#1c1a18;box-shadow:0 30px 80px rgba(0,0,0,.3);}
+.nst-tr-box h2{margin:0 0 8px;font:400 28px/1.15 'Playfair Display',Georgia,serif;}
+.nst-tr-box label{display:block;margin:14px 0 6px;font:500 13px 'Inter',sans-serif;color:#5f5a54;}
+.nst-tr-box form .nst-btn{width:100%;min-height:48px;border-radius:999px;margin-top:16px;font:500 15px 'Inter',sans-serif;cursor:pointer;}
+.nst-tr-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border:0;background:none;font-size:26px;cursor:pointer;color:#5f5a54;}
+.nst-tr-sub{margin:0;color:#5f5a54;font-size:14px;}
+.nst-tr-err{margin:16px 0 0;color:#9b2c1f;font-weight:500;}
+.nst-tr-steps{list-style:none;margin:20px 0 12px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.nst-tr-steps li{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:13px;color:#8b857d;}
+.nst-tr-steps li span{width:32px;height:32px;border-radius:50%;border:1px solid #d9d4cc;display:flex;align-items:center;justify-content:center;font-weight:500;background:#fff;}
+.nst-tr-steps li.on{color:#1c1a18;font-weight:500;}.nst-tr-steps li.on span{background:#1c1a18;color:#fff;border-color:#1c1a18;}
+.nst-tr-box a{color:#1c1a18;}
+html body .nst-tr-box .nst-input,html body .nst-ed .nst-input{background:#fff!important;color:#1c1a18!important;border:1px solid #d9d4cc!important;border-radius:10px!important;min-height:46px;font-size:16px!important;box-shadow:none;}
+html body .nst-tr-box .nst-input:focus{border-color:#1c1a18!important;box-shadow:0 0 0 1px #1c1a18!important;}
 /* ═══ v2.2 — système de design du site ═══ */
 :root{--n-ink:#1c1a18;--n-mut:#5f5a54;--n-line:#d9d4cc;--n-soft:#f6f4f0;}
 /* Boutons : principal = noir plein, secondaire = contour */
@@ -1442,18 +1471,18 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
     <div class="panel" id="panel3">
       <div id="nstEd" class="nst-ed">
         <div class="nst-bar">
-          <div class="nst-themes" id="nstThemes" aria-label="Style de l'album"></div>
+          <div class="nst-themes" id="nstThemes" data-ui-aria="style_aria" aria-label="Style de l'album"></div>
           <div class="nst-bar-r">
-            <button class="nst-btn" id="nstUndo" disabled title="Annuler (Ctrl+Z)">Annuler</button>
-            <button class="nst-btn" id="nstRedo" disabled title="Rétablir">Rétablir</button>
-            <button class="nst-btn" id="nstFull">Feuilleter</button>
+            <button class="nst-btn" id="nstUndo" disabled data-ui="undo">Annuler</button>
+            <button class="nst-btn" id="nstRedo" disabled data-ui="redo">Rétablir</button>
+            <button class="nst-btn" id="nstFull" data-ui="read">Feuilleter</button>
           </div>
         </div>
         <div class="nst-main">
           <div class="nst-stagewrap">
-            <button class="nst-nav" id="nstPrev" aria-label="Page précédente">‹</button>
+            <button class="nst-nav" id="nstPrev" data-ui-aria="prev" aria-label="Page précédente">‹</button>
             <div class="nst-spread" id="nstSpread"></div>
-            <button class="nst-nav" id="nstNext" aria-label="Page suivante">›</button>
+            <button class="nst-nav" id="nstNext" data-ui-aria="next" aria-label="Page suivante">›</button>
             <div class="nst-ctr" id="nstCtr"></div>
           </div>
           <aside class="nst-tools" id="nstTools" aria-live="polite"></aside>
@@ -1461,8 +1490,8 @@ html body #app .nst-qhint::before{content:"";flex:0 0 auto;width:14px;height:14p
         <div class="nst-strip" id="nstStrip"></div>
       </div>
       <div class="btn-row" id="previewActions" style="margin-top:1rem;display:none;">
-        <button class="btn" onclick="goTab(1)">← Photos</button>
-        <button class="btn btn-gold" onclick="goTab(4)" id="btnOrder">Commander ce livre</button>
+        <button class="btn" onclick="goTab(1)" data-ui="back_photos">← Photos</button>
+        <button class="btn btn-gold" onclick="goTab(4)" id="btnOrder" data-ui="order_book">Commander ce livre</button>
       </div>
     </div>
 
@@ -4205,20 +4234,22 @@ function plan(nPages, story, info) {
   });
 
   const ch = story.chapters || [], notes = story.notes || [];
+  const tag = (pg, k) => { pg.k = k; return pg; };
+  const ttl = k => (story.titles && story.titles[k]) || lab(k);
   let hi = 0;
   const takePhoto = () => (hi < hp.length ? hp[hi++] : null);
   const extra = {
-    love: () => mkPage('list', [], { title: lab('love'), items: (story.love || []).slice(0, 8).join('\n') }),
-    quote: () => mkPage('quote', [], { text: story.quote || '' }),
-    film: () => mkPage('prose', [], { title: lab('film'), text: story.film || '', foot: `${lab('starring')} ${info.n1}${info.n2 ? ' ' + lab('and') + ' ' + info.n2 : ''}` }),
-    disputes: () => mkPage('list', [], { title: lab('disputes'), items: (story.disputes || []).slice(0, 5).join('\n') }),
-    wish: () => mkPage('checklist', [], { title: lab('wish'), items: (story.wishlist || []).slice(0, 6).join('\n') }),
-    weather: () => mkPage('prose', [], { title: lab('weather'), text: story.weather || '' }),
-    journal: () => mkPage('journal', [], { title: lab('journal'), text: story.journal_prompt || '' }),
+    love: () => tag(mkPage('list', [], { title: ttl('love'), items: (story.love || []).slice(0, 8).join('\n') }), 'love'),
+    quote: () => tag(mkPage('quote', [], { text: story.quote || '' }), 'quote'),
+    film: () => tag(mkPage('prose', [], { title: ttl('film'), text: story.film || '', foot: `${lab('starring')} ${info.n1}${info.n2 ? ' ' + lab('and') + ' ' + info.n2 : ''}` }), 'film'),
+    disputes: () => tag(mkPage('list', [], { title: ttl('disputes'), items: (story.disputes || []).slice(0, 5).join('\n') }), 'disputes'),
+    wish: () => tag(mkPage('checklist', [], { title: ttl('wish'), items: (story.wishlist || []).slice(0, 6).join('\n') }), 'wish'),
+    weather: () => tag(mkPage('prose', [], { title: ttl('weather'), text: story.weather || '' }), 'weather'),
+    journal: () => tag(mkPage('journal', [], { title: ttl('journal'), text: story.journal_prompt || '' }), 'journal'),
   };
   const noteP = [];
   // Leur souvenir devient une page entière (elle remplace un mot doux : même nombre de pages)
-  const memPage = story.memory && story.memory.text ? mkPage('prose', [], { title: story.memory.title || '', text: story.memory.text }) : null;
+  const memPage = story.memory && story.memory.text ? tag(mkPage('prose', [], { title: story.memory.title || '', text: story.memory.text }), 'memory') : null;
   const nNotes = memPage ? Math.max(0, t.notes - 1) : t.notes;
   for (let k = 0; k < nNotes; k++) {
     const p = takePhoto(), text = notes[k] || '';
@@ -4261,10 +4292,10 @@ function plan(nPages, story, info) {
     if (target.layout === 'frame') target.v = 0;
   }
   t.end.forEach(k => {
-    if (k === 'letter') out.push(mkPage('prose', [], { title: lab('letter'), text: story.letter || '', foot: names }));
+    if (k === 'letter') out.push(tag(mkPage('prose', [], { title: ttl('letter'), text: story.letter || '', foot: names }), 'letter'));
     if (k === 'journal') out.push(extra.journal());
   });
-  out.push(mkPage('closing', [], { text: story.closing || '', names: `${lab('belongs')}\n${names}\n${new Date().getFullYear()}` }));
+  out.push(tag(mkPage('closing', [], { text: story.closing || '', names: `${lab('belongs')}\n${names}\n${new Date().getFullYear()}` }), 'closing'));
   while (out.length > nPages) { const k = out.findIndex((p, i) => i > 1 && p.layout === 'note'); out.splice(k > 0 ? k : out.length - 2, 1); }
   while (out.length < nPages) out.splice(out.length - 1, 0, extra.journal());
   return out;
@@ -4307,7 +4338,7 @@ function loadDetector() {
 }
 
 const clamp01 = v => Math.max(0, Math.min(1, v));
-function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
 
 /* Zone la plus « parlante » sans visage : contraste local × saturation, avec léger biais central */
 function saliency(img) {
@@ -4423,6 +4454,159 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 </script>
 <script>
 /* ════════════════════════════════════════════════════════════════
+   NOUSTALGIE — Textes de l'éditeur en 5 langues (NA.t)
+   ════════════════════════════════════════════════════════════════ */
+(function () {
+'use strict';
+const UI = {
+fr: {
+  undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
+  hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
+  hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
+  cover: 'Couverture', back: '4e de couverture', page: 'Page {0}', pages: 'Pages {0}–{1}', th_cover: 'Couv.', th_back: 'Dos',
+  zoom: 'Zoom', render: 'Rendu', f_none: 'Original', f_bw: 'Noir & blanc', f_warm: 'Chaud', f_soft: 'Doux', recenter: 'Recadrage automatique', change_photo: 'Changer la photo',
+  swap_wide: 'Une photo déjà placée ailleurs sera échangée avec celle-ci. Faites glisser la photo sur la page pour la recadrer, molette pour zoomer.',
+  swap_mobile: 'Une photo déjà placée ailleurs sera échangée avec celle-ci. Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.',
+  used: 'Déjà utilisée page {0} : les deux seront échangées', photo_n: 'Photo {0}', current: '(actuelle)',
+  text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA :', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
+  layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille',
+  move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
+  resume_txt: 'Vous avez un album en cours :', resume_yes: 'Reprendre', resume_no: 'Plus tard',
+  issue_txt: 'L’écriture automatique n’a pas répondu : votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
+  gen_min: 'Il faut au moins {0} photos pour un album de {1} pages (vous en avez {2}).', g_analyze: 'Analyse de vos photos… {0}/{1}', g_read: 'Lecture de vos photos… {0}/{1}', g_write: 'Écriture de votre histoire…', g_verify: 'Vérification de vos souvenirs…', g_fail: 'La composition n’a pas abouti ({0}).', g_retry: 'Relancer',
+  p_need: 'Merci de renseigner votre prénom et votre email.', p_email: 'Votre email semble invalide.', p_addr: 'Merci de renseigner votre adresse complète (rue, code postal, ville) pour la livraison.', p_empty: 'Votre album n’est pas encore composé.',
+  p_prep: 'Préparation de votre livre…', p_upload: 'Envoi de vos photos en haute définition… {0}/{1}', p_layout: 'Mise en page de votre livre…', p_redirect: 'Redirection vers le paiement…',
+  p_fail: 'La préparation de votre livre a échoué ({0}). Vous n’avez pas été débité. Réessayez dans un instant, ou écrivez à contact@noustalgie.fr.',
+  save_title: 'Gardez votre album', save_sub: 'Recevez le lien par email pour le reprendre plus tard, sur n’importe quel appareil.', save_email: 'Votre email', save_remind: 'Me le rappeler demain si je n’ai pas terminé', save_btn: 'Recevoir le lien',
+  save_busy: 'Enregistrement… {0}/{1}', save_ok: 'C’est envoyé ! Pensez à regarder vos spams.', save_fail: 'L’enregistrement a échoué. Réessayez dans un instant.', save_note: 'Vos photos sont conservées 30 jours, uniquement pour ce lien.',
+  restore_busy: 'Ouverture de votre album…', restore_fail: 'Impossible d’ouvrir cet album : {0}',
+  add_photos: 'Ajouter des photos', remove_photo: 'Retirer cette photo du livre', remove_min: 'Il faut garder au moins {0} photos pour ce format.', recompose: 'Recomposition de votre livre…',
+  format_lbl: 'Format', format_opt: '{0} pages', format_min: 'Il faut au moins {0} photos pour {1} pages.', format_adding: 'Écriture des pages supplémentaires…', drag_hint: 'Glissez les miniatures pour réordonner les pages.', photos_lbl: 'Photos',
+  tr_title: 'Suivre ma commande', tr_sub: 'Entrez le numéro reçu par email (NOUST-…) et l’adresse email utilisée pour la commande.', tr_ref: 'Numéro de commande', tr_email: 'Email', tr_btn: 'Voir le suivi',
+  tr_s1: 'Commande reçue', tr_s2: 'En fabrication', tr_s3: 'Expédiée', tr_track: 'Suivre le colis', tr_num: 'N° de suivi', tr_cancel: 'Cette commande a été annulée. Écrivez-nous si vous avez une question.',
+  tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
+},
+en: {
+  undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
+  hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
+  hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
+  cover: 'Cover', back: 'Back cover', page: 'Page {0}', pages: 'Pages {0}–{1}', th_cover: 'Cover', th_back: 'Back',
+  zoom: 'Zoom', render: 'Look', f_none: 'Original', f_bw: 'Black & white', f_warm: 'Warm', f_soft: 'Soft', recenter: 'Automatic crop', change_photo: 'Change photo',
+  swap_wide: 'A photo already placed elsewhere will be swapped with this one. Drag the photo on the page to crop it, scroll to zoom.',
+  swap_mobile: 'A photo already placed elsewhere will be swapped with this one. Drag the photo with your finger to crop it, pinch to zoom.',
+  used: 'Already used on page {0}: they will be swapped', photo_n: 'Photo {0}', current: '(current)',
+  text: 'Text', text_list: ' (one item per line)', ai_alt: 'Another wording by AI:', rw_short: 'Shorter', rw_tender: 'More tender', rw_funny: 'Funnier', rw_again: 'Another version', writing: 'Writing…', rw_fail: 'Rewriting is unavailable right now.',
+  layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid',
+  move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
+  resume_txt: 'You have an album in progress:', resume_yes: 'Resume', resume_no: 'Later',
+  issue_txt: 'Automatic writing did not respond: your album uses default texts. Tap a text to write it, or try the writing again.', issue_retry: 'Retry writing',
+  gen_min: 'You need at least {0} photos for a {1}-page album (you have {2}).', g_analyze: 'Analysing your photos… {0}/{1}', g_read: 'Reading your photos… {0}/{1}', g_write: 'Writing your story…', g_verify: 'Checking your memories…', g_fail: 'The album could not be composed ({0}).', g_retry: 'Try again',
+  p_need: 'Please enter your first name and email.', p_email: 'Your email looks invalid.', p_addr: 'Please enter your full address (street, postcode, city) for delivery.', p_empty: 'Your album is not composed yet.',
+  p_prep: 'Preparing your book…', p_upload: 'Uploading your photos in high definition… {0}/{1}', p_layout: 'Laying out your book…', p_redirect: 'Redirecting to payment…',
+  p_fail: 'Preparing your book failed ({0}). You have not been charged. Try again in a moment, or email contact@noustalgie.fr.',
+  save_title: 'Keep your album', save_sub: 'Get the link by email to pick it up later, on any device.', save_email: 'Your email', save_remind: 'Remind me tomorrow if I haven’t finished', save_btn: 'Send me the link',
+  save_busy: 'Saving… {0}/{1}', save_ok: 'Sent! Check your spam folder too.', save_fail: 'Saving failed. Please try again in a moment.', save_note: 'Your photos are kept for 30 days, only for this link.',
+  restore_busy: 'Opening your album…', restore_fail: 'Unable to open this album: {0}',
+  add_photos: 'Add photos', remove_photo: 'Remove this photo from the book', remove_min: 'You need to keep at least {0} photos for this format.', recompose: 'Recomposing your book…',
+  format_lbl: 'Format', format_opt: '{0} pages', format_min: 'You need at least {0} photos for {1} pages.', format_adding: 'Writing the extra pages…', drag_hint: 'Drag the thumbnails to reorder pages.', photos_lbl: 'Photos',
+  tr_title: 'Track my order', tr_sub: 'Enter the number from your email (NOUST-…) and the email address used for the order.', tr_ref: 'Order number', tr_email: 'Email', tr_btn: 'Track',
+  tr_s1: 'Order received', tr_s2: 'In production', tr_s3: 'Shipped', tr_track: 'Track the parcel', tr_num: 'Tracking no.', tr_cancel: 'This order was cancelled. Email us if you have any question.',
+  tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
+},
+de: {
+  undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
+  hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
+  hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
+  cover: 'Cover', back: 'Rückseite', page: 'Seite {0}', pages: 'Seiten {0}–{1}', th_cover: 'Cover', th_back: 'Rücks.',
+  zoom: 'Zoom', render: 'Stil', f_none: 'Original', f_bw: 'Schwarz-Weiß', f_warm: 'Warm', f_soft: 'Sanft', recenter: 'Automatischer Zuschnitt', change_photo: 'Foto ändern',
+  swap_wide: 'Ein bereits platziertes Foto wird mit diesem getauscht. Zieht das Foto zum Zuschneiden, Mausrad zum Zoomen.',
+  swap_mobile: 'Ein bereits platziertes Foto wird mit diesem getauscht. Mit dem Finger ziehen zum Zuschneiden, zwei Finger zum Zoomen.',
+  used: 'Schon auf Seite {0}: beide werden getauscht', photo_n: 'Foto {0}', current: '(aktuell)',
+  text: 'Text', text_list: ' (ein Eintrag pro Zeile)', ai_alt: 'Andere Formulierung per KI:', rw_short: 'Kürzer', rw_tender: 'Zärtlicher', rw_funny: 'Lustiger', rw_again: 'Andere Version', writing: 'Schreibt…', rw_fail: 'Umschreiben gerade nicht verfügbar.',
+  layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster',
+  move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
+  resume_txt: 'Ihr habt ein angefangenes Album:', resume_yes: 'Fortsetzen', resume_no: 'Später',
+  issue_txt: 'Das automatische Schreiben hat nicht geantwortet: euer Album nutzt Standardtexte. Tippt auf einen Text, um ihn zu schreiben, oder versucht es erneut.', issue_retry: 'Erneut schreiben',
+  gen_min: 'Für ein Album mit {1} Seiten braucht ihr mindestens {0} Fotos (ihr habt {2}).', g_analyze: 'Fotos werden analysiert… {0}/{1}', g_read: 'Fotos werden gelesen… {0}/{1}', g_write: 'Eure Geschichte wird geschrieben…', g_verify: 'Eure Erinnerungen werden geprüft…', g_fail: 'Das Album konnte nicht erstellt werden ({0}).', g_retry: 'Erneut versuchen',
+  p_need: 'Bitte Vornamen und E-Mail angeben.', p_email: 'Die E-Mail scheint ungültig.', p_addr: 'Bitte vollständige Adresse (Straße, PLZ, Ort) angeben.', p_empty: 'Euer Album ist noch nicht erstellt.',
+  p_prep: 'Euer Buch wird vorbereitet…', p_upload: 'Fotos werden in hoher Auflösung hochgeladen… {0}/{1}', p_layout: 'Euer Buch wird gesetzt…', p_redirect: 'Weiterleitung zur Zahlung…',
+  p_fail: 'Die Vorbereitung ist fehlgeschlagen ({0}). Es wurde nichts abgebucht. Versucht es gleich noch einmal oder schreibt an contact@noustalgie.fr.',
+  save_title: 'Album behalten', save_sub: 'Erhaltet den Link per E-Mail, um später auf jedem Gerät weiterzumachen.', save_email: 'Eure E-Mail', save_remind: 'Morgen erinnern, falls ich nicht fertig bin', save_btn: 'Link erhalten',
+  save_busy: 'Wird gespeichert… {0}/{1}', save_ok: 'Gesendet! Schaut auch im Spam-Ordner nach.', save_fail: 'Speichern fehlgeschlagen. Bitte gleich erneut versuchen.', save_note: 'Eure Fotos werden 30 Tage aufbewahrt, nur für diesen Link.',
+  restore_busy: 'Album wird geöffnet…', restore_fail: 'Album kann nicht geöffnet werden: {0}',
+  add_photos: 'Fotos hinzufügen', remove_photo: 'Foto aus dem Buch entfernen', remove_min: 'Für dieses Format braucht ihr mindestens {0} Fotos.', recompose: 'Buch wird neu zusammengestellt…',
+  format_lbl: 'Format', format_opt: '{0} Seiten', format_min: 'Für {1} Seiten braucht ihr mindestens {0} Fotos.', format_adding: 'Zusätzliche Seiten werden geschrieben…', drag_hint: 'Miniaturen ziehen, um Seiten umzusortieren.', photos_lbl: 'Fotos',
+  tr_title: 'Bestellung verfolgen', tr_sub: 'Gebt die Nummer aus der E-Mail (NOUST-…) und die bei der Bestellung verwendete E-Mail an.', tr_ref: 'Bestellnummer', tr_email: 'E-Mail', tr_btn: 'Anzeigen',
+  tr_s1: 'Bestellung erhalten', tr_s2: 'In Produktion', tr_s3: 'Versendet', tr_track: 'Paket verfolgen', tr_num: 'Sendungsnr.', tr_cancel: 'Diese Bestellung wurde storniert. Schreibt uns bei Fragen.',
+  tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
+},
+es: {
+  undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
+  hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
+  hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
+  cover: 'Portada', back: 'Contraportada', page: 'Página {0}', pages: 'Páginas {0}–{1}', th_cover: 'Port.', th_back: 'Contra.',
+  zoom: 'Zoom', render: 'Estilo', f_none: 'Original', f_bw: 'Blanco y negro', f_warm: 'Cálido', f_soft: 'Suave', recenter: 'Recorte automático', change_photo: 'Cambiar la foto',
+  swap_wide: 'Una foto ya colocada en otro sitio se intercambiará con esta. Arrastra la foto para recortarla, rueda para ampliar.',
+  swap_mobile: 'Una foto ya colocada en otro sitio se intercambiará con esta. Arrastra con el dedo para recortarla, pellizca para ampliar.',
+  used: 'Ya usada en la página {0}: se intercambiarán', photo_n: 'Foto {0}', current: '(actual)',
+  text: 'Texto', text_list: ' (un elemento por línea)', ai_alt: 'Otra redacción con IA:', rw_short: 'Más corto', rw_tender: 'Más tierno', rw_funny: 'Más divertido', rw_again: 'Otra versión', writing: 'Escribiendo…', rw_fail: 'Reescritura no disponible por ahora.',
+  layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula',
+  move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
+  resume_txt: 'Tienes un álbum en curso:', resume_yes: 'Retomar', resume_no: 'Más tarde',
+  issue_txt: 'La escritura automática no respondió: tu álbum usa textos por defecto. Toca un texto para escribirlo o vuelve a intentarlo.', issue_retry: 'Volver a escribir',
+  gen_min: 'Necesitas al menos {0} fotos para un álbum de {1} páginas (tienes {2}).', g_analyze: 'Analizando tus fotos… {0}/{1}', g_read: 'Leyendo tus fotos… {0}/{1}', g_write: 'Escribiendo vuestra historia…', g_verify: 'Comprobando vuestros recuerdos…', g_fail: 'No se pudo componer el álbum ({0}).', g_retry: 'Reintentar',
+  p_need: 'Indica tu nombre y tu email.', p_email: 'Tu email no parece válido.', p_addr: 'Indica tu dirección completa (calle, código postal, ciudad).', p_empty: 'Tu álbum aún no está compuesto.',
+  p_prep: 'Preparando tu libro…', p_upload: 'Subiendo tus fotos en alta definición… {0}/{1}', p_layout: 'Maquetando tu libro…', p_redirect: 'Redirigiendo al pago…',
+  p_fail: 'La preparación de tu libro falló ({0}). No se ha realizado ningún cargo. Inténtalo de nuevo o escribe a contact@noustalgie.fr.',
+  save_title: 'Guarda tu álbum', save_sub: 'Recibe el enlace por email para retomarlo más tarde, en cualquier dispositivo.', save_email: 'Tu email', save_remind: 'Recordármelo mañana si no he terminado', save_btn: 'Recibir el enlace',
+  save_busy: 'Guardando… {0}/{1}', save_ok: '¡Enviado! Revisa también el correo no deseado.', save_fail: 'No se pudo guardar. Inténtalo de nuevo.', save_note: 'Tus fotos se conservan 30 días, solo para este enlace.',
+  restore_busy: 'Abriendo tu álbum…', restore_fail: 'No se puede abrir este álbum: {0}',
+  add_photos: 'Añadir fotos', remove_photo: 'Quitar esta foto del libro', remove_min: 'Debes conservar al menos {0} fotos para este formato.', recompose: 'Recomponiendo tu libro…',
+  format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Necesitas al menos {0} fotos para {1} páginas.', format_adding: 'Escribiendo las páginas adicionales…', drag_hint: 'Arrastra las miniaturas para reordenar las páginas.', photos_lbl: 'Fotos',
+  tr_title: 'Seguir mi pedido', tr_sub: 'Introduce el número recibido por email (NOUST-…) y el email usado en el pedido.', tr_ref: 'Número de pedido', tr_email: 'Email', tr_btn: 'Ver el seguimiento',
+  tr_s1: 'Pedido recibido', tr_s2: 'En fabricación', tr_s3: 'Enviado', tr_track: 'Seguir el paquete', tr_num: 'N.º de seguimiento', tr_cancel: 'Este pedido fue cancelado. Escríbenos si tienes alguna pregunta.',
+  tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
+},
+pt: {
+  undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
+  hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
+  hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
+  cover: 'Capa', back: 'Contracapa', page: 'Página {0}', pages: 'Páginas {0}–{1}', th_cover: 'Capa', th_back: 'Contra.',
+  zoom: 'Zoom', render: 'Estilo', f_none: 'Original', f_bw: 'Preto e branco', f_warm: 'Quente', f_soft: 'Suave', recenter: 'Recorte automático', change_photo: 'Mudar a foto',
+  swap_wide: 'Uma foto já colocada noutro lugar será trocada com esta. Arrasta a foto para a recortar, roda para ampliar.',
+  swap_mobile: 'Uma foto já colocada noutro lugar será trocada com esta. Arrasta com o dedo para recortar, aperta para ampliar.',
+  used: 'Já usada na página {0}: serão trocadas', photo_n: 'Foto {0}', current: '(atual)',
+  text: 'Texto', text_list: ' (um item por linha)', ai_alt: 'Outra redação com IA:', rw_short: 'Mais curto', rw_tender: 'Mais terno', rw_funny: 'Mais divertido', rw_again: 'Outra versão', writing: 'A escrever…', rw_fail: 'Reescrita indisponível de momento.',
+  layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha',
+  move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
+  resume_txt: 'Tens um álbum em curso:', resume_yes: 'Retomar', resume_no: 'Mais tarde',
+  issue_txt: 'A escrita automática não respondeu: o teu álbum usa textos por defeito. Toca num texto para o escrever, ou tenta de novo.', issue_retry: 'Escrever de novo',
+  gen_min: 'Precisas de pelo menos {0} fotos para um álbum de {1} páginas (tens {2}).', g_analyze: 'A analisar as tuas fotos… {0}/{1}', g_read: 'A ler as tuas fotos… {0}/{1}', g_write: 'A escrever a vossa história…', g_verify: 'A verificar as vossas memórias…', g_fail: 'Não foi possível compor o álbum ({0}).', g_retry: 'Tentar de novo',
+  p_need: 'Indica o teu nome e o teu email.', p_email: 'O teu email parece inválido.', p_addr: 'Indica a morada completa (rua, código postal, cidade).', p_empty: 'O teu álbum ainda não está composto.',
+  p_prep: 'A preparar o teu livro…', p_upload: 'A enviar as tuas fotos em alta definição… {0}/{1}', p_layout: 'A paginar o teu livro…', p_redirect: 'A redirecionar para o pagamento…',
+  p_fail: 'A preparação do teu livro falhou ({0}). Não foste cobrado. Tenta de novo ou escreve para contact@noustalgie.fr.',
+  save_title: 'Guarda o teu álbum', save_sub: 'Recebe o link por email para o retomar mais tarde, em qualquer dispositivo.', save_email: 'O teu email', save_remind: 'Lembrar-me amanhã se não tiver terminado', save_btn: 'Receber o link',
+  save_busy: 'A guardar… {0}/{1}', save_ok: 'Enviado! Vê também o correio não desejado.', save_fail: 'Não foi possível guardar. Tenta de novo.', save_note: 'As tuas fotos são guardadas 30 dias, apenas para este link.',
+  restore_busy: 'A abrir o teu álbum…', restore_fail: 'Não é possível abrir este álbum: {0}',
+  add_photos: 'Adicionar fotos', remove_photo: 'Retirar esta foto do livro', remove_min: 'Tens de manter pelo menos {0} fotos para este formato.', recompose: 'A recompor o teu livro…',
+  format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Precisas de pelo menos {0} fotos para {1} páginas.', format_adding: 'A escrever as páginas adicionais…', drag_hint: 'Arrasta as miniaturas para reordenar as páginas.', photos_lbl: 'Fotos',
+  tr_title: 'Seguir a minha encomenda', tr_sub: 'Introduz o número recebido por email (NOUST-…) e o email usado na encomenda.', tr_ref: 'Número da encomenda', tr_email: 'Email', tr_btn: 'Ver o seguimento',
+  tr_s1: 'Encomenda recebida', tr_s2: 'Em produção', tr_s3: 'Enviada', tr_track: 'Seguir a encomenda', tr_num: 'N.º de seguimento', tr_cancel: 'Esta encomenda foi cancelada. Escreve-nos se tiveres alguma questão.',
+  tr_pdf: 'Para um álbum digital, o link de download está no email de confirmação.', tr_eta: 'Entrega estimada: cerca de 10 a 12 dias após a encomenda.', tr_busy: 'A procurar…',
+},
+};
+function t(key) {
+  const l = (typeof currentLang !== 'undefined' && UI[currentLang]) ? currentLang : 'fr';
+  let s = (UI[l] && UI[l][key]) || UI.fr[key] || key;
+  for (let i = 1; i < arguments.length; i++) s = s.split('{' + (i - 1) + '}').join(arguments[i]);
+  return s;
+}
+window.NA = window.NA || {};
+window.NA.t = t;
+window.NA.UI = UI;
+})();
+
+/* ════════════════════════════════════════════════════════════════
    NOUSTALGIE — Application album v2 (génération, éditeur, impression)
    Remplace : addPhotos, getMinPhotos, runGeneration, renderBookPreview,
               generateAlbumPDF, processPayment
@@ -4439,7 +4623,7 @@ const LANG_NAME = { fr: 'French', en: 'English', de: 'German', es: 'Spanish', pt
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /* ══ 1. Import des photos : une version écran + une version impression ══ */
-function loadImage(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+function loadImage(src) { return new Promise((res, rej) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
 function toJpeg(img, max, q) {
   const r = Math.min(max / img.width, max / img.height, 1);
   const c = document.createElement('canvas');
@@ -4669,11 +4853,11 @@ window.runGeneration = async function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const nPages = nPagesSel();
   const min = NA.minPhotos(nPages);
-  if (S.photos.length < min) { alert(`Il faut au moins ${min} photos pour un album de ${nPages} pages (vous en avez ${S.photos.length}).`); return; }
+  if (S.photos.length < min) { alert(NA.t('gen_min', min, nPages, S.photos.length)); return; }
   const btn = $('btnGen'); if (btn) btn.disabled = true;
   goTab(2);
   const msg = $('genStatusMsg'); const logBox = $('logBox'); if (logBox) { logBox.innerHTML = ''; logBox.style.display = 'none'; }
-  const steps = T.gen_steps || ['Lecture de vos photos…', 'Écriture de votre histoire…', 'Choix des mises en page…', 'Dernières retouches…'];
+  const steps = [NA.t('g_read', '', '').replace(/\s*\/?\s*$/, ''), NA.t('g_write')];
   let pct = 2, cap = 30, si = 0;
   const tick = setInterval(() => {
     if (pct < cap) { pct += Math.max(0.2, (cap - pct) * 0.05); setProgress(Math.round(pct)); }
@@ -4684,22 +4868,22 @@ window.runGeneration = async function () {
   try {
     const info = coupleInfo();
     // 0) analyse des photos (visages, sujets) : indispensable au cadrage et au choix des mises en page
-    if (NA.analyzeAll) await NA.analyzeAll((d, n) => { if (msg) msg.textContent = `Analyse de vos photos… ${d}/${n}`; });
+    if (NA.analyzeAll) await NA.analyzeAll((d, n) => { if (msg) msg.textContent = NA.t('g_analyze', d, n); });
     // 1) les photos d'abord : légendes + description de chaque scène (par petits lots, jamais bloquant)
-    const cap = await captionPhotos(info, (d, n) => { if (msg) msg.textContent = `Lecture de vos photos… ${d}/${n}`; }).catch(() => ({ captions: [], scenes: [] }));
+    const cap = await captionPhotos(info, (d, n) => { if (msg) msg.textContent = NA.t('g_read', d, n); }).catch(() => ({ captions: [], scenes: [] }));
     const captions = cap.captions || [];
     // scènes regroupées par chapitre, dans l'ordre des photos (hors couverture)
     const C = { 24: 3, 36: 4, 50: 5 }[nPages] || 4, rest = S.photos.length - 1;
     const chapterScenes = Array.from({ length: C }, (_, c) => (cap.scenes || []).slice(1 + Math.floor(c * rest / C), 1 + Math.floor((c + 1) * rest / C)).filter(Boolean).slice(0, 10));
     // 2) l'histoire, construite autour de leurs réponses et de leurs photos
-    if (msg) msg.textContent = 'Écriture de votre histoire…';
+    if (msg) msg.textContent = NA.t('g_write');
     let story = null;
     try {
       story = await callAI({ max_tokens: 2800, temperature: 0.9, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: storyPrompt(info, nPages, chapterScenes) }] }, 3, 'histoire');
       // 3) vérification : chacune de leurs réponses doit vraiment figurer dans le livre
       const miss = missingAnswers(story, info.answers || {});
       if (miss.length) {
-        if (msg) msg.textContent = 'Vérification de vos souvenirs…';
+        if (msg) msg.textContent = NA.t('g_verify');
         try { story = await repairStory(story, info.answers, miss); } catch (e) { console.warn('[Noustalgie] réécriture impossible', e); }
       }
     } catch (e) {
@@ -4720,7 +4904,7 @@ window.runGeneration = async function () {
   } catch (e) {
     clearInterval(tick); clearInterval(climb); setProgress(0);
     console.error('[Noustalgie] génération', e);
-    if (msg) msg.innerHTML = `La composition n’a pas abouti (${esc(e.message || 'erreur')}). <button class="btn btn-gold" style="margin-top:14px" onclick="runGeneration()">Relancer</button>`;
+    if (msg) msg.innerHTML = `${esc(NA.t('g_fail', e.message || 'erreur'))} <button class="btn btn-gold" style="margin-top:14px" onclick="runGeneration()">${NA.t('g_retry')}</button>`;
   }
   if (btn) btn.disabled = false;
 };
@@ -4730,7 +4914,7 @@ function showIssue() {
   let b = $('nstIssue'); if (b) b.remove();
   if (!NA.genIssue) return;
   b = document.createElement('div'); b.id = 'nstIssue'; b.className = 'nst-issue';
-  b.innerHTML = `<span>L’écriture automatique n’a pas répondu : votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.</span><button class="nst-btn" id="nstRetry">Relancer l’écriture</button><small>${esc(NA.genIssue)}</small>`;
+  b.innerHTML = `<span>${NA.t('issue_txt')}</span><button class="nst-btn" id="nstRetry">${NA.t('issue_retry')}</button><small>${esc(NA.genIssue)}</small>`;
   ed.insertBefore(b, ed.firstChild);
   $('nstRetry').onclick = () => { NA.genIssue = null; NA.pages = []; runGeneration(); };
 }
@@ -4755,7 +4939,7 @@ function visible() {
   const l = c % 2 === 0 ? c : c - 1, r = l + 1;
   return [l, r < last ? r : null];
 }
-const pageName = i => i === 0 ? 'Couverture' : i === NA.pages.length - 1 ? '4e de couverture' : `Page ${i + 1}`;
+const pageName = i => i === 0 ? NA.t('cover') : i === NA.pages.length - 1 ? NA.t('back') : NA.t('page', i + 1);
 function mountPage(host, i, editing) {
   host.innerHTML = NA.renderPage(NA.pages[i], { editing, inline: editing && isWide() });
   host.dataset.page = i;
@@ -4780,7 +4964,7 @@ function drawStage() {
   stage.querySelectorAll('.nst-page[data-page]').forEach(h => mountPage(h, +h.dataset.page, true));
   highlightSel();
   const vv = v.filter(x => x != null), ctr = $('nstCtr');
-  if (ctr) ctr.textContent = vv.length === 2 ? `Pages ${vv[0] + 1}–${vv[1] + 1} / ${NA.pages.length}` : `${pageName(vv[0])} / ${NA.pages.length}`;
+  if (ctr) ctr.textContent = vv.length === 2 ? `${NA.t('pages', vv[0] + 1, vv[1] + 1)} / ${NA.pages.length}` : `${pageName(vv[0])} / ${NA.pages.length}`;
   $('nstPrev').disabled = NA.cur === 0; $('nstNext').disabled = Math.max(...vv) >= NA.pages.length - 1;
 }
 function drawThumb(i) {
@@ -4790,7 +4974,7 @@ function drawThumb(i) {
 function drawStrip() {
   const s = $('nstStrip'); if (!s) return;
   const last = NA.pages.length - 1;
-  s.innerHTML = NA.pages.map((p, i) => `<button class="nst-th" data-page="${i}" aria-label="${pageName(i)}"><div class="nst-th-in"></div><span>${i === 0 ? 'Couv.' : i === last ? 'Dos' : i + 1}</span></button>`).join('');
+  s.innerHTML = NA.pages.map((p, i) => `<button class="nst-th" data-page="${i}" aria-label="${pageName(i)}" draggable="${i > 0 && i < last}"><div class="nst-th-in"></div><span>${i === 0 ? NA.t('th_cover') : i === last ? NA.t('th_back') : i + 1}</span></button>`).join('');
   NA.pages.forEach((_, i) => drawThumb(i));
   markStrip();
 }
@@ -4836,40 +5020,39 @@ function drawTools() {
   box.classList.toggle('sheet', sheet);
   document.body.classList.toggle('nst-sheet-open', sheet);
   if (!sel) {
-    box.innerHTML = isWide()
-      ? `<p class="nst-hint">Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.</p>`
-      : `<p class="nst-hint">Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.</p>`;
+    box.innerHTML = (isWide() ? `<p class="nst-hint">${NA.t('hint_wide')}</p>` : `<p class="nst-hint">${NA.t('hint_mobile')}</p>`)
+      + (NA.albumPanel ? NA.albumPanel() : '');
     return;
   }
   const pg = NA.pages[sel.page], L = NA.LAYOUTS[pg.layout];
-  let html = `<div class="nst-grip" aria-hidden="true"></div><div class="nst-tools-hd"><b>${pageName(sel.page)}</b><span>${esc(L && L.name ? L.name : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
+  let html = `<div class="nst-grip" aria-hidden="true"></div><div class="nst-tools-hd"><b>${pageName(sel.page)}</b><span>${esc(L && !L.text ? NA.t('ly_' + pg.layout) : '')}</span><button class="nst-x" data-act="close" aria-label="Fermer">×</button></div>`;
 
   if (sel.slot != null) {
     const s = pg.slots[sel.slot];
     const used = new Map(); NA.pages.forEach((p, pi) => p.slots.forEach((sl, si) => used.set(sl.p, [pi, si])));
-    html += `<div class="nst-sec"><label for="nstZoom">Zoom</label><input id="nstZoom" type="range" min="1" max="2.5" step="0.01" value="${s.z || 1}"/></div>
-      <div class="nst-sec"><label>Rendu</label><div class="nst-chips">${[['none', 'Original'], ['bw', 'Noir & blanc'], ['warm', 'Chaud'], ['soft', 'Doux']].map(([k, n]) => `<button class="nst-chip${(s.f || 'none') === k ? ' on' : ''}" data-filter="${k}">${n}</button>`).join('')}</div></div>
-      <div class="nst-sec"><button class="nst-link" data-act="recenter">Recadrage automatique</button></div>`;
-    html += `<div class="nst-sec"><label>Changer la photo</label><div class="nst-pick">${S.photos.map((p, i) =>
-      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" aria-label="Photo ${i + 1}${s.p === i ? ' (actuelle)' : ''}" title="${used.has(i) && s.p !== i ? 'Déjà utilisée page ' + (used.get(i)[0] + 1) + ' : les deux seront échangées' : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
-      <p class="nst-note">Une photo déjà placée ailleurs sera échangée avec celle-ci. ${isWide() ? 'Faites glisser la photo sur la page pour la recadrer, molette pour zoomer.' : 'Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.'}</p></div>`;
+    html += `<div class="nst-sec"><label for="nstZoom">${NA.t('zoom')}</label><input id="nstZoom" type="range" min="1" max="2.5" step="0.01" value="${s.z || 1}"/></div>
+      <div class="nst-sec"><label>${NA.t('render')}</label><div class="nst-chips">${[['none', NA.t('f_none')], ['bw', NA.t('f_bw')], ['warm', NA.t('f_warm')], ['soft', NA.t('f_soft')]].map(([k, n]) => `<button class="nst-chip${(s.f || 'none') === k ? ' on' : ''}" data-filter="${k}">${n}</button>`).join('')}</div></div>
+      <div class="nst-sec nst-row"><button class="nst-link" data-act="recenter">${NA.t('recenter')}</button><button class="nst-link nst-danger" data-act="remove-photo">${NA.t('remove_photo')}</button></div>`;
+    html += `<div class="nst-sec"><label>${NA.t('change_photo')}</label><div class="nst-pick">${S.photos.map((p, i) =>
+      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" aria-label="${NA.t('photo_n', i + 1)}${s.p === i ? ' ' + NA.t('current') : ''}" title="${used.has(i) && s.p !== i ? NA.t('used', used.get(i)[0] + 1) : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
+      <p class="nst-note">${isWide() ? NA.t('swap_wide') : NA.t('swap_mobile')}</p></div>`;
 
   }
   if (sel.text) {
     const isList = pg.layout === 'list' || pg.layout === 'checklist';
-    html += `<div class="nst-sec"><label for="nstTxt">Texte${isList ? ' (une ligne par élément)' : ''}</label><textarea id="nstTxt" rows="${isList ? 7 : 4}">${esc(pg.t[sel.text] || '')}</textarea><p class="nst-note">Autre formulation par l’IA :</p>
-      <div class="nst-chips">${[['shorter', 'Plus court'], ['tender', 'Plus tendre'], ['funny', 'Plus drôle'], ['again', 'Autre version']].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
+    html += `<div class="nst-sec"><label for="nstTxt">${NA.t('text')}${isList ? NA.t('text_list') : ''}</label><textarea id="nstTxt" rows="${isList ? 7 : 4}">${esc(pg.t[sel.text] || '')}</textarea><p class="nst-note">${NA.t('ai_alt')}</p>
+      <div class="nst-chips">${[['shorter', NA.t('rw_short')], ['tender', NA.t('rw_tender')], ['funny', NA.t('rw_funny')], ['again', NA.t('rw_again')]].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
       <p class="nst-note" id="nstAiMsg"></p></div>`;
   }
   if (sel.page === 0) {
-    html += `<div class="nst-sec"><label for="nstSpine">Texte de la tranche</label><input id="nstSpine" class="nst-input" maxlength="40" value="${esc(spineText())}"/><p class="nst-note">Imprimé sur la tranche du livre, lisible de bas en haut.</p></div>`;
+    html += `<div class="nst-sec"><label for="nstSpine">${NA.t('spine_lbl')}</label><input id="nstSpine" class="nst-input" maxlength="40" value="${esc(spineText())}"/><p class="nst-note">${NA.t('spine_note')}</p></div>`;
   }
   const alts = L && !L.text ? NA.PHOTO_LAYOUTS(L.n) : [];
   if (alts.length > 1) {
-    html += `<div class="nst-sec"><label>Mise en page</label><div class="nst-chips">${alts.map(k => `<button class="nst-chip${pg.layout === k ? ' on' : ''}" data-layout="${k}">${NA.LAYOUTS[k].name}</button>`).join('')}</div></div>`;
+    html += `<div class="nst-sec"><label>${NA.t('layout')}</label><div class="nst-chips">${alts.map(k => `<button class="nst-chip${pg.layout === k ? ' on' : ''}" data-layout="${k}">${NA.t('ly_' + k)}</button>`).join('')}</div></div>`;
   }
   if (sel.page > 0 && sel.page < NA.pages.length - 1) {
-    html += `<div class="nst-sec nst-row"><button class="nst-link" data-act="left" ${sel.page <= 1 ? 'disabled' : ''}>← Avancer la page</button><button class="nst-link" data-act="right" ${sel.page >= NA.pages.length - 1 ? 'disabled' : ''}>Reculer la page →</button></div>`;
+    html += `<div class="nst-sec nst-row"><button class="nst-link" data-act="left" ${sel.page <= 1 ? 'disabled' : ''}>${NA.t('move_left')}</button><button class="nst-link" data-act="right" ${sel.page >= NA.pages.length - 1 ? 'disabled' : ''}>${NA.t('move_right')}</button></div>`;
   }
   box.innerHTML = html;
 }
@@ -4878,7 +5061,7 @@ function drawTools() {
 async function rewrite(kind) {
   const sel = ED.sel; if (!sel || !sel.text) return;
   const pg = NA.pages[sel.page], cur = pg.t[sel.text] || '';
-  const m = $('nstAiMsg'); if (m) m.textContent = 'Écriture…';
+  const m = $('nstAiMsg'); if (m) m.textContent = NA.t('writing');
   const how = { shorter: 'Make it noticeably shorter, keep the essence.', tender: 'Make it more tender and intimate.', funny: 'Make it lighter and gently funny.', again: 'Write a fresh alternative with the same purpose.' }[kind];
   const info = NA.info || coupleInfo();
   const isList = pg.layout === 'list' || pg.layout === 'checklist';
@@ -4889,7 +5072,7 @@ Current text:
 """${cur}"""
 Return ONLY JSON: {"text": "..."}` }] }, 2);
     if (j && j.text) { commit(); pg.t[sel.text] = String(j.text).trim(); refreshPage(sel.page); if ($('nstAiMsg')) $('nstAiMsg').textContent = ''; if ($('nstTxt')) $('nstTxt').value = pg.t[sel.text]; }
-  } catch (e) { if (m) m.textContent = 'Réécriture indisponible pour le moment.'; }
+  } catch (e) { if (m) m.textContent = NA.t('rw_fail'); }
 }
 
 function swapPhoto(photoIdx) {
@@ -5077,7 +5260,7 @@ function openReader() {
   const ov = document.createElement('div'); ov.className = 'nst-reader'; ov.tabIndex = -1;
   let i = NA.cur;
   const draw = () => {
-    ov.innerHTML = `<button class="nst-r-x" aria-label="Fermer">×</button><button class="nst-r-p" aria-label="Page précédente">‹</button><div class="nst-r-page"></div><button class="nst-r-n" aria-label="Page suivante">›</button><div class="nst-r-c">${i + 1} / ${NA.pages.length}</div>`;
+    ov.innerHTML = `<button class="nst-r-x" aria-label="${NA.t('close')}">×</button><button class="nst-r-p" aria-label="${NA.t('prev')}">‹</button><div class="nst-r-page"></div><button class="nst-r-n" aria-label="${NA.t('next')}">›</button><div class="nst-r-c">${i + 1} / ${NA.pages.length}</div>`;
     const h = ov.querySelector('.nst-r-page'); h.innerHTML = NA.renderPage(NA.pages[i]); requestAnimationFrame(() => scaleHost(h));
   };
   const close = () => { ov.remove(); document.removeEventListener('keydown', key); };
@@ -5114,20 +5297,21 @@ async function idbGet(k) { const d = await idb(); return new Promise((res, rej) 
 async function idbDel(k) { const d = await idb(); return new Promise(res => { const t = d.transaction(DB.store, 'readwrite'); t.objectStore(DB.store).delete(k); t.oncomplete = res; }); }
 function saveLocal() {
   if (!NA.pages.length) return;
-  idbSet('album', { v: 2, savedAt: Date.now(), photos: S.photos.map(p => Object.assign({}, p)), captions: S.captions || {}, story: S.story, theme: NA.theme, pages: NA.pages, info: NA.info, spineText: NA.spineText, selectedPages: nPagesSel() }).catch(() => {});
+  idbSet('album', { v: 2, savedAt: Date.now(), photos: S.photos.map(p => Object.assign({}, p)), captions: S.captions || {}, story: S.story, theme: NA.theme, pages: NA.pages, info: NA.info, spineText: NA.spineText, selectedPages: nPagesSel(), albumId: NA.albumId || '', reminder: NA.reminder || null }).catch(() => {});
 }
 let st; function saveLocalSoon() { clearTimeout(st); st = setTimeout(saveLocal, 800); }
 NA.clearLocal = () => idbDel('album').catch(() => {});
 async function offerResume() {
+  if (new URLSearchParams(location.search).has('album')) return; // un lien d'album est en cours d'ouverture
   let a; try { a = await idbGet('album'); } catch (e) { return; }
   if (!a || !a.pages || Date.now() - a.savedAt > 14 * 864e5) return;
   const bar = document.createElement('div'); bar.className = 'nst-resume';
   const title = (a.story && a.story.title) || 'votre album';
-  bar.innerHTML = `<span>Vous avez un album en cours : <b>${esc(title)}</b></span><button class="nst-r-yes">Reprendre</button><button class="nst-r-no" aria-label="Ignorer">Plus tard</button>`;
+  bar.innerHTML = `<span>${NA.t('resume_txt')} <b>${esc(title)}</b></span><button class="nst-r-yes">${NA.t('resume_yes')}</button><button class="nst-r-no">${NA.t('resume_no')}</button>`;
   document.body.appendChild(bar);
   bar.querySelector('.nst-r-no').onclick = () => bar.remove();
   bar.querySelector('.nst-r-yes').onclick = () => {
-    S.photos = a.photos || []; S.captions = a.captions || {}; S.story = a.story; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.info = a.info; NA.spineText = a.spineText != null ? a.spineText : null;
+    S.photos = a.photos || []; S.captions = a.captions || {}; S.story = a.story; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.info = a.info; NA.spineText = a.spineText != null ? a.spineText : null; NA.albumId = a.albumId || ''; NA.reminder = a.reminder || null;
     if (a.selectedPages) { try { selectedPages = a.selectedPages; } catch (e) {} }
     if (a.info) { const set = (id, v) => { if ($(id) && v) $(id).value = v; }; set('name1', a.info.n1); set('name2', a.info.n2); set('meetDate', a.info.meet); set('dedication', a.info.dedication); }
     S.done.add(0); S.done.add(1); S.done.add(2);
@@ -5142,9 +5326,9 @@ window.addEventListener('load', () => setTimeout(offerResume, 600));
 
 /* ══ 5. Impression : photos en pleine résolution + PDF hébergé ══ */
 function dataUrlToBlob(u) { const [h, b] = u.split(','); const bin = atob(b); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: h.slice(5, h.indexOf(';')) }); }
-async function uploadPhotos(onProgress) {
+async function uploadPhotos(onProgress, all) {
   const used = new Set(); NA.pages.forEach(p => p.slots.forEach(s => used.add(s.p)));
-  const todo = [...used].filter(i => S.photos[i] && !S.photos[i].pid);
+  const todo = (all ? S.photos.map((_, i) => i) : [...used]).filter(i => S.photos[i] && !S.photos[i].pid);
   if (!todo.length) return;
   const sig = await fetch('/api/sign-upload', { method: 'POST' }).then(r => r.json());
   if (!sig || !sig.signature) throw new Error('signature');
@@ -5198,8 +5382,8 @@ function coverHtml(w) {
 }
 window.generateAlbumPDF = async function (onStep, opts) {
   onStep = onStep || (() => {}); opts = opts || {};
-  await uploadPhotos((d, n) => onStep(`Envoi de vos photos en haute définition… ${d}/${n}`));
-  onStep('Mise en page de votre livre…');
+  await uploadPhotos((d, n) => onStep(NA.t('p_upload', d, n)));
+  onStep(NA.t('p_layout'));
   const n = NA.pages.length;
   const gen = (html, extra) => fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ html, mode: 'url' }, extra || {})) })
     .then(r => r.json()).catch(() => ({}));
@@ -5218,37 +5402,39 @@ window.generateAlbumPDF = async function (onStep, opts) {
 };
 NA.coverHtml = coverHtml; NA.innerHtml = innerHtml;
 NA.printHtml = printHtml;
+NA._ed = { drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, saveLocalSoon, coupleInfo, callAI, uploadPhotos, defaultStory, go, commit, updUndo,
+  sel: () => ED.sel, clearSel: () => { ED.sel = null; }, isWide, nPagesSel };
 
 /* ══ 6. Paiement ══ */
 window.processPayment = async function () {
   const btn = $('payBtn');
   const name = val('payName'), email = val('payEmail'), format = ($('payFormat') && $('payFormat').value) || 'print';
   if ($('hpField') && $('hpField').value) return;
-  if (!name || !email) { alert('Merci de renseigner votre prénom et votre email.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert('Votre email semble invalide.'); return; }
+  if (!name || !email) { alert(NA.t('p_need')); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(NA.t('p_email')); return; }
   const line1 = val('payAddrLine1'), line2 = val('payAddrLine2'), postal = val('payAddrPostal'), city = val('payAddrCity');
   const cSel = $('payAddrCountry'), countryCode = (cSel && cSel.value) || 'FR';
   const country = cSel && cSel.options ? cSel.options[cSel.selectedIndex].text : 'France';
   const address = [line1, line2, (postal + ' ' + city).trim(), country].filter(Boolean).join(', ');
-  if (format === 'print' && (!line1 || !postal || !city)) { alert('Merci de renseigner votre adresse complète (rue, code postal, ville) pour la livraison.'); return; }
-  if (!NA.pages.length) { alert('Votre album n’est pas encore composé.'); return; }
+  if (format === 'print' && (!line1 || !postal || !city)) { alert(NA.t('p_addr')); return; }
+  if (!NA.pages.length) { alert(NA.t('p_empty')); return; }
   const label = btn.innerHTML;
   const say = t => { btn.innerHTML = `<span class="nst-spin"></span>${esc(t)}`; };
   btn.disabled = true;
   try {
-    say('Préparation de votre livre…');
+    say(NA.t('p_prep'));
     const pdf = await window.generateAlbumPDF(say, { country: format === 'print' ? countryCode : null }), pdfUrl = pdf.url;
-    say('Redirection vers le paiement…');
+    say(NA.t('p_redirect'));
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, promoCode: (promo() && promo().code) || '' }) });
+      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, album: { id: NA.albumId || '', reminder: NA.reminder || null }, promoCode: (promo() && promo().code) || '' }) });
     const d = await r.json();
     if (d.url) { window.location.href = d.url; return; }
     throw new Error(d.error || 'paiement');
   } catch (e) {
     console.error(e);
     btn.disabled = false; btn.innerHTML = label;
-    alert('La préparation de votre livre a échoué (' + (e.message || 'réseau') + '). Vous n’avez pas été débité. Réessayez dans un instant, ou écrivez à contact@noustalgie.fr.');
+    alert(NA.t('p_fail', e.message || 'réseau'));
   }
 };
 })();
@@ -5468,6 +5654,7 @@ confidentialite: { tab: 'Confidentialité', html: `
 <thead><tr><th>Données</th><th>Pourquoi</th><th>Base légale</th><th>Conservation</th></tr></thead>
 <tbody>
 <tr><td>Photos, prénoms, informations sur votre histoire, dédicace</td><td>Composer et fabriquer votre album</td><td>Exécution du contrat</td><td>30 jours sur nos serveurs</td></tr>
+<tr><td>Email pour recevoir le lien de votre album</td><td>Vous envoyer le lien et, si vous le demandez, un rappel</td><td>Votre demande (consentement)</td><td>Le temps de l'envoi ; album conservé 30 jours</td></tr>
 <tr><td>Email, nom, adresse de livraison</td><td>Traiter, livrer et suivre votre commande</td><td>Exécution du contrat</td><td>Durée de la relation, puis archivage légal</td></tr>
 <tr><td>Justificatifs de commande et de paiement</td><td>Obligations comptables</td><td>Obligation légale</td><td>10 ans</td></tr>
 <tr><td>Statistiques de visite anonymes</td><td>Améliorer le site</td><td>Intérêt légitime</td><td>Données agrégées, sans cookie</td></tr>
@@ -5478,6 +5665,7 @@ confidentialite: { tab: 'Confidentialité', html: `
 <li><b>Pendant la création</b>, vos photos restent dans votre navigateur. Pour que vous ne perdiez pas votre travail, une copie de votre album en cours est gardée sur votre appareil ; elle est effacée si vous videz les données du site.</li>
 <li><b>Pour écrire les légendes</b>, des miniatures basse résolution de vos photos sont transmises à OpenAI. Selon ses conditions pour les services professionnels, ces données ne servent pas à entraîner ses modèles.</li>
 <li><b>Au moment de la commande</b>, vos photos sont envoyées en haute définition à Cloudinary, puis le fichier d'impression est créé par PDFShift et transmis à notre imprimeur partenaire, Prodigi.</li>
+<li><b>Si vous demandez à recevoir le lien de votre album</b>, vos photos et votre album sont enregistrés sur nos serveurs pour que vous puissiez le reprendre sur un autre appareil. Votre email ne sert qu'à vous envoyer ce lien et, si vous cochez la case, un seul rappel le lendemain, annulé si vous commandez entre-temps.</li>
 <li><b>30 jours après</b>, photos et fichiers d'album sont automatiquement supprimés de nos serveurs. Ce délai permet de traiter une éventuelle réclamation ou réimpression.</li>
 </ul>
 <h2>Nos prestataires</h2>
@@ -5592,6 +5780,257 @@ if (links && !links.querySelector('.footer-mail')) {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) { setOpen(false); tg.focus(); } });
   if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function () { const r = o.apply(this, arguments); try { paint(); } catch (e) {} return r; }; }
   paint();
+})();
+
+/* ════════════════════════════════════════════════════════════════
+   NOUSTALGIE — v3.3 : lien de l'album par email, reprise depuis le lien,
+   ajout/retrait de photos, changement de format, pages glissées,
+   suivi de commande, éditeur traduit.
+   ════════════════════════════════════════════════════════════════ */
+(function () {
+'use strict';
+if (!window.NA || !NA._ed) return;
+const $ = id => document.getElementById(id);
+const t = NA.t, E = NA._ed, esc = NA.esc;
+const lang = () => (typeof currentLang !== 'undefined' && currentLang) || 'fr';
+const MIN = n => NA.minPhotos(n);
+const cloudUrl = p => `https://res.cloudinary.com/${p.cloud}/image/upload/c_limit,w_1200,q_85,f_jpg/${p.pid}`;
+
+/* ── Textes fixes de l'éditeur ── */
+function applyUI() {
+  document.querySelectorAll('[data-ui]').forEach(el => { el.textContent = t(el.dataset.ui); });
+  document.querySelectorAll('[data-ui-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.uiAria)); });
+  const f = document.querySelector('.footer-track'); if (f) f.textContent = t('tr_title');
+}
+if (typeof window.setLang === 'function') {
+  const o = window.setLang;
+  window.setLang = function () { const r = o.apply(this, arguments); try { applyUI(); if ($('panel3') && $('panel3').classList.contains('active') && NA.pages.length) E.drawAll(); } catch (e) {} return r; };
+}
+
+/* ── Panneau « Album » (quand rien n'est sélectionné) ── */
+NA.albumPanel = function () {
+  const n = E.nPagesSel();
+  const opts = [24, 36, 50].map(v => `<option value="${v}"${v === n ? ' selected' : ''}>${t('format_opt', v)}</option>`).join('');
+  return `<div class="nst-sec"><label for="nstFormat">${t('format_lbl')}</label><select id="nstFormat" class="nst-input">${opts}</select></div>
+  <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button><input type="file" id="nstAddFile" accept="image/*,.heic,.heif" multiple hidden/>
+    ${E.isWide() ? `<p class="nst-note">${t('drag_hint')}</p>` : ''}</div>
+  <div class="nst-sec nst-save"><label for="nstSaveEmail">${t('save_title')}</label><p class="nst-note" style="margin:0 0 10px">${t('save_sub')}</p>
+    <input id="nstSaveEmail" class="nst-input" type="email" autocomplete="email" placeholder="${t('save_email')}" value="${esc(NA.saveEmail || '')}"/>
+    <label class="nst-check"><input type="checkbox" id="nstSaveRemind" checked/> <span>${t('save_remind')}</span></label>
+    <button class="nst-btn nst-btn-dark" data-act="save-link" type="button">${t('save_btn')}</button>
+    <p class="nst-note" id="nstSaveMsg">${t('save_note')}</p></div>`;
+};
+
+/* ── Remettre les textes (y compris modifiés à la main) dans l'histoire avant de recomposer ── */
+function syncStory() {
+  const s = JSON.parse(JSON.stringify(S.story || {})), P = NA.pages, info = NA.info || E.coupleInfo();
+  s.titles = s.titles || {};
+  if (P[0] && P[0].t.title) s.title = P[0].t.title;
+  const ch = P.filter(p => p.layout === 'chapter' || p.layout === 'chapterp');
+  s.chapters = s.chapters || []; ch.forEach((p, i) => { s.chapters[i] = { title: p.t.title || '', text: p.t.text || '' }; });
+  const notes = P.filter(p => p.layout === 'note' || p.layout === 'notep').map(p => p.t.text || '');
+  s.notes = notes.concat((s.notes || []).slice(notes.length));
+  const lines = v => String(v || '').split('\n').map(x => x.trim()).filter(Boolean);
+  P.forEach(p => {
+    if (!p.k) return;
+    if (p.t.title != null && ['love', 'disputes', 'wish', 'film', 'weather', 'letter', 'journal'].includes(p.k)) s.titles[p.k] = p.t.title;
+    if (p.k === 'love') s.love = lines(p.t.items);
+    if (p.k === 'disputes') s.disputes = lines(p.t.items);
+    if (p.k === 'wish') s.wishlist = lines(p.t.items);
+    if (p.k === 'quote') s.quote = p.t.text;
+    if (p.k === 'film') s.film = p.t.text;
+    if (p.k === 'weather') s.weather = p.t.text;
+    if (p.k === 'letter') s.letter = p.t.text;
+    if (p.k === 'journal') s.journal_prompt = p.t.text;
+    if (p.k === 'closing') s.closing = p.t.text;
+    if (p.k === 'memory') s.memory = { title: p.t.title || '', text: p.t.text || '' };
+    if (p.layout === 'dedication') info.dedication = p.t.text;
+  });
+  info.captions = info.captions || {};
+  P.forEach(p => { if (p.slots.length && p.t.cap) info.captions[p.slots[0].p] = p.t.cap; });
+  S.story = s; NA.info = info;
+}
+// Nombre de chapitres / mots doux attendus par format
+const NEED = { 24: [3, 2], 36: [4, 3], 50: [5, 4] };
+async function ensureStoryFor(n) {
+  const s = S.story, [c, k] = NEED[n] || NEED[36];
+  const missC = Math.max(0, c - (s.chapters || []).filter(x => x && x.text).length), missN = Math.max(0, k - (s.notes || []).filter(Boolean).length);
+  if (!missC && !missN) return;
+  const msg = $('nstSaveMsg'); if (msg) msg.textContent = t('format_adding');
+  try {
+    const j = await E.callAI({ max_tokens: 900, temperature: 0.9, response_format: { type: 'json_object' }, messages: [{ role: 'user', content:
+`A couple's photo book (${(NA.info || {}).names || ''}) needs ${missC} more chapter(s) and ${missN} more short love note(s), continuing its tone. Existing chapters: ${JSON.stringify((s.chapters || []).map(x => x.title))}. Language: same as this text: """${(s.chapters && s.chapters[0] && s.chapters[0].text) || ''}""". Never invent facts. Return ONLY JSON: {"chapters": [{"title": "2-5 words", "text": "2-3 sentences"}], "notes": ["1-2 sentences"]}` }] }, 2, 'pages');
+    s.chapters = (s.chapters || []).filter(x => x && x.text).concat((j.chapters || []).slice(0, missC));
+    s.notes = (s.notes || []).filter(Boolean).concat((j.notes || []).slice(0, missN));
+  } catch (e) {
+    const d = E.defaultStory(NA.info || E.coupleInfo());
+    s.chapters = (s.chapters || []).filter(x => x && x.text); while (s.chapters.length < c) s.chapters.push(d.chapters[s.chapters.length] || d.chapters[0]);
+    s.notes = (s.notes || []).filter(Boolean); while (s.notes.length < k) s.notes.push(d.notes[s.notes.length % d.notes.length]);
+  }
+}
+async function recompose(n, synced) {
+  if (!synced) syncStory();
+  if (NA.analyzeAll) await NA.analyzeAll();
+  await ensureStoryFor(n);
+  try { selectedPages = n; } catch (e) {}
+  if (typeof highlightPal === 'function') try { highlightPal(n); } catch (e) {}
+  if (typeof updateFormatPrices === 'function') try { updateFormatPrices(); } catch (e) {}
+  NA.pages = NA.plan(n, S.story, NA.info);
+  NA.hist = []; NA.fut = []; E.clearSel(); NA.cur = Math.min(NA.cur || 0, NA.pages.length - 1);
+  E.drawAll(); E.saveLocal();
+}
+
+/* ── Retirer une photo ── */
+function removePhoto(idx) {
+  const n = E.nPagesSel();
+  if (S.photos.length - 1 < MIN(n)) { alert(t('remove_min', MIN(n))); return; }
+  syncStory();
+  const shift = m => { const o = {}; Object.keys(m || {}).forEach(k => { const i = +k; if (i < idx) o[i] = m[k]; else if (i > idx) o[i - 1] = m[k]; }); return o; };
+  NA.info.captions = shift(NA.info.captions); S.captions = shift(S.captions);
+  if (S.story && Array.isArray(S.story.captions)) S.story.captions.splice(idx, 1);
+  S.photos.splice(idx, 1);
+  if (typeof renderPhotos === 'function') renderPhotos();
+  recompose(n, true);
+}
+
+/* ── Événements du panneau d'outils ── */
+const tools = $('nstTools');
+if (tools) {
+  tools.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const a = b.dataset.act;
+    if (a === 'remove-photo') { const s = E.sel(); if (s && s.slot != null) removePhoto(NA.pages[s.page].slots[s.slot].p); }
+    if (a === 'add-photos') { const f = $('nstAddFile'); if (f) f.click(); }
+    if (a === 'save-link') saveLink(b);
+  });
+  tools.addEventListener('change', async e => {
+    if (e.target.id === 'nstFormat') {
+      const n = +e.target.value;
+      if (S.photos.length < MIN(n)) { alert(t('format_min', MIN(n), n)); e.target.value = E.nPagesSel(); return; }
+      e.target.disabled = true; await recompose(n);
+    }
+    if (e.target.id === 'nstAddFile' && e.target.files && e.target.files.length) {
+      const files = Array.from(e.target.files); const n = E.nPagesSel();
+      syncStory();
+      const keep = { pages: NA.pages, story: S.story, info: NA.info };
+      await window.addPhotos(files);                     // (addPhotos vide l'album : on le recompose aussitôt)
+      S.story = keep.story; NA.info = keep.info;
+      await recompose(n, true);
+    }
+  });
+  tools.addEventListener('input', e => { if (e.target.id === 'nstSaveEmail') NA.saveEmail = e.target.value; });
+}
+
+/* ── Glisser-déposer des miniatures (ordinateur) ── */
+const strip = $('nstStrip');
+if (strip) {
+  let from = null;
+  strip.addEventListener('dragstart', e => { const b = e.target.closest('.nst-th'); if (!b || b.getAttribute('draggable') !== 'true') return e.preventDefault(); from = +b.dataset.page; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(from)); } catch (x) {} b.classList.add('nst-dragging'); });
+  strip.addEventListener('dragover', e => { const b = e.target.closest('.nst-th'); if (from == null || !b) return; const i = +b.dataset.page; if (i < 1 || i > NA.pages.length - 2) return; e.preventDefault(); strip.querySelectorAll('.nst-drop').forEach(x => x.classList.remove('nst-drop')); b.classList.add('nst-drop'); });
+  strip.addEventListener('dragend', () => { from = null; strip.querySelectorAll('.nst-drop,.nst-dragging').forEach(x => x.classList.remove('nst-drop', 'nst-dragging')); });
+  strip.addEventListener('drop', e => {
+    const b = e.target.closest('.nst-th'); if (from == null || !b) return;
+    e.preventDefault(); const to = +b.dataset.page;
+    if (to < 1 || to > NA.pages.length - 2 || to === from) return;
+    E.commit();
+    const [pg] = NA.pages.splice(from, 1); NA.pages.splice(to, 0, pg);
+    NA.cur = to; E.clearSel(); E.drawAll(); E.saveLocalSoon();
+  });
+}
+
+/* ── Recevoir le lien de l'album par email ── */
+async function saveLink(btn) {
+  const email = (($('nstSaveEmail') || {}).value || '').trim(), remind = !!($('nstSaveRemind') || {}).checked, msg = $('nstSaveMsg');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(t('p_email')); return; }
+  NA.saveEmail = email; btn.disabled = true;
+  try {
+    await E.uploadPhotos((d, n) => { if (msg) msg.textContent = t('save_busy', d, n); }, true);
+    if (S.photos.some(p => !p.pid)) throw new Error('upload');
+    const album = { v: 1, lang: lang(), theme: NA.theme, pages: NA.pages, story: S.story, info: NA.info, spineText: NA.spineText, selectedPages: E.nPagesSel(),
+      photos: S.photos.map(p => ({ pid: p.pid, cloud: p.cloud, w: p.w, h: p.h, ratio: p.ratio, orient: p.orient, focalY: p.focalY, faces: p.faces, subj: p.subj, vis: p.vis, name: p.name })) };
+    const r = await fetch('/api/album', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: NA.albumId || '', album, email, remind, lang: lang() }) }).then(x => x.json());
+    if (!r || !r.id) throw new Error((r && r.error) || 'save');
+    NA.albumId = r.id; if (r.reminder) NA.reminder = r.reminder;
+    E.saveLocal();
+    if (msg) { msg.textContent = t('save_ok'); msg.classList.add('nst-ok'); }
+  } catch (e) {
+    console.warn('[Noustalgie] sauvegarde', e);
+    if (msg) { msg.textContent = t('save_fail'); msg.classList.remove('nst-ok'); }
+  }
+  btn.disabled = false;
+}
+
+/* ── Ouvrir un album depuis son lien (?album=…) ── */
+async function openFromLink(id) {
+  const ov = document.createElement('div'); ov.className = 'nst-resume'; ov.textContent = t('restore_busy'); document.body.appendChild(ov);
+  try {
+    const r = await fetch('/api/album?id=' + encodeURIComponent(id)).then(x => x.json());
+    const a = r && r.album; if (!a || !Array.isArray(a.pages)) throw new Error((r && r.error) || '404');
+    S.photos = (a.photos || []).map(p => Object.assign({}, p, { data: cloudUrl(p), full: null }));
+    S.story = a.story; S.captions = {}; NA.info = a.info; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.spineText = a.spineText != null ? a.spineText : null;
+    NA.albumId = id; NA.reminder = null; NA.cur = 0; NA.hist = []; NA.fut = [];
+    try { selectedPages = a.selectedPages || NA.pages.length; } catch (e) {}
+    if (a.lang && typeof window.setLang === 'function' && a.lang !== lang()) try { window.setLang(a.lang); } catch (e) {}
+    const set = (k, v) => { if ($(k) && v) $(k).value = v; };
+    if (a.info) { set('name1', a.info.n1); set('name2', a.info.n2); set('meetDate', a.info.meet); set('dedication', a.info.dedication); }
+    S.done.add(0); S.done.add(1); S.done.add(2);
+    if (typeof renderPhotos === 'function') renderPhotos();
+    history.replaceState(null, '', location.pathname + location.hash);
+    ov.remove();
+    const app = $('app'); if (app) app.scrollIntoView();
+    goTab(3); E.saveLocal();
+  } catch (e) {
+    ov.textContent = t('restore_fail', e.message === '404' ? '—' : e.message);
+    setTimeout(() => ov.remove(), 6000);
+  }
+}
+const albumId = new URLSearchParams(location.search).get('album');
+if (albumId && /^[a-f0-9]{24}$/.test(albumId)) window.addEventListener('load', () => setTimeout(() => openFromLink(albumId), 300));
+
+/* ── Suivre ma commande ── */
+function trackOverlay() {
+  let ov = $('nstTrack');
+  if (!ov) {
+    ov = document.createElement('div'); ov.id = 'nstTrack'; ov.className = 'nst-track'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e => { if (e.target === ov || e.target.closest('.nst-tr-x')) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('on')) close(); });
+  }
+  const close = () => { ov.classList.remove('on'); document.body.style.overflow = ''; if (location.hash === '#suivi') history.replaceState(null, '', location.pathname + location.search); };
+  ov.innerHTML = `<div class="nst-tr-box"><button class="nst-tr-x" type="button" aria-label="${t('close')}">×</button>
+    <h2>${t('tr_title')}</h2><p class="nst-tr-sub">${t('tr_sub')}</p>
+    <form id="nstTrForm" novalidate><label for="nstTrRef">${t('tr_ref')}</label><input id="nstTrRef" class="nst-input" placeholder="NOUST-261001-AB12C" autocapitalize="characters" autocomplete="off"/>
+    <label for="nstTrEmail">${t('tr_email')}</label><input id="nstTrEmail" class="nst-input" type="email" autocomplete="email"/>
+    <button class="nst-btn nst-btn-dark" type="submit">${t('tr_btn')}</button></form><div id="nstTrOut" aria-live="polite"></div>
+    <p class="nst-tr-sub" style="margin-top:14px">${t('tr_pdf')}</p></div>`;
+  ov.classList.add('on'); document.body.style.overflow = 'hidden';
+  setTimeout(() => $('nstTrRef').focus(), 50);
+  $('nstTrForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const out = $('nstTrOut'); out.innerHTML = `<p class="nst-tr-sub">${t('tr_busy')}</p>`;
+    try {
+      const r = await fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: $('nstTrRef').value, email: $('nstTrEmail').value }) });
+      const j = await r.json();
+      if (!r.ok) { out.innerHTML = `<p class="nst-tr-err">${esc(j.error || '')}</p>`; return; }
+      if (j.cancelled) { out.innerHTML = `<p class="nst-tr-err">${t('tr_cancel')}</p>`; return; }
+      const steps = [t('tr_s1'), t('tr_s2'), t('tr_s3')].map((s, i) => `<li class="${i < j.step ? 'on' : ''}"><span>${i + 1}</span>${s}</li>`).join('');
+      const ship = (j.shipments || []).filter(s => s.number || s.url).map(s => `<p>${s.carrier ? esc(s.carrier) + ' · ' : ''}${t('tr_num')} ${esc(s.number)} ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${t('tr_track')} ↗</a>` : ''}</p>`).join('');
+      out.innerHTML = `<ol class="nst-tr-steps">${steps}</ol>${ship}${j.step < 3 ? `<p class="nst-tr-sub">${t('tr_eta')}</p>` : ''}`;
+    } catch (x) { out.innerHTML = `<p class="nst-tr-err">${t('save_fail')}</p>`; }
+  });
+}
+NA.openTrack = trackOverlay;
+const info = document.querySelector('[data-i18n="footer_info"]');
+const links = info && info.parentElement.querySelector('.footer-links');
+if (links && !links.querySelector('.footer-track')) {
+  const a = document.createElement('a'); a.className = 'footer-link footer-track'; a.href = '#suivi'; a.textContent = t('tr_title');
+  a.addEventListener('click', e => { e.preventDefault(); trackOverlay(); });
+  links.insertBefore(a, links.querySelector('.footer-mail'));
+}
+if (location.hash === '#suivi') window.addEventListener('load', () => setTimeout(trackOverlay, 200));
+window.addEventListener('hashchange', () => { if (location.hash === '#suivi') trackOverlay(); });
+
+applyUI();
 })();
 
 </script>
