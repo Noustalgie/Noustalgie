@@ -20,6 +20,9 @@
     },
     "api/sign-upload.js": {
       "maxDuration": 10
+    },
+    "api/compose.js": {
+      "maxDuration": 60
     }
   },
   "crons": [
@@ -71,7 +74,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com; worker-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com; connect-src 'self' https://noustalgie.fr https://www.noustalgie.fr https://noustalgie.vercel.app https://api.cloudinary.com; worker-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
         }
       ]
     },

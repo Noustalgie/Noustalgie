@@ -4722,13 +4722,20 @@ window.addPhotos = async function (files) {
 window.getMinPhotos = () => NA.minPhotos(nPagesSel());
 
 /* ══ 2. Génération : histoire + légendes à partir des photos ══ */
+// Relevé des blocages de la politique de sécurité (pour un diagnostic précis)
+window.__nstCsp = [];
+document.addEventListener('securitypolicyviolation', e => { window.__nstCsp.push((e.violatedDirective || '') + ' ' + String(e.blockedURI || '').slice(0, 60)); });
+const AI_ROUTES = ['/api/compose', '/api/chat'];
+let aiRoute = 0;
+function browserTag() { const u = navigator.userAgent; const m = u.match(/(Firefox|Edg|OPR|Chrome|Safari)\/(\d+)/); return m ? `${m[1]} ${m[2]}` : 'navigateur'; }
 async function callAI(body, tries = 2, label = 'IA') {
   let last;
   for (let a = 0; a < tries; a++) {
     const t0 = Date.now(), ctl = window.AbortController ? new AbortController() : null;
     const to = ctl ? setTimeout(() => ctl.abort(), 58000) : 0;
+    const route = AI_ROUTES[aiRoute % AI_ROUTES.length];
     try {
-      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctl ? ctl.signal : undefined });
+      const r = await fetch(route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctl ? ctl.signal : undefined });
       const raw = await r.text();
       let j = null; try { j = JSON.parse(raw); } catch (e) {}
       if (!r.ok || !j || !j.choices) {
@@ -4739,9 +4746,12 @@ async function callAI(body, tries = 2, label = 'IA') {
       return JSON.parse(txt.replace(/```json|```/g, '').trim());
     } catch (e) {
       const s = ((Date.now() - t0) / 1000).toFixed(1);
-      last = new Error(`${label}, essai ${a + 1}/${tries}, ${e.name === 'AbortError' ? 'délai dépassé' : e.message} (${s} s)`);
+      const net = e instanceof TypeError;                 // requête bloquée ou coupée avant toute réponse
+      if (net) aiRoute++;                                  // on bascule sur l'autre route
+      const csp = window.__nstCsp.length ? ` · CSP: ${window.__nstCsp.slice(-1)[0]}` : '';
+      last = new Error(`${label}, essai ${a + 1}/${tries}, ${e.name === 'AbortError' ? 'délai dépassé' : e.message} (${s} s) · ${route} · ${browserTag()}${csp}`);
       console.warn('[Noustalgie]', last.message);
-      if (a < tries - 1) await sleep(2000 * (a + 1));
+      if (a < tries - 1) await sleep(net ? 300 : 2000 * (a + 1));
     } finally { if (to) clearTimeout(to); }
   }
   throw last;
@@ -6065,7 +6075,7 @@ function trackOverlay() {
     e.preventDefault();
     const out = $('nstTrOut'); out.innerHTML = `<p class="nst-tr-sub">${t('tr_busy')}</p>`;
     try {
-      const r = await fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: $('nstTrRef').value, email: $('nstTrEmail').value }) });
+      const r = await fetch('/api/order-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: $('nstTrRef').value, email: $('nstTrEmail').value }) });
       const j = await r.json();
       if (!r.ok) { out.innerHTML = `<p class="nst-tr-err">${esc(j.error || '')}</p>`; return; }
       if (j.cancelled) { out.innerHTML = `<p class="nst-tr-err">${t('tr_cancel')}</p>`; return; }
