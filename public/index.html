@@ -783,7 +783,7 @@ img{max-width:100%;}
 .nst-row{display:flex;justify-content:space-between;gap:10px;}
 .nst-sec input[type=range]{width:100%;accent-color:#1c1a18;}
 .nst-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 6px;scrollbar-width:thin;}
-.nst-th{flex:0 0 auto;width:86px;border:0;background:none;padding:0;cursor:pointer;text-align:center;font:500 11px 'Inter',sans-serif;color:var(--mut);}
+.nst-th{flex:0 0 auto;width:86px;border:0;background:none;padding:0;cursor:pointer;text-align:center;font:500 11px "Inter",sans-serif;color:#5f5a54;}
 .nst-th-in{position:relative;width:86px;height:86px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.18);margin-bottom:5px;}
 .nst-th-in .nst-canvas{position:absolute;left:0;top:0;}
 .nst-th.on .nst-th-in{outline:2px solid var(--ink);outline-offset:2px;}
@@ -919,8 +919,8 @@ img{max-width:100%;}
 .nst-gal-book .nst-page:last-child .nst-canvas::after{content:"";position:absolute;top:0;bottom:0;left:0;width:60px;background:linear-gradient(to right,rgba(0,0,0,.16),rgba(0,0,0,0));}
 .nst-gal-item figcaption{margin-top:14px;font:500 13px 'Inter',sans-serif;color:#77726b;text-align:center;}
 /* ═══ v2.3 — garanties ═══ */
-.nst-guar{display:grid;grid-template-columns:repeat(4,auto);justify-content:center;gap:10px 28px;padding:18px 24px;border-bottom:1px solid #111;background:#fff;}
-@media (max-width:1180px){.nst-guar{grid-template-columns:repeat(2,auto);}}
+.nst-guar{display:grid;grid-template-columns:repeat(3,auto);justify-content:center;gap:10px 28px;padding:18px 24px;border-bottom:1px solid #111;background:#fff;}
+@media (max-width:900px){.nst-guar{grid-template-columns:repeat(2,auto);}}
 .nst-guar-i{display:flex;align-items:center;gap:8px;font:500 13px/1.4 'Inter',system-ui,sans-serif;color:#1c1a18;}
 .nst-guar-i svg{flex:0 0 auto;color:#1c1a18;}
 @media (max-width:640px){.nst-gal-item{flex-basis:92vw;}.nst-gal-row{gap:16px;}.nst-guar{grid-template-columns:1fr;justify-content:start;gap:10px;padding:18px 22px;}}
@@ -940,6 +940,34 @@ img{max-width:100%;}
 html body .app-section .btn,html body .app-section .btn-gold,html body .app-section .btn-buy,html body .app-section .btn-hero,html body .app-section #payBtn,html body .app-section .btn-pay{border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;}
 html body button[onclick^="applyPromo"]{border-radius:999px!important;text-transform:none!important;letter-spacing:0!important;font:500 14px 'Inter',system-ui,sans-serif!important;min-height:48px;margin-left:8px;}
 html body .legal-close-btn{border-radius:999px!important;border:1px solid #1c1a18!important;background:#fff!important;color:#1c1a18!important;padding:10px 20px!important;font:500 14px 'Inter',system-ui,sans-serif!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;}
+
+/* ═══ v2.4 — hero : couverture du livre fermé ═══ */
+.nst-cover-book{position:relative;width:min(78%,380px);aspect-ratio:1;cursor:pointer;}
+.nst-cover{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;}
+.nst-cover.on{opacity:1;}
+.nst-cover .nst-page{position:absolute;inset:0;overflow:hidden;border-radius:2px 5px 5px 2px;box-shadow:0 28px 50px -22px rgba(40,30,20,.6),0 3px 8px rgba(40,30,20,.14),inset 0 0 0 1px rgba(0,0,0,.06);}
+.nst-cover .nst-canvas::after{content:"";position:absolute;top:0;bottom:0;left:0;width:34px;background:linear-gradient(to right,rgba(0,0,0,.22),rgba(0,0,0,.04) 30%,rgba(255,255,255,.12) 42%,rgba(0,0,0,0) 60%);pointer-events:none;}
+@media (max-width:700px){.nst-cover-book{width:min(82%,330px);}}
+@media (prefers-reduced-motion:reduce){.nst-cover{transition:none;}}
+/* ═══ v2.4 — lisibilité : textes secondaires contrastés (≥ 4,5:1) ═══ */
+html body .fl,html body .card-hd,html body .p-lbl,html body .ed-stat-l,html body .ed-sec-eyebrow,html body .eyebrow,
+html body .ed-price-tier,html body .ed-price-pages,html body .ed-note,html body .footer-col-t,html body .ed-faq-head,
+html body [data-nst="eyebrow"],html body #nstDemoName{color:#5f5a54!important;}
+html body .ed-price-v[style*="#999"]{color:#5f5a54!important;}
+html body .ed-price-card.feat .ed-price-tier,html body .ed-price-card.feat .ed-price-pages{color:rgba(255,255,255,.78)!important;}
+html body .ed-step .num{color:#8f8981!important;}
+html body .p-step.active .p-lbl{color:#fff!important;}
+html body .p-step.done .p-lbl{color:#1c1a18!important;}
+html body #app .fl,html body #app .card-hd,html body #app .p-lbl,html body #app .eyebrow{color:#5f5a54!important;}
+html body #app .p-step.active .p-lbl{color:#fff!important;}
+html body #app .p-step.done .p-lbl{color:#1c1a18!important;}
+html body #mobStepTxt{color:#5f5a54!important;}
+html body .mob-prog-count{color:#5f5a54!important;font:500 12px 'Inter',sans-serif!important;}
+html body .mob-prog-fill{background:#1c1a18!important;}
+html body .mob-prog-bar{background:#e4dfd7!important;}
+html body #app .dz-s{color:#5f5a54!important;}
+html body #photoCount{color:#2f6b3a!important;}
+.nst-ctr{color:#5f5a54!important;}
 </style>
 <script type="application/ld+json">
 {
@@ -1075,8 +1103,8 @@ html body .legal-close-btn{border-radius:999px!important;border:1px solid #1c1a1
 <div class="ed-wrap">
 <nav class="ed-nav">
   <div class="ed-nav-links">
-    <a onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="nav_how">Comment ça marche</a>
-    <a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" data-i18n="nav_pricing">Tarifs</a>
+    <a href="#how" data-i18n="nav_how">Comment ça marche</a>
+    <a href="#pricing" data-i18n="nav_pricing">Tarifs</a>
   </div>
   <div class="ed-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Noustalgie</div>
   <div style="display:flex;align-items:center;gap:12px;">
@@ -1110,9 +1138,9 @@ html body .legal-close-btn{border-radius:999px!important;border:1px solid #1c1a1
 </section>
 
 <div class="ed-stats">
-  <div class="ed-stat"><div class="ed-stat-n">2 min</div><div class="ed-stat-l" data-i18n="proof1">Pour créer</div></div>
-  <div class="ed-stat"><div class="ed-stat-n it" data-i18n="proof2_n">Unique</div><div class="ed-stat-l" data-i18n="proof2">Sur mesure</div></div>
-  <div class="ed-stat"><div class="ed-stat-n" data-i18n="stat_from">Dès 39,99€</div><div class="ed-stat-l" data-i18n="proof3">Livré chez vous</div></div>
+  <div class="ed-stat"><div class="ed-stat-n">21×21 cm</div><div class="ed-stat-l" data-i18n="proof1">Couverture rigide</div></div>
+  <div class="ed-stat"><div class="ed-stat-n it" data-i18n="proof2_n">24 à 50</div><div class="ed-stat-l" data-i18n="proof2">pages</div></div>
+  <div class="ed-stat"><div class="ed-stat-n" data-i18n="stat_from">Dès 39,99€</div><div class="ed-stat-l" data-i18n="proof3">Livre imprimé</div></div>
 </div>
 
 <section class="ed-sec" id="how">
@@ -1177,7 +1205,7 @@ html body .legal-close-btn{border-radius:999px!important;border:1px solid #1c1a1
       <div class="mob-prog-bar"><div class="mob-prog-fill" id="mobFill" style="width:16.6%"></div></div>
       <div class="mob-prog-txt">
         <span class="mob-prog-step" id="mobStepTxt" data-i18n="step_duo">Votre duo</span>
-        <span class="mob-prog-count" id="mobCount">1 / 6</span>
+        <span class="mob-prog-count" id="mobCount">1 / 5</span>
       </div>
     </div>
 
@@ -1530,7 +1558,7 @@ const LANGS = {
     hero_h1_1:'Votre histoire,', hero_h1_2:'immortalisée', hero_h1_sub:'en un livre que vous garderez toute votre vie',
     hero_p1:'Envoyez vos plus belles photos.', hero_p2:'Nous rédigeons votre histoire d\'amour', hero_p3:', mettons en page votre album et vous livrons un livre imprimé.',
     hero_cta:'Créer notre album', hero_how:'Voir comment ça marche',
-    proof1:'Pour uploader', proof2_n:'Unique', proof2:'Histoire sur mesure', proof3:'Livre livré chez vous', proof4:'Cadeau inoubliable',
+    proof1:"Couverture rigide", proof2_n:"24 à 50", proof2:"pages", proof3:"Livre imprimé", proof4:'Cadeau inoubliable',
     how_eyebrow:'Le processus', how_title1:'Simple comme', how_title2:'dire je t\'aime', how_sub:'Zéro compétence requise. Vous envoyez les photos, nous faisons la magie.',
     step1_name:'Vos infos & photos', step1_desc:'Vos prénoms, date de rencontre, minimum 15 photos.',
     step2_name:'Vos petits mots', step2_desc:'Dédicaces, légendes photo, message de clôture.',
@@ -1616,7 +1644,7 @@ const LANGS = {
     hero_h1_1:'Your story,', hero_h1_2:'immortalised', hero_h1_sub:'in a book you\'ll keep for life',
     hero_p1:'Send your best photos.', hero_p2:'We write your love story', hero_p3:', design your album, and deliver a professionally printed book.',
     hero_cta:'Create our album', hero_how:'See how it works',
-    proof1:'To upload', proof2_n:'Unique', proof2:'Tailored story', proof3:'Book delivered', proof4:'Unforgettable gift',
+    proof1:"Hardcover", proof2_n:"24 to 50", proof2:"pages", proof3:"Printed book", proof4:'Unforgettable gift',
     how_eyebrow:'The process', how_title1:'As simple as', how_title2:'saying I love you', how_sub:'No skills required. You send the photos, we do the magic. You receive the book.',
     step1_name:'Your info & photos', step1_desc:'Your names, when you met, minimum 10 couple photos.',
     step2_name:'Your personal words', step2_desc:'Dedication, photo captions, closing message.',
@@ -1702,7 +1730,7 @@ const LANGS = {
     hero_h1_1:'Eure Geschichte,', hero_h1_2:'verewigt', hero_h1_sub:'in einem Buch, das ihr ein Leben lang behaltet',
     hero_p1:'Schickt eure schönsten Fotos.', hero_p2:'Wir schreiben eure Liebesgeschichte', hero_p3:', gestalten euer Album und liefern ein professionell gedrucktes Buch.',
     hero_cta:'Unser Album erstellen', hero_how:'So funktioniert\'s',
-    proof1:'Zum Hochladen', proof2_n:'Einzigartig', proof2:'Maßgefertigte Geschichte', proof3:'Buch geliefert', proof4:'Unvergessliches Geschenk',
+    proof1:"Hardcover", proof2_n:"24 bis 50", proof2:"Seiten", proof3:"Gedrucktes Buch", proof4:'Unvergessliches Geschenk',
     how_eyebrow:'Der Ablauf', how_title1:'So einfach wie', how_title2:'Ich liebe dich sagen', how_sub:'Keine Kenntnisse erforderlich. Ihr schickt die Fotos, wir machen die Magie.',
     step1_name:'Eure Infos & Fotos', step1_desc:'Eure Vornamen, Kennenlerndatum, mindestens 10 Pärchenfot.',
     step2_name:'Eure persönlichen Worte', step2_desc:'Widmung, Bildunterschriften, Abschlussnachricht.',
@@ -1788,7 +1816,7 @@ const LANGS = {
     hero_h1_1:'Vuestra historia,', hero_h1_2:'inmortalizada', hero_h1_sub:'en un libro que guardaréis toda la vida',
     hero_p1:'Enviad vuestras mejores fotos.', hero_p2:'Escribimos vuestra historia de amor', hero_p3:', diseñamos vuestro álbum y os entregamos un libro impreso profesionalmente.',
     hero_cta:'Crear nuestro álbum', hero_how:'Ver cómo funciona',
-    proof1:'Para subir', proof2_n:'Único', proof2:'Historia a medida', proof3:'Libro entregado', proof4:'Regalo inolvidable',
+    proof1:"Tapa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Libro impreso", proof4:'Regalo inolvidable',
     how_eyebrow:'El proceso', how_title1:'Tan sencillo como', how_title2:'decir te quiero', how_sub:'Sin necesidad de habilidades. Enviadlas fotos, nosotros hacemos la magia.',
     step1_name:'Vuestros datos & fotos', step1_desc:'Vuestros nombres, cuándo os conocisteis, mínimo 10 fotos.',
     step2_name:'Vuestras palabras', step2_desc:'Dedicatoria, pies de foto, mensaje final.',
@@ -1874,7 +1902,7 @@ const LANGS = {
     hero_h1_1:'A vossa história,', hero_h1_2:'imortalizada', hero_h1_sub:'num livro que guardarão para sempre',
     hero_p1:'Enviem as vossas melhores fotos.', hero_p2:'Escrevemos a vossa história de amor', hero_p3:', desenhamos o vosso álbum e entregamos um livro impresso profissionalmente.',
     hero_cta:'Criar o nosso álbum', hero_how:'Ver como funciona',
-    proof1:'Para carregar', proof2_n:'Único', proof2:'História personalizada', proof3:'Livro entregue', proof4:'Presente inesquecível',
+    proof1:"Capa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Livro impresso", proof4:'Presente inesquecível',
     how_eyebrow:'O processo', how_title1:'Tão simples como', how_title2:'dizer eu te amo', how_sub:'Sem necessidade de competências. Enviam as fotos, nós fazemos a magia.',
     step1_name:'As vossas infos & fotos', step1_desc:'Os vossos nomes, quando se conheceram, mínimo 10 fotos.',
     step2_name:'As vossas palavras', step2_desc:'Dedicatória, legendas, mensagem final.',
@@ -4065,46 +4093,35 @@ Object.assign(window.NA, {
 });
 })();
 
-/* Noustalgie v2 — album de démonstration dans le hero (vraies pages du moteur) */
+/* Noustalgie v2.4 — hero : la couverture du livre dans les 4 styles (la galerie montre l'intérieur) */
 (function () {
   const host = document.getElementById('nstDemo'); if (!host || !window.NA) return;
-  const U = id => ({ data: `https://images.unsplash.com/photo-${id}?w=900&q=78&auto=format`, orient: 'portrait', focalY: 40 });
-  const P = [U('1518621736915-f3b1c41bfd00'), U('1522673607200-164d1b6ce486'), U('1494774157365-9e04c6720e47'), U('1469371670807-013ccf25f16a'), U('1516589178581-6cd7833ae3b2')];
-  const pg = (layout, slots, t) => ({ layout, slots: slots.map(p => ({ p, z: 1, f: 'none' })), t });
-  const SPREADS = [
-    { theme: 'galerie', name: 'Galerie', pages: [
-      pg('chapter', [], { num: 'I', title: 'Le premier été', text: 'Il y a eu une terrasse, une chaise en trop et une conversation qui ne voulait pas finir.' }),
-      pg('frame', [0], { cap: 'La lumière des dimanches' }) ] },
-    { theme: 'nuit', name: 'Nuit', pages: [
-      pg('note', [], { text: 'Tu ris toujours une seconde avant la fin de mes blagues. Je crois que c’est pour ça que je continue.' }),
-      pg('full', [2], { cap: 'Juste avant de rire' }) ] },
-    { theme: 'argentique', name: 'Argentique', pages: [
-      pg('list', [], { title: 'Ce que j’aime chez toi', items: 'Le bruit de tes clés le soir\nTes chansons inventées sous la douche\nTa patience avec mes plantes\nTon rire qui arrive avant le mien\nLes petits mots sur le frigo' }),
-      pg('duo', [1, 3], { cap: 'Un après-midi sans montre' }) ] },
-    { theme: 'encre', name: 'Encre', pages: [
-      pg('quote', [], { text: 'On ne tombe pas amoureux une fois : on recommence chaque matin, en faisant le café.' }),
-      pg('frame', [4], { cap: 'Toi, concentré' }) ] },
-  ];
-  const book = document.createElement('div'); book.className = 'nst-demo-book';
-  book.innerHTML = SPREADS.map((s, i) => `<div class="nst-demo-spread${i ? '' : ' on'}" aria-hidden="${i ? 'true' : 'false'}">`
-    + s.pages.map(p => `<div class="nst-page">${NA.renderPage(p, { photos: P, theme: s.theme })}</div>`).join('') + '</div>').join('');
+  const P = [{ data: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=78&auto=format', orient: 'portrait', focalY: 40 }];
+  const LBL = { fr: 'Style', en: 'Style', de: 'Stil', es: 'Estilo', pt: 'Estilo' };
+  const lang = () => (typeof currentLang !== 'undefined' && LBL[currentLang]) ? currentLang : 'fr';
+  const cover = { layout: 'cover', slots: [{ p: 0, z: 1, f: 'none' }], t: { title: 'La lumière des dimanches', names: 'Léa & Hugo · 2026' } };
+  const THEMES = [['galerie', 'Galerie'], ['nuit', 'Nuit'], ['argentique', 'Argentique'], ['encre', 'Encre']];
+  const book = document.createElement('div'); book.className = 'nst-cover-book';
+  book.innerHTML = THEMES.map(([k], i) => `<div class="nst-cover${i ? '' : ' on'}" aria-hidden="${i ? 'true' : 'false'}"><div class="nst-page">${NA.renderPage(cover, { photos: P, theme: k })}</div></div>`).join('');
   const cap = document.createElement('div'); cap.className = 'nst-demo-cap';
-  cap.innerHTML = `<span id="nstDemoName">Thème ${SPREADS[0].name}</span><div class="nst-demo-dots">${SPREADS.map((s, i) => `<button aria-label="Voir le thème ${s.name}"${i ? '' : ' class="on"'}></button>`).join('')}</div>`;
+  cap.innerHTML = `<span id="nstDemoName"></span><div class="nst-demo-dots">${THEMES.map((t, i) => `<button type="button" aria-label="${t[1]}"${i ? '' : ' class="on"'}></button>`).join('')}</div>`;
   host.appendChild(book); host.appendChild(cap);
   host.parentElement.classList.add('has-demo');
   const scale = () => host.querySelectorAll('.nst-page').forEach(h => { const c = h.firstElementChild; if (c) { c.style.transform = `scale(${h.clientWidth / NA.PX})`; c.style.transformOrigin = '0 0'; } });
   scale(); if (window.ResizeObserver) new ResizeObserver(scale).observe(book); else window.addEventListener('resize', scale);
   let cur = 0, timer;
+  const name = () => { document.getElementById('nstDemoName').textContent = `${LBL[lang()]} ${THEMES[cur][1]}`; };
   const show = i => {
-    cur = (i + SPREADS.length) % SPREADS.length;
-    book.querySelectorAll('.nst-demo-spread').forEach((e, k) => { e.classList.toggle('on', k === cur); e.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
+    cur = (i + THEMES.length) % THEMES.length;
+    book.querySelectorAll('.nst-cover').forEach((e, k) => { e.classList.toggle('on', k === cur); e.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
     cap.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === cur));
-    document.getElementById('nstDemoName').textContent = 'Thème ' + SPREADS[cur].name;
+    name();
   };
-  const auto = () => { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => show(cur + 1), 4200); };
+  const auto = () => { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => show(cur + 1), 3800); };
   cap.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show([...cap.querySelectorAll('button')].indexOf(b)); auto(); } });
   book.addEventListener('click', () => { show(cur + 1); auto(); });
-  auto();
+  name(); auto();
+  if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function () { const r = o.apply(this, arguments); try { name(); } catch (e) {} return r; }; }
 })();
 
 </script>
@@ -4456,7 +4473,7 @@ function drawTools() {
       <div class="nst-sec"><label>Rendu</label><div class="nst-chips">${[['none', 'Original'], ['bw', 'Noir & blanc'], ['warm', 'Chaud'], ['soft', 'Doux']].map(([k, n]) => `<button class="nst-chip${(s.f || 'none') === k ? ' on' : ''}" data-filter="${k}">${n}</button>`).join('')}</div></div>
       <div class="nst-sec"><button class="nst-link" data-act="recenter">Recentrer la photo</button></div>`;
     html += `<div class="nst-sec"><label>Changer la photo</label><div class="nst-pick">${S.photos.map((p, i) =>
-      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" title="${used.has(i) && s.p !== i ? 'Déjà utilisée page ' + (used.get(i)[0] + 1) + ' : les deux seront échangées' : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
+      `<button class="nst-ph${s.p === i ? ' on' : ''}${used.has(i) && s.p !== i ? ' used' : ''}" data-photo="${i}" aria-label="Photo ${i + 1}${s.p === i ? ' (actuelle)' : ''}" title="${used.has(i) && s.p !== i ? 'Déjà utilisée page ' + (used.get(i)[0] + 1) + ' : les deux seront échangées' : ''}"><img src="${p.data}" alt="" loading="lazy"/></button>`).join('')}</div>
       <p class="nst-note">Une photo déjà placée ailleurs sera échangée avec celle-ci. ${isWide() ? 'Faites glisser la photo sur la page pour la recadrer, molette pour zoomer.' : 'Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.'}</p></div>`;
 
   }
@@ -4830,30 +4847,30 @@ window.processPayment = async function () {
 (function () {
   if (!window.NA) return;
   const TXT = {
-    fr: { eyebrow: 'À quoi ressemble votre livre', title: 'De vraies pages, <em>pas des modèles</em>', sub: 'Chaque album est composé à partir de vos photos et de votre histoire. Voici quelques doubles pages, dans trois des quatre styles.',
-          g: ['Aperçu complet et gratuit avant de payer', 'Livraison offerte, 3 à 5 jours ouvrés', 'Réimpression ou remboursement si le livre arrive abîmé', 'Vos photos supprimées après 30 jours'],
-          cta: 'Composer mon album', from: 'dès 39,99€', choose: 'Choisir', themes: ['Style Galerie', 'Style Argentique', 'Style Nuit'] },
-    en: { eyebrow: 'What your book looks like', title: 'Real pages, <em>not templates</em>', sub: 'Every album is composed from your photos and your story. Here are a few spreads in three of the four styles.',
-          g: ['Full free preview before you pay', 'Free delivery, 3 to 5 business days', 'Reprint or refund if your book arrives damaged', 'Your photos deleted after 30 days'],
-          cta: 'Create my album', from: 'from €39.99', choose: 'Choose', themes: ['Gallery style', 'Film style', 'Night style'] },
-    de: { eyebrow: 'So sieht euer Buch aus', title: 'Echte Seiten, <em>keine Vorlagen</em>', sub: 'Jedes Album entsteht aus euren Fotos und eurer Geschichte. Hier einige Doppelseiten in drei der vier Stile.',
-          g: ['Vollständige Gratis-Vorschau vor dem Bezahlen', 'Kostenloser Versand, 3 bis 5 Werktage', 'Neudruck oder Erstattung bei Beschädigung', 'Eure Fotos werden nach 30 Tagen gelöscht'],
-          cta: 'Album gestalten', from: 'ab 39,99€', choose: 'Wählen', themes: ['Stil Galerie', 'Stil Analog', 'Stil Nacht'] },
-    es: { eyebrow: 'Así es vuestro libro', title: 'Páginas reales, <em>no plantillas</em>', sub: 'Cada álbum se compone con vuestras fotos y vuestra historia. Aquí algunas dobles páginas en tres de los cuatro estilos.',
-          g: ['Vista previa completa y gratuita antes de pagar', 'Envío gratis, de 3 a 5 días laborables', 'Reimpresión o reembolso si llega dañado', 'Vuestras fotos se borran a los 30 días'],
-          cta: 'Crear mi álbum', from: 'desde 39,99€', choose: 'Elegir', themes: ['Estilo Galería', 'Estilo Analógico', 'Estilo Noche'] },
-    pt: { eyebrow: 'Assim é o vosso livro', title: 'Páginas reais, <em>não modelos</em>', sub: 'Cada álbum é composto com as vossas fotos e a vossa história. Eis algumas páginas duplas em três dos quatro estilos.',
-          g: ['Pré-visualização completa e gratuita antes de pagar', 'Envio grátis, 3 a 5 dias úteis', 'Reimpressão ou reembolso se chegar danificado', 'As vossas fotos apagadas após 30 dias'],
-          cta: 'Criar o meu álbum', from: 'desde 39,99€', choose: 'Escolher', themes: ['Estilo Galeria', 'Estilo Analógico', 'Estilo Noite'] },
+    fr: { eyebrow: 'À quoi ressemble votre livre', title: 'De vraies pages, <em>pas des modèles</em>', sub: 'Chaque album est composé à partir de vos photos et de votre histoire. Voici quelques doubles pages : vos photos, et les mots écrits pour vous.',
+          g: ['Aperçu complet et gratuit avant de payer', 'Livraison offerte à domicile', 'Vos photos supprimées après 30 jours'], nav_ex: 'Exemples', galLabel: 'Exemples de doubles pages',
+          cta: 'Composer mon album', from: 'dès 39,99€', choose: 'Choisir', themes: ['Style Galerie · vos photos', 'Style Argentique · photos et mots', 'Style Nuit · les textes écrits pour vous'] },
+    en: { eyebrow: 'What your book looks like', title: 'Real pages, <em>not templates</em>', sub: 'Every album is composed from your photos and your story. Here are a few spreads: your photos, and words written for you.',
+          g: ['Full free preview before you pay', 'Free home delivery', 'Your photos deleted after 30 days'], nav_ex: 'Examples', galLabel: 'Example spreads',
+          cta: 'Create my album', from: 'from €39.99', choose: 'Choose', themes: ['Gallery style · your photos', 'Film style · photos and words', 'Night style · words written for you'] },
+    de: { eyebrow: 'So sieht euer Buch aus', title: 'Echte Seiten, <em>keine Vorlagen</em>', sub: 'Jedes Album entsteht aus euren Fotos und eurer Geschichte. Hier einige Doppelseiten: eure Fotos und Worte, die für euch geschrieben wurden.',
+          g: ['Vollständige Gratis-Vorschau vor dem Bezahlen', 'Kostenlose Lieferung nach Hause', 'Eure Fotos werden nach 30 Tagen gelöscht'], nav_ex: 'Beispiele', galLabel: 'Beispielseiten',
+          cta: 'Album gestalten', from: 'ab 39,99€', choose: 'Wählen', themes: ['Stil Galerie · eure Fotos', 'Stil Analog · Fotos und Worte', 'Stil Nacht · für euch geschriebene Worte'] },
+    es: { eyebrow: 'Así es vuestro libro', title: 'Páginas reales, <em>no plantillas</em>', sub: 'Cada álbum se compone con vuestras fotos y vuestra historia. Aquí algunas dobles páginas: vuestras fotos y palabras escritas para vosotros.',
+          g: ['Vista previa completa y gratuita antes de pagar', 'Envío gratis a domicilio', 'Vuestras fotos se borran a los 30 días'], nav_ex: 'Ejemplos', galLabel: 'Páginas de ejemplo',
+          cta: 'Crear mi álbum', from: 'desde 39,99€', choose: 'Elegir', themes: ['Estilo Galería · vuestras fotos', 'Estilo Analógico · fotos y palabras', 'Estilo Noche · palabras escritas para vosotros'] },
+    pt: { eyebrow: 'Assim é o vosso livro', title: 'Páginas reais, <em>não modelos</em>', sub: 'Cada álbum é composto com as vossas fotos e a vossa história. Eis algumas páginas duplas: as vossas fotos e palavras escritas para vós.',
+          g: ['Pré-visualização completa e gratuita antes de pagar', 'Envio grátis ao domicílio', 'As vossas fotos apagadas após 30 dias'], nav_ex: 'Exemplos', galLabel: 'Páginas de exemplo',
+          cta: 'Criar o meu álbum', from: 'desde 39,99€', choose: 'Escolher', themes: ['Estilo Galeria · as vossas fotos', 'Estilo Analógico · fotos e palavras', 'Estilo Noite · palavras escritas para vós'] },
   };
   const lang = () => (typeof currentLang !== 'undefined' && TXT[currentLang]) ? currentLang : 'fr';
   const U = id => ({ data: `https://images.unsplash.com/photo-${id}?w=900&q=78&auto=format`, orient: 'portrait', focalY: 40 });
   const P = [U('1518621736915-f3b1c41bfd00'), U('1522673607200-164d1b6ce486'), U('1494774157365-9e04c6720e47'), U('1469371670807-013ccf25f16a'), U('1516589178581-6cd7833ae3b2')];
   const pg = (layout, slots, t, v) => ({ layout, v: v || 0, slots: slots.map(p => ({ p, z: 1, f: 'none' })), t });
   const SPREADS = [
-    { theme: 'galerie', pages: [pg('chapterp', [0], { num: 'II', title: 'Nos jours ordinaires', text: 'Le café trop fort du matin, les fous rires dans l’escalier. C’est là, dans l’ordinaire, que tout s’est construit.' }, 0), pg('duo', [1, 2], { cap: 'Un après-midi sans montre' })] },
-    { theme: 'argentique', pages: [pg('list', [], { title: 'Ce que j’aime chez toi', items: 'Le bruit de tes clés le soir\nTes chansons inventées sous la douche\nTa patience avec mes plantes\nTon rire qui arrive avant le mien\nLes petits mots sur le frigo\nTa façon de dire mon prénom' }), pg('frame', [3], { cap: 'La lumière des dimanches' }, 1)] },
-    { theme: 'nuit', pages: [pg('quote', [], { text: 'On ne tombe pas amoureux une fois : on recommence chaque matin, en faisant le café.' }), pg('full', [4], { cap: 'Juste avant de rire' })] },
+    { theme: 'galerie', pages: [pg('chapterp', [1], { num: 'II', title: 'Nos jours ordinaires', text: 'Le café trop fort du matin, les fous rires dans l’escalier. C’est là, dans l’ordinaire, que tout s’est construit.' }, 0), pg('duo', [2, 3], { cap: 'Un après-midi sans montre' })] },
+    { theme: 'argentique', pages: [pg('list', [], { title: 'Ce que j’aime chez toi', items: 'Le bruit de tes clés le soir\nTes chansons inventées sous la douche\nTa patience avec mes plantes\nTon rire qui arrive avant le mien\nLes petits mots sur le frigo\nTa façon de dire mon prénom' }), pg('frame', [4], { cap: 'La lumière des dimanches' }, 1)] },
+    { theme: 'nuit', pages: [pg('checklist', [], { title: 'Ce qu’on fera ensemble', items: 'Voir une aurore boréale\nApprendre à faire du pain\nUn road trip sans GPS\nDanser à un mariage d’inconnus\nRelire ce livre dans vingt ans' }), pg('quote', [], { text: 'On ne tombe pas amoureux une fois : on recommence chaque matin, en faisant le café.' })] },
   ];
   const scaleAll = root => root.querySelectorAll('.nst-page').forEach(h => { const c = h.firstElementChild; if (c) { c.style.transform = `scale(${h.clientWidth / NA.PX})`; c.style.transformOrigin = '0 0'; } });
 
@@ -4862,7 +4879,7 @@ window.processPayment = async function () {
   if (gal) {
     const sec = document.createElement('section'); sec.className = 'nst-gal'; sec.id = 'exemples';
     sec.innerHTML = `<div class="nst-gal-hd"><div class="ed-sec-eyebrow" data-nst="eyebrow"></div><h2 data-nst-html="title"></h2><p data-nst="sub"></p></div>
-      <div class="nst-gal-row">${SPREADS.map((s, i) => `<figure class="nst-gal-item"><div class="nst-gal-book">${s.pages.map(p => `<div class="nst-page">${NA.renderPage(p, { photos: P, theme: s.theme })}</div>`).join('')}</div><figcaption data-nst-theme="${i}"></figcaption></figure>`).join('')}</div>`;
+      <div class="nst-gal-row" tabindex="0" role="region" data-nst-aria="galLabel">${SPREADS.map((s, i) => `<figure class="nst-gal-item"><div class="nst-gal-book">${s.pages.map(p => `<div class="nst-page">${NA.renderPage(p, { photos: P, theme: s.theme })}</div>`).join('')}</div><figcaption data-nst-theme="${i}"></figcaption></figure>`).join('')}</div>`;
     gal.replaceWith(sec);
     requestAnimationFrame(() => scaleAll(sec));
     if (window.ResizeObserver) new ResizeObserver(() => scaleAll(sec)).observe(sec);
@@ -4872,7 +4889,7 @@ window.processPayment = async function () {
   const stats = document.querySelector('.ed-stats');
   if (stats) {
     const g = document.createElement('div'); g.className = 'nst-guar';
-    g.innerHTML = [0, 1, 2, 3].map(i => `<div class="nst-guar-i"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-nst-g="${i}"></span></div>`).join('');
+    g.innerHTML = [0, 1, 2].map(i => `<div class="nst-guar-i"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-nst-g="${i}"></span></div>`).join('');
     stats.insertAdjacentElement('afterend', g);
   }
 
@@ -4888,17 +4905,29 @@ window.processPayment = async function () {
   const bar = document.createElement('div'); bar.className = 'nst-sticky'; bar.setAttribute('aria-hidden', 'true');
   bar.innerHTML = `<button type="button" class="nst-sticky-btn"><span data-nst="cta"></span><small data-nst="from"></small></button>`;
   bar.querySelector('button').addEventListener('click', () => { if (typeof startApp === 'function') startApp(); });
+  bar.querySelector('button').tabIndex = -1; if ('inert' in bar) bar.inert = true;
   document.body.appendChild(bar);
   const hero = document.querySelector('.ed-hero'), app = document.getElementById('app'), foot = document.querySelector('footer');
   const vis = new Map();
   const upd = () => {
     const show = !vis.get(hero) && !vis.get(app) && !vis.get(foot) && !document.querySelector('.nst-resume');
-    bar.classList.toggle('on', show); bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    bar.classList.toggle('on', show); bar.setAttribute('aria-hidden', show ? 'false' : 'true'); bar.querySelector('button').tabIndex = show ? 0 : -1; if ('inert' in bar) bar.inert = !show;
   };
   if (window.IntersectionObserver) {
     const io = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target, e.isIntersecting)); upd(); }, { threshold: 0.05 });
     [hero, app, foot].filter(Boolean).forEach(el => { vis.set(el, el === hero); io.observe(el); });
   }
+
+  const navLinks = document.querySelector('.ed-nav-links');
+  if (navLinks && !navLinks.querySelector('[href="#exemples"]')) {
+    const a = document.createElement('a'); a.href = '#exemples'; a.dataset.nst = 'nav_ex';
+    const ref = navLinks.querySelector('[href="#pricing"]'); navLinks.insertBefore(a, ref || null);
+  }
+  // Libellés reliés à leurs champs (clic sur le libellé + lecteurs d'écran)
+  const FOR = { name1_lbl: 'name1', name2_lbl: 'name2', since_lbl: 'meetDate', occasion_lbl: 'occasion', ded_lbl: 'dedication', q_meet_lbl: 'qMeet', q_memory_lbl: 'qMemory', q_habit_lbl: 'qHabit', q_special_lbl: 'qSpecial', pay_name_lbl: 'payName', pay_email_lbl: 'payEmail', modal_lbl: 'modalMsg' };
+  Object.entries(FOR).forEach(([k, id]) => { const l = document.querySelector(`label[data-i18n="${k}"]`); if (l && document.getElementById(id)) l.htmlFor = id; });
+  document.querySelectorAll('#app input[type=file]').forEach(f => { if (!f.getAttribute('aria-label')) f.setAttribute('aria-label', 'Ajouter des photos'); });
+  const appSec = document.getElementById('app'); if (appSec && !document.querySelector('main,[role=main]')) appSec.setAttribute('role', 'main');
 
   // Textes dans la langue choisie
   const apply = () => {
@@ -4906,6 +4935,7 @@ window.processPayment = async function () {
     document.querySelectorAll('[data-nst]').forEach(el => { el.textContent = T[el.dataset.nst]; });
     document.querySelectorAll('[data-nst-html]').forEach(el => { el.innerHTML = T[el.dataset.nstHtml]; });
     document.querySelectorAll('[data-nst-g]').forEach(el => { el.textContent = T.g[+el.dataset.nstG]; });
+    document.querySelectorAll('[data-nst-aria]').forEach(el => { el.setAttribute('aria-label', T[el.dataset.nstAria]); });
     document.querySelectorAll('[data-nst-theme]').forEach(el => { el.textContent = T.themes[+el.dataset.nstTheme]; });
   };
   apply();
