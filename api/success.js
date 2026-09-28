@@ -20,11 +20,11 @@ function page({ firstName, pages, price, format, email, paid }) {
     ['Produit', isPdf ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide'],
     ['Pages', `${pages} pages`],
     ['Montant payé', `${price} €`],
-    [isPdf ? 'Envoi' : 'Livraison estimée', isPdf ? 'Par email, dans quelques minutes' : '3 à 5 jours ouvrés'],
+    [isPdf ? 'Envoi' : 'Livraison estimée', isPdf ? 'Par email, dans quelques minutes' : 'Environ 10 à 12 jours'],
   ];
   const steps = isPdf
     ? ['Votre album est envoyé à ' + email + '.', 'Téléchargez-le depuis le lien reçu (valable 14 jours).', 'Imprimez-le, partagez-le, gardez-le.']
-    : ['Votre album part à l’impression dans notre atelier partenaire.', 'Vous recevez le numéro de suivi par email dès l’expédition.', 'Livraison à votre porte sous 3 à 5 jours ouvrés.'];
+    : ['Votre album part à l’impression dans notre atelier partenaire.', 'Vous recevez le numéro de suivi par email dès l’expédition.', 'Livraison à votre porte en 10 à 12 jours environ.'];
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="robots" content="noindex"/>
 <title>Commande confirmée — Noustalgie</title>

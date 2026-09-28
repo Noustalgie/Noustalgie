@@ -184,7 +184,7 @@ module.exports = async (req, res) => {
         to: email,
         subject: 'Votre livre Noustalgie part à l’impression ♥',
         html: mail(`Bonjour ${h(first)},`, `<p>Votre commande est confirmée : le livre <b>${h(names)}</b> part à l’impression.</p>
-          <p>N° de commande : <b style="color:#f2ebe0;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 3 à 5 jours ouvrés</p>
+          <p>N° de commande : <b style="color:#f2ebe0;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 10 à 12 jours environ</p>
           <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>`),
       });
     }
