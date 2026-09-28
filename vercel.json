@@ -18,11 +18,8 @@
     "api/cleanup.js": {
       "maxDuration": 60
     },
-    "api/sign-upload.js": {
-      "maxDuration": 10
-    },
-    "api/compose.js": {
-      "maxDuration": 60
+    "api/tools.js": {
+      "maxDuration": 30
     }
   },
   "crons": [
@@ -38,7 +35,39 @@
     },
     {
       "source": "/cancel",
-      "destination": "/api/cancel"
+      "destination": "/api/tools?fn=cancel"
+    },
+    {
+      "source": "/api/compose",
+      "destination": "/api/chat"
+    },
+    {
+      "source": "/api/promo",
+      "destination": "/api/tools?fn=promo"
+    },
+    {
+      "source": "/api/sign-upload",
+      "destination": "/api/tools?fn=sign-upload"
+    },
+    {
+      "source": "/api/spine",
+      "destination": "/api/tools?fn=spine"
+    },
+    {
+      "source": "/api/album",
+      "destination": "/api/tools?fn=album"
+    },
+    {
+      "source": "/api/track",
+      "destination": "/api/tools?fn=track"
+    },
+    {
+      "source": "/api/order-status",
+      "destination": "/api/tools?fn=track"
+    },
+    {
+      "source": "/api/cancel",
+      "destination": "/api/tools?fn=cancel"
     }
   ],
   "redirects": [

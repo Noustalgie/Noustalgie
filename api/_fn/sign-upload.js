@@ -1,8 +1,8 @@
 // api/sign-upload.js — autorise le navigateur à envoyer UNE photo en pleine résolution
 // directement à Cloudinary (pas de passage par Vercel, donc pas de limite de 4,5 Mo).
 const crypto = require('crypto');
-const { isAllowedOrigin, applyCors, rateLimit } = require('./_lib/security');
-const { cfg, sign } = require('./_lib/cloudinary');
+const { isAllowedOrigin, applyCors, rateLimit } = require('../_lib/security');
+const { cfg, sign } = require('../_lib/cloudinary');
 
 module.exports = async (req, res) => {
   applyCors(req, res);

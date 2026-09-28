@@ -1,6 +1,6 @@
 // api/promo.js — vérifie un code promo (codes dans la variable Vercel PROMO_CODES)
-const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
-const { checkPromo } = require('./_lib/promo');
+const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('../_lib/security');
+const { checkPromo } = require('../_lib/promo');
 
 module.exports = async (req, res) => {
   applyCors(req, res);

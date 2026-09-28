@@ -1,6 +1,6 @@
 // api/spine.js — largeur de tranche du livre, fournie par Prodigi (dépend du nombre de pages et de l'atelier)
 const https = require('https');
-const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
+const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('../_lib/security');
 
 const SKU = 'BOOK-FE-8_3-SQ-HARD-G';
 const COUNTRIES = ['FR', 'BE', 'LU', 'MC', 'CH', 'DE', 'AT', 'NL', 'ES', 'PT', 'IT', 'IE'];

@@ -3,8 +3,8 @@
 // GET  : relit un album à partir de son identifiant secret
 const https = require('https');
 const crypto = require('crypto');
-const { isAllowedOrigin, applyCors, rateLimit, parseBody, escapeHtml: h } = require('./_lib/security');
-const { cfg, sign, pdfProof } = require('./_lib/cloudinary');
+const { isAllowedOrigin, applyCors, rateLimit, parseBody, escapeHtml: h } = require('../_lib/security');
+const { cfg, sign, pdfProof } = require('../_lib/cloudinary');
 
 const SITE = 'https://noustalgie.fr';
 const ID_RE = /^[a-f0-9]{24}$/;

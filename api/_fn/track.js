@@ -1,6 +1,6 @@
 // api/track.js — « Suivre ma commande » : numéro NOUST-… + email de la commande
 const https = require('https');
-const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
+const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('../_lib/security');
 const REF = /^NOUST-\d{6}-[A-Z0-9]{5}$/;
 
 function prodigi(path) {
