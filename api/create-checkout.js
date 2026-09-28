@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'checkout', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez dans quelques minutes.' });
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).json({ error: 'Configuration de paiement incomplète.' });
 
-  const { name, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode } = parseBody(req);
+  const { name, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine } = parseBody(req);
 
   if (!email || !EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'Email invalide.' });
 
@@ -59,6 +59,11 @@ module.exports = async (req, res) => {
   const fmt = format === 'pdf' ? 'pdf' : 'print';
   // Le PDF doit avoir été généré par notre serveur, avec exactement le nombre de pages payé
   if (!pdfUrl || !checkProof(String(pdfUrl), pagesNum, pdfProof)) return res.status(400).json({ error: 'Le fichier de votre album n’est pas valide. Rechargez l’aperçu et réessayez.' });
+  // Version avec tranche imprimée : facultative, retenue seulement si les deux fichiers sont prouvés
+  let S = null;
+  if (spine && spine.coverUrl && spine.innerUrl && checkProof(String(spine.coverUrl), `cover:${pagesNum}`, spine.coverProof) && checkProof(String(spine.innerUrl), `inner:${pagesNum}`, spine.innerProof)) {
+    S = { cover: String(spine.coverUrl), inner: String(spine.innerUrl), mm: Number(spine.widthMm) || '' };
+  }
   // Adresse structurée, transmise telle quelle à l'imprimeur
   const A = addr && typeof addr === 'object' ? {
     line1: cut(addr.line1, 100).trim(), line2: cut(addr.line2, 100).trim(),
@@ -85,6 +90,7 @@ module.exports = async (req, res) => {
   const priceStr = priceEuros.toFixed(2);
   const meta = {
     name: cut(name, 200), email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
+    cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
     names: cut(names, 200), style: cut(style, 100), pdf_url: cut(pdfUrl, 480), format: fmt, price: priceStr, promo: appliedPromo,
   };

@@ -32,9 +32,39 @@ function detectCountry(text) {
   return 'FR';
 }
 
-async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId, orderNumber, pages }) {
-  if (!process.env.PRODIGI_API_KEY) { global.__lastProdigiError = 'PRODIGI_API_KEY manquante'; return null; }
-  if (!pdfUrl) { global.__lastProdigiError = 'Pas de PDF'; return null; }
+const SKU = 'BOOK-FE-8_3-SQ-HARD-G';
+function prodigiCall(method, path, payload) {
+  return new Promise(resolve => {
+    const buf = payload ? Buffer.from(JSON.stringify(payload)) : null;
+    const req = https.request({ hostname: 'api.prodigi.com', path, method, timeout: 20000,
+      headers: Object.assign({ 'X-API-Key': process.env.PRODIGI_API_KEY }, buf ? { 'Content-Type': 'application/json', 'Content-Length': buf.length } : {}) }, r => {
+      let d = ''; r.on('data', c => d += c);
+      r.on('end', () => { let j = null; try { j = JSON.parse(d); } catch (e) {} resolve({ status: r.statusCode, body: j, raw: d }); });
+    });
+    req.on('timeout', () => { req.destroy(); resolve({ status: 0, body: null, raw: 'timeout' }); });
+    req.on('error', e => resolve({ status: 0, body: null, raw: 'réseau: ' + e.message }));
+    if (buf) req.write(buf); req.end();
+  });
+}
+// Zone d'impression « couverture » du produit (lue dans la fiche produit Prodigi)
+let coverAreaCache;
+async function coverPrintArea() {
+  if (coverAreaCache !== undefined) return coverAreaCache;
+  const r = await prodigiCall('GET', `/v4.0/products/${SKU}`);
+  const areas = r.body && r.body.product && r.body.product.printAreas ? Object.keys(r.body.product.printAreas) : [];
+  coverAreaCache = areas.find(a => /cover/i.test(a)) || areas.find(a => a !== 'default') || null;
+  return coverAreaCache;
+}
+async function postOrder(payload) {
+  const r = await prodigiCall('POST', '/v4.0/orders', payload);
+  const id = r.body && (r.body.order && r.body.order.id || r.body.id);
+  if (r.status && r.status < 300 && id) return { id, outcome: r.body.outcome || '' };
+  return { id: null, err: `HTTP ${r.status} — ${String(r.raw).slice(0, 500)}` };
+}
+
+async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId, orderNumber, pages, spine }) {
+  if (!process.env.PRODIGI_API_KEY) { global.__lastProdigiError = 'PRODIGI_API_KEY manquante'; return { id: null }; }
+  if (!pdfUrl) { global.__lastProdigiError = 'Pas de PDF'; return { id: null }; }
   const structured = addr && addr.line1 && addr.postal && addr.city && addr.country;
   const parts = (address || '').split(',').map(s => s.trim()).filter(Boolean);
   let postalCode = '', city = '', postalIdx = -1;
@@ -45,42 +75,31 @@ async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSe
   const addressParts = postalIdx >= 0 ? parts.slice(0, postalIdx) : parts.slice(0, Math.max(1, parts.length - 1));
   const line1 = addressParts.join(', ') || (parts[0] || '');
   const country = detectCountry(postalIdx >= 0 ? parts.slice(postalIdx + 1).join(' ') : parts[parts.length - 1]);
-
   const recipientAddress = structured
     ? { line1: addr.line1, line2: addr.line2 || undefined, postalOrZipCode: addr.postal, countryCode: addr.country, townOrCity: addr.city, isBusiness: false }
     : { line1, postalOrZipCode: postalCode, countryCode: country, townOrCity: city, isBusiness: false };
-  const orderPayload = {
-    merchantReference: orderNumber,
-    shippingMethod: 'Budget',
-    idempotencyKey: `noustalgie-${stripeSessionId}`,
-    recipient: { name, email, address: recipientAddress },
-    items: [{
-      merchantReference: `album-${stripeSessionId}`,
-      sku: 'BOOK-FE-8_3-SQ-HARD-G',
-      copies: 1,
-      sizing: 'fillPrintArea',
-      assets: [{ printArea: 'default', url: pdfUrl, pageCount: parseInt(pages, 10) || 36 }],
-    }],
-  };
-  return new Promise(resolve => {
-    const buf = Buffer.from(JSON.stringify(orderPayload));
-    const req = https.request({
-      hostname: 'api.prodigi.com', path: '/v4.0/orders', method: 'POST',
-      headers: { 'X-API-Key': process.env.PRODIGI_API_KEY, 'Content-Type': 'application/json', 'Content-Length': buf.length },
-    }, r => {
-      let d = ''; r.on('data', c => d += c);
-      r.on('end', () => {
-        try {
-          const body = JSON.parse(d);
-          const orderId = body?.order?.id || body?.id;
-          if (r.statusCode < 300) { console.log(`Commande Prodigi : ${orderId}`); resolve(orderId); }
-          else { global.__lastProdigiError = `HTTP ${r.statusCode} — ${d.slice(0, 600)}`; console.error(global.__lastProdigiError); resolve(null); }
-        } catch (e) { global.__lastProdigiError = 'Parse error: ' + String(d).slice(0, 400); resolve(null); }
-      });
-    });
-    req.on('error', e => { global.__lastProdigiError = 'Erreur réseau: ' + e.message; resolve(null); });
-    req.write(buf); req.end();
-  });
+  const n = parseInt(pages, 10) || 36;
+  const base = { merchantReference: orderNumber, shippingMethod: 'Budget', recipient: { name, email, address: recipientAddress } };
+  const item = assets => [{ merchantReference: `album-${stripeSessionId}`, sku: SKU, copies: 1, sizing: 'fillPrintArea', assets }];
+  let note = '';
+
+  // 1) Livre avec tranche imprimée : couverture (dos + tranche + face) + pages intérieures
+  if (spine && spine.cover && spine.inner) {
+    const area = await coverPrintArea();
+    if (area) {
+      const r = await postOrder({ ...base, idempotencyKey: `noustalgie-${stripeSessionId}-spine`,
+        items: item([{ printArea: area, url: spine.cover }, { printArea: 'default', url: spine.inner, pageCount: n - 2 }]) });
+      if (r.id) { console.log(`Commande Prodigi (tranche) : ${r.id}`); return { id: r.id, spine: true, note: r.outcome && r.outcome !== 'Created' ? `Statut Prodigi : ${r.outcome}` : '' }; }
+      note = `Tranche non acceptée par Prodigi, commande standard envoyée à la place. Détail : ${r.err}`;
+    } else note = 'Zone « couverture » absente de la fiche produit Prodigi : commande standard envoyée.';
+    console.warn(note);
+  }
+  // 2) Format historique (déjà validé en production) : un seul PDF, couverture et dos compris
+  const r = await postOrder({ ...base, idempotencyKey: `noustalgie-${stripeSessionId}`, items: item([{ printArea: 'default', url: pdfUrl, pageCount: n }]) });
+  if (r.id) { console.log(`Commande Prodigi : ${r.id}`); return { id: r.id, spine: false, note }; }
+  global.__lastProdigiError = r.err + (note ? ` | ${note}` : '');
+  console.error(global.__lastProdigiError);
+  return { id: null, note };
 }
 
 function verifyStripeSignature(rawBody, sigHeader, secret) {
@@ -152,7 +171,7 @@ module.exports = async (req, res) => {
   const ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
   const orderNumber = `NOUST-${ymd}-${crypto.createHash('sha1').update(session.id).digest('hex').slice(0, 5).toUpperCase()}`;
 
-  let prodigiOrderId = null;
+  let prodigiOrderId = null, prodigi = { id: null, note: '' };
   try {
     if (format === 'pdf' && pdfUrl && email) {
       await sendEmail({
@@ -164,7 +183,9 @@ module.exports = async (req, res) => {
 
     if (format === 'print' && pdfUrl) {
       const addr = { line1: m.addr_line1, line2: m.addr_line2, postal: m.addr_postal, city: m.addr_city, country: m.addr_country };
-      prodigiOrderId = await createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId: session.id, orderNumber, pages });
+      const spine = m.cover_url && m.inner_url ? { cover: m.cover_url, inner: m.inner_url } : null;
+      prodigi = await createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine });
+      prodigiOrderId = prodigi.id;
     }
 
     const NOTIFY = process.env.NOTIFY_EMAIL;
@@ -179,7 +200,8 @@ module.exports = async (req, res) => {
           <p><b>Format :</b> ${format} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
           <p><b>Adresse :</b> ${h(address || '(PDF)')}</p>
           <p><b>PDF :</b> ${pdfUrl ? `<a href="${h(pdfUrl)}">ouvrir</a>` : 'Non disponible'}</p>
-          ${prodigiOrderId ? `<p style="color:green"><b>✅ Prodigi : ${h(prodigiOrderId)}</b></p>` : warn}
+          ${prodigiOrderId ? `<p style="color:green"><b>✅ Prodigi : ${h(prodigiOrderId)}</b> — ${prodigi.spine ? `tranche imprimée (${h(m.spine_mm)} mm)` : 'tranche unie'}</p>` : warn}
+          ${prodigi.note ? `<p style="color:#9a6b12"><small>${h(prodigi.note)}</small></p>` : ''}
           <p><a href="https://dashboard.stripe.com/payments">Voir Stripe</a></p>`,
       });
     }

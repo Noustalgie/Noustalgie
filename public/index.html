@@ -848,6 +848,9 @@ img{max-width:100%;}
 @media (prefers-reduced-motion:reduce){.nst-tools.sheet{animation:none;}}
 .nst-page.nst-blank{background:#fff;}
 .nst-spread.two .nst-blank{box-shadow:inset -18px 0 22px -18px rgba(0,0,0,.12);}
+.nst-spine-prev{flex:0 0 5.5%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font:500 11px/1 'Inter',sans-serif;letter-spacing:.08em;white-space:nowrap;overflow:hidden;border-radius:3px 0 0 3px;}
+.nst-input{width:100%;box-sizing:border-box;border:1px solid var(--line);padding:10px 12px;font:16px/1.4 'Inter',system-ui,sans-serif;color:var(--ink);background:#fff;border-radius:2px;}
+.nst-input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
 /* ═══ v2.2 — système de design du site ═══ */
 :root{--n-ink:#1c1a18;--n-mut:#5f5a54;--n-line:#d9d4cc;--n-soft:#f6f4f0;}
 /* Boutons : principal = noir plein, secondaire = contour */
@@ -4708,6 +4711,7 @@ window.runGeneration = async function () {
     S.story = story;
     NA.info = info;
     NA.pages = NA.plan(nPages, story, info);
+    NA.spineText = null; // par défaut : « prénoms · année »
     NA.cur = 0; NA.hist = []; NA.fut = [];
     clearInterval(tick); clearInterval(climb); setProgress(100);
     S.done.add(0); S.done.add(1); S.done.add(2);
@@ -4770,7 +4774,9 @@ function drawStage() {
   const stage = $('nstSpread'); if (!stage) return;
   const v = visible();
   stage.className = 'nst-spread' + (v.length === 2 ? ' two' : '') + (NA.cur === 0 ? ' cover' : '');
-  stage.innerHTML = v.map(i => i == null ? `<div class="nst-page nst-blank" aria-hidden="true"></div>` : `<div class="nst-page" data-page="${i}"></div>`).join('');
+  const sp = spineStyle();
+  const spinePrev = (v.length === 1 && v[0] === 0) ? `<div class="nst-spine-prev" id="nstSpinePrev" title="Tranche du livre" style="background:${sp.bg};color:${sp.fg}">${esc(spineText())}</div>` : '';
+  stage.innerHTML = spinePrev + v.map(i => i == null ? `<div class="nst-page nst-blank" aria-hidden="true"></div>` : `<div class="nst-page" data-page="${i}"></div>`).join('');
   stage.querySelectorAll('.nst-page[data-page]').forEach(h => mountPage(h, +h.dataset.page, true));
   highlightSel();
   const vv = v.filter(x => x != null), ctr = $('nstCtr');
@@ -4855,6 +4861,9 @@ function drawTools() {
       <div class="nst-chips">${[['shorter', 'Plus court'], ['tender', 'Plus tendre'], ['funny', 'Plus drôle'], ['again', 'Autre version']].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
       <p class="nst-note" id="nstAiMsg"></p></div>`;
   }
+  if (sel.page === 0) {
+    html += `<div class="nst-sec"><label for="nstSpine">Texte de la tranche</label><input id="nstSpine" class="nst-input" maxlength="40" value="${esc(spineText())}"/><p class="nst-note">Imprimé sur la tranche du livre, lisible de bas en haut.</p></div>`;
+  }
   const alts = L && !L.text ? NA.PHOTO_LAYOUTS(L.n) : [];
   if (alts.length > 1) {
     html += `<div class="nst-sec"><label>Mise en page</label><div class="nst-chips">${alts.map(k => `<button class="nst-chip${pg.layout === k ? ' on' : ''}" data-layout="${k}">${NA.LAYOUTS[k].name}</button>`).join('')}</div></div>`;
@@ -4912,7 +4921,7 @@ function bindEditor() {
   $('nstStrip').addEventListener('click', e => { const b = e.target.closest('.nst-th'); if (b) go(+b.dataset.page); });
   $('nstThemes').addEventListener('click', e => {
     const b = e.target.closest('.nst-theme'); if (!b || b.dataset.theme === NA.theme) return;
-    commit(); NA.theme = b.dataset.theme; drawThemes(); drawStage(); drawStrip(); saveLocalSoon();
+    commit(); NA.theme = b.dataset.theme; drawThemes(); drawStage(); drawStrip(); drawTools(); saveLocalSoon();
   });
 
   const stage = $('nstSpread');
@@ -5036,6 +5045,11 @@ function bindEditor() {
       clearTimeout(ED.tt); ED.tt = setTimeout(() => { drawThumb(i); saveLocalSoon(); }, 400);
       return;
     }
+    if (e.target.id === 'nstSpine') {
+      NA.spineText = e.target.value.slice(0, 40);
+      const p = $('nstSpinePrev'); if (p) p.textContent = spineText();
+      saveLocalSoon(); return;
+    }
     if (e.target.id !== 'nstZoom' || !ED.sel) return;
     const sl = NA.pages[ED.sel.page].slots[ED.sel.slot];
     if (!ED.zoomCommitted) { commit(); ED.zoomCommitted = true; }
@@ -5100,7 +5114,7 @@ async function idbGet(k) { const d = await idb(); return new Promise((res, rej) 
 async function idbDel(k) { const d = await idb(); return new Promise(res => { const t = d.transaction(DB.store, 'readwrite'); t.objectStore(DB.store).delete(k); t.oncomplete = res; }); }
 function saveLocal() {
   if (!NA.pages.length) return;
-  idbSet('album', { v: 2, savedAt: Date.now(), photos: S.photos.map(p => Object.assign({}, p)), captions: S.captions || {}, story: S.story, theme: NA.theme, pages: NA.pages, info: NA.info, selectedPages: nPagesSel() }).catch(() => {});
+  idbSet('album', { v: 2, savedAt: Date.now(), photos: S.photos.map(p => Object.assign({}, p)), captions: S.captions || {}, story: S.story, theme: NA.theme, pages: NA.pages, info: NA.info, spineText: NA.spineText, selectedPages: nPagesSel() }).catch(() => {});
 }
 let st; function saveLocalSoon() { clearTimeout(st); st = setTimeout(saveLocal, 800); }
 NA.clearLocal = () => idbDel('album').catch(() => {});
@@ -5113,7 +5127,7 @@ async function offerResume() {
   document.body.appendChild(bar);
   bar.querySelector('.nst-r-no').onclick = () => bar.remove();
   bar.querySelector('.nst-r-yes').onclick = () => {
-    S.photos = a.photos || []; S.captions = a.captions || {}; S.story = a.story; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.info = a.info;
+    S.photos = a.photos || []; S.captions = a.captions || {}; S.story = a.story; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.info = a.info; NA.spineText = a.spineText != null ? a.spineText : null;
     if (a.selectedPages) { try { selectedPages = a.selectedPages; } catch (e) {} }
     if (a.info) { const set = (id, v) => { if ($(id) && v) $(id).value = v; }; set('name1', a.info.n1); set('name2', a.info.n2); set('meetDate', a.info.meet); set('dedication', a.info.dedication); }
     S.done.add(0); S.done.add(1); S.done.add(2);
@@ -5157,23 +5171,52 @@ async function uploadPhotos(onProgress) {
   }
   await Promise.all([worker(), worker(), worker(), worker()]);
 }
-function printHtml() {
-  const pages = NA.pages.map(p => `<div class="page">${NA.renderPage(p, { print: true })}</div>`).join('');
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
-    + '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=block" rel="stylesheet"/>'
-    + '<style>@page{size:210mm 210mm;margin:0}*{margin:0;padding:0;box-sizing:border-box}html,body{width:210mm}.page{width:210mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}.nst-canvas{transform:scale(' + (793.7 / NA.PX) + ');transform-origin:0 0}</style>'
-    + '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){window.__r=true})});function nstReady(){return window.__r}<\/script>'
-    + '</head><body>' + pages + '</body></html>';
+const READY = '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){window.__r=true})});function nstReady(){return window.__r}<\/script>';
+const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=block" rel="stylesheet"/>';
+function docHtml(body, widthMm) {
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"/>' + FONTS
+    + '<style>@page{size:' + widthMm + 'mm 210mm;margin:0}*{margin:0;padding:0;box-sizing:border-box}html,body{width:' + widthMm + 'mm}.page{width:' + widthMm + 'mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}.nst-canvas{transform:scale(' + (793.7 / NA.PX) + ');transform-origin:0 0}.cv{position:absolute;top:0;width:210mm;height:210mm;overflow:hidden}</style>'
+    + READY + '</head><body>' + body + '</body></html>';
 }
-window.generateAlbumPDF = async function (onStep) {
-  onStep = onStep || (() => {});
+const pagesDoc = list => docHtml(list.map(p => `<div class="page">${NA.renderPage(p, { print: true })}</div>`).join(''), 210);
+function printHtml() { return pagesDoc(NA.pages); }           // livre complet (format historique)
+function innerHtml() { return pagesDoc(NA.pages.slice(1, -1)); } // pages intérieures seules
+// Tranche : couleurs du thème, texte lisible de bas en haut (usage français)
+function spineStyle() {
+  const T = NA.THEMES[NA.theme] || NA.THEMES.galerie, night = NA.theme === 'nuit';
+  return { bg: night ? T.paper : T.ink, fg: night ? T.accent : T.paper };
+}
+function spineText() { return (NA.spineText != null ? NA.spineText : defaultSpine()).trim(); }
+function defaultSpine() { const i = NA.info || coupleInfo(); return `${i.names} · ${new Date().getFullYear()}`; }
+function coverHtml(w) {
+  const { bg, fg } = spineStyle(), last = NA.pages[NA.pages.length - 1], txt = spineText();
+  const fs = Math.min(w * 0.42, 4.2);
+  const label = w >= 4 && txt ? `<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font:500 ${fs.toFixed(2)}mm/1 'Inter',sans-serif;letter-spacing:.08em;color:${fg};">${esc(txt)}</div>` : '';
+  return docHtml(`<div class="page"><div class="cv" style="left:0">${NA.renderPage(last, { print: true })}</div>`
+    + `<div style="position:absolute;top:0;left:210mm;width:${w}mm;height:210mm;background:${bg};overflow:hidden">${label}</div>`
+    + `<div class="cv" style="left:${(210 + w).toFixed(2)}mm">${NA.renderPage(NA.pages[0], { print: true })}</div></div>`, (420 + w).toFixed(2));
+}
+window.generateAlbumPDF = async function (onStep, opts) {
+  onStep = onStep || (() => {}); opts = opts || {};
   await uploadPhotos((d, n) => onStep(`Envoi de vos photos en haute définition… ${d}/${n}`));
   onStep('Mise en page de votre livre…');
-  const res = await fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ html: printHtml(), mode: 'url' }) });
-  const j = await res.json().catch(() => ({}));
-  if (!j.url || !j.proof) throw new Error(j.error || 'PDF');
-  return { url: j.url, proof: j.proof };
+  const n = NA.pages.length;
+  const gen = (html, extra) => fetch('/api/generate-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ html, mode: 'url' }, extra || {})) })
+    .then(r => r.json()).catch(() => ({}));
+  // Largeur de tranche (livre imprimé uniquement) : dépend du nombre de pages et de l'atelier Prodigi
+  let spineMm = null;
+  if (opts.country) {
+    try { const s = await fetch('/api/spine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pages: n, country: opts.country }) }).then(r => r.json()); spineMm = s && s.widthMm > 0 ? s.widthMm : null; } catch (e) {}
+  }
+  const jobs = [gen(printHtml())];
+  if (spineMm) jobs.push(gen(coverHtml(spineMm), { kind: 'cover', albumPages: n, spineMm }), gen(innerHtml(), { kind: 'inner', albumPages: n }));
+  const [full, cover, inner] = await Promise.all(jobs);
+  if (!full || !full.url || !full.proof) throw new Error((full && full.error) || 'PDF');
+  const spine = cover && cover.url && cover.proof && inner && inner.url && inner.proof
+    ? { coverUrl: cover.url, coverProof: cover.proof, innerUrl: inner.url, innerProof: inner.proof, widthMm: spineMm } : null;
+  return { url: full.url, proof: full.proof, spine };
 };
+NA.coverHtml = coverHtml; NA.innerHtml = innerHtml;
 NA.printHtml = printHtml;
 
 /* ══ 6. Paiement ══ */
@@ -5194,11 +5237,11 @@ window.processPayment = async function () {
   btn.disabled = true;
   try {
     say('Préparation de votre livre…');
-    const pdf = await window.generateAlbumPDF(say), pdfUrl = pdf.url;
+    const pdf = await window.generateAlbumPDF(say, { country: format === 'print' ? countryCode : null }), pdfUrl = pdf.url;
     say('Redirection vers le paiement…');
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, promoCode: (promo() && promo().code) || '' }) });
+      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, promoCode: (promo() && promo().code) || '' }) });
     const d = await r.json();
     if (d.url) { window.location.href = d.url; return; }
     throw new Error(d.error || 'paiement');

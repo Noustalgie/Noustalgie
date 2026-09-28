@@ -31,10 +31,10 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).end();
   if (!isAllowedOrigin(req)) return res.status(403).json({ error: 'Origine non autorisée.' });
-  if (!rateLimit(req, 'pdf', 8, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de demandes, réessayez dans quelques minutes.' });
+  if (!rateLimit(req, 'pdf', 18, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de demandes, réessayez dans quelques minutes.' });
 
   try {
-    const { html, mode } = parseBody(req);
+    const { html, mode, kind, albumPages, spineMm } = parseBody(req);
     if (!html || typeof html !== 'string') return res.status(400).json({ error: 'HTML manquant' });
     if (html.length > MAX_HTML) return res.status(413).json({ error: 'Album trop lourd.' });
     const KEY = process.env.PDFSHIFT_API_KEY;
@@ -44,15 +44,30 @@ module.exports = async (req, res) => {
 
     if (mode === 'url') {
       const pages = (html.match(/class="page"/g) || []).length;
-      if (![24, 36, 50].includes(pages)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
+      // kind : 'full' (livre complet, format historique) · 'cover' (dos + tranche + face) · 'inner' (pages intérieures)
+      const K = kind === 'cover' || kind === 'inner' ? kind : 'full';
+      const album = parseInt(albumPages, 10);
+      let format = base.format, tag = pages;
+      if (K === 'full') {
+        if (![24, 36, 50].includes(pages)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
+      } else {
+        if (![24, 36, 50].includes(album)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
+        if (K === 'inner' && pages !== album - 2) return res.status(400).json({ error: 'Pages intérieures invalides.' });
+        if (K === 'cover') {
+          const w = Number(spineMm);
+          if (pages !== 1 || !(w >= 2 && w <= 60)) return res.status(400).json({ error: 'Couverture invalide.' });
+          format = `${(420 + w).toFixed(2)}mmx210mm`;
+        }
+        tag = `${K}:${album}`;
+      }
       const ref = `album-${new Date().toISOString().slice(0, 10)}-${crypto.randomBytes(5).toString('hex')}`;
-      const out = await pdfshift({ ...base, filename: ref + '.pdf', wait_for: 'nstReady' }, KEY);
+      const out = await pdfshift({ ...base, format, filename: ref + (K === 'full' ? '' : '-' + K) + '.pdf', wait_for: 'nstReady' }, KEY);
       let j = null; try { j = JSON.parse(out.body.toString()); } catch (e) {}
       if (out.status !== 200 || !j || !j.url) throw new Error(`PDFShift ${out.status}: ${out.body.toString().slice(0, 300)}`);
       // Copie durable chez nous (30 jours, cf. cron cleanup). Si ça échoue, le lien PDFShift reste valable.
-      const copy = await uploadRemote({ url: j.url, resourceType: 'raw', folder: 'noustalgie/pdf', publicId: ref + '.pdf' });
+      const copy = await uploadRemote({ url: j.url, resourceType: 'raw', folder: 'noustalgie/pdf', publicId: ref + (K === 'full' ? '' : '-' + K) + '.pdf' });
       const url = (copy && copy.secure_url) || j.url;
-      return res.json({ url, pages, proof: pdfProof(url, pages), size: j.filesize || null });
+      return res.json({ url, pages, kind: K, proof: pdfProof(url, tag), size: j.filesize || null });
     }
 
     // Ancien mode (compatibilité) : PDF renvoyé en base64
