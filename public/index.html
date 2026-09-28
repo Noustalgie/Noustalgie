@@ -823,6 +823,7 @@ img{max-width:100%;}
 .ed-hero-img.has-demo{background:#e9e5df;}
 .nst-demo-book{cursor:pointer;}
 @media (prefers-reduced-motion:reduce){.nst-demo-spread{transition:none;}}
+.nst-issue{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#fbf3e4;border:1px solid #ecd9b5;padding:12px 14px;margin-bottom:12px;font:14px/1.5 'Inter',sans-serif;color:#4a3b22;}.nst-issue span{flex:1 1 320px;}.nst-issue small{flex-basis:100%;color:#8a7650;font-size:12px;}
 </style>
 <script type="application/ld+json">
 {
@@ -4001,16 +4002,27 @@ window.addPhotos = async function (files) {
 window.getMinPhotos = () => NA.minPhotos(nPagesSel());
 
 /* ══ 2. Génération : histoire + légendes à partir des photos ══ */
-async function callAI(body, tries = 2) {
+async function callAI(body, tries = 2, label = 'IA') {
   let last;
   for (let a = 0; a < tries; a++) {
+    const t0 = Date.now(), ctl = window.AbortController ? new AbortController() : null;
+    const to = ctl ? setTimeout(() => ctl.abort(), 58000) : 0;
     try {
-      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      const j = await r.json().catch(() => null);
-      if (!r.ok || !j || !j.choices) throw new Error((j && j.error && j.error.message) || ('HTTP ' + r.status));
+      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctl ? ctl.signal : undefined });
+      const raw = await r.text();
+      let j = null; try { j = JSON.parse(raw); } catch (e) {}
+      if (!r.ok || !j || !j.choices) {
+        const why = (j && j.error && j.error.message) || raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+        throw new Error(`HTTP ${r.status}${why ? ' — ' + why : ''}`);
+      }
       const txt = j.choices[0].message.content || '';
       return JSON.parse(txt.replace(/```json|```/g, '').trim());
-    } catch (e) { last = e; if (a < tries - 1) await sleep(1500); }
+    } catch (e) {
+      const s = ((Date.now() - t0) / 1000).toFixed(1);
+      last = new Error(`${label}, essai ${a + 1}/${tries}, ${e.name === 'AbortError' ? 'délai dépassé' : e.message} (${s} s)`);
+      console.warn('[Noustalgie]', last.message);
+      if (a < tries - 1) await sleep(2000 * (a + 1));
+    } finally { if (to) clearTimeout(to); }
   }
   throw last;
 }
@@ -4055,14 +4067,58 @@ Return ONLY a JSON object with exactly these keys:
 Chapters should follow a natural arc (beginnings → everyday life → what they build → what comes next).`;
 }
 
-async function captionPhotos(info) {
-  const ph = S.photos.slice(0, 60);
-  const thumbs = await Promise.all(ph.map(thumb));
-  const content = [{ type: 'text', text:
-`These are ${ph.length} photos of a couple (${info.names}), in order, numbered from 0. For each photo write a short caption for their photo book, in ${LANG_NAME[lang()] || 'French'}: 3 to 9 words, evocative, about the moment or the light, never naming places, never guessing who is who, no hashtags, no emojis. Return ONLY JSON: {"captions": ["caption for 0", "caption for 1", ...]} with exactly ${ph.length} strings.` }];
-  thumbs.forEach((u, i) => { content.push({ type: 'text', text: `Photo ${i}` }); content.push({ type: 'image_url', image_url: { url: u } }); });
-  const j = await callAI({ max_tokens: 1800, temperature: 0.8, response_format: { type: 'json_object' }, messages: [{ role: 'user', content }] }, 1);
-  return Array.isArray(j.captions) ? j.captions.map(c => String(c || '').trim()) : [];
+// Légendes par petits lots de 10 photos (requêtes légères, chacune facultative)
+async function captionPhotos(info, onBatch) {
+  const ph = S.photos.slice(0, 60), out = [];
+  for (let start = 0; start < ph.length; start += 10) {
+    const batch = ph.slice(start, start + 10);
+    try {
+      const thumbs = await Promise.all(batch.map(thumb));
+      const content = [{ type: 'text', text:
+`These are ${batch.length} photos of a couple (${info.names}), numbered from 0. For each photo write a short caption for their photo book, in ${LANG_NAME[lang()] || 'French'}: 3 to 9 words, evocative, about the moment or the light, never naming places, never guessing who is who, no hashtags, no emojis. Return ONLY JSON: {"captions": ["caption for 0", "caption for 1", ...]} with exactly ${batch.length} strings.` }];
+      thumbs.forEach((u, i) => { content.push({ type: 'text', text: `Photo ${i}` }); content.push({ type: 'image_url', image_url: { url: u } }); });
+      const j = await callAI({ max_tokens: 500, temperature: 0.8, response_format: { type: 'json_object' }, messages: [{ role: 'user', content }] }, 1, 'légendes');
+      (Array.isArray(j.captions) ? j.captions : []).forEach((c, i) => { out[start + i] = String(c || '').trim(); });
+    } catch (e) { /* lot sans légende : l'album reste complet */ }
+    if (onBatch) onBatch(Math.min(start + 10, ph.length), ph.length);
+  }
+  return out;
+}
+
+// Textes de secours si l'écriture automatique est indisponible (tous modifiables)
+function defaultStory(info) {
+  const en = lang() !== 'fr';
+  return en ? {
+    title: `${info.names}`, chapters: [
+      { title: 'Where it began', text: 'Every story starts somewhere. Ours started with a look, a laugh, and the feeling that something had just begun.' },
+      { title: 'Our everyday', text: 'Coffee in the morning, small rituals, shared jokes. This is where everything was built.' },
+      { title: 'What we build', text: 'Plans scribbled on napkins, places that became ours, a life that looks like us.' },
+      { title: 'What comes next', text: 'Nothing is written yet. That might be our favourite part.' },
+      { title: 'Always', text: 'Page after page, the same certainty.' }],
+    notes: ['You make ordinary days feel like something worth remembering.', 'I still look for you first in every room.', 'Thank you for all the small things nobody else sees.', 'With you, even waiting is a good moment.'],
+    love: ['Your laugh', 'The way you say my name', 'Your patience', 'Your hands', 'Our late conversations', 'How you make coffee', 'Your stubbornness', 'Everything else'],
+    quote: 'Love is not one moment. It is every morning we choose each other again.',
+    film: 'A quiet, sunlit story with a lot of laughter and very few arguments. The best scenes happen at the kitchen table. Nobody leaves at the end.',
+    disputes: ['Who finished the milk', 'The perfect room temperature', 'Which series to watch next', 'Who is the better driver'],
+    wishlist: ['Watch a sunrise together', 'Take a trip without a plan', 'Learn to cook something new', 'Dance in the kitchen', 'Read this book again in ten years', 'Keep choosing each other'],
+    weather: 'Sunny with occasional showers of laughter. High chance of cuddles on Sunday mornings.',
+    letter: 'Dear us, ten years from now. We hope you still laugh at the same jokes, still hold hands without thinking, and still look at each other the way you do in these pages.',
+    journal_prompt: 'Take a pen and write here what you never said out loud.', closing: 'To all the pages still to write.' } : {
+    title: `${info.names}`, chapters: [
+      { title: 'Le début', text: 'Toute histoire commence quelque part. La nôtre a commencé par un regard, un rire, et l’impression que quelque chose venait de naître.' },
+      { title: 'Nos jours ordinaires', text: 'Le café du matin, les petits rituels, les fous rires partagés. C’est là que tout s’est construit.' },
+      { title: 'Ce qu’on construit', text: 'Des projets griffonnés sur un coin de table, des lieux devenus les nôtres, une vie qui nous ressemble.' },
+      { title: 'Et maintenant', text: 'La suite n’est écrite nulle part. C’est peut-être ce qu’on préfère.' },
+      { title: 'Toujours', text: 'Page après page, la même évidence.' }],
+    notes: ['Tu rends les jours ordinaires dignes d’être racontés.', 'Dans chaque pièce, c’est toujours toi que je cherche en premier.', 'Merci pour toutes les petites choses que personne d’autre ne voit.', 'Avec toi, même attendre devient un bon moment.'],
+    love: ['Ton rire', 'Ta façon de dire mon prénom', 'Ta patience', 'Tes mains', 'Nos conversations tard le soir', 'Ta façon de faire le café', 'Ton entêtement', 'Tout le reste'],
+    quote: 'L’amour n’est pas un instant : c’est chaque matin où l’on se choisit encore.',
+    film: 'Une histoire douce tournée en lumière naturelle, avec beaucoup de rires et très peu de disputes. Les meilleures scènes se passent autour de la table de la cuisine. À la fin, personne ne part.',
+    disputes: ['Qui a fini le lait', 'La température idéale de la chambre', 'Quelle série regarder ensuite', 'Qui conduit le mieux'],
+    wishlist: ['Voir un lever de soleil ensemble', 'Partir en voyage sans rien prévoir', 'Apprendre une nouvelle recette', 'Danser dans la cuisine', 'Relire ce livre dans dix ans', 'Continuer à se choisir'],
+    weather: 'Temps ensoleillé, avec quelques averses de fou rire. Risque élevé de câlins le dimanche matin.',
+    letter: 'Chers nous, dans dix ans. On espère que vous riez toujours des mêmes blagues, que vous vous tenez encore la main sans y penser, et que vous vous regardez toujours comme dans ces pages.',
+    journal_prompt: 'Prends un stylo et écris ici ce que tu n’as jamais dit à voix haute.', closing: 'À toutes les pages qu’il nous reste à écrire.' };
 }
 
 window.runGeneration = async function () {
@@ -4084,10 +4140,18 @@ window.runGeneration = async function () {
   if (msg) msg.textContent = steps[0];
   try {
     const info = coupleInfo();
-    const [story, captions] = await Promise.all([
-      callAI({ max_tokens: 2600, temperature: 0.95, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: storyPrompt(info, nPages) }] }, 3),
-      captionPhotos(info).catch(e => { console.warn('légendes indisponibles', e); return []; }),
-    ]);
+    // 1) l'histoire, seule (requête légère)
+    let story = null;
+    try {
+      story = await callAI({ max_tokens: 2600, temperature: 0.95, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: storyPrompt(info, nPages) }] }, 3, 'histoire');
+    } catch (e) {
+      console.error('[Noustalgie] écriture indisponible', e);
+      NA.genIssue = e.message;
+      story = defaultStory(info);
+    }
+    // 2) les légendes, par petits lots, sans jamais bloquer
+    if (msg) msg.textContent = steps[Math.min(2, steps.length - 1)];
+    const captions = NA.genIssue ? [] : await captionPhotos(info, (d, n) => { if (msg) msg.textContent = `Légendes de vos photos… ${d}/${n}`; });
     story.captions = captions;
     S.story = story;
     NA.info = info;
@@ -4096,13 +4160,24 @@ window.runGeneration = async function () {
     clearInterval(tick); clearInterval(climb); setProgress(100);
     S.done.add(0); S.done.add(1); S.done.add(2);
     saveLocal();
-    setTimeout(() => goTab(3), 500);
+    setTimeout(() => { goTab(3); showIssue(); }, 500);
   } catch (e) {
     clearInterval(tick); clearInterval(climb); setProgress(0);
-    if (msg) msg.innerHTML = `L’écriture n’a pas abouti (${esc(e.message || 'erreur réseau')}). <button class="btn btn-gold" style="margin-top:14px" onclick="runGeneration()">Relancer</button>`;
+    console.error('[Noustalgie] génération', e);
+    if (msg) msg.innerHTML = `La composition n’a pas abouti (${esc(e.message || 'erreur')}). <button class="btn btn-gold" style="margin-top:14px" onclick="runGeneration()">Relancer</button>`;
   }
   if (btn) btn.disabled = false;
 };
+
+function showIssue() {
+  const ed = $('nstEd'); if (!ed) return;
+  let b = $('nstIssue'); if (b) b.remove();
+  if (!NA.genIssue) return;
+  b = document.createElement('div'); b.id = 'nstIssue'; b.className = 'nst-issue';
+  b.innerHTML = `<span>L’écriture automatique n’a pas répondu : votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.</span><button class="nst-btn" id="nstRetry">Relancer l’écriture</button><small>${esc(NA.genIssue)}</small>`;
+  ed.insertBefore(b, ed.firstChild);
+  $('nstRetry').onclick = () => { NA.genIssue = null; NA.pages = []; runGeneration(); };
+}
 
 /* ══ 3. Éditeur ══ */
 const ED = { sel: null, drag: null, dirty: new Set() };
