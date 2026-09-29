@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><script>window.__nstErrs=[];addEventListener("error",function(e){__nstErrs.push((e.message||"erreur")+" @"+(e.lineno||"?"))});addEventListener("unhandledrejection",function(e){__nstErrs.push("promesse: "+((e.reason&&e.reason.message)||e.reason))});</script>
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMTExMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk48L3RleHQ+PC9zdmc+"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -1233,6 +1233,22 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 #photoGrid .ov-cover{position:absolute;top:4px;right:4px;z-index:3;min-width:34px!important;min-height:34px!important;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:.92;}
 @media (hover:hover){#photoGrid .ov-cover{opacity:0;transition:opacity .2s;}#photoGrid .photo-item:hover .ov-cover{opacity:1;}}
 #photoGrid .ov-cover::after{content:"";position:absolute;inset:-5px;}
+
+/* ═══ v4.8 — édition évidente ═══ */
+.nst-ebar{margin:10px 0 0;font-family:'Inter',system-ui,sans-serif;}
+.nst-eb-lbl{display:block;margin:0 0 8px;font:600 12.5px 'Inter',sans-serif;color:#5f5a54;}
+.nst-eb-row{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.nst-eb{flex:0 0 auto;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid #d9d4cc;background:#fff;color:#1c1a18;font:500 14px 'Inter',sans-serif;cursor:pointer;white-space:nowrap;}
+.nst-eb.on{background:#1c1a18;color:#fff;border-color:#1c1a18;}
+.nst-coach{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:6;width:min(340px,calc(100% - 24px));background:#1c1a18;color:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 16px 40px -12px rgba(0,0,0,.45);font:400 14px/1.5 'Inter',system-ui,sans-serif;text-align:left;}
+.nst-coach p{margin:0 0 10px;}
+.nst-coach button{min-height:40px;padding:0 18px;border-radius:999px;border:0;background:#fff;color:#1c1a18;font:600 14px 'Inter',sans-serif;cursor:pointer;}
+.nst-pulse .nst-page .nst-slot,.nst-pulse .nst-page .nst-t{animation:nstPulse 1.3s ease-in-out 3;}
+@keyframes nstPulse{0%,100%{box-shadow:0 0 0 0 rgba(28,26,24,0)}50%{box-shadow:0 0 0 4px rgba(28,26,24,.45)}}
+@media (prefers-reduced-motion:reduce){.nst-pulse .nst-page .nst-slot,.nst-pulse .nst-page .nst-t{animation:none;}}
+.nst-r-p,.nst-r-n{z-index:3;}
+@media (max-width:760px){.nst-r-p,.nst-r-n{top:auto;bottom:calc(20px + env(safe-area-inset-bottom));transform:none;font-size:34px;padding:8px 22px;background:rgba(255,255,255,.12);border-radius:999px;}.nst-r-p{left:18px;}.nst-r-n{right:18px;}}
+.nst-debug{position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;max-height:40vh;overflow:auto;white-space:pre-wrap;background:rgba(155,44,31,.94);color:#fff;font:12px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;}
 </style>
 <script type="application/ld+json">
 {
@@ -4005,7 +4021,7 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
 /* ── Contexte de rendu ──────────────────────────────────────────── */
 // print=true → images servies par Cloudinary en haute définition
-let CTX = { print: false, editing: false, inline: false, photos: null, theme: null };
+let CTX = { print: false, editing: false, inline: false, thumb: false, photos: null, theme: null };
 const themeKey = () => CTX.theme || NA.theme;
 const theme = () => THEMES[themeKey()] || THEMES.galerie;
 const photos = () => CTX.photos || (typeof S !== 'undefined' && S.photos) || [];
@@ -4076,7 +4092,7 @@ function slot(pg, i, x, y, w, h, o = {}) {
     const ap = (s.x == null || s.y == null) ? autoPos(p, w - 2 * b, h - 2 * b) : null;
     const z = s.z || 1, fx = s.x != null ? s.x : ap.x, fy = s.y != null ? s.y : ap.y;
     const filt = [T.filter, FILTERS[s.f] || ''].filter(Boolean).join(' ');
-    const src = CTX.print ? printSrc(p, w * z) : p.data;
+    const src = CTX.print ? printSrc(p, w * z) : (CTX.thumb && p.thumb ? p.thumb : p.data);
     inner = `<img src="${src}" alt="" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${fx}% ${fy}%;transform:scale(${z});transform-origin:${fx}% ${fy}%;${filt ? `filter:${filt};` : ''}"/>`;
   } else {
     inner = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:${T.muted};font:14px ${T.ui};">+</div>`;
@@ -4249,7 +4265,7 @@ const LAYOUTS = {
 const PHOTO_LAYOUTS = n => Object.keys(LAYOUTS).filter(k => !LAYOUTS[k].text && LAYOUTS[k].n === n);
 
 function renderPage(pg, opts = {}) {
-  const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, photos: null, theme: null }, opts);
+  const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, thumb: false, photos: null, theme: null }, opts);
   const T = theme(), Ly = LAYOUTS[pg.layout] || LAYOUTS.frame;
   let html;
   try { html = Ly.render(pg, T); } catch (e) { console.error('render', pg.layout, e); html = ''; }
@@ -4464,9 +4480,10 @@ function loadDetector() {
 const clamp01 = v => Math.max(0, Math.min(1, v));
 function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
 
+const SAL_CV = document.createElement('canvas');   // réutilisé (mémoire des canevas plafonnée sur iPhone)
 /* Zone la plus « parlante » sans visage : contraste local × saturation, avec léger biais central */
 function saliency(img) {
-  const N = 64, c = document.createElement('canvas'); c.width = N; c.height = N;
+  const N = 64, c = SAL_CV; c.width = N; c.height = N;
   const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, N, N);
   const d = x.getImageData(0, 0, N, N).data;
   const L = new Float32Array(N * N), Sa = new Float32Array(N * N);
@@ -4507,7 +4524,7 @@ async function analyze(p) {
   let faces = [];
   if (await loadDetector()) {
     try {
-      const det = await window.faceapi.detectAllFaces(img, new window.faceapi.TinyFaceDetectorOptions({ inputSize: (window.matchMedia && matchMedia('(pointer: coarse)').matches) ? 416 : 512, scoreThreshold: 0.4 }));
+      const det = await window.faceapi.detectAllFaces(img, new window.faceapi.TinyFaceDetectorOptions({ inputSize: (window.matchMedia && matchMedia('(pointer: coarse)').matches) ? 320 : 512, scoreThreshold: 0.4 }));
       const W = img.naturalWidth, H = img.naturalHeight;
       faces = det.map(d => { const b = d.box; return [b.x / W, b.y / H, b.width / W, b.height / H, d.score]; })
         .filter(f => f[2] > 0.025);                         // ignore les visages minuscules (arrière-plan)
@@ -4722,23 +4739,32 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /* ══ 1. Import des photos : une version écran + une version impression ══ */
 function loadImage(src) { return new Promise((res, rej) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+const CV = document.createElement('canvas');                         // réutilisé pour toutes les conversions
 function toJpeg(img, max, q) {
   const r = Math.min(max / img.width, max / img.height, 1);
-  const c = document.createElement('canvas');
+  const c = CV;
   c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
   const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
   x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, c.width, c.height);
-  return c.toDataURL('image/jpeg', q);
+  const out = c.toDataURL('image/jpeg', q);
+  c.width = c.height = 1;                                                // libère la mémoire tout de suite
+  return out;
 }
 // Import robuste, pensé pour les téléphones : lecture native, une photo à la fois, erreurs visibles
 const TOUCH = window.matchMedia && matchMedia('(pointer: coarse)').matches;
 const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
 const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
 async function decodeFile(file) {
-  // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : on s'en sert pour décoder
+  if (!file || file.size === 0) return null;                             // photo iCloud non téléchargée, fichier vide
+  // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : décodeur principal
   const url = URL.createObjectURL(file);
-  try { const img = await loadImage(url); return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; }
-  catch (e) { URL.revokeObjectURL(url); return null; }
+  try { const img = await loadImage(url); if (img.naturalWidth) return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; } catch (e) {}
+  URL.revokeObjectURL(url);
+  // Second décodeur (autre chemin interne du navigateur)
+  if (window.createImageBitmap) {
+    try { const bmp = await createImageBitmap(file); return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; } catch (e) {}
+  }
+  return null;
 }
 async function importFile(f) {
   try {
@@ -5087,11 +5113,13 @@ function showIssue() {
 const ED = { sel: null, drag: null, dirty: new Set() };
 const isWide = () => window.matchMedia('(min-width: 900px)').matches;
 const snap = () => JSON.stringify({ theme: NA.theme, pages: NA.pages });
-function commit() { NA.hist.push(snap()); if (NA.hist.length > 60) NA.hist.shift(); NA.fut = []; updUndo(); }
+NA.hist = NA.hist || []; NA.fut = NA.fut || [];
+const H = () => { if (!Array.isArray(NA.hist)) NA.hist = []; if (!Array.isArray(NA.fut)) NA.fut = []; };
+function commit() { H(); NA.hist.push(snap()); if (NA.hist.length > 60) NA.hist.shift(); NA.fut = []; updUndo(); }
 function restore(s) { const o = JSON.parse(s); NA.theme = o.theme; NA.pages = o.pages; ED.sel = null; drawAll(); saveLocal(); }
-function undo() { if (!NA.hist.length) return; NA.fut.push(snap()); restore(NA.hist.pop()); updUndo(); }
-function redo() { if (!NA.fut.length) return; NA.hist.push(snap()); restore(NA.fut.pop()); updUndo(); }
-function updUndo() { const u = $('nstUndo'), r = $('nstRedo'); if (u) u.disabled = !NA.hist.length; if (r) r.disabled = !NA.fut.length; }
+function undo() { H(); if (!NA.hist.length) return; NA.fut.push(snap()); restore(NA.hist.pop()); updUndo(); }
+function redo() { H(); if (!NA.fut.length) return; NA.hist.push(snap()); restore(NA.fut.pop()); updUndo(); }
+function updUndo() { H(); const u = $('nstUndo'), r = $('nstRedo'); if (u) u.disabled = !NA.hist.length; if (r) r.disabled = !NA.fut.length; }
 
 // Pages visibles : couverture seule, puis doubles pages (2-3, 4-5…) sur grand écran
 // Comme le livre imprimé : couverture seule ; page 2 seule à droite (face à la feuille de garde) ;
@@ -5133,7 +5161,7 @@ function drawStage() {
 }
 function drawThumb(i) {
   const h = document.querySelector(`#nstStrip .nst-th[data-page="${i}"] .nst-th-in`);
-  if (h) { h.innerHTML = NA.renderPage(NA.pages[i]); scaleHost(h); }
+  if (h) { h.innerHTML = NA.renderPage(NA.pages[i], { thumb: true }); scaleHost(h); }
 }
 function drawStrip() {
   const s = $('nstStrip'); if (!s) return;
@@ -5354,7 +5382,7 @@ function bindEditor() {
   });
   stage.addEventListener('focusout', e => {
     const t = e.target.closest('.nst-t'); if (!t) return;
-    if (ED.textBefore && ED.textBefore !== snap()) { NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
+    if (ED.textBefore && ED.textBefore !== snap()) { H(); NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
     ED.textBefore = null;
     const page = +t.closest('.nst-page').dataset.page;
     // re-rendu pour recalculer la taille des polices adaptatives
@@ -5380,7 +5408,7 @@ function bindEditor() {
   $('nstTools').addEventListener('focusin', e => { if (e.target.id === 'nstTxt') ED.textBefore = snap(); });
   $('nstTools').addEventListener('focusout', e => {
     if (e.target.id !== 'nstTxt') return;
-    if (ED.textBefore && ED.textBefore !== snap()) { NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
+    if (ED.textBefore && ED.textBefore !== snap()) { H(); NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
     ED.textBefore = null;
     if (ED.sel) { const i = ED.sel.page; drawStage(); drawThumb(i); }
   });
@@ -5430,16 +5458,24 @@ function openReader() {
   };
   const close = () => { ov.remove(); document.removeEventListener('keydown', key); };
   const key = e => { if (e.key === 'Escape') close(); if (e.key === 'ArrowRight' && i < NA.pages.length - 1) { i++; draw(); } if (e.key === 'ArrowLeft' && i > 0) { i--; draw(); } };
+  const next = () => { if (i < NA.pages.length - 1) { i++; draw(); } }, prev = () => { if (i > 0) { i--; draw(); } };
   ov.addEventListener('click', e => {
     if (e.target.closest('.nst-r-x') || e.target === ov) return close();
-    if (e.target.closest('.nst-r-n') && i < NA.pages.length - 1) { i++; draw(); }
-    if (e.target.closest('.nst-r-p') && i > 0) { i--; draw(); }
+    if (e.target.closest('.nst-r-n')) return next();
+    if (e.target.closest('.nst-r-p')) return prev();
+    const pg = e.target.closest('.nst-r-page');                         // toucher le bord droit / gauche de la page
+    if (pg) { const r = pg.getBoundingClientRect(); (e.clientX - r.left > r.width / 2) ? next() : prev(); }
   });
+  let sx = null, sy = null;                                             // glisser le doigt pour tourner
+  ov.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  ov.addEventListener('touchend', e => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { dx < 0 ? next() : prev(); } }, { passive: true });
   document.addEventListener('keydown', key);
   document.body.appendChild(ov); draw(); ov.focus();
 }
 
 window.renderBookPreview = function () {
+  H();
   if (!NA.pages.length) {
     if (!S.story) return;
     NA.info = NA.info || coupleInfo();
@@ -5585,7 +5621,8 @@ window.generateAlbumPDF = async function (onStep, opts) {
 NA.coverHtml = coverHtml; NA.innerHtml = innerHtml;
 NA.printHtml = printHtml;
 NA._ed = { drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, saveLocalSoon, coupleInfo, callAI, uploadPhotos, defaultStory, go, commit, updUndo,
-  sel: () => ED.sel, clearSel: () => { ED.sel = null; }, isWide, nPagesSel };
+  sel: () => ED.sel, clearSel: () => { ED.sel = null; }, isWide, nPagesSel, visible, pageName,
+  select: s => { ED.sel = s; highlightSel(); drawTools(); revealStage(); } };
 
 /* ══ 6. Paiement ══ */
 window.processPayment = async function () {
@@ -6216,6 +6253,69 @@ if (links && !links.querySelector('.footer-track')) {
 if (location.hash === '#suivi') window.addEventListener('load', () => setTimeout(trackOverlay, 200));
 window.addEventListener('hashchange', () => { if (location.hash === '#suivi') trackOverlay(); });
 
+/* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
+Object.entries({
+  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
+  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
+  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
+  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
+  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
+}).forEach(([l, d]) => Object.assign(NA.UI[l], d));
+const stageWrap = document.querySelector('.nst-stagewrap');
+let ebar = null;
+if (stageWrap) {
+  ebar = document.createElement('div'); ebar.className = 'nst-ebar'; ebar.id = 'nstEbar'; ebar.setAttribute('role', 'toolbar');
+  stageWrap.insertAdjacentElement('afterend', ebar);
+  ebar.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const page = +b.dataset.page;
+    E.select(b.dataset.slot != null ? { page, slot: +b.dataset.slot } : { page, text: b.dataset.text });
+  });
+}
+function drawEbar() {
+  if (!ebar || !NA.pages.length) return;
+  const v = E.visible().filter(x => x != null), sel = E.sel() || {};
+  const parts = [];
+  v.forEach(i => {
+    const host = document.querySelector(`#nstSpread .nst-page[data-page="${i}"]`); if (!host) return;
+    const pre = v.length > 1 ? `p.${i + 1} · ` : '';
+    [...host.querySelectorAll('.nst-slot')].forEach((s, k) => {
+      const on = sel.page === i && sel.slot === k;
+      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-slot="${k}">🖼 ${pre}${t('ek_photo')}${host.querySelectorAll('.nst-slot').length > 1 ? ' ' + (k + 1) : ''}</button>`);
+    });
+    [...host.querySelectorAll('.nst-t[data-t]')].forEach(tx => {
+      const key = tx.dataset.t, on = sel.page === i && sel.text === key;
+      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-text="${esc(key)}">✎ ${pre}${t('ek_' + key) !== 'ek_' + key ? t('ek_' + key) : key}</button>`);
+    });
+  });
+  ebar.innerHTML = parts.length ? `<span class="nst-eb-lbl">${t('eb_lbl')}</span><div class="nst-eb-row">${parts.join('')}</div>` : '';
+}
+const spread = $('nstSpread'), toolsBox = $('nstTools');
+if (spread && window.MutationObserver) {
+  let q; const soon = () => { clearTimeout(q); q = setTimeout(drawEbar, 30); };
+  new MutationObserver(soon).observe(spread, { childList: true });
+  if (toolsBox) new MutationObserver(soon).observe(toolsBox, { childList: true });
+}
+/* ── Message d'accueil à la première ouverture de l'éditeur ── */
+function coach() {
+  let seen = false; try { seen = localStorage.getItem('nst_coach') === '1'; } catch (e) {}
+  if (seen || !stageWrap || $('nstCoach')) return;
+  const c = document.createElement('div'); c.id = 'nstCoach'; c.className = 'nst-coach'; c.setAttribute('role', 'dialog');
+  c.innerHTML = `<p>${E.isWide() ? t('coach_wide') : t('coach')}</p><button type="button">${t('coach_ok')}</button>`;
+  stageWrap.appendChild(c); stageWrap.classList.add('nst-pulse');
+  const done = () => { c.remove(); stageWrap.classList.remove('nst-pulse'); try { localStorage.setItem('nst_coach', '1'); } catch (e) {} };
+  c.querySelector('button').addEventListener('click', done);
+  const ed = $('nstEd'); if (ed) ed.addEventListener('pointerdown', ev => { if (!ev.target.closest('#nstCoach') && document.getElementById('nstCoach')) done(); }, { once: false });
+  setTimeout(() => stageWrap.classList.remove('nst-pulse'), 4200);
+}
+const og2 = window.goTab;
+window.goTab = function (n) { const r = og2.apply(this, arguments); if (n === 3) setTimeout(() => { drawEbar(); coach(); }, 200); return r; };
+/* ── Diagnostic : ajouter ?debug à l'adresse pour afficher les erreurs à l'écran ── */
+if (/[?&]debug/.test(location.search)) {
+  const pnl = document.createElement('div'); pnl.className = 'nst-debug';
+  const draw = () => { const e = window.__nstErrs || []; pnl.textContent = e.length ? e.slice(-6).join('\n') : 'Aucune erreur · ' + navigator.userAgent.replace(/.*(iPhone OS [\d_]+|Android [\d.]+|Mac OS X [\d_]+).*/, '$1'); };
+  document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
+}
 applyUI();
 })();
 
