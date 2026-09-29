@@ -1548,7 +1548,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
       <div class="card">
         <div class="card-hd" data-i18n="p1_hd">Vos photos ensemble</div>
         <div class="dz" id="dz">
-          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onclick="this.value=''" onchange="addPhotos(this.files)" oninput="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
+          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onclick="this.value='';NA.pickerOpened&&NA.pickerOpened()" onchange="addPhotos(this.files)" oninput="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
           <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum selon le palier choisi</div>
@@ -4556,6 +4556,12 @@ function analyzeAll(onProgress) {
       if (onProgress) onProgress(n, total);
       await new Promise(r => setTimeout(r, 0));
     }
+    // Sur téléphone, on libère le moteur (mémoire graphique) : il sera rechargé si besoin
+    if (ready && window.matchMedia && matchMedia('(pointer: coarse)').matches && window.faceapi && window.faceapi.tf) {
+      try { window.faceapi.tf.engine().reset(); } catch (e) {}
+      try { window.faceapi.nets.tinyFaceDetector.dispose && window.faceapi.nets.tinyFaceDetector.dispose(); } catch (e) {}
+      ready = false; loading = null;
+    }
   });
   return queue;
 }
@@ -4573,7 +4579,7 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
-  ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
+  ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
   undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
@@ -4601,7 +4607,7 @@ fr: {
   tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
 },
 en: {
-  ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
+  ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
   undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
@@ -4629,7 +4635,7 @@ en: {
   tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
 },
 de: {
-  ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
+  ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
   undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
@@ -4657,7 +4663,7 @@ de: {
   tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
-  ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
+  ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
   undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
@@ -4685,7 +4691,7 @@ es: {
   tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
-  ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
+  ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
   undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
@@ -4755,9 +4761,39 @@ function toJpeg(img, max, q) {
 }
 // Import robuste, pensé pour les téléphones : lecture native, une photo à la fois, erreurs visibles
 const TOUCH = window.matchMedia && matchMedia('(pointer: coarse)').matches;
-window.__nstLog = window.__nstLog || [];
-const nlog = m => { window.__nstLog.push(new Date().toTimeString().slice(0, 8) + ' ' + m); if (window.__nstLog.length > 40) window.__nstLog.shift(); };
+// Journal de diagnostic : conservé d'une page à l'autre (on voit aussi un rechargement causé par iOS)
+window.__nstLog = (() => { try { return JSON.parse(localStorage.getItem('nst_log') || '[]'); } catch (e) { return []; } })();
+const nlog = m => {
+  window.__nstLog.push(new Date().toTimeString().slice(0, 8) + ' ' + m);
+  if (window.__nstLog.length > 60) window.__nstLog.splice(0, window.__nstLog.length - 60);
+  try { localStorage.setItem('nst_log', JSON.stringify(window.__nstLog)); } catch (e) {}
+};
 NA.log = nlog;
+(() => {
+  let nav = 'ouverture'; try { const n = performance.getEntriesByType('navigation')[0]; if (n) nav = { reload: 'RECHARGEMENT', back_forward: 'retour', navigate: 'ouverture' }[n.type] || n.type; } catch (e) {}
+  const was = (() => { try { return sessionStorage.getItem('nst_picker'); } catch (e) { return null; } })();
+  nlog('page : ' + nav + (was ? ' — ⚠ le sélecteur de photos était ouvert (page rechargée par le navigateur pendant la sélection)' : ''));
+  try { sessionStorage.removeItem('nst_picker'); } catch (e) {}
+  document.addEventListener('visibilitychange', () => nlog(document.hidden ? 'page en arrière-plan' : 'page de retour'));
+  window.addEventListener('pagehide', e => nlog('page masquée' + (e.persisted ? ' (mise en cache)' : '')));
+})();
+// Ouverture du sélecteur : si rien n'arrive au retour, on le dit clairement au client
+let pickerAt = 0, gotFiles = false;
+NA.pickerOpened = () => {
+  pickerAt = Date.now(); gotFiles = false; nlog('sélecteur de photos ouvert');
+  try { sessionStorage.setItem('nst_picker', String(pickerAt)); } catch (e) {}
+};
+function pickerBack() {
+  if (!pickerAt || document.hidden) return;
+  const t0 = pickerAt;
+  setTimeout(() => {
+    if (pickerAt !== t0) return;
+    pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {}
+    if (!gotFiles) { nlog('retour du sélecteur : aucune photo reçue d\'iOS'); toast(NA.t('ph_nothing'), 12000); }
+  }, 2500);
+}
+document.addEventListener('visibilitychange', pickerBack);
+window.addEventListener('focus', pickerBack);
 const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
 const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
 // Chaque étape a un délai maximum : une photo récalcitrante ne peut plus bloquer les suivantes
@@ -4790,6 +4826,18 @@ async function decodeFile(file) {
   nlog('illisible : ' + file.name + ' · ' + (file.type || 'sans type') + ' · ' + Math.round((file.size || 0) / 1024) + ' Ko');
   return null;
 }
+// Version haute définition compacte (JPEG 2200-2400 px), fabriquée une seule fois
+const HD_CV = document.createElement('canvas');
+function hdBlob(img) {
+  const W = img.naturalWidth || img.width, Hh = img.naturalHeight || img.height, max = TOUCH ? 2200 : 2400;
+  const r = Math.min(max / W, max / Hh, 1), c = HD_CV;
+  c.width = Math.round(W * r); c.height = Math.round(Hh * r);
+  const x = c.getContext('2d'); if (!x) return Promise.resolve(null);
+  x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, c.width, c.height);
+  return within(new Promise(res => c.toBlob(res, 'image/jpeg', 0.9)), 20000, 'haute définition')
+    .catch(e => { nlog(e.message); return null; })
+    .finally(() => { c.width = c.height = 1; });
+}
 async function importFile(f) {
   try {
     let d = await decodeFile(f);                                   // Safari/iOS lit le HEIC nativement
@@ -4804,9 +4852,10 @@ async function importFile(f) {
     const focalY = orient === 'portrait' ? 38 : orient === 'carre' ? 42 : 48;
     const p = { name: f.name || 'photo.jpg', w, h, ratio, orient, focalY,
       thumb: toJpeg(img, 360, 0.8),                                // grille : très léger
-      data: toJpeg(img, 1200, 0.86),                               // écran et éditeur
-      file: f };                                                   // original gardé : la HD n'est fabriquée qu'à la commande
+      data: toJpeg(img, 1200, 0.86) };                             // écran et éditeur
+    p.hd = await hdBlob(img);                                      // impression : ~600 Ko au lieu de l'original (3 à 10 Mo)
     d.done();
+    if (!p.hd) p.file = f;                                         // secours : on garde l'original
     return p;
   } catch (e) { console.warn('photo ignorée', f && f.name, e); return null; }
 }
@@ -4823,7 +4872,9 @@ NA.photosReady = () => pumping || Promise.resolve();
 async function fillPhoto(p) {
   if (p.ready) { try { await within(p.ready, 15000, 'copie'); } catch (e) { nlog('copie : ' + e.message + ' · ' + p.name); } }
   const r = await importFile(p.file); if (!r) return false;
-  delete r.name; Object.assign(p, r); p.pending = false; p.failed = false; return true;
+  delete r.name; Object.assign(p, r); p.pending = false; p.failed = false;
+  if (r.hd) { delete p.file; delete p.ready; }                      // l'original n'est plus utile : mémoire libérée
+  return true;
 }
 function dropPhoto(p) {
   const i = S.photos.indexOf(p); if (i < 0) return;
@@ -4862,6 +4913,7 @@ NA.retryPhoto = i => { const p = S.photos[i]; if (!p || !p.failed) return; p.fai
 let lastSig = '', lastAt = 0;
 window.addPhotos = function (files) {
   const all = Array.from(files || []);
+  if (all.length) { gotFiles = true; pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {} }
   const sig = all.map(f => f.name + ':' + f.size + ':' + f.lastModified).join('|');
   if (sig && sig === lastSig && Date.now() - lastAt < 2500) return NA.photosReady();   // même sélection signalée deux fois (change + input)
   lastSig = sig; lastAt = Date.now();
@@ -5581,6 +5633,7 @@ window.addEventListener('load', () => setTimeout(offerResume, 600));
 
 /* ══ 5. Impression : photos en pleine résolution + PDF hébergé ══ */
 async function fullBlob(p) {
+  if (p.hd) return p.hd;                                             // déjà prête depuis l'import
   if (p.full) return dataUrlToBlob(p.full);                          // anciens albums enregistrés
   if (p.file) {
     const d = await decodeFile(p.file);
@@ -6197,7 +6250,7 @@ if (tools) {
     const b = e.target.closest('button'); if (!b) return;
     const a = b.dataset.act;
     if (a === 'remove-photo') { const s = E.sel(); if (s && s.slot != null) removePhoto(NA.pages[s.page].slots[s.slot].p); }
-    if (a === 'add-photos') { const f = addInput(); f.value = ''; f.click(); }
+    if (a === 'add-photos') { const f = addInput(); f.value = ''; if (NA.pickerOpened) NA.pickerOpened(); f.click(); }
     if (a === 'save-link') saveLink(b);
   });
   tools.addEventListener('change', async e => {
@@ -6375,13 +6428,19 @@ function coach() {
   setTimeout(() => stageWrap.classList.remove('nst-pulse'), 4200);
 }
 const og2 = window.goTab;
-window.goTab = function (n) { const r = og2.apply(this, arguments); if (n === 3) setTimeout(() => { drawEbar(); coach(); }, 200); return r; };
+window.goTab = function (n) {
+  const r = og2.apply(this, arguments);
+  if (n === 3) setTimeout(() => { drawEbar(); coach(); }, 200);
+  else { ['nstSpread', 'nstStrip'].forEach(id => { const el = $(id); if (el) el.innerHTML = ''; }); }   // libère les images de l'éditeur
+  return r;
+};
 /* ── Diagnostic : ajouter ?debug à l'adresse pour afficher les erreurs à l'écran ── */
 if (/[?&]debug/.test(location.search)) {
   const pnl = document.createElement('div'); pnl.className = 'nst-debug';
   const draw = () => { const e = window.__nstErrs || [], l = window.__nstLog || [];
-    pnl.textContent = (e.length ? 'ERREURS :\n' + e.slice(-5).join('\n') + '\n' : 'Aucune erreur · ' + navigator.userAgent.replace(/.*(iPhone OS [\d_]+|Android [\d.]+|Mac OS X [\d_]+).*/, '$1') + '\n') + (l.length ? 'JOURNAL :\n' + l.slice(-10).join('\n') : ''); };
-  document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
+    const os = navigator.userAgent.replace(/.*(iPhone OS [\d_]+|Android [\d.]+|Mac OS X [\d_]+).*/, '$1');
+    pnl.textContent = (e.length ? 'ERREURS :\n' + e.slice(-4).join('\n') + '\n' : 'Aucune erreur · ' + os + ' · ' + S.photos.length + ' photo(s)\n') + (l.length ? 'JOURNAL :\n' + l.slice(-12).join('\n') : ''); };
+  pnl.style.maxHeight = '38vh'; document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
 }
 applyUI();
 })();
