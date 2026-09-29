@@ -4588,7 +4588,7 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
-  ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre téléphone n’a envoyé aucune photo. Cela arrive quand les photos sont stockées sur iCloud (« Optimiser le stockage ») et que l’iPhone n’a plus assez d’espace ou de connexion pour les télécharger.', ph_help_1: 'Libérez un peu d’espace : Réglages › Général › Stockage iPhone.', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
+  ph_prep: 'Préparation de vos photos…', ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre téléphone n’a envoyé aucune photo. Cela arrive quand les photos sont stockées sur iCloud (« Optimiser le stockage ») et que l’iPhone n’a plus assez d’espace ou de connexion pour les télécharger.', ph_help_1: 'Libérez un peu d’espace : Réglages › Général › Stockage iPhone.', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
   undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
@@ -4616,7 +4616,7 @@ fr: {
   tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
 },
 en: {
-  ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your phone did not send any photo. This happens when photos are stored in iCloud (“Optimize Storage”) and the iPhone lacks the space or connection to download them.', ph_help_1: 'Free up some space: Settings › General › iPhone Storage.', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
+  ph_prep: 'Preparing your photos…', ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your phone did not send any photo. This happens when photos are stored in iCloud (“Optimize Storage”) and the iPhone lacks the space or connection to download them.', ph_help_1: 'Free up some space: Settings › General › iPhone Storage.', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
   undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
@@ -4644,7 +4644,7 @@ en: {
   tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
 },
 de: {
-  ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer Telefon hat kein Foto gesendet. Das passiert, wenn Fotos in iCloud liegen („Speicher optimieren“) und dem iPhone Platz oder Verbindung zum Laden fehlt.', ph_help_1: 'Etwas Speicher freigeben: Einstellungen › Allgemein › iPhone-Speicher.', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
+  ph_prep: 'Eure Fotos werden vorbereitet…', ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer Telefon hat kein Foto gesendet. Das passiert, wenn Fotos in iCloud liegen („Speicher optimieren“) und dem iPhone Platz oder Verbindung zum Laden fehlt.', ph_help_1: 'Etwas Speicher freigeben: Einstellungen › Allgemein › iPhone-Speicher.', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
   undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
@@ -4672,7 +4672,7 @@ de: {
   tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
-  ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu teléfono no envió ninguna foto. Ocurre cuando las fotos están en iCloud («Optimizar almacenamiento») y al iPhone le falta espacio o conexión para descargarlas.', ph_help_1: 'Libera algo de espacio: Ajustes › General › Almacenamiento del iPhone.', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
+  ph_prep: 'Preparando tus fotos…', ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu teléfono no envió ninguna foto. Ocurre cuando las fotos están en iCloud («Optimizar almacenamiento») y al iPhone le falta espacio o conexión para descargarlas.', ph_help_1: 'Libera algo de espacio: Ajustes › General › Almacenamiento del iPhone.', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
   undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
@@ -4700,7 +4700,7 @@ es: {
   tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
-  ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu telemóvel não enviou nenhuma foto. Acontece quando as fotos estão no iCloud («Otimizar armazenamento») e o iPhone não tem espaço ou ligação para as descarregar.', ph_help_1: 'Liberta algum espaço: Definições › Geral › Armazenamento do iPhone.', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
+  ph_prep: 'A preparar as tuas fotos…', ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu telemóvel não enviou nenhuma foto. Acontece quando as fotos estão no iCloud («Otimizar armazenamento») e o iPhone não tem espaço ou ligação para as descarregar.', ph_help_1: 'Liberta algum espaço: Definições › Geral › Armazenamento do iPhone.', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
   undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
@@ -4892,15 +4892,28 @@ function toast(msg, ms) {
   clearTimeout(el.__t); el.__t = setTimeout(() => el.classList.remove('on'), ms || 6000);
 }
 NA.toast = toast;
-const Q = [];                                   // photos à préparer
-let pumping = null;                             // traitement en cours (promesse)
-NA.photosReady = () => pumping || Promise.resolve();
-async function fillPhoto(p) {
+// Préparation en deux passes :
+//  1) VIGNETTES (rapide, prioritaire, 2 à la fois sur téléphone) : la grille se remplit en quelques secondes ;
+//  2) VERSIONS ÉCRAN + HAUTE DÉFINITION (en arrière-plan) : prêtes avant la génération et le paiement.
+const Q = [], Q2 = [];
+let pumping = null, pumping2 = null;
+NA.photosReady = async () => { while (pumping || pumping2 || Q.length || Q2.length) { await (pumping || pumping2 || sleep(50)); } };
+function geom(p, img) {
+  const w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+  const ratio = w / h, orient = ratio > 1.25 ? 'paysage' : ratio < 0.8 ? 'portrait' : 'carre';
+  Object.assign(p, { w, h, ratio, orient, focalY: orient === 'portrait' ? 38 : orient === 'carre' ? 42 : 48 });
+}
+async function prepThumb(p) {                                        // passe 1
   if (p.ready) { try { await within(p.ready, 15000, 'copie'); } catch (e) { nlog('copie : ' + e.message + ' · ' + p.name); } }
-  const r = await importFile(p.file); if (!r) return false;
-  delete r.name; Object.assign(p, r); p.pending = false; p.failed = false;
-  if (r.hd) { delete p.file; delete p.ready; }                      // l'original n'est plus utile : mémoire libérée
-  return true;
+  const d = await decodeFile(p.file); if (!d) return false;
+  try { geom(p, d.img); p.thumb = toJpeg(d.img, 360, 0.8); } finally { d.done(); }
+  return !!p.thumb;
+}
+async function prepFull(p) {                                         // passe 2
+  const d = await decodeFile(p.file); if (!d) return false;
+  try { p.data = toJpeg(d.img, 1200, 0.86); p.hd = await hdBlob(d.img); } finally { d.done(); }
+  if (p.hd) { delete p.file; delete p.ready; }                      // l'original n'est plus utile : mémoire libérée
+  return !!p.data;
 }
 function dropPhoto(p) {
   const i = S.photos.indexOf(p); if (i < 0) return;
@@ -4908,34 +4921,61 @@ function dropPhoto(p) {
   const shift = m => { const o = {}; Object.keys(m || {}).forEach(k => { const n = +k; if (n < i) o[n] = m[k]; else if (n > i) o[n - 1] = m[k]; }); return o; };
   S.captions = shift(S.captions);
 }
+function tile(p) {                                                   // met à jour une seule vignette (pas toute la grille)
+  const i = S.photos.indexOf(p), g = document.getElementById('photoGrid');
+  const el = g && g.children[i];
+  if (!el || !el.classList.contains('pending') || !p.thumb) return false;
+  el.classList.remove('pending');
+  const w = el.querySelector('.ph-wait'); if (w) w.outerHTML = `<img src="${p.thumb}" alt="${esc(p.name || '')}" decoding="async"/>`;
+  return true;
+}
 let batch = { total: 0, done: 0, items: [] };
 function pump() {
   if (pumping) return pumping;
   pumping = (async () => {
-    let lastDraw = 0;
-    while (Q.length) {
-      const p = Q.shift();
-      if (S.photos.indexOf(p) >= 0) {
-        let ok = false;
-        try { ok = await within(fillPhoto(p), 60000, 'photo'); } catch (e) { nlog(e.message + ' · ' + p.name); }
-        if (!ok) { p.pending = false; p.failed = true; }
+    const workers = TOUCH ? 2 : 4;
+    await Promise.all(Array.from({ length: workers }, async () => {
+      while (Q.length) {
+        const p = Q.shift();
+        if (S.photos.indexOf(p) >= 0) {
+          let ok = false;
+          try { ok = await within(prepThumb(p), 45000, 'vignette'); } catch (e) { nlog(e.message + ' · ' + p.name); }
+          if (ok) { p.pending = false; p.failed = false; Q2.push(p); if (!tile(p) && typeof renderPhotos === 'function') renderPhotos(); }
+          else { p.pending = false; p.failed = true; if (typeof renderPhotos === 'function') renderPhotos(); }
+        }
+        batch.done++;
+        if (typeof showUploadLoader === 'function') showUploadLoader(Math.min(batch.done, batch.total), batch.total);
+        await sleep(0);
       }
-      batch.done++;
-      if (typeof showUploadLoader === 'function') showUploadLoader(Math.min(batch.done, batch.total), batch.total);
-      const now = Date.now(); if (now - lastDraw > 400 && typeof renderPhotos === 'function') { renderPhotos(); lastDraw = now; }
-      await sleep(TOUCH ? 30 : 0);                                   // laisse la mémoire se libérer entre deux photos
-    }
+    }));
     const failed = batch.items.filter(p => p.failed && S.photos.indexOf(p) >= 0);
     if (typeof hideUploadLoader === 'function') hideUploadLoader();
     if (typeof renderPhotos === 'function') renderPhotos();
-    nlog('ajout terminé : ' + (batch.total - failed.length) + '/' + batch.total + ' photo(s) prête(s)');
+    nlog('vignettes : ' + (batch.total - failed.length) + '/' + batch.total + ' photo(s) ajoutée(s)');
     if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
     batch = { total: 0, done: 0, items: [] };
-    if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600);
-  })().finally(() => { pumping = null; if (Q.length) pump(); });
+  })().finally(() => { pumping = null; if (Q.length) pump(); else pump2(); });
   return pumping;
 }
-NA.retryPhoto = i => { const p = S.photos[i]; if (!p || !p.failed) return; p.failed = false; p.pending = true; Q.push(p); batch.total++; batch.items.push(p); renderPhotos(); pump(); };
+function pump2() {                                                   // passe 2, une photo à la fois, cède la place aux vignettes
+  if (pumping2 || pumping) return pumping2;
+  pumping2 = (async () => {
+    while (Q2.length && !Q.length) {
+      const p = Q2.shift();
+      if (S.photos.indexOf(p) < 0 || p.data) continue;
+      let ok = false;
+      try { ok = await within(prepFull(p), 60000, 'haute définition'); } catch (e) { nlog(e.message + ' · ' + p.name); }
+      if (!ok) { p.failed = true; if (typeof renderPhotos === 'function') renderPhotos(); }
+      await sleep(TOUCH ? 20 : 0);
+    }
+  })().finally(() => {
+    pumping2 = null;
+    if (Q.length) pump(); else if (Q2.length) pump2();
+    else if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600);
+  });
+  return pumping2;
+}
+NA.retryPhoto = i => { const p = S.photos[i]; if (!p || !p.failed) return; p.failed = false; p.pending = !p.thumb; if (p.thumb) { Q2.push(p); renderPhotos(); pump2(); return; } Q.push(p); batch.total++; batch.items.push(p); renderPhotos(); pump(); };
 let lastSig = '', lastAt = 0;
 window.addPhotos = function (files) {
   const all = Array.from(files || []);
@@ -4967,9 +5007,9 @@ window.addPhotos = function (files) {
 window.renderPhotos = function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const grid = document.getElementById('photoGrid'); if (!grid) return;
-  grid.innerHTML = S.photos.map((p, i) => `<div class="photo-item${p.pending ? ' pending' : ''}${p.failed ? ' failed' : ''}">${p.pending ? '<div class="ph-wait" aria-hidden="true"></div>' : p.failed ? `<button type="button" class="ph-retry" onclick="NA.retryPhoto(${i})">⚠︎<span>${esc(NA.t('ph_retry'))}</span></button>` : `<img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>`}
+  grid.innerHTML = S.photos.map((p, i) => { const wait = p.pending || !(p.thumb || p.data); return `<div class="photo-item${wait && !p.failed ? ' pending' : ''}${p.failed ? ' failed' : ''}">${p.failed ? `<button type="button" class="ph-retry" onclick="NA.retryPhoto(${i})">⚠︎<span>${esc(NA.t('ph_retry'))}</span></button>` : wait ? '<div class="ph-wait" aria-hidden="true"></div>' : `<img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>`}
       <div class="photo-ov"><button class="ov-rm" type="button" aria-label="×" onclick="removePhoto(${i})">×</button><button class="ov-msg" type="button" onclick="openMsgModal(${i})">${S.captions[i] ? '✎' : '💬'}</button></div>
-      ${S.captions[i] ? `<div class="ph-cap">"${esc(S.captions[i])}"</div>` : ''}</div>`).join('');
+      ${S.captions[i] ? `<div class="ph-cap">"${esc(S.captions[i])}"</div>` : ''}</div>`; }).join('');
   const c = document.getElementById('photoCount'); if (!c) return;
   const minPh = window.getMinPhotos(), ok = S.photos.length >= minPh;
   c.className = 'count-bar ' + (ok ? 'c-ok' : 'c-warn');
@@ -5172,6 +5212,7 @@ function defaultStory(info) {
 window.runGeneration = async function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const nPages = nPagesSel();
+  if (S.photos.some(p => !p.data && !p.failed) && msg) msg.textContent = NA.t('ph_prep');
   if (NA.photosReady) await NA.photosReady();
   S.photos.filter(p => p.failed || !p.data).forEach(dropPhoto);        // on ne compose qu'avec les photos prêtes
   const min = NA.minPhotos(nPages);
@@ -5733,6 +5774,7 @@ function coverHtml(w) {
 }
 window.generateAlbumPDF = async function (onStep, opts) {
   onStep = onStep || (() => {}); opts = opts || {};
+  if (NA.photosReady) await NA.photosReady();
   await uploadPhotos((d, n) => onStep(NA.t('p_upload', d, n)));
   onStep(NA.t('p_layout'));
   const n = NA.pages.length;
