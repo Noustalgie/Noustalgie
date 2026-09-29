@@ -1248,7 +1248,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 @media (prefers-reduced-motion:reduce){.nst-pulse .nst-page .nst-slot,.nst-pulse .nst-page .nst-t{animation:none;}}
 .nst-r-p,.nst-r-n{z-index:3;}
 @media (max-width:760px){.nst-r-p,.nst-r-n{top:auto;bottom:calc(20px + env(safe-area-inset-bottom));transform:none;font-size:34px;padding:8px 22px;background:rgba(255,255,255,.12);border-radius:999px;}.nst-r-p{left:18px;}.nst-r-n{right:18px;}}
-.nst-debug{position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;max-height:40vh;overflow:auto;white-space:pre-wrap;background:rgba(155,44,31,.94);color:#fff;font:12px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;}
+.nst-debug{position:fixed;left:6px;right:6px;top:calc(6px + env(safe-area-inset-top));z-index:99999;max-height:24vh;overflow:hidden;white-space:pre-wrap;background:rgba(155,44,31,.88);color:#fff;font:11px/1.35 ui-monospace,Menlo,monospace;padding:8px 10px;border-radius:10px;pointer-events:none;}
 </style>
 <script type="application/ld+json">
 {
@@ -1545,7 +1545,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
       <div class="card">
         <div class="card-hd" data-i18n="p1_hd">Vos photos ensemble</div>
         <div class="dz" id="dz">
-          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onchange="addPhotos(this.files);this.value=''" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
+          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onclick="this.value=''" onchange="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
           <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum selon le palier choisi</div>
@@ -4752,18 +4752,22 @@ function toJpeg(img, max, q) {
 }
 // Import robuste, pensé pour les téléphones : lecture native, une photo à la fois, erreurs visibles
 const TOUCH = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+window.__nstLog = window.__nstLog || [];
+const nlog = m => { window.__nstLog.push(new Date().toTimeString().slice(0, 8) + ' ' + m); if (window.__nstLog.length > 40) window.__nstLog.shift(); };
+NA.log = nlog;
 const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
 const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
 async function decodeFile(file) {
-  if (!file || file.size === 0) return null;                             // photo iCloud non téléchargée, fichier vide
+  if (!file || file.size === 0) { nlog('illisible (fichier vide) : ' + (file && file.name)); return null; }
   // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : décodeur principal
   const url = URL.createObjectURL(file);
   try { const img = await loadImage(url); if (img.naturalWidth) return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; } catch (e) {}
   URL.revokeObjectURL(url);
   // Second décodeur (autre chemin interne du navigateur)
   if (window.createImageBitmap) {
-    try { const bmp = await createImageBitmap(file); return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; } catch (e) {}
-  }
+    try { const bmp = await createImageBitmap(file); nlog('décodé par le 2e décodeur : ' + file.name); return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; }
+    catch (e) { nlog('illisible (' + (e && e.name) + ') : ' + file.name + ' ' + (file.type || 'sans type') + ' ' + Math.round(file.size / 1024) + ' Ko'); }
+  } else nlog('illisible : ' + file.name + ' ' + (file.type || 'sans type'));
   return null;
 }
 async function importFile(f) {
@@ -4795,7 +4799,7 @@ function toast(msg, ms) {
 NA.toast = toast;
 let importJob = Promise.resolve();
 NA.photosReady = () => importJob;
-async function fillPhoto(p) { const r = await importFile(p.file); if (!r) return false; delete r.name; Object.assign(p, r); p.pending = false; return true; }
+async function fillPhoto(p) { if (p.ready) await p.ready; const r = await importFile(p.file); if (!r) return false; delete r.name; Object.assign(p, r); p.pending = false; return true; }
 function dropPhoto(p) {
   const i = S.photos.indexOf(p); if (i < 0) return;
   S.photos.splice(i, 1);
@@ -4804,11 +4808,20 @@ function dropPhoto(p) {
 }
 window.addPhotos = function (files) {
   const all = Array.from(files || []);
+  nlog('sélection : ' + all.length + ' fichier(s) · ' + [...new Set(all.map(f => f.type || 'sans type'))].join(', ') + ' · ' + Math.round(all.reduce((s, f) => s + (f.size || 0), 0) / 1048576) + ' Mo');
   const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
   if (!list.length) { if (all.length) toast(NA.t('ph_none')); return importJob; }
   // 1) Toutes les photos apparaissent tout de suite (tuiles en préparation)
   const added = list.map(f => ({ name: f.name || 'photo.jpg', file: f, pending: true }));
   added.forEach(p => S.photos.push(p));
+  // Copie immédiate en mémoire : sur iPhone, les fichiers choisis sont des copies temporaires d'iOS
+  // qui peuvent disparaître (nouvelle sélection, champ vidé). La copie, elle, reste lisible jusqu'à la commande.
+  added.forEach(p => {
+    const f = p.file;
+    p.ready = f.arrayBuffer()
+      .then(buf => { if (!buf.byteLength) throw new Error('vide'); p.file = new File([buf], f.name || 'photo.jpg', { type: f.type || 'image/jpeg', lastModified: f.lastModified || Date.now() }); })
+      .catch(e => nlog('lecture impossible : ' + (f.name || '?') + ' (' + ((e && (e.name || e.message)) || 'erreur') + ')'));
+  });
   NA.pages = [];                                                   // les photos ont changé : l'album sera recomposé
   if (typeof renderPhotos === 'function') renderPhotos();
   if (typeof showUploadLoader === 'function') showUploadLoader(0, added.length);
@@ -4826,6 +4839,7 @@ window.addPhotos = function (files) {
       if (S.photos.indexOf(p) >= 0 && await fillPhoto(p)) failed.splice(failed.indexOf(p), 1);
     }
     failed.forEach(dropPhoto);
+    nlog('ajout terminé : ' + (added.length - failed.length) + '/' + added.length + ' photo(s)');
     if (typeof hideUploadLoader === 'function') hideUploadLoader();
     if (typeof renderPhotos === 'function') renderPhotos();
     if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
@@ -6033,7 +6047,7 @@ NA.albumPanel = function () {
   const n = E.nPagesSel();
   const opts = [24, 36, 50].map(v => `<option value="${v}"${v === n ? ' selected' : ''}>${t('format_opt', v)}</option>`).join('');
   return `<div class="nst-sec"><label for="nstFormat">${t('format_lbl')}</label><select id="nstFormat" class="nst-input">${opts}</select></div>
-  <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button><input type="file" id="nstAddFile" accept="image/*" multiple hidden/>
+  <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button>
     ${E.isWide() ? `<p class="nst-note">${t('drag_hint')}</p>` : ''}</div>
   <div class="nst-sec nst-save"><label for="nstSaveEmail">${t('save_title')}</label><p class="nst-note" style="margin:0 0 10px">${t('save_sub')}</p>
     <input id="nstSaveEmail" class="nst-input" type="email" autocomplete="email" placeholder="${t('save_email')}" value="${esc(NA.saveEmail || '')}"/>
@@ -6101,6 +6115,26 @@ async function recompose(n, synced) {
   E.drawAll(); E.saveLocal();
 }
 
+/* ── Champ permanent pour ajouter des photos depuis l'éditeur ── */
+let addEl = null;
+function addInput() {
+  if (addEl) return addEl;
+  addEl = document.createElement('input'); addEl.type = 'file'; addEl.accept = 'image/*'; addEl.multiple = true;
+  addEl.style.cssText = 'position:fixed;left:-9999px;width:1px;height:1px;opacity:0;';
+  addEl.setAttribute('aria-hidden', 'true'); addEl.tabIndex = -1;
+  document.body.appendChild(addEl);
+  addEl.addEventListener('change', async () => {
+    const files = Array.from(addEl.files || []); if (!files.length) return;
+    const n = E.nPagesSel();
+    syncStory();
+    const keep = { story: S.story, info: NA.info };
+    await window.addPhotos(files);                         // (addPhotos vide l'album : on le recompose aussitôt)
+    S.story = keep.story; NA.info = keep.info;
+    await recompose(n, true);
+  });
+  return addEl;
+}
+
 /* ── Retirer une photo ── */
 function removePhoto(idx) {
   const n = E.nPagesSel();
@@ -6123,7 +6157,7 @@ if (tools) {
     const b = e.target.closest('button'); if (!b) return;
     const a = b.dataset.act;
     if (a === 'remove-photo') { const s = E.sel(); if (s && s.slot != null) removePhoto(NA.pages[s.page].slots[s.slot].p); }
-    if (a === 'add-photos') { const f = $('nstAddFile'); if (f) f.click(); }
+    if (a === 'add-photos') { const f = addInput(); f.value = ''; f.click(); }
     if (a === 'save-link') saveLink(b);
   });
   tools.addEventListener('change', async e => {
@@ -6131,14 +6165,6 @@ if (tools) {
       const n = +e.target.value;
       if (S.photos.length < MIN(n)) { alert(t('format_min', MIN(n), n)); e.target.value = E.nPagesSel(); return; }
       e.target.disabled = true; await recompose(n);
-    }
-    if (e.target.id === 'nstAddFile' && e.target.files && e.target.files.length) {
-      const files = Array.from(e.target.files); e.target.value = ''; const n = E.nPagesSel();
-      syncStory();
-      const keep = { pages: NA.pages, story: S.story, info: NA.info };
-      await window.addPhotos(files);                     // (addPhotos vide l'album : on le recompose aussitôt)
-      S.story = keep.story; NA.info = keep.info;
-      await recompose(n, true);
     }
   });
   tools.addEventListener('input', e => { if (e.target.id === 'nstSaveEmail') NA.saveEmail = e.target.value; });
@@ -6313,7 +6339,8 @@ window.goTab = function (n) { const r = og2.apply(this, arguments); if (n === 3)
 /* ── Diagnostic : ajouter ?debug à l'adresse pour afficher les erreurs à l'écran ── */
 if (/[?&]debug/.test(location.search)) {
   const pnl = document.createElement('div'); pnl.className = 'nst-debug';
-  const draw = () => { const e = window.__nstErrs || []; pnl.textContent = e.length ? e.slice(-6).join('\n') : 'Aucune erreur · ' + navigator.userAgent.replace(/.*(iPhone OS [\d_]+|Android [\d.]+|Mac OS X [\d_]+).*/, '$1'); };
+  const draw = () => { const e = window.__nstErrs || [], l = window.__nstLog || [];
+    pnl.textContent = (e.length ? 'ERREURS :\n' + e.slice(-5).join('\n') + '\n' : 'Aucune erreur · ' + navigator.userAgent.replace(/.*(iPhone OS [\d_]+|Android [\d.]+|Mac OS X [\d_]+).*/, '$1') + '\n') + (l.length ? 'JOURNAL :\n' + l.slice(-10).join('\n') : ''); };
   document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
 }
 applyUI();
