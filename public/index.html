@@ -1249,6 +1249,9 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 .nst-r-p,.nst-r-n{z-index:3;}
 @media (max-width:760px){.nst-r-p,.nst-r-n{top:auto;bottom:calc(20px + env(safe-area-inset-bottom));transform:none;font-size:34px;padding:8px 22px;background:rgba(255,255,255,.12);border-radius:999px;}.nst-r-p{left:18px;}.nst-r-n{right:18px;}}
 .nst-debug{position:fixed;left:6px;right:6px;top:calc(6px + env(safe-area-inset-top));z-index:99999;max-height:24vh;overflow:hidden;white-space:pre-wrap;background:rgba(155,44,31,.88);color:#fff;font:11px/1.35 ui-monospace,Menlo,monospace;padding:8px 10px;border-radius:10px;pointer-events:none;}
+#photoGrid .photo-item.failed{background:#f6ece8;}
+.ph-retry{position:absolute;inset:0;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9b2c1f;font:600 18px 'Inter',sans-serif;cursor:pointer;}
+.ph-retry span{font-size:12px;font-weight:500;}
 </style>
 <script type="application/ld+json">
 {
@@ -1545,7 +1548,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
       <div class="card">
         <div class="card-hd" data-i18n="p1_hd">Vos photos ensemble</div>
         <div class="dz" id="dz">
-          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onclick="this.value=''" onchange="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
+          <input type="file" accept="image/*" multiple aria-label="Ajouter des photos" onclick="this.value=''" onchange="addPhotos(this.files)" oninput="addPhotos(this.files)" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10;"/>
           <div class="dz-ico">📷</div>
           <div class="dz-l" data-i18n="dz_label">Glissez vos photos ici ou cliquez pour parcourir</div>
           <div class="dz-s" data-i18n="dz_sub">JPG · PNG · WEBP · HEIC — minimum selon le palier choisi</div>
@@ -4570,7 +4573,7 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
-  ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
+  ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
   undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
@@ -4598,7 +4601,7 @@ fr: {
   tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
 },
 en: {
-  ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
+  ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
   undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
@@ -4626,7 +4629,7 @@ en: {
   tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
 },
 de: {
-  ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
+  ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
   undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
@@ -4654,7 +4657,7 @@ de: {
   tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
-  ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
+  ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
   undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
@@ -4682,7 +4685,7 @@ es: {
   tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
-  ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
+  ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
   undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
@@ -4757,17 +4760,34 @@ const nlog = m => { window.__nstLog.push(new Date().toTimeString().slice(0, 8) +
 NA.log = nlog;
 const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
 const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
+// Chaque étape a un délai maximum : une photo récalcitrante ne peut plus bloquer les suivantes
+const within = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('délai dépassé : ' + what)), ms * (window.__nstTimeScale || 1)))]);
 async function decodeFile(file) {
   if (!file || file.size === 0) { nlog('illisible (fichier vide) : ' + (file && file.name)); return null; }
-  // <img> respecte toujours l'orientation EXIF (photos prises en portrait) : décodeur principal
-  const url = URL.createObjectURL(file);
-  try { const img = await loadImage(url); if (img.naturalWidth) return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; } catch (e) {}
-  URL.revokeObjectURL(url);
-  // Second décodeur (autre chemin interne du navigateur)
+  const big = (file.size || 0) > 6 * 1048576;                          // photo de 24-48 Mpx : on évite le décodage pleine taille
+  // 1) <img> : respecte toujours l'orientation EXIF (décodeur principal, sauf très grosses photos)
+  if (!big) {
+    const url = URL.createObjectURL(file);
+    try { const img = await within(loadImage(url), 20000, 'image'); if (img.naturalWidth) return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; }
+    catch (e) { nlog('décodage 1 : ' + (e.message || e.name) + ' · ' + file.name); }
+    URL.revokeObjectURL(url);
+  }
+  // 2) décodage directement en taille réduite (bien moins de mémoire)
   if (window.createImageBitmap) {
-    try { const bmp = await createImageBitmap(file); nlog('décodé par le 2e décodeur : ' + file.name); return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; }
-    catch (e) { nlog('illisible (' + (e && e.name) + ') : ' + file.name + ' ' + (file.type || 'sans type') + ' ' + Math.round(file.size / 1024) + ' Ko'); }
-  } else nlog('illisible : ' + file.name + ' ' + (file.type || 'sans type'));
+    try { const bmp = await within(createImageBitmap(file, { resizeWidth: 2200, resizeQuality: 'high', imageOrientation: 'from-image' }), 25000, 'réduction');
+      if (bmp && bmp.width) return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; }
+    catch (e) { nlog('décodage 2 : ' + (e.message || e.name) + ' · ' + file.name); }
+    try { const bmp = await within(createImageBitmap(file), 25000, 'bitmap'); if (bmp && bmp.width) return { img: bmp, done: () => { try { bmp.close(); } catch (e) {} } }; }
+    catch (e) { nlog('décodage 3 : ' + (e.message || e.name) + ' · ' + file.name); }
+  }
+  // 3) grosse photo : dernier essai avec <img>
+  if (big) {
+    const url = URL.createObjectURL(file);
+    try { const img = await within(loadImage(url), 25000, 'image'); if (img.naturalWidth) return { img, done: () => { img.src = ''; URL.revokeObjectURL(url); } }; }
+    catch (e) { nlog('décodage 4 : ' + (e.message || e.name) + ' · ' + file.name); }
+    URL.revokeObjectURL(url);
+  }
+  nlog('illisible : ' + file.name + ' · ' + (file.type || 'sans type') + ' · ' + Math.round((file.size || 0) / 1024) + ' Ko');
   return null;
 }
 async function importFile(f) {
@@ -4797,25 +4817,61 @@ function toast(msg, ms) {
   clearTimeout(el.__t); el.__t = setTimeout(() => el.classList.remove('on'), ms || 6000);
 }
 NA.toast = toast;
-let importJob = Promise.resolve();
-NA.photosReady = () => importJob;
-async function fillPhoto(p) { if (p.ready) await p.ready; const r = await importFile(p.file); if (!r) return false; delete r.name; Object.assign(p, r); p.pending = false; return true; }
+const Q = [];                                   // photos à préparer
+let pumping = null;                             // traitement en cours (promesse)
+NA.photosReady = () => pumping || Promise.resolve();
+async function fillPhoto(p) {
+  if (p.ready) { try { await within(p.ready, 15000, 'copie'); } catch (e) { nlog('copie : ' + e.message + ' · ' + p.name); } }
+  const r = await importFile(p.file); if (!r) return false;
+  delete r.name; Object.assign(p, r); p.pending = false; p.failed = false; return true;
+}
 function dropPhoto(p) {
   const i = S.photos.indexOf(p); if (i < 0) return;
   S.photos.splice(i, 1);
   const shift = m => { const o = {}; Object.keys(m || {}).forEach(k => { const n = +k; if (n < i) o[n] = m[k]; else if (n > i) o[n - 1] = m[k]; }); return o; };
   S.captions = shift(S.captions);
 }
+let batch = { total: 0, done: 0, items: [] };
+function pump() {
+  if (pumping) return pumping;
+  pumping = (async () => {
+    let lastDraw = 0;
+    while (Q.length) {
+      const p = Q.shift();
+      if (S.photos.indexOf(p) >= 0) {
+        let ok = false;
+        try { ok = await within(fillPhoto(p), 60000, 'photo'); } catch (e) { nlog(e.message + ' · ' + p.name); }
+        if (!ok) { p.pending = false; p.failed = true; }
+      }
+      batch.done++;
+      if (typeof showUploadLoader === 'function') showUploadLoader(Math.min(batch.done, batch.total), batch.total);
+      const now = Date.now(); if (now - lastDraw > 400 && typeof renderPhotos === 'function') { renderPhotos(); lastDraw = now; }
+      await sleep(TOUCH ? 30 : 0);                                   // laisse la mémoire se libérer entre deux photos
+    }
+    const failed = batch.items.filter(p => p.failed && S.photos.indexOf(p) >= 0);
+    if (typeof hideUploadLoader === 'function') hideUploadLoader();
+    if (typeof renderPhotos === 'function') renderPhotos();
+    nlog('ajout terminé : ' + (batch.total - failed.length) + '/' + batch.total + ' photo(s) prête(s)');
+    if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
+    batch = { total: 0, done: 0, items: [] };
+    if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600);
+  })().finally(() => { pumping = null; if (Q.length) pump(); });
+  return pumping;
+}
+NA.retryPhoto = i => { const p = S.photos[i]; if (!p || !p.failed) return; p.failed = false; p.pending = true; Q.push(p); batch.total++; batch.items.push(p); renderPhotos(); pump(); };
+let lastSig = '', lastAt = 0;
 window.addPhotos = function (files) {
   const all = Array.from(files || []);
+  const sig = all.map(f => f.name + ':' + f.size + ':' + f.lastModified).join('|');
+  if (sig && sig === lastSig && Date.now() - lastAt < 2500) return NA.photosReady();   // même sélection signalée deux fois (change + input)
+  lastSig = sig; lastAt = Date.now();
   nlog('sélection : ' + all.length + ' fichier(s) · ' + [...new Set(all.map(f => f.type || 'sans type'))].join(', ') + ' · ' + Math.round(all.reduce((s, f) => s + (f.size || 0), 0) / 1048576) + ' Mo');
   const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
-  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return importJob; }
-  // 1) Toutes les photos apparaissent tout de suite (tuiles en préparation)
+  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return NA.photosReady(); }
+  // 1) Toutes les photos apparaissent tout de suite
   const added = list.map(f => ({ name: f.name || 'photo.jpg', file: f, pending: true }));
   added.forEach(p => S.photos.push(p));
-  // Copie immédiate en mémoire : sur iPhone, les fichiers choisis sont des copies temporaires d'iOS
-  // qui peuvent disparaître (nouvelle sélection, champ vidé). La copie, elle, reste lisible jusqu'à la commande.
+  // Copie immédiate en mémoire (les fichiers choisis sur iPhone sont des copies temporaires d'iOS)
   added.forEach(p => {
     const f = p.file;
     p.ready = f.arrayBuffer()
@@ -4823,34 +4879,17 @@ window.addPhotos = function (files) {
       .catch(e => nlog('lecture impossible : ' + (f.name || '?') + ' (' + ((e && (e.name || e.message)) || 'erreur') + ')'));
   });
   NA.pages = [];                                                   // les photos ont changé : l'album sera recomposé
+  batch.total += added.length; batch.items.push(...added);
   if (typeof renderPhotos === 'function') renderPhotos();
-  if (typeof showUploadLoader === 'function') showUploadLoader(0, added.length);
-  // 2) Préparation en arrière-plan : une à la fois sur téléphone, 3 sur ordinateur ; nouvel essai pour celles qui échouent
-  importJob = importJob.then(async () => {
-    let done = 0, lastDraw = 0;
-    const failed = [], queue = added.slice(), workers = TOUCH ? 1 : 3;
-    const tick = () => { done++; if (typeof showUploadLoader === 'function') showUploadLoader(done, added.length);
-      const now = Date.now(); if (now - lastDraw > 400 && typeof renderPhotos === 'function') { renderPhotos(); lastDraw = now; } };
-    await Promise.all(Array.from({ length: workers }, async () => {
-      while (queue.length) { const p = queue.shift(); if (S.photos.indexOf(p) < 0) { tick(); continue; } if (!(await fillPhoto(p))) failed.push(p); tick(); await sleep(0); }
-    }));
-    for (const p of failed.slice()) {                              // 2e essai, après une pause (mémoire libérée)
-      await sleep(300);
-      if (S.photos.indexOf(p) >= 0 && await fillPhoto(p)) failed.splice(failed.indexOf(p), 1);
-    }
-    failed.forEach(dropPhoto);
-    nlog('ajout terminé : ' + (added.length - failed.length) + '/' + added.length + ' photo(s)');
-    if (typeof hideUploadLoader === 'function') hideUploadLoader();
-    if (typeof renderPhotos === 'function') renderPhotos();
-    if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
-    if (NA.analyzeAll && !TOUCH) setTimeout(() => NA.analyzeAll(), 600); // visages : en arrière-plan sur ordinateur, pendant la génération sur téléphone
-  });
-  return importJob;
+  if (typeof showUploadLoader === 'function') showUploadLoader(batch.done, batch.total);
+  // 2) Préparation une à une, en arrière-plan
+  added.forEach(p => Q.push(p));
+  return pump();
 };
 window.renderPhotos = function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const grid = document.getElementById('photoGrid'); if (!grid) return;
-  grid.innerHTML = S.photos.map((p, i) => `<div class="photo-item${p.pending ? ' pending' : ''}">${p.pending ? '<div class="ph-wait" aria-hidden="true"></div>' : `<img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>`}
+  grid.innerHTML = S.photos.map((p, i) => `<div class="photo-item${p.pending ? ' pending' : ''}${p.failed ? ' failed' : ''}">${p.pending ? '<div class="ph-wait" aria-hidden="true"></div>' : p.failed ? `<button type="button" class="ph-retry" onclick="NA.retryPhoto(${i})">⚠︎<span>${esc(NA.t('ph_retry'))}</span></button>` : `<img src="${p.thumb || p.data}" alt="${esc(p.name || '')}" loading="lazy" decoding="async"/>`}
       <div class="photo-ov"><button class="ov-rm" type="button" aria-label="×" onclick="removePhoto(${i})">×</button><button class="ov-msg" type="button" onclick="openMsgModal(${i})">${S.captions[i] ? '✎' : '💬'}</button></div>
       ${S.captions[i] ? `<div class="ph-cap">"${esc(S.captions[i])}"</div>` : ''}</div>`).join('');
   const c = document.getElementById('photoCount'); if (!c) return;
@@ -5056,6 +5095,7 @@ window.runGeneration = async function () {
   const T = (typeof LANGS !== 'undefined' && LANGS[lang()]) || {};
   const nPages = nPagesSel();
   if (NA.photosReady) await NA.photosReady();
+  S.photos.filter(p => p.failed || !p.data).forEach(dropPhoto);        // on ne compose qu'avec les photos prêtes
   const min = NA.minPhotos(nPages);
   if (S.photos.length < min) { alert(NA.t('gen_min', min, nPages, S.photos.length)); return; }
   const btn = $('btnGen'); if (btn) btn.disabled = true;
