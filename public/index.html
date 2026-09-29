@@ -1261,6 +1261,11 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 .nst-ph-box p{margin:0 0 10px;color:#5f5a54;}
 .nst-ph-box ul{margin:0 0 16px;padding-left:18px;}.nst-ph-box li{margin:0 0 6px;}
 .nst-ph-box button{width:100%;min-height:48px;border-radius:999px;border:0;background:#1c1a18;color:#fff;font:500 15px 'Inter',sans-serif;cursor:pointer;}
+
+/* ═══ v5.4 — lisibilité ═══ */
+.nst-live-ded.empty{color:#77726b;}
+html body #app [data-ui="pick_tier"]{color:#5f5a54!important;}
+html body #app [id^="pal"]:not(.on) > div:nth-child(2),html body #app [id^="pal"]:not(.on) > div:nth-child(3){color:#5f5a54!important;}
 </style>
 <script type="application/ld+json">
 {
@@ -1567,7 +1572,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
       </div>
       <!-- Sélecteur de palier -->
       <div style="margin:1rem 0;background:#fafafa;border:1px solid #e2e2e2;border-radius:0;padding:1rem;">
-        <div style="font-size:.75rem;font-weight:600;color:#999;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;font-family:'Inter',sans-serif;">Choisir votre palier</div>
+        <div data-ui="pick_tier" style="font-size:.75rem;font-weight:600;color:#999;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;font-family:'Inter',sans-serif;">Choisir votre palier</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
           <div id="pal24" onclick="selectPricing(24,null);highlightPal(24)" style="border:1.5px solid #ddd;border-radius:0;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;background:#fff;">
             <div style="font-size:1.1rem;font-weight:700;color:#111;">24</div>
@@ -1695,7 +1700,7 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
             <div id="promoMsg" style="font-size:.75rem;margin-top:4px;display:none;"></div>
             <!-- Adresse (masquée si PDF) -->
             <div id="addressField">
-              <label class="fl">Adresse de livraison</label>
+              <label class="fl" data-i18n="pay_addr_lbl">Adresse de livraison</label>
               <input type="text" id="payAddrLine1" placeholder="12 rue des Amoureux" style="margin-bottom:6px;"/>
               <input type="text" id="payAddrLine2" placeholder="Appartement, bâtiment, étage... (optionnel)" style="margin-bottom:6px;"/>
               <div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;margin-bottom:6px;">
@@ -6487,7 +6492,7 @@ if (spread && window.MutationObserver) {
 function coach() {
   let seen = false; try { seen = localStorage.getItem('nst_coach') === '1'; } catch (e) {}
   if (seen || !stageWrap || $('nstCoach')) return;
-  const c = document.createElement('div'); c.id = 'nstCoach'; c.className = 'nst-coach'; c.setAttribute('role', 'dialog');
+  const c = document.createElement('div'); c.id = 'nstCoach'; c.className = 'nst-coach'; c.setAttribute('role', 'dialog'); c.setAttribute('aria-label', t('coach_ok'));
   c.innerHTML = `<p>${E.isWide() ? t('coach_wide') : t('coach')}</p><button type="button">${t('coach_ok')}</button>`;
   stageWrap.appendChild(c); stageWrap.classList.add('nst-pulse');
   const done = () => { c.remove(); stageWrap.classList.remove('nst-pulse'); try { localStorage.setItem('nst_coach', '1'); } catch (e) {} };
@@ -6510,7 +6515,35 @@ if (/[?&]debug/.test(location.search)) {
     pnl.textContent = (e.length ? 'ERREURS :\n' + e.slice(-4).join('\n') + '\n' : 'Aucune erreur · ' + os + ' · ' + S.photos.length + ' photo(s)\n') + (l.length ? 'JOURNAL :\n' + l.slice(-12).join('\n') : ''); };
   pnl.style.maxHeight = '38vh'; document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
 }
-applyUI();
+/* ── Traductions : palier, compteur de photos, bouton de commande ── */
+Object.entries({
+  fr: { pick_tier: 'Choisir votre palier', btn_book: 'Commander le livre · {0} ♥', btn_pdf: 'Télécharger le PDF · {0} ♥' },
+  en: { pick_tier: 'Choose your format', btn_book: 'Order the book · {0} ♥', btn_pdf: 'Download the PDF · {0} ♥' },
+  de: { pick_tier: 'Format wählen', btn_book: 'Buch bestellen · {0} ♥', btn_pdf: 'PDF herunterladen · {0} ♥' },
+  es: { pick_tier: 'Elige tu formato', btn_book: 'Pedir el libro · {0} ♥', btn_pdf: 'Descargar el PDF · {0} ♥' },
+  pt: { pick_tier: 'Escolhe o formato', btn_book: 'Encomendar o livro · {0} ♥', btn_pdf: 'Descarregar o PDF · {0} ♥' },
+}).forEach(([l, d]) => Object.assign(NA.UI[l], d));
+function payLabel() {
+  const btn = $('payBtn'); if (!btn) return;
+  const m2 = btn.textContent.match(/(\d+[.,]\d{2})/); if (!m2) return;
+  const n = parseFloat(m2[1].replace(',', '.')), isBook = !/PDF/.test(btn.textContent);   // le libellé d'origine indique le format
+  const price = lang() === 'en' ? '€' + n.toFixed(2) : n.toFixed(2).replace('.', ',') + ' €';
+  btn.textContent = t(isBook ? 'btn_book' : 'btn_pdf', price);
+}
+['updateFormatPrices', 'selectFormat', 'selectPricing'].forEach(fn => {
+  if (typeof window[fn] === 'function') { const o = window[fn]; window[fn] = function () { const r = o.apply(this, arguments); try { payLabel(); } catch (e) {} return r; }; }
+});
+// Palier choisi repéré par une classe (le style en ligne d'origine ne le permettait pas)
+if (typeof window.highlightPal === 'function') {
+  const o = window.highlightPal;
+  window.highlightPal = function (n) { const r = o.apply(this, arguments); [24, 36, 50].forEach(k => { const el = $('pal' + k); if (el) el.classList.toggle('on', k === n); }); return r; };
+  try { window.highlightPal(typeof selectedPages !== 'undefined' ? selectedPages : 36); } catch (e) {}
+}
+if (typeof window.setLang === 'function') {
+  const o = window.setLang;
+  window.setLang = function () { const r = o.apply(this, arguments); try { if (typeof renderPhotos === 'function' && S.photos.length) renderPhotos(); payLabel(); } catch (e) {} return r; };
+}
+applyUI(); payLabel();
 })();
 
 /* ════════════════════════════════════════════════════════════════
@@ -6849,6 +6882,7 @@ city.setAttribute('autocomplete', 'address-level2');
 country.setAttribute('autocomplete', 'country');
 function applyText() {
   document.querySelectorAll('[data-a]').forEach(el => { el.textContent = t(el.dataset.a); });
+  line1.setAttribute('aria-label', t('a_street'));
   if (!hint.dataset.state) hint.textContent = t('a_hint');
 }
 applyText();
