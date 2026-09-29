@@ -1266,6 +1266,32 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 .nst-live-ded.empty{color:#77726b;}
 html body #app [data-ui="pick_tier"]{color:#5f5a54!important;}
 html body #app [id^="pal"]:not(.on) > div:nth-child(2),html body #app [id^="pal"]:not(.on) > div:nth-child(3){color:#5f5a54!important;}
+
+/* ═══ v5.5 — finitions demandées ═══ */
+/* Curseurs : la main seulement là où l'on peut agir (éditeur), jamais sur les pages décoratives */
+.nst-page .nst-slot,.nst-page .nst-t,.nst-page .nst-slot img{cursor:inherit!important;}
+#nstSpread .nst-page .nst-slot{cursor:grab!important;}
+#nstSpread .nst-page .nst-t{cursor:text!important;}
+.b3d:not(.b3d-hero),.b3d:not(.b3d-hero) *{cursor:inherit!important;}
+/* Prix dans le récapitulatif (plus d'encadré séparé) */
+html body #app .pay-price-box{display:none!important;}
+.nst-sum{position:relative;}
+.nst-sum-price{margin-left:auto;align-self:center;text-align:right;display:flex;flex-direction:column;gap:2px;padding-left:12px;}
+.nst-sum-price b{font:400 30px/1 'Playfair Display',Georgia,serif;color:#1c1a18;white-space:nowrap;}
+.nst-sum-price span{font:500 12.5px 'Inter',sans-serif;color:#5f5a54;}
+@media (max-width:520px){.nst-sum-price{margin:6px 0 0;align-self:center;text-align:center;padding:0;}}
+/* Étapes : une barre discrète partout (plus de pilules cliquables) */
+html body #app .prog{display:none!important;}
+html body #app .mob-prog{display:block!important;max-width:720px;margin:0 auto 22px!important;}
+html body #app .mob-prog-bar{height:2px!important;background:#e4dfd7!important;border-radius:2px;margin:0 0 10px!important;}
+html body #app .mob-prog-fill{background:#1c1a18!important;transition:width .4s ease;}
+html body #app .mob-prog-txt{display:flex;justify-content:space-between;align-items:baseline;}
+html body #app .mob-prog-step{font:italic 400 17px 'Playfair Display',Georgia,serif!important;color:#1c1a18!important;}
+html body #app .mob-prog-count{font:500 12.5px 'Inter',sans-serif!important;color:#5f5a54!important;letter-spacing:.04em;}
+.app-wrap.nst-live-wide .mob-prog{max-width:none!important;}
+/* Code promo : bouton compact et discret */
+html body button[onclick^="applyPromo"]{min-height:36px!important;height:36px;align-self:center;margin:0 6px 0 4px!important;padding:0 16px!important;background:transparent!important;color:#1c1a18!important;border:1px solid #1c1a18!important;font:500 13.5px 'Inter',system-ui,sans-serif!important;}
+html body button[onclick^="applyPromo"]:hover{background:#1c1a18!important;color:#fff!important;}
 </style>
 <script type="application/ld+json">
 {
@@ -6515,6 +6541,14 @@ if (/[?&]debug/.test(location.search)) {
     pnl.textContent = (e.length ? 'ERREURS :\n' + e.slice(-4).join('\n') + '\n' : 'Aucune erreur · ' + os + ' · ' + S.photos.length + ' photo(s)\n') + (l.length ? 'JOURNAL :\n' + l.slice(-12).join('\n') : ''); };
   pnl.style.maxHeight = '38vh'; document.body.appendChild(pnl); draw(); setInterval(draw, 1500);
 }
+/* ── Titre de la page (Google, onglet) : l'ancienne fonction de langue l'écrasait par un vieux titre ── */
+const TITLES = {
+  fr: document.title,
+  en: 'Noustalgie — Personalised couple photo album made with AI | Original gift',
+  de: 'Noustalgie — Personalisiertes Paar-Fotoalbum mit KI | Originelles Geschenk',
+  es: 'Noustalgie — Álbum de fotos de pareja personalizado con IA | Regalo original',
+  pt: 'Noustalgie — Álbum de fotos de casal personalizado com IA | Presente original',
+};
 /* ── Traductions : palier, compteur de photos, bouton de commande ── */
 Object.entries({
   fr: { pick_tier: 'Choisir votre palier', btn_book: 'Commander le livre · {0} ♥', btn_pdf: 'Télécharger le PDF · {0} ♥' },
@@ -6523,15 +6557,20 @@ Object.entries({
   es: { pick_tier: 'Elige tu formato', btn_book: 'Pedir el libro · {0} ♥', btn_pdf: 'Descargar el PDF · {0} ♥' },
   pt: { pick_tier: 'Escolhe o formato', btn_book: 'Encomendar o livro · {0} ♥', btn_pdf: 'Descarregar o PDF · {0} ♥' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
+// Prix courant, lu à la source (format choisi + nombre de pages + grille de prix)
+NA.curPrice = () => {
+  const fmt = (($('payFormat') || {}).value) || 'print';
+  const pr = (typeof PRICES !== 'undefined' && typeof selectedPages !== 'undefined' && PRICES[selectedPages]) || null;
+  const v = pr ? (fmt === 'pdf' ? pr.pdf : pr.print) : null;
+  return { fmt, v, txt: v == null ? '' : (lang() === 'en' ? '€' + v.toFixed(2) : v.toFixed(2).replace('.', ',') + ' €') };
+};
 function payLabel() {
-  const btn = $('payBtn'); if (!btn) return;
-  const m2 = btn.textContent.match(/(\d+[.,]\d{2})/); if (!m2) return;
-  const n = parseFloat(m2[1].replace(',', '.')), isBook = !/PDF/.test(btn.textContent);   // le libellé d'origine indique le format
-  const price = lang() === 'en' ? '€' + n.toFixed(2) : n.toFixed(2).replace('.', ',') + ' €';
-  btn.textContent = t(isBook ? 'btn_book' : 'btn_pdf', price);
+  const btn = $('payBtn'), c = NA.curPrice(); if (!btn || c.v == null) return;
+  btn.textContent = t(c.fmt === 'pdf' ? 'btn_pdf' : 'btn_book', c.txt);
 }
+NA.payLabel = payLabel;
 ['updateFormatPrices', 'selectFormat', 'selectPricing'].forEach(fn => {
-  if (typeof window[fn] === 'function') { const o = window[fn]; window[fn] = function () { const r = o.apply(this, arguments); try { payLabel(); } catch (e) {} return r; }; }
+  if (typeof window[fn] === 'function') { const o = window[fn]; window[fn] = function () { const r = o.apply(this, arguments); try { payLabel(); if (NA.syncPrice) NA.syncPrice(); } catch (e) {} return r; }; }
 });
 // Palier choisi repéré par une classe (le style en ligne d'origine ne le permettait pas)
 if (typeof window.highlightPal === 'function') {
@@ -6541,7 +6580,7 @@ if (typeof window.highlightPal === 'function') {
 }
 if (typeof window.setLang === 'function') {
   const o = window.setLang;
-  window.setLang = function () { const r = o.apply(this, arguments); try { if (typeof renderPhotos === 'function' && S.photos.length) renderPhotos(); payLabel(); } catch (e) {} return r; };
+  window.setLang = function () { const r = o.apply(this, arguments); try { if (typeof renderPhotos === 'function' && S.photos.length) renderPhotos(); payLabel(); if (NA.syncPrice) NA.syncPrice(); document.title = TITLES[lang()] || TITLES.fr; } catch (e) {} return r; };
 }
 applyUI(); payLabel();
 })();
@@ -6561,11 +6600,11 @@ const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').m
 
 /* ── Textes (5 langues) ── */
 Object.entries({
-  fr: { sort_date: 'Trier par date de prise de vue', set_cover: 'Mettre en couverture', drag_photos: 'Glissez les photos pour changer leur ordre : la première devient la couverture.', live_title: 'Votre livre', live_sub: 'Il prend forme à mesure que vous écrivez.', live_ph: 'Vos prénoms', live_meta: '{0} pages · {1} photos', live_ded: 'Votre dédicace apparaîtra ici.', gen_title: 'Votre livre se compose', sum_title: 'Votre livre', sum_meta: '{0} pages · style {1}', sum_spec: 'Couverture rigide · 21 × 21 cm · papier photo', sum_edit: 'Revoir l’album', style: 'Style', sorted: 'Photos triées de la plus ancienne à la plus récente.' },
-  en: { sort_date: 'Sort by date taken', set_cover: 'Use as cover', drag_photos: 'Drag photos to change their order: the first one becomes the cover.', live_title: 'Your book', live_sub: 'It takes shape as you write.', live_ph: 'Your names', live_meta: '{0} pages · {1} photos', live_ded: 'Your dedication will appear here.', gen_title: 'Your book is coming together', sum_title: 'Your book', sum_meta: '{0} pages · {1} style', sum_spec: 'Hardcover · 21 × 21 cm · photo paper', sum_edit: 'Review the album', style: 'Style', sorted: 'Photos sorted from oldest to newest.' },
-  de: { sort_date: 'Nach Aufnahmedatum sortieren', set_cover: 'Als Cover verwenden', drag_photos: 'Zieht die Fotos, um die Reihenfolge zu ändern: das erste wird zum Cover.', live_title: 'Euer Buch', live_sub: 'Es nimmt Gestalt an, während ihr schreibt.', live_ph: 'Eure Vornamen', live_meta: '{0} Seiten · {1} Fotos', live_ded: 'Eure Widmung erscheint hier.', gen_title: 'Euer Buch entsteht', sum_title: 'Euer Buch', sum_meta: '{0} Seiten · Stil {1}', sum_spec: 'Hardcover · 21 × 21 cm · Fotopapier', sum_edit: 'Album ansehen', style: 'Stil', sorted: 'Fotos vom ältesten zum neuesten sortiert.' },
-  es: { sort_date: 'Ordenar por fecha de la foto', set_cover: 'Usar como portada', drag_photos: 'Arrastra las fotos para cambiar su orden: la primera será la portada.', live_title: 'Vuestro libro', live_sub: 'Toma forma mientras escribís.', live_ph: 'Vuestros nombres', live_meta: '{0} páginas · {1} fotos', live_ded: 'Vuestra dedicatoria aparecerá aquí.', gen_title: 'Vuestro libro se compone', sum_title: 'Vuestro libro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Tapa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Revisar el álbum', style: 'Estilo', sorted: 'Fotos ordenadas de la más antigua a la más reciente.' },
-  pt: { sort_date: 'Ordenar pela data da foto', set_cover: 'Usar como capa', drag_photos: 'Arrasta as fotos para mudar a ordem: a primeira será a capa.', live_title: 'O vosso livro', live_sub: 'Ganha forma à medida que escrevem.', live_ph: 'Os vossos nomes', live_meta: '{0} páginas · {1} fotos', live_ded: 'A vossa dedicatória aparecerá aqui.', gen_title: 'O vosso livro está a ganhar forma', sum_title: 'O vosso livro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Capa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Rever o álbum', style: 'Estilo', sorted: 'Fotos ordenadas da mais antiga à mais recente.' },
+  fr: { sum_free: 'Livraison offerte', sum_pdf: 'Album numérique (PDF)', sort_date: 'Trier par date de prise de vue', set_cover: 'Mettre en couverture', drag_photos: 'Glissez les photos pour changer leur ordre : la première devient la couverture.', live_title: 'Votre livre', live_sub: 'Il prend forme à mesure que vous écrivez.', live_ph: 'Vos prénoms', live_meta: '{0} pages · {1} photos', live_ded: 'Votre dédicace apparaîtra ici.', gen_title: 'Votre livre se compose', sum_title: 'Votre livre', sum_meta: '{0} pages · style {1}', sum_spec: 'Couverture rigide · 21 × 21 cm · papier photo', sum_edit: 'Revoir l’album', style: 'Style', sorted: 'Photos triées de la plus ancienne à la plus récente.' },
+  en: { sum_free: 'Free delivery', sum_pdf: 'Digital album (PDF)', sort_date: 'Sort by date taken', set_cover: 'Use as cover', drag_photos: 'Drag photos to change their order: the first one becomes the cover.', live_title: 'Your book', live_sub: 'It takes shape as you write.', live_ph: 'Your names', live_meta: '{0} pages · {1} photos', live_ded: 'Your dedication will appear here.', gen_title: 'Your book is coming together', sum_title: 'Your book', sum_meta: '{0} pages · {1} style', sum_spec: 'Hardcover · 21 × 21 cm · photo paper', sum_edit: 'Review the album', style: 'Style', sorted: 'Photos sorted from oldest to newest.' },
+  de: { sum_free: 'Kostenloser Versand', sum_pdf: 'Digitales Album (PDF)', sort_date: 'Nach Aufnahmedatum sortieren', set_cover: 'Als Cover verwenden', drag_photos: 'Zieht die Fotos, um die Reihenfolge zu ändern: das erste wird zum Cover.', live_title: 'Euer Buch', live_sub: 'Es nimmt Gestalt an, während ihr schreibt.', live_ph: 'Eure Vornamen', live_meta: '{0} Seiten · {1} Fotos', live_ded: 'Eure Widmung erscheint hier.', gen_title: 'Euer Buch entsteht', sum_title: 'Euer Buch', sum_meta: '{0} Seiten · Stil {1}', sum_spec: 'Hardcover · 21 × 21 cm · Fotopapier', sum_edit: 'Album ansehen', style: 'Stil', sorted: 'Fotos vom ältesten zum neuesten sortiert.' },
+  es: { sum_free: 'Envío gratis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar por fecha de la foto', set_cover: 'Usar como portada', drag_photos: 'Arrastra las fotos para cambiar su orden: la primera será la portada.', live_title: 'Vuestro libro', live_sub: 'Toma forma mientras escribís.', live_ph: 'Vuestros nombres', live_meta: '{0} páginas · {1} fotos', live_ded: 'Vuestra dedicatoria aparecerá aquí.', gen_title: 'Vuestro libro se compone', sum_title: 'Vuestro libro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Tapa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Revisar el álbum', style: 'Estilo', sorted: 'Fotos ordenadas de la más antigua a la más reciente.' },
+  pt: { sum_free: 'Envio grátis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar pela data da foto', set_cover: 'Usar como capa', drag_photos: 'Arrasta as fotos para mudar a ordem: a primeira será a capa.', live_title: 'O vosso livro', live_sub: 'Ganha forma à medida que escrevem.', live_ph: 'Os vossos nomes', live_meta: '{0} páginas · {1} fotos', live_ded: 'A vossa dedicatória aparecerá aqui.', gen_title: 'O vosso livro está a ganhar forma', sum_title: 'O vosso livro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Capa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Rever o álbum', style: 'Estilo', sorted: 'Fotos ordenadas da mais antiga à mais recente.' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 
 /* ════ 1. Livre 3D réutilisable ════ */
@@ -6803,10 +6842,20 @@ function renderSummary() {
   if (!box) { box = document.createElement('div'); box.id = 'nstSum'; box.className = 'nst-sum'; form.insertBefore(box, form.firstChild); }
   const n = NA.pages.length, th = (NA.THEMES[NA.theme] || NA.THEMES.galerie).name, sp = NA.spineText != null ? NA.spineText : ((NA.info && NA.info.names) ? `${NA.info.names} · ${year}` : '');
   box.innerHTML = `<div class="nst-sum-book"></div><div class="nst-sum-txt"><span class="nst-sum-eb">${t('sum_title')}</span><b>${esc((NA.pages[0].t && NA.pages[0].t.title) || '')}</b>
-    <span>${t('sum_meta', n, th)}</span><span>${t('sum_spec')}</span><button type="button" class="nst-link" id="nstSumEdit">${t('sum_edit')}</button></div>`;
+    <span>${t('sum_meta', n, th)}</span><span>${t('sum_spec')}</span><button type="button" class="nst-link" id="nstSumEdit">${t('sum_edit')}</button></div>
+    <div class="nst-sum-price"><b id="nstSumPrice"></b><span id="nstSumPriceSub"></span></div>`;
   box.querySelector('.nst-sum-book').appendChild(NA.book3d({ cover: NA.pages[0], photos: S.photos, theme: NA.theme, spine: sp, size: 132, depth: { 24: 7, 36: 10, 50: 14 }[n] || 10 }));
   $('nstSumEdit').addEventListener('click', () => goTab(3));
+  syncPrice();
 }
+// Prix intégré au récapitulatif (l'ancien encadré est masqué) ; il suit le format et le nombre de pages
+function syncPrice() {
+  const o = $('nstSumPrice'), s = $('nstSumPriceSub'); if (!o || !NA.curPrice) return;
+  const c = NA.curPrice(); if (c.v == null) return;
+  o.textContent = c.txt; s.textContent = c.fmt === 'pdf' ? t('sum_pdf') : t('sum_free');
+}
+NA.syncPrice = syncPrice;
+if (window.MutationObserver && $('payFinalPrice')) new MutationObserver(syncPrice).observe($('payFinalPrice'), { childList: true, characterData: true, subtree: true });
 
 /* ── Navigation : aperçu en direct, récapitulatif ── */
 const og = window.goTab;
