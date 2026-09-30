@@ -6,9 +6,6 @@
     "api/create-checkout.js": {
       "maxDuration": 30
     },
-    "api/success.js": {
-      "maxDuration": 15
-    },
     "api/generate-pdf.js": {
       "maxDuration": 60
     },
@@ -31,7 +28,7 @@
   "rewrites": [
     {
       "source": "/success",
-      "destination": "/api/success"
+      "destination": "/success.html"
     },
     {
       "source": "/cancel",
@@ -68,6 +65,10 @@
     {
       "source": "/api/cancel",
       "destination": "/api/tools?fn=cancel"
+    },
+    {
+      "source": "/api/order-summary",
+      "destination": "/api/tools?fn=order"
     }
   ],
   "redirects": [

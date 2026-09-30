@@ -8,6 +8,7 @@ const H = {
   album: require('./_fn/album'),
   track: require('./_fn/track'),
   cancel: require('./_fn/cancel'),
+  order: require('./_fn/order'),
 };
 const ALIAS = { 'order-status': 'track' };
 
