@@ -5813,7 +5813,7 @@ window.generateAlbumPDF = async function (onStep, opts) {
     .then(r => r.json()).catch(() => ({}));
   // Largeur de tranche (livre imprimé uniquement) : dépend du nombre de pages et de l'atelier Prodigi
   let spineMm = null;
-  if (opts.country) {
+  if (opts.country && n - 2 >= 24) {   // Prodigi : 24 pages intérieures minimum pour le format avec tranche
     try { const s = await fetch('/api/spine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pages: n, country: opts.country }) }).then(r => r.json()); spineMm = s && s.widthMm > 0 ? s.widthMm : null; } catch (e) {}
   }
   const jobs = [gen(printHtml())];

@@ -85,7 +85,8 @@ async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSe
   let note = '';
 
   // 1) Livre avec tranche imprimée : couverture (dos + tranche + face) + pages intérieures
-  if (spine && spine.cover && spine.inner) {
+  if (spine && spine.cover && spine.inner && n - 2 < 24) note = 'Tranche non proposée : 24 pages intérieures minimum chez Prodigi (album de ' + n + ' pages).';
+  else if (spine && spine.cover && spine.inner) {
     const area = await coverPrintArea();
     if (area) {
       const r = await postOrder({ ...base, idempotencyKey: `noustalgie-${stripeSessionId}-spine`,
