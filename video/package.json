@@ -1,0 +1,19 @@
+{
+  "name": "noustalgie-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vidéo TikTok de présentation de Noustalgie (motion design, 1080×1920, 48 s)",
+  "scripts": {
+    "photos": "node tools/gen-photos.js",
+    "pages": "node tools/gen-pages.js",
+    "assets": "npm run photos && npm run pages && python3 tools/thumbs.py",
+    "cues": "node tools/render.js --cues",
+    "audio": "python3 tools/audio.py",
+    "snap": "node tools/render.js --snap",
+    "render": "node tools/render.js --fps 60 --workers 4",
+    "preview": "node tools/serve.js 8780"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
+  }
+}

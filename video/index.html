@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Noustalgie — vidéo TikTok</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="camera"></div>
+  <canvas id="fx" width="1080" height="1920"></canvas>
+  <div id="leak"></div>
+  <canvas id="grain" width="1080" height="1920"></canvas>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+  <div id="fade"></div>
+</div>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="mblurX" x="-20%" y="0" width="140%" height="100%"><feGaussianBlur stdDeviation="40 0"/></filter>
+  <filter id="mblurY" x="0" y="-20%" width="100%" height="140%"><feGaussianBlur stdDeviation="0 40"/></filter>
+</svg>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="node_modules/gsap/dist/MotionPathPlugin.min.js"></script>
+<script src="src/core.js"></script>
+<script src="src/fx.js"></script>
+<script src="src/components.js"></script>
+<script src="src/scenes/01-hook.js"></script>
+<script src="src/scenes/02-promise.js"></script>
+<script src="src/scenes/03-photos.js"></script>
+<script src="src/scenes/04-story.js"></script>
+<script src="src/scenes/05-preview.js"></script>
+<script src="src/scenes/06-book.js"></script>
+<script src="src/scenes/07-delivery.js"></script>
+<script src="src/scenes/08-occasions.js"></script>
+<script src="src/scenes/09-price.js"></script>
+<script src="src/scenes/10-cta.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
