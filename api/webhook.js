@@ -55,14 +55,26 @@ async function coverPrintArea() {
   coverAreaCache = areas.find(a => /cover/i.test(a)) || areas.find(a => a !== 'default') || null;
   return coverAreaCache;
 }
-async function postOrder(payload) {
+async function postOrderOnce(payload) {
   const r = await prodigiCall('POST', '/v4.0/orders', payload);
   const id = r.body && (r.body.order && r.body.order.id || r.body.id);
   if (r.status && r.status < 300 && id) return { id, outcome: r.body.outcome || '' };
-  return { id: null, err: `HTTP ${r.status} — ${String(r.raw).slice(0, 500)}` };
+  return { id: null, status: r.status, err: `HTTP ${r.status} — ${String(r.raw).slice(0, 500)}` };
+}
+// Le téléphone aide le transporteur, mais ne doit jamais bloquer une commande :
+// si Prodigi refuse explicitement la requête (HTTP 400), on renvoie une fois sans numéro.
+// (Jamais de nouvel envoi sur un délai dépassé ou une erreur serveur : la commande a pu être créée.)
+async function postOrder(payload) {
+  const r = await postOrderOnce(payload);
+  if (r.id || r.status !== 400 || !payload.recipient || !payload.recipient.phoneNumber) return r;
+  const { phoneNumber, ...recipient } = payload.recipient;
+  console.warn('Prodigi a refusé la commande avec téléphone, nouvel essai sans :', r.err);
+  const r2 = await postOrderOnce({ ...payload, recipient, idempotencyKey: payload.idempotencyKey + '-sanstel' });
+  if (r2.id) r2.outcome = (r2.outcome ? r2.outcome + ' · ' : '') + 'envoyée sans téléphone';
+  return r2;
 }
 
-async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId, orderNumber, pages, spine }) {
+async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId, orderNumber, pages, spine }) {
   if (!process.env.PRODIGI_API_KEY) { global.__lastProdigiError = 'PRODIGI_API_KEY manquante'; return { id: null }; }
   if (!pdfUrl) { global.__lastProdigiError = 'Pas de PDF'; return { id: null }; }
   const structured = addr && addr.line1 && addr.postal && addr.city && addr.country;
@@ -80,7 +92,8 @@ async function createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSe
     : { line1, postalOrZipCode: postalCode, countryCode: country, townOrCity: city, isBusiness: false };
   const n = parseInt(pages, 10) || 36;
   // callbackUrl : Prodigi nous prévient à chaque étape (expédition → email de suivi au client)
-  const base = { merchantReference: orderNumber, shippingMethod: 'Budget', callbackUrl: 'https://noustalgie.fr/api/prodigi-webhook', recipient: { name, email, address: recipientAddress } };
+  const recipient = Object.assign({ name, email }, phone ? { phoneNumber: phone } : {}, { address: recipientAddress });
+  const base = { merchantReference: orderNumber, shippingMethod: 'Budget', callbackUrl: 'https://noustalgie.fr/api/prodigi-webhook', recipient };
   const item = assets => [{ merchantReference: `album-${stripeSessionId}`, sku: SKU, copies: 1, sizing: 'fillPrintArea', assets }];
   let note = '';
 
@@ -166,7 +179,8 @@ module.exports = async (req, res) => {
   const price = typeof session.amount_total === 'number' ? (session.amount_total / 100).toFixed(2) : (m.price || '');
   const format = m.format === 'pdf' ? 'pdf' : 'print';
   const pdfUrl = m.pdf_url || '';
-  const first = String(name).trim().split(' ')[0];
+  const phone = m.phone || session.customer_details?.phone || '';
+  const first = m.first_name || String(name).trim().split(' ')[0];
 
   // Numéro de commande stable (dérivé de la session → identique si Stripe renvoie l'événement)
   const d = new Date((session.created || Date.now() / 1000) * 1000);
@@ -194,7 +208,7 @@ module.exports = async (req, res) => {
     if (format === 'print' && pdfUrl) {
       const addr = { line1: m.addr_line1, line2: m.addr_line2, postal: m.addr_postal, city: m.addr_city, country: m.addr_country };
       const spine = m.cover_url && m.inner_url ? { cover: m.cover_url, inner: m.inner_url } : null;
-      prodigi = await createProdigiOrder({ pdfUrl, name, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine });
+      prodigi = await createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine });
       prodigiOrderId = prodigi.id;
     }
 
@@ -208,7 +222,7 @@ module.exports = async (req, res) => {
         html: `<h2>Nouvelle commande</h2>
           <p><b>N° :</b> ${orderNumber}<br><b>Client :</b> ${h(name)} (${h(email)})<br><b>Couple :</b> ${h(names)}</p>
           <p><b>Format :</b> ${format} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
-          <p><b>Adresse :</b> ${h(address || '(PDF)')}</p>
+          <p><b>Destinataire :</b> ${h(name || '—')}${phone ? ` · <b>Tél :</b> ${h(phone)}` : ''}<br><b>Adresse :</b> ${h(address || '(PDF)')}</p>
           <p><b>PDF :</b> ${pdfUrl ? `<a href="${h(pdfUrl)}">ouvrir</a>` : 'Non disponible'}</p>
           ${prodigiOrderId ? `<p style="color:green"><b>✅ Prodigi : ${h(prodigiOrderId)}</b> — ${prodigi.spine ? `tranche imprimée (${h(m.spine_mm)} mm)` : 'tranche unie'}</p>` : warn}
           ${prodigi.note ? `<p style="color:#9a6b12"><small>${h(prodigi.note)}</small></p>` : ''}

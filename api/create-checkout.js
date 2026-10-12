@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'checkout', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez dans quelques minutes.' });
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).json({ error: 'Configuration de paiement incomplète.' });
 
-  const { name, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album } = parseBody(req);
+  const { name, firstName, lastName, phone, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album } = parseBody(req);
   const rem = album && album.reminder && album.reminder.id && checkProof(String(album.reminder.id), 'reminder', album.reminder.sig) ? String(album.reminder.id) : '';
 
   if (!email || !EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'Email invalide.' });
@@ -70,7 +70,22 @@ module.exports = async (req, res) => {
     line1: cut(addr.line1, 100).trim(), line2: cut(addr.line2, 100).trim(),
     postal: cut(addr.postal, 16).trim(), city: cut(addr.city, 80).trim(), country: String(addr.country || '').toUpperCase(),
   } : null;
+  // Destinataire : prénom + nom (exigés par le transporteur sur l'étiquette).
+  // Compatibilité : une ancienne page n'envoie que « name » ; on le découpe s'il contient prénom et nom.
+  const clean = s => cut(s, 80).replace(/\s+/g, ' ').trim();
+  let first = clean(firstName), last = clean(lastName);
+  if (!first && !last) {
+    const parts = clean(name).split(' ').filter(Boolean);
+    first = parts.shift() || ''; last = parts.join(' ');
+  }
+  const fullName = [first, last].filter(Boolean).join(' ');
+  if (!first) return res.status(400).json({ error: 'Merci d’indiquer votre prénom.' });
+  // Téléphone : facultatif côté serveur (anciennes pages), mais nettoyé et vérifié s'il est fourni
+  const tel = String(phone || '').replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '').slice(0, 16);
+  const telOk = tel.replace(/\D/g, '').length >= 8 && tel.replace(/\D/g, '').length <= 15;
   if (fmt === 'print') {
+    if (!last) return res.status(400).json({ error: 'Merci d’indiquer votre nom de famille : il doit figurer sur le colis. Rechargez la page si le champ « Nom » n’apparaît pas.' });
+    if (phone && !telOk) return res.status(400).json({ error: 'Le numéro de téléphone semble invalide.' });
     if (!A || A.line1.length < 3 || A.postal.length < 3 || A.city.length < 2) return res.status(400).json({ error: 'Adresse de livraison incomplète.' });
     if (!COUNTRIES.includes(A.country)) return res.status(400).json({ error: 'Nous ne livrons pas encore ce pays.' });
   }
@@ -90,7 +105,8 @@ module.exports = async (req, res) => {
   const cents = Math.round(priceEuros * 100);
   const priceStr = priceEuros.toFixed(2);
   const meta = {
-    name: cut(name, 200), email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
+    name: cut(fullName, 200), first_name: first, last_name: last, phone: fmt === 'print' && telOk ? tel : '',
+    email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
     reminder_id: cut(rem, 100),
     cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
