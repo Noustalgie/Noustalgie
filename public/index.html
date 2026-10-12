@@ -1717,8 +1717,13 @@ html body button[onclick^="applyPromo"]:hover{background:#1c1a18!important;color
             <li data-i18n="pay_inc6">Livraison offerte</li>
           </ul>
           <div class="pay-form">
-            <label class="fl" data-i18n="pay_name_lbl">Votre prénom</label>
-            <input type="text" id="payName" data-i18n-ph="pay_name_ph" placeholder="Votre prénom"/>
+            <!-- Prénom + nom : les deux figurent sur l'étiquette du colis -->
+            <div class="nst-name-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div><label class="fl" for="payName" data-i18n="pay_name_lbl">Prénom</label>
+              <input type="text" id="payName" autocomplete="given-name" autocapitalize="words" data-i18n-ph="pay_name_ph" placeholder="Emma"/></div>
+              <div><label class="fl" for="payLastName" data-i18n="pay_last_lbl">Nom</label>
+              <input type="text" id="payLastName" autocomplete="family-name" autocapitalize="words" data-i18n-ph="pay_last_ph" placeholder="Martin"/></div>
+            </div>
             <label class="fl" data-i18n="pay_email_lbl">Email (suivi de commande)</label>
             <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true"/><input type="email" id="payEmail" placeholder="emma@email.com"/>
             <!-- Choix format -->
@@ -1754,6 +1759,8 @@ html body button[onclick^="applyPromo"]:hover{background:#1c1a18!important;color
               </div>
               <select id="payAddrCountry" aria-label="Pays" style="margin-bottom:0;"><option value="FR" selected>France</option><option value="BE">Belgique</option><option value="LU">Luxembourg</option><option value="MC">Monaco</option><option value="CH">Suisse</option><option value="DE">Allemagne</option><option value="AT">Autriche</option><option value="NL">Pays-Bas</option><option value="ES">Espagne</option><option value="PT">Portugal</option><option value="IT">Italie</option><option value="IE">Irlande</option></select>
               <input type="hidden" id="payAddress"/>
+              <label class="fl" for="payPhone" data-i18n="pay_phone_lbl">Téléphone (pour le livreur)</label>
+              <input type="text" id="payPhone" inputmode="tel" autocomplete="tel" maxlength="24" data-i18n-ph="pay_phone_ph" placeholder="06 12 34 56 78"/>
             </div>
           </div>
           <button class="btn-pay" id="payBtn" onclick="processPayment()" data-i18n="pay_btn">Payer & commander</button>
@@ -1952,7 +1959,7 @@ const LANGS = {
     p4_hd:'Aperçu de votre livre', fullscreen:'Plein écran ↗', order_btn:'Commander →',
     pay_title:'Votre livre est prêt', pay_sub:'Satisfait de l\'aperçu ? Commandez votre livre photo premium.',
     pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier photo", pay_inc5:"Couverture rigide, reliure PUR solide", pay_inc6:'Livraison offerte',
-    pay_name_lbl:'Votre prénom', pay_name_ph:'Emma', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
+    pay_name_lbl:'Prénom', pay_name_ph:'Emma', pay_last_lbl:'Nom', pay_last_ph:'Martin', pay_phone_lbl:'Téléphone (pour le livreur)', pay_phone_ph:'06 12 34 56 78', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
     pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Livraison dans 10 à 12 jours.', dl_pdf:'Télécharger aussi le PDF ↗',
     footer_tag:'L\'album photo de votre histoire d\'amour.', footer_info:'Informations', footer_product:'Produit',
@@ -2038,7 +2045,7 @@ const LANGS = {
     p4_hd:'Your book preview', fullscreen:'Full screen ↗', order_btn:'Order →',
     pay_title:'Your book is ready', pay_sub:'Happy with the preview? Order your premium photo book.',
     pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on photo paper", pay_inc5:"Hard cover, durable PUR binding", pay_inc6:'Free delivery',
-    pay_name_lbl:'Your first name', pay_name_ph:'Emma', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
+    pay_name_lbl:'First name', pay_name_ph:'Emma', pay_last_lbl:'Last name', pay_last_ph:'Martin', pay_phone_lbl:'Phone (for the courier)', pay_phone_ph:'+33 6 12 34 56 78', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
     pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. Delivery in 5 to 7 working days.', dl_pdf:'Download the PDF too ↗',
     footer_tag:'The photo book of your love story.', footer_info:'Information', footer_product:'Product',
@@ -2124,7 +2131,7 @@ const LANGS = {
     p4_hd:'Vorschau eures Buches', fullscreen:'Vollbild ↗', order_btn:'Bestellen →',
     pay_title:'Euer Buch ist fertig', pay_sub:'Zufrieden mit der Vorschau? Bestellt euer Premium-Fotobuch.',
     pay_inc1:'Maßgefertigte Geschichte', pay_inc2:"Eure Fotos in hoher Auflösung gedruckt", pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:"Professioneller Druck auf Fotopapier", pay_inc5:"Fester Einband, robuste PUR-Bindung", pay_inc6:'Kostenloser Versand',
-    pay_name_lbl:'Euer Vorname', pay_name_ph:'Emma', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
+    pay_name_lbl:'Vorname', pay_name_ph:'Emma', pay_last_lbl:'Nachname', pay_last_ph:'Martin', pay_phone_lbl:'Telefon (für den Zusteller)', pay_phone_ph:'+49 151 23456789', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
     pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL',
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Lieferung in 5 bis 7 Werktagen.', dl_pdf:'PDF auch herunterladen ↗',
     footer_tag:'Das Fotobuch eurer Liebesgeschichte.', footer_info:'Informationen', footer_product:'Produkt',
@@ -2210,7 +2217,7 @@ const LANGS = {
     p4_hd:'Vista previa de vuestro libro', fullscreen:'Pantalla completa ↗', order_btn:'Pedir →',
     pay_title:'Vuestro libro está listo', pay_sub:'¿Satisfechos con la vista previa? Pedid vuestro libro fotográfico premium.',
     pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel fotográfico", pay_inc5:"Tapa dura, encuadernación PUR resistente", pay_inc6:'Envío gratuito',
-    pay_name_lbl:'Vuestro nombre', pay_name_ph:'Emma', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
+    pay_name_lbl:'Nombre', pay_name_ph:'Emma', pay_last_lbl:'Apellidos', pay_last_ph:'Martin', pay_phone_lbl:'Teléfono (para el repartidor)', pay_phone_ph:'+34 612 34 56 78', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
     pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro está siendo impreso. Entrega en 5 a 7 días laborables.', dl_pdf:'Descargar también el PDF ↗',
     footer_tag:'El álbum fotográfico de vuestra historia de amor.', footer_info:'Información', footer_product:'Producto',
@@ -2296,7 +2303,7 @@ const LANGS = {
     p4_hd:'Pré-visualização do vosso livro', fullscreen:'Ecrã inteiro ↗', order_btn:'Encomendar →',
     pay_title:'O vosso livro está pronto', pay_sub:'Satisfeitos com a pré-visualização? Encomendai o vosso livro fotográfico premium.',
     pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel fotográfico", pay_inc5:"Capa dura, encadernação PUR resistente", pay_inc6:'Envio gratuito',
-    pay_name_lbl:'O vosso primeiro nome', pay_name_ph:'Emma', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
+    pay_name_lbl:'Nome', pay_name_ph:'Emma', pay_last_lbl:'Apelido', pay_last_ph:'Martin', pay_phone_lbl:'Telefone (para o estafeta)', pay_phone_ph:'+351 912 345 678', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
     pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Entrega em 5 a 7 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
     footer_tag:'O álbum fotográfico da vossa história de amor.', footer_info:'Informações', footer_product:'Produto',
@@ -2458,6 +2465,8 @@ function saveDraft(){
       occasion: document.getElementById('occasion')?.value||'',
       dedication: document.getElementById('dedication')?.value||'',
       payName: document.getElementById('payName')?.value||'',
+      payLastName: document.getElementById('payLastName')?.value||'',
+      payPhone: document.getElementById('payPhone')?.value||'',
       payEmail: document.getElementById('payEmail')?.value||'',
       selectedPages: (typeof selectedPages!=='undefined')?selectedPages:36,
       captions: S.captions||{},
@@ -2476,7 +2485,7 @@ function restoreDraft(){
     const set=(id,val)=>{const el=document.getElementById(id);if(el&&val)el.value=val;};
     set('name1',d.name1); set('name2',d.name2); set('meetDate',d.meetDate);
     set('occasion',d.occasion); set('dedication',d.dedication);
-    set('payName',d.payName); set('payEmail',d.payEmail);
+    set('payName',d.payName); set('payLastName',d.payLastName); set('payPhone',d.payPhone); set('payEmail',d.payEmail);
     if(d.captions) S.captions=d.captions;
     if(d.selectedPages && typeof selectedPages!=='undefined'){ selectedPages=d.selectedPages; }
   }catch(e){/* ignore */}
@@ -2484,7 +2493,7 @@ function restoreDraft(){
 function clearDraft(){ try{ localStorage.removeItem('noustalgie_draft'); }catch(e){} }
 // Sauvegarde auto à chaque saisie
 document.addEventListener('input', function(e){
-  if(e.target && (e.target.id==='name1'||e.target.id==='name2'||e.target.id==='meetDate'||e.target.id==='dedication'||e.target.id==='payName'||e.target.id==='payEmail')){
+  if(e.target && (e.target.id==='name1'||e.target.id==='name2'||e.target.id==='meetDate'||e.target.id==='dedication'||e.target.id==='payName'||e.target.id==='payLastName'||e.target.id==='payPhone'||e.target.id==='payEmail')){
     saveDraft();
   }
 });
@@ -5850,17 +5859,30 @@ NA._ed = { drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, sa
   select: s => { ED.sel = s; highlightSel(); drawTools(); revealStage(); } };
 
 /* ══ 6. Paiement ══ */
+// Prénom + nom + téléphone : le transporteur a besoin du nom complet du destinataire et d'un numéro pour le joindre
+Object.entries({
+  fr: { p_last: 'Merci d’indiquer votre nom de famille : il doit figurer sur le colis.', p_phone: 'Merci d’indiquer un numéro de téléphone valide : le livreur en a besoin pour vous joindre.' },
+  en: { p_last: 'Please enter your last name: it must appear on the parcel.', p_phone: 'Please enter a valid phone number: the courier needs it to reach you.' },
+  de: { p_last: 'Bitte gebt euren Nachnamen an: Er muss auf dem Paket stehen.', p_phone: 'Bitte gebt eine gültige Telefonnummer an: Der Zusteller braucht sie, um euch zu erreichen.' },
+  es: { p_last: 'Indica tus apellidos: deben figurar en el paquete.', p_phone: 'Indica un teléfono válido: el repartidor lo necesita para contactarte.' },
+  pt: { p_last: 'Indica o teu apelido: tem de constar na encomenda.', p_phone: 'Indica um telefone válido: o estafeta precisa dele para te contactar.' },
+}).forEach(([l, d]) => { if (NA.UI && NA.UI[l]) Object.assign(NA.UI[l], d); });
+const phoneOk = p => { const d = p.replace(/\D/g, ''); return /^\+?[\d\s.\-()]+$/.test(p) && d.length >= 8 && d.length <= 15; };
 window.processPayment = async function () {
   const btn = $('payBtn');
-  const name = val('payName'), email = val('payEmail'), format = ($('payFormat') && $('payFormat').value) || 'print';
+  const firstName = val('payName'), lastName = val('payLastName'), phone = val('payPhone');
+  const name = [firstName, lastName].filter(Boolean).join(' ');
+  const email = val('payEmail'), format = ($('payFormat') && $('payFormat').value) || 'print';
   if ($('hpField') && $('hpField').value) return;
-  if (!name || !email) { alert(NA.t('p_need')); return; }
+  if (!firstName || !email) { alert(NA.t('p_need')); return; }
+  if (format === 'print' && !lastName) { alert(NA.t('p_last')); if ($('payLastName')) $('payLastName').focus(); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(NA.t('p_email')); return; }
   const line1 = val('payAddrLine1'), line2 = val('payAddrLine2'), postal = val('payAddrPostal'), city = val('payAddrCity');
   const cSel = $('payAddrCountry'), countryCode = (cSel && cSel.value) || 'FR';
   const country = cSel && cSel.options ? cSel.options[cSel.selectedIndex].text : 'France';
   const address = [line1, line2, (postal + ' ' + city).trim(), country].filter(Boolean).join(', ');
   if (format === 'print' && (!line1 || !postal || !city)) { alert(NA.t('p_addr')); return; }
+  if (format === 'print' && !phoneOk(phone)) { alert(NA.t('p_phone')); if ($('payPhone')) $('payPhone').focus(); return; }
   if (!NA.pages.length) { alert(NA.t('p_empty')); return; }
   const label = btn.innerHTML;
   const say = t => { btn.innerHTML = `<span class="nst-spin"></span>${esc(t)}`; };
@@ -5871,7 +5893,7 @@ window.processPayment = async function () {
     say(NA.t('p_redirect'));
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, album: { id: NA.albumId || '', reminder: NA.reminder || null }, promoCode: (promo() && promo().code) || '' }) });
+      body: JSON.stringify({ name, firstName, lastName, phone: format === 'print' ? phone : '', email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, album: { id: NA.albumId || '', reminder: NA.reminder || null }, promoCode: (promo() && promo().code) || '' }) });
     const d = await r.json();
     if (d.url) { window.location.href = d.url; return; }
     throw new Error(d.error || 'paiement');
@@ -6099,7 +6121,7 @@ confidentialite: { tab: 'Confidentialité', html: `
 <tbody>
 <tr><td>Photos, prénoms, informations sur votre histoire, dédicace</td><td>Composer et fabriquer votre album</td><td>Exécution du contrat</td><td>30 jours sur nos serveurs</td></tr>
 <tr><td>Email pour recevoir le lien de votre album</td><td>Vous envoyer le lien et, si vous le demandez, un rappel</td><td>Votre demande (consentement)</td><td>Le temps de l'envoi ; album conservé 30 jours</td></tr>
-<tr><td>Email, nom, adresse de livraison</td><td>Traiter, livrer et suivre votre commande</td><td>Exécution du contrat</td><td>Durée de la relation, puis archivage légal</td></tr>
+<tr><td>Email, nom, adresse de livraison, téléphone</td><td>Traiter, livrer et suivre votre commande</td><td>Exécution du contrat</td><td>Durée de la relation, puis archivage légal</td></tr>
 <tr><td>Justificatifs de commande et de paiement</td><td>Obligations comptables</td><td>Obligation légale</td><td>10 ans</td></tr>
 <tr><td>Statistiques de visite anonymes</td><td>Améliorer le site</td><td>Intérêt légitime</td><td>Données agrégées, sans cookie</td></tr>
 </tbody></table></div>

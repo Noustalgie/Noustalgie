@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const m = s.metadata || {};
   return res.json({
     paid: s.payment_status === 'paid',
-    firstName: String(m.name || '').trim().split(' ')[0].slice(0, 40),
+    firstName: String(m.first_name || String(m.name || '').trim().split(' ')[0]).slice(0, 40),
     pages: String(m.pages || '').slice(0, 3),
     price: typeof s.amount_total === 'number' ? (s.amount_total / 100).toFixed(2).replace('.', ',') : '',
     format: m.format === 'pdf' ? 'pdf' : 'print',
