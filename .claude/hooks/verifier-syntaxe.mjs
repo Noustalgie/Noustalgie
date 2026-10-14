@@ -4,6 +4,8 @@
 // - api/**/*.js : le fichier est compilé.
 // Code de sortie 2 = erreur renvoyée à Claude pour correction immédiate.
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
 let input = '';
@@ -44,6 +46,13 @@ process.stdin.on('end', () => {
   if (errors.length) {
     process.stderr.write('Vérification de syntaxe en échec, le site casserait en production :\n- ' + errors.join('\n- ') + '\n');
     process.exit(2);
+  }
+  // index.html modifié et valide : la carte des numéros de ligne est remise à jour, sans bruit
+  if (/public\/index\.html$/.test(file)) {
+    try {
+      const carte = new URL('../../outils/carte-du-code.mjs', import.meta.url);
+      execFileSync(process.execPath, [fileURLToPath(carte)], { stdio: 'ignore', timeout: 20000 });
+    } catch { /* la carte est un confort : son échec ne bloque jamais */ }
   }
   process.exit(0);
 });

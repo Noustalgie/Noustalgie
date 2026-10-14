@@ -16,14 +16,12 @@ git checkout -b <nom-court-en-francais>
 
 ## 2. Vérifier avant de committer
 
-- Syntaxe (le crochet le fait après chaque modification ; à la main) :
-  ```bash
-  echo '{"tool_input":{"file_path":"public/index.html"}}' | node .claude/hooks/verifier-syntaxe.mjs && echo OK
-  for f in api/*.js api/_fn/*.js api/_lib/*.js; do node --check "$f" || echo "ERREUR $f"; done
-  ```
-- Rendu : servir `public/` (`python3 -m http.server 8771 -d public`), ouvrir la page sur ordinateur (1440 px) et mobile (390 px), vérifier qu'aucune erreur n'apparaît dans `window.__nstErrs`.
-- Textes : si un texte français a changé, il est modifié **dans le HTML statique et dans `LANGS.fr`** ; contrôler qu'un aller-retour `setLang('en')` puis `setLang('fr')` ne change rien à l'écran.
-- Paiement : si `processPayment`, `api/create-checkout.js` ou `api/webhook.js` ont bougé, tester le formulaire (nom de famille obligatoire, téléphone valide) sans appeler Stripe.
+```bash
+python3 outils/verifier-site.py
+```
+Tout doit afficher OK : syntaxe (scripts, JSON-LD, CSS, api/), aucune erreur JavaScript sur ordinateur et mobile, pas de défilement horizontal, sections et menu présents, français identique après un aller-retour de langue, formulaire de paiement (nom de famille, téléphone, données envoyées), aucun tiret cadratin visible. Le travail peut être confié à l'agent `verificateur` (Haiku, moins cher).
+
+Si la modification est visuelle : `python3 outils/rendu.py --sortie /tmp/rendu` puis regarder les tranches `/tmp/rendu_1440_part*.png` et `/tmp/rendu_390_part*.png`.
 
 ## 3. Committer et ouvrir la PR
 
