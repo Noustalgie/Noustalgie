@@ -2028,6 +2028,16 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
           <button class="footer-link" onclick="startApp()" data-i18n="create_album">Composer mon album</button>
         </div>
       </div>
+      <div>
+        <div class="footer-col-t">Idées cadeaux</div>
+        <div class="footer-links">
+          <a class="footer-link" href="/idee-cadeau-couple">Idée cadeau couple</a>
+          <a class="footer-link" href="/album-photo-couple">Album photo couple</a>
+          <a class="footer-link" href="/idee-cadeau-noel-couple">Cadeau de Noël pour un couple</a>
+          <a class="footer-link" href="/cadeau-anniversaire-couple">Anniversaire de couple</a>
+          <a class="footer-link" href="/livre-personnalise-couple">Livre personnalisé couple</a>
+        </div>
+      </div>
     </div>
     <div class="footer-bottom">
       <div class="footer-copy" data-i18n="footer_copy">© 2026 Noustalgie. Tous droits réservés.</div>
@@ -6690,6 +6700,13 @@ if (links && !links.querySelector('.footer-track')) {
 }
 if (location.hash === '#suivi') window.addEventListener('load', () => setTimeout(trackOverlay, 200));
 window.addEventListener('hashchange', () => { if (location.hash === '#suivi') trackOverlay(); });
+/* Liens directs vers les pages légales (utilisés par les pages guides) : /#mentions, /#cgv, /#confidentialite, /#contact */
+(function () {
+  const PAGES_LEGALES = { '#mentions': 'mentions', '#cgv': 'cgv', '#confidentialite': 'confidentialite', '#contact': 'contact' };
+  const ouvrir = () => { const k = PAGES_LEGALES[location.hash]; if (k && window.openLegal) window.openLegal(k); };
+  window.addEventListener('load', () => setTimeout(ouvrir, 250));
+  window.addEventListener('hashchange', ouvrir);
+})();
 
 /* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
 Object.entries({
