@@ -98,3 +98,13 @@ h1 em,h2 em{font-weight:400;}
   .g-body h2,.g-section h2{margin-top:48px;}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+
+/* Sommaire /guides */
+.g-hub-head{padding:40px 0 8px;max-width:760px;}
+.g-hub h2{margin:56px 0 18px;font:400 clamp(26px,3vw,36px)/1.15 var(--disp);letter-spacing:-.018em;}
+.g-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.g-list a{display:block;height:100%;padding:22px 24px;border:1px solid var(--line);border-radius:20px;text-decoration:none;transition:border-color .25s var(--ease),transform .3s var(--ease);}
+.g-list a:hover{border-color:var(--ink);transform:translateY(-1px);}
+.g-list strong{display:block;margin-bottom:6px;font:500 20px/1.3 var(--disp);}
+.g-list span{display:block;font-size:15px;line-height:1.55;color:var(--mut);}
+@media (max-width:760px){.g-list{grid-template-columns:minmax(0,1fr);}}
