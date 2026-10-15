@@ -108,3 +108,11 @@ h1 em,h2 em{font-weight:400;}
 .g-list strong{display:block;margin-bottom:6px;font:500 20px/1.3 var(--disp);}
 .g-list span{display:block;font-size:15px;line-height:1.55;color:var(--mut);}
 @media (max-width:760px){.g-list{grid-template-columns:minmax(0,1fr);}}
+
+/* Exemple d'album (visuels produit) */
+.g-ex{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0 10px;}
+.g-ex figure{margin:0;}
+.g-ex img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--soft);}
+.g-ex figcaption{margin-top:8px;font:500 14px/1.45 var(--ui);color:var(--mut);}
+.g-ex-note{margin:6px 0 0;font:400 13px/1.5 var(--ui);color:var(--mut2);}
+@media (max-width:760px){.g-ex{grid-template-columns:minmax(0,1fr);gap:22px;}}
