@@ -395,7 +395,7 @@ Générée automatiquement (7540 lignes). Ouvrir une zone : Read avec offset = n
 ## api/
 
 - api/_fn/album.js (107 lignes) api/album.js — « Recevoir le lien de mon album »
-- api/_fn/cancel.js (15 lignes) 
+- api/_fn/cancel.js (28 lignes) 
 - api/_fn/order.js (35 lignes) Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
 - api/_fn/promo.js (19 lignes) api/promo.js — vérifie un code promo (codes dans la variable Vercel PROMO_CODES)
 - api/_fn/sign-upload.js (22 lignes) api/sign-upload.js — autorise le navigateur à envoyer UNE photo en pleine résolution
