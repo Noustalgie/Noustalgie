@@ -117,6 +117,8 @@ class Page:
             self.url = '/' + rel
         brut = open(fichier, encoding='utf-8', errors='replace').read()
         self.octets = len(brut.encode('utf-8'))
+        # ancres gérées par script : {'#cgv': 'cgv'}, location.hash === '#suivi', sec.id = 'exemples'
+        self.ancres_js = set(re.findall(r"['\"]#([A-Za-z][\w-]{2,30})['\"]\s*:", brut)) | set(re.findall(r"hash\s*===?\s*['\"]#([A-Za-z][\w-]{2,30})['\"]", brut)) | set(re.findall(r"\.id\s*=\s*['\"]([A-Za-z][\w-]{2,30})['\"]", brut))
         a = Arbre()
         a.feed(brut)
         self.doctype = a.doctype
@@ -367,7 +369,7 @@ class Audit:
     def ancres(self, url):
         if url not in self._ancres:
             p = self.par_url.get(url)
-            self._ancres[url] = {n.attrs.get('id') for n in p.tous if n.attrs.get('id')} | {n.attrs.get('name') for n in p.tous if n.tag == 'a' and n.attrs.get('name')} if p else set()
+            self._ancres[url] = ({n.attrs.get('id') for n in p.tous if n.attrs.get('id')} | {n.attrs.get('name') for n in p.tous if n.tag == 'a' and n.attrs.get('name')} | p.ancres_js) if p else set()
         return self._ancres[url]
 
     # ── données structurées ──
