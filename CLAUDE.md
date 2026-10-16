@@ -42,6 +42,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Les chaînes `testi*` du dictionnaire sont des témoignages inventés : ne jamais les afficher.
 - Vouvoiement partout côté client. Espace insécable avant `? ! : ;` en français.
 - `.vercelignore` suit la syntaxe de `.gitignore` : un motif sans `/` au début vaut à tous les niveaux. `video` excluait aussi `public/video/` (le film de /exemple-album) ; écrire `/video`.
+- Après « Ajouter » dans le sélecteur de photos, Safari fait convertir chaque photo en JPEG par l'iPhone avant de les transmettre : plusieurs secondes sans aucun signal, et aucun site ne peut l'éviter (`accept` n'y change rien). Ne jamais conclure « photos non transmises » tant que le navigateur n'a pas signalé d'annulation : la pastille « Préparation de vos photos… » couvre cette attente.
 
 ## Référencement (SEO)
 
