@@ -175,3 +175,16 @@ h1 em,h2 em{font-weight:400;}
   .g-table tr{display:block;padding:14px 0;border-bottom:1px solid var(--line);}
   .g-table td{display:block;padding:2px 0;border:0;}
 }
+
+/* Pages légales : texte long, sommaire, tableaux */
+.g-legal{max-width:760px;padding-top:28px;}
+.g-legal h2{margin:44px 0 12px;font-size:clamp(24px,2.6vw,30px);}
+.g-legal .lg-maj{margin:-8px 0 26px;font:400 14.5px/1.5 var(--ui);color:var(--mut);}
+.g-legal .lg-note{margin:0 0 26px;padding:18px 22px;border:1px solid var(--line);border-radius:20px;background:var(--soft);color:#3d3935;}
+.g-legal .lg-toc{margin:0 0 28px;padding:18px 22px;border:1px solid var(--line);border-radius:20px;background:var(--soft);}
+.g-legal .lg-toc p{margin:0 0 6px;font:600 14.5px/1.4 var(--ui);color:var(--ink);}
+.g-legal .lg-toc ol{margin:0;padding-left:1.3em;font:400 15.5px/1.75 var(--ui);}
+.g-legal .lg-table{overflow-x:auto;margin:18px 0;}
+.g-legal table{width:100%;min-width:520px;border-collapse:collapse;font:400 15px/1.5 var(--ui);}
+.g-legal th,.g-legal td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+.g-legal th{font-weight:600;color:var(--ink);}

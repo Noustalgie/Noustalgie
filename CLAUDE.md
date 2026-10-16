@@ -23,9 +23,11 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
   - Un grand bloc `<style>` dans le `<head>` : couches successives v1 → v6. **Toute nouvelle règle CSS va juste avant le PREMIER `</style>`** (jamais le dernier : il peut tomber dans une chaîne JavaScript et casser le site).
   - Le bloc « v6 · Direction artistique » (fin du CSS) porte les règles de design actuelles.
   - Trois gros scripts en fin de page : textes multilingues (`LANGS.fr/en/de/es/pt`), moteur d'album, éditeur, paiement.
+  - En production seulement, l'étape de construction Vercel (`outils/preparer-production.mjs`) sort ce `<style>` et ces scripts dans `/assets` (noms hachés, cache d'un an). On continue de modifier le fichier unique ; rien à faire à la main.
 - `api/` : fonctions Vercel. `create-checkout.js` (Stripe, **les prix sont recalculés ici** et doivent correspondre au site : 24/36/50 pages), `webhook.js` (commande Prodigi après paiement), `generate-pdf.js` (HTML de l'album → PDF via PDFShift), `chat.js` (textes par OpenAI), `tools.js` + `_fn/` (promo, suivi, annulation, upload…), `cleanup.js` (cron).
 - `vercel.json` : réécritures, redirections, en-têtes de sécurité (CSP : polices uniquement via Google Fonts).
-- `outils/` : `verifier-site.py` (tous les contrôles avant mise en ligne), `rendu.py` (captures fidèles sans réseau), `carte-du-code.mjs` (plan de index.html).
+- `outils/` : `verifier-site.py` (tous les contrôles avant mise en ligne), `rendu.py` (captures fidèles sans réseau), `carte-du-code.mjs` (plan de index.html), `audit-seo.py`, `preparer-production.mjs` (construction Vercel), `pages-legales.mjs`.
+- Pages `/mentions-legales`, `/cgv`, `/confidentialite` : générées à partir de la fenêtre « Informations légales » de index.html. Ne pas les modifier à la main : changer le texte dans index.html puis lancer `node outils/pages-legales.mjs` (la construction Vercel le refait de toute façon).
 - `video/` : films TikTok (rendu image par image dans Chromium, voir `video/package.json`). `video/oui` = « Le plus beau oui » (livre 3D, 38 s) ; son moteur sert aussi aux visuels du site (`node tools/oui-still.js` en mode studio, `node tools/og.js` pour les images de partage). Les rendus lourds vont dans `video/out/` (ignoré par git).
 - Variables d'environnement (sur Vercel, jamais dans le code) : STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PRODIGI_API_KEY, RESEND_API_KEY, NOTIFY_EMAIL, CLOUDINARY_*, PDFSHIFT_API_KEY, OPENAI_API_KEY, PROMO_CODES, CRON_SECRET.
 
@@ -64,5 +66,6 @@ Le crochet `.claude/hooks/verifier-syntaxe.mjs` vérifie la syntaxe de `index.ht
 ```bash
 python3 outils/verifier-site.py        # contrôles complets, code de sortie 1 si un échoue
 python3 outils/rendu.py --sortie /tmp/rendu   # captures 1440 et 390 px (polices réelles, photos de substitution)
+node outils/preparer-production.mjs --sortie /tmp/construit && python3 outils/verifier-site.py --dossier /tmp/construit   # version découpée, comme en production
 ```
 Les appels `/api/*` échouent en local, c'est normal.

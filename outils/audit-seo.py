@@ -22,7 +22,7 @@ from html.parser import HTMLParser
 
 ICI = os.path.dirname(os.path.abspath(__file__))
 RACINE = os.path.dirname(ICI)
-PUBLIC = os.path.join(RACINE, 'public')
+PUBLIC = os.path.abspath(sys.argv[sys.argv.index('--dossier') + 1]) if '--dossier' in sys.argv else os.path.join(RACINE, 'public')   # --dossier : version construite
 SITE = 'https://noustalgie.fr'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 INVISIBLE = {'script', 'style', 'noscript', 'template', 'svg', 'head', 'title'}
@@ -118,7 +118,8 @@ class Page:
         brut = open(fichier, encoding='utf-8', errors='replace').read()
         self.octets = len(brut.encode('utf-8'))
         # ancres gérées par script : {'#cgv': 'cgv'}, location.hash === '#suivi', sec.id = 'exemples'
-        self.ancres_js = set(re.findall(r"['\"]#([A-Za-z][\w-]{2,30})['\"]\s*:", brut)) | set(re.findall(r"hash\s*===?\s*['\"]#([A-Za-z][\w-]{2,30})['\"]", brut)) | set(re.findall(r"\.id\s*=\s*['\"]([A-Za-z][\w-]{2,30})['\"]", brut))
+        js = brut + ''.join(open(os.path.join(PUBLIC, s.lstrip('/')), encoding='utf-8', errors='replace').read() for s in re.findall(r'<script[^>]+src="(/[^"]+\.js)"', brut) if os.path.isfile(os.path.join(PUBLIC, s.lstrip('/'))))   # scripts locaux de la page
+        self.ancres_js = set(re.findall(r"['\"]#([A-Za-z][\w-]{2,30})['\"]\s*:", js)) | set(re.findall(r"hash\s*===?\s*['\"]#([A-Za-z][\w-]{2,30})['\"]", js)) | set(re.findall(r"\.id\s*=\s*['\"]([A-Za-z][\w-]{2,30})['\"]", js))
         a = Arbre()
         a.feed(brut)
         self.doctype = a.doctype

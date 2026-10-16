@@ -51,7 +51,8 @@
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": "FR",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+        "merchantReturnLink": "https://noustalgie.fr/cgv#cgv-7"
       },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
@@ -91,7 +92,8 @@
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": "FR",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+        "merchantReturnLink": "https://noustalgie.fr/cgv#cgv-7"
       },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
@@ -131,7 +133,8 @@
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": "FR",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+        "merchantReturnLink": "https://noustalgie.fr/cgv#cgv-7"
       },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
@@ -1790,7 +1793,7 @@ main#main:focus{outline:none;}
 
 <section class="ed-hero">
   <div class="ed-hero-txt">
-    <h1 class="ed-h1"><span data-i18n="hero_h1_1">L'album</span> <em><span data-i18n="hero_h1_2">qui raconte</span><br><span data-i18n="hero_h1_sub">votre histoire</span></em></h1>
+    <h1 class="ed-h1"><span data-i18n="hero_h1_1">L'album photo de couple</span> <em><span data-i18n="hero_h1_2">qui raconte</span><br><span data-i18n="hero_h1_sub">votre histoire</span></em></h1>
     <p class="ed-lead"><span data-i18n="hero_p2">Envoyez vos plus belles photos.</span> <span data-i18n="hero_p3">Nous composons votre album et vous livrons un livre imprimé sur papier photo professionnel.</span></p>
     <div>
       <button class="ed-btn-dark" onclick="startApp()" data-i18n="hero_cta">Composer mon album</button>
@@ -2159,9 +2162,9 @@ main#main:focus{outline:none;}
       <div>
         <div class="footer-col-t" data-i18n="footer_info">Informations</div>
         <div class="footer-links">
-          <button class="footer-link" onclick="openLegal('mentions')" data-i18n="legal_mentions">Mentions légales</button>
-          <button class="footer-link" onclick="openLegal('cgv')" data-i18n="legal_cgv">CGV</button>
-          <button class="footer-link" onclick="openLegal('confidentialite')" data-i18n="legal_privacy">Confidentialité</button>
+          <a class="footer-link" href="/mentions-legales" onclick="openLegal('mentions');return false;" data-i18n="legal_mentions">Mentions légales</a>
+          <a class="footer-link" href="/cgv" onclick="openLegal('cgv');return false;" data-i18n="legal_cgv">CGV</a>
+          <a class="footer-link" href="/confidentialite" onclick="openLegal('confidentialite');return false;" data-i18n="legal_privacy">Confidentialité</a>
           <button class="footer-link" onclick="openLegal('contact')" data-i18n="legal_contact">Contact</button>
         </div>
       </div>
@@ -2243,7 +2246,7 @@ const LANGS = {
     faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:'Oui, nous livrons dans toute l\'Europe grâce à notre réseau d\'imprimeurs partenaires. Il vous suffit d\'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l\'expédition de votre album.',
     nav_how:'Comment ça marche', nav_pricing:'Tarifs', nav_ideas:'Idées cadeaux', nav_create:'Créer notre album', nav_cta:'Composer mon album',
     hero_badge:'Album photo couple · Impression premium',
-    hero_h1_1:'L\'album', hero_h1_2:'qui raconte', hero_h1_sub:'votre histoire',
+    hero_h1_1:'L\'album photo de couple', hero_h1_2:'qui raconte', hero_h1_sub:'votre histoire',
     hero_p1:'Envoyez vos plus belles photos.', hero_p2:'Envoyez vos plus belles photos.', hero_p3:'Nous composons votre album et vous livrons un livre imprimé sur papier photo professionnel.',
     hero_cta:'Composer mon album', hero_how:'Comment ça marche',
     proof1:"Couverture rigide", proof2_n:"24 à 50", proof2:"pages", proof3:"Livre imprimé", proof4:'Cadeau inoubliable',
@@ -2329,7 +2332,7 @@ const LANGS = {
     faq_q10:'Do you ship outside France?', faq_a10:"Yes, we ship across Europe through our printing network. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
     nav_how:'How it works', nav_pricing:'Pricing', nav_ideas:'Gift ideas', nav_create:'Create our album', nav_cta:'Create my album',
     hero_badge:'Couple photo album · Premium printing',
-    hero_h1_1:'The album', hero_h1_2:'that tells', hero_h1_sub:'your story',
+    hero_h1_1:'The couple photo album', hero_h1_2:'that tells', hero_h1_sub:'your story',
     hero_p1:'Send your best photos.', hero_p2:'Send us your best photos.', hero_p3:'We design your album and deliver a book printed on professional photo paper.',
     hero_cta:'Create my album', hero_how:'How it works',
     proof1:"Hardcover", proof2_n:"24 to 50", proof2:"pages", proof3:"Printed book", proof4:'Unforgettable gift',
@@ -2415,7 +2418,7 @@ const LANGS = {
     faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, wir liefern europaweit über unser Drucknetzwerk. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
     nav_how:'So funktioniert\'s', nav_pricing:'Preise', nav_ideas:'Geschenkideen', nav_create:'Unser Album erstellen', nav_cta:'Mein Album gestalten',
     hero_badge:'Pärchen-Fotoalbum · Premium-Druck',
-    hero_h1_1:'Das Album,', hero_h1_2:'das eure Geschichte', hero_h1_sub:'erzählt',
+    hero_h1_1:'Das Fotoalbum für Paare,', hero_h1_2:'das eure Geschichte', hero_h1_sub:'erzählt',
     hero_p1:'Schickt eure schönsten Fotos.', hero_p2:'Schickt uns eure schönsten Fotos.', hero_p3:'Wir gestalten euer Album und liefern ein Buch, gedruckt auf professionellem Fotopapier.',
     hero_cta:'Mein Album gestalten', hero_how:'So funktioniert\'s',
     proof1:"Hardcover", proof2_n:"24 bis 50", proof2:"Seiten", proof3:"Gedrucktes Buch", proof4:'Unvergessliches Geschenk',
@@ -2501,7 +2504,7 @@ const LANGS = {
     faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, enviamos a toda Europa a través de nuestra red de impresión. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
     nav_how:'Cómo funciona', nav_pricing:'Precios', nav_ideas:'Ideas de regalo', nav_create:'Crear nuestro álbum', nav_cta:'Crear mi álbum',
     hero_badge:'Álbum foto pareja · Impresión premium',
-    hero_h1_1:'El álbum', hero_h1_2:'que cuenta', hero_h1_sub:'vuestra historia',
+    hero_h1_1:'El álbum de fotos de pareja', hero_h1_2:'que cuenta', hero_h1_sub:'vuestra historia',
     hero_p1:'Enviad vuestras mejores fotos.', hero_p2:'Enviadnos vuestras mejores fotos.', hero_p3:'Diseñamos vuestro álbum y os entregamos un libro impreso en papel fotográfico profesional.',
     hero_cta:'Crear mi álbum', hero_how:'Cómo funciona',
     proof1:"Tapa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Libro impreso", proof4:'Regalo inolvidable',
@@ -2587,7 +2590,7 @@ const LANGS = {
     faq_q10:'Entregam fora de França?', faq_a10:'Sim, entregamos em toda a Europa através da nossa rede de impressão. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
     nav_how:'Como funciona', nav_pricing:'Preços', nav_ideas:'Ideias de presente', nav_create:'Criar o nosso álbum', nav_cta:'Criar o meu álbum',
     hero_badge:'Álbum de casal · Impressão premium',
-    hero_h1_1:'O álbum', hero_h1_2:'que conta', hero_h1_sub:'a vossa história',
+    hero_h1_1:'O álbum de fotos de casal', hero_h1_2:'que conta', hero_h1_sub:'a vossa história',
     hero_p1:'Enviem as vossas melhores fotos.', hero_p2:'Enviem-nos as vossas melhores fotos.', hero_p3:'Desenhamos o vosso álbum e entregamos um livro impresso em papel fotográfico profissional.',
     hero_cta:'Criar o meu álbum', hero_how:'Como funciona',
     proof1:"Capa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Livro impresso", proof4:'Presente inesquecível',
@@ -6498,13 +6501,13 @@ mentions: { tab: 'Mentions légales', html: `
 <h2>Éditeur du site</h2>
 <p>Le site noustalgie.fr est édité par <b>Gabin Bacquet, entrepreneur individuel (EI)</b>, exerçant sous le nom commercial Noustalgie.<br>
 14 rue des Arts, 59800 Lille, France<br>
-SIRET : 100 004 738 00017 — SIREN : 100 004 738${rcs}<br>
+SIRET : 100 004 738 00017 · SIREN : 100 004 738${rcs}<br>
 Email : ${mail('Contact', E)}${tel}</p>
 <p>Directeur de la publication : Gabin Bacquet.</p>
 <h2>TVA</h2>
 <p>TVA non applicable, article 293 B du Code général des impôts (franchise en base).</p>
 <h2>Hébergement</h2>
-<p>Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis — vercel.com.</p>
+<p>Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis (vercel.com).</p>
 <h2>Propriété intellectuelle</h2>
 <p>La marque Noustalgie, les textes, la mise en page, les styles d'album, l'identité visuelle et le code du site sont protégés. Toute reproduction ou réutilisation sans autorisation écrite est interdite.</p>
 <p>Les photographies que vous importez restent votre propriété. Vous nous autorisez uniquement à les utiliser pour composer, fabriquer et vous livrer votre album.</p>
@@ -6520,7 +6523,7 @@ cgv: { tab: 'CGV', toc: true, html: `
 <h1>Conditions générales de vente</h1>
 <p class="lg-maj">En vigueur au ${CFG.maj}. Toute commande implique l'acceptation des présentes conditions.</p>
 <h2 id="cgv-1">1. Objet</h2>
-<p>Les présentes conditions régissent la vente, sur noustalgie.fr, d'albums photo personnalisés au format numérique (PDF) ou imprimé, par Gabin Bacquet, entrepreneur individuel (Noustalgie), 14 rue des Arts, 59800 Lille — SIRET 100 004 738 00017 — ${E}.</p>
+<p>Les présentes conditions régissent la vente, sur noustalgie.fr, d'albums photo personnalisés au format numérique (PDF) ou imprimé, par Gabin Bacquet, entrepreneur individuel (Noustalgie), 14 rue des Arts, 59800 Lille (SIRET 100 004 738 00017), ${E}.</p>
 <h2 id="cgv-2">2. Produits</h2>
 <p>Chaque album est composé à partir des photos, prénoms et informations fournis par le client, avec des textes rédigés automatiquement puis modifiables librement avant la commande.</p>
 <ul>
@@ -6565,10 +6568,10 @@ cgv: { tab: 'CGV', toc: true, html: `
 confidentialite: { tab: 'Confidentialité', html: `
 <p class="lg-eyebrow">Protection des données</p>
 <h1>Politique de confidentialité</h1>
-<p class="lg-maj">Dernière mise à jour : ${CFG.maj} — conforme au Règlement (UE) 2016/679 (RGPD).</p>
+<p class="lg-maj">Dernière mise à jour : ${CFG.maj}, conforme au Règlement (UE) 2016/679 (RGPD).</p>
 <div class="lg-note">En bref : vos photos servent uniquement à fabriquer votre album. Elles ne sont jamais vendues ni utilisées pour autre chose, et sont supprimées de nos serveurs 30 jours après leur envoi.</div>
 <h2>Responsable du traitement</h2>
-<p>Gabin Bacquet (Noustalgie), 14 rue des Arts, 59800 Lille — ${mail('Données personnelles', E)}.</p>
+<p>Gabin Bacquet (Noustalgie), 14 rue des Arts, 59800 Lille, ${mail('Données personnelles', E)}.</p>
 <h2>Données traitées, finalités et durées</h2>
 <div class="lg-table"><table>
 <thead><tr><th>Données</th><th>Pourquoi</th><th>Base légale</th><th>Conservation</th></tr></thead>
@@ -6614,7 +6617,7 @@ contact: { tab: 'Contact', html: `
 <h2>Email</h2>
 <p>${mail('Contact', E)}${tel}</p>
 <h2>Adresse</h2>
-<p>Noustalgie — Gabin Bacquet (EI)<br>14 rue des Arts, 59800 Lille, France</p>
+<p>Noustalgie, Gabin Bacquet (EI)<br>14 rue des Arts, 59800 Lille, France</p>
 <h2>Livraison hors de France</h2>
 <p>Noustalgie livre en France et dans de nombreux pays d'Europe. Saisissez précisément votre pays dans l'adresse de livraison ; pour une destination particulière, écrivez-nous avant de commander.</p>
 ` },
