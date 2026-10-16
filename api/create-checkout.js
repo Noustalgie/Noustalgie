@@ -116,7 +116,7 @@ module.exports = async (req, res) => {
     'payment_method_types[]': 'card',
     'line_items[0][price_data][currency]': 'eur',
     'line_items[0][price_data][product_data][name]': `Album Noustalgie · ${pagesNum} pages`,
-    'line_items[0][price_data][product_data][description]': `${fmt === 'pdf' ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide, livraison incluse'}${names ? ' — ' + cut(names, 120) : ''}`,
+    'line_items[0][price_data][product_data][description]': `${fmt === 'pdf' ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide, livraison incluse'}${names ? ' · ' + cut(names, 120) : ''}`,
     'line_items[0][price_data][unit_amount]': cents,
     'line_items[0][quantity]': '1',
     mode: 'payment',
