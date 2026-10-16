@@ -1,5 +1,41 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(python3 outils/verifier-site.py)",
+      "Bash(python3 outils/verifier-site.py *)",
+      "Bash(python3 outils/audit-seo.py)",
+      "Bash(python3 outils/audit-seo.py *)",
+      "mcp__Semrush__get_report_schema",
+      "mcp__github__pull_request_read",
+      "mcp__Vercel__list_deployments",
+      "mcp__Vercel__list_deployment_events"
+    ]
+  },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh\"",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/garde-fous.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
