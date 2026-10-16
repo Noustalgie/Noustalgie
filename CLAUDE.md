@@ -9,6 +9,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Le plus simple qui marche : rien de plus que ce qui est demandé, pas d'abstraction pour un seul usage.
 - Modifications chirurgicales : ne toucher que ce que la demande exige, garder le style existant, signaler le code mort sans le supprimer.
 - Objectif vérifiable : transformer la demande en contrôle (« corriger le bug » → reproduire, corriger, montrer que ça passe) et ne rien annoncer comme fait sans preuve (skill `verification-before-completion`). Un bug : skill `systematic-debugging`, la cause avant la correction.
+- Chaque erreur qui a coûté du temps devient une ligne de « Règles qui ont déjà coûté cher », pour ne pas la refaire.
 (Inspiré des consignes « karpathy-skills », licence MIT.)
 
 ## Lire moins, dépenser moins
@@ -40,6 +41,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Délai réel de livraison : 10 à 12 jours. Ne jamais écrire 3-5 ou 5-7 jours.
 - Les chaînes `testi*` du dictionnaire sont des témoignages inventés : ne jamais les afficher.
 - Vouvoiement partout côté client. Espace insécable avant `? ! : ;` en français.
+- `.vercelignore` suit la syntaxe de `.gitignore` : un motif sans `/` au début vaut à tous les niveaux. `video` excluait aussi `public/video/` (le film de /exemple-album) ; écrire `/video`.
 
 ## Référencement (SEO)
 
@@ -59,7 +61,12 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 ## Mise en ligne
 
 Utiliser le skill `/mise-en-ligne` (branche → vérifications → PR → aperçu Vercel → fusion → contrôle en production).
-Le crochet `.claude/hooks/verifier-syntaxe.mjs` vérifie la syntaxe de `index.html` et des fichiers `api/` après chaque modification, et remet la carte du code à jour.
+Crochets (`.claude/settings.json`) :
+- `verifier-syntaxe.mjs` vérifie la syntaxe de `index.html` et des fichiers `api/` après chaque modification, et remet la carte du code à jour ;
+- `garde-fous.mjs` refuse les modifications à la main des pages légales générées ;
+- `session-start.sh` installe, au début de chaque session web, ce qu'il faut pour les contrôles et les films (Playwright 1.56 pour le Chromium préinstallé, Pillow, paquets audio, `video/node_modules`, polices).
+
+Aperçus Vercel depuis une session web : `curl` est bloqué, lire les pages avec l'outil `web_fetch_vercel_url` du connecteur Vercel. Jamais un gros fichier (vidéo) avec cet outil, il fait planter le connecteur : vérifier l'affiche ou un petit fichier du même dossier.
 
 ## Tester en local
 
