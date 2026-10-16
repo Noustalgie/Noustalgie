@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://noustalgie.fr/</loc>
     <lastmod>2026-10-16</lastmod>
@@ -95,6 +95,15 @@
     <image:image>
       <image:loc>https://noustalgie.fr/img/exemple/album/page-24.jpg</image:loc>
     </image:image>
+      <video:video>
+      <video:thumbnail_loc>https://noustalgie.fr/video/le-plus-beau-oui.jpg</video:thumbnail_loc>
+      <video:title>Le plus beau oui : l'album de Léa et Hugo en 38 secondes</video:title>
+      <video:description>Le film de l'album d'exemple de Noustalgie : un livre de mariage feuilleté page après page, sur une musique originale. Léa et Hugo sont un couple imaginé, les pages sont réelles.</video:description>
+      <video:content_loc>https://noustalgie.fr/video/le-plus-beau-oui.mp4</video:content_loc>
+      <video:duration>38</video:duration>
+      <video:publication_date>2026-10-16</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://noustalgie.fr/idee-cadeau-couple</loc>
