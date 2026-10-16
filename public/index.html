@@ -7,7 +7,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Noustalgie : l'album photo de couple qui raconte votre histoire</title><meta name="description" content="Créez l'album photo de votre couple en quelques minutes : vos photos, votre histoire mise en mots, un livre 21×21 cm à couverture rigide livré en 10 à 12 jours. Aperçu gratuit avant paiement."/><meta name="keywords" content="album photo couple, cadeau original couple, livre photo personnalisé, cadeau saint valentin, album photo mariage"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://noustalgie.fr/"/><meta property="og:type" content="website"/><meta property="og:url" content="https://noustalgie.fr/"/><meta property="og:title" content="Noustalgie : l'album photo de couple qui raconte votre histoire"/><meta property="og:description" content="Vos photos, votre histoire, un vrai livre relié. Aperçu gratuit avant paiement."/><meta property="og:site_name" content="Noustalgie"/>
+<title>Noustalgie : l'album photo de couple qui raconte votre histoire</title><meta name="description" content="Créez l'album photo de votre couple en quelques minutes : vos photos, votre histoire en mots, un livre rigide 21×21 cm livré en 10 à 12 jours. Aperçu gratuit."/><meta name="keywords" content="album photo couple, cadeau original couple, livre photo personnalisé, cadeau saint valentin, album photo mariage"/><meta name="robots" content="index, follow"/><link rel="canonical" href="https://noustalgie.fr/"/><meta property="og:type" content="website"/><meta property="og:url" content="https://noustalgie.fr/"/><meta property="og:title" content="Noustalgie : l'album photo de couple qui raconte votre histoire"/><meta property="og:description" content="Vos photos, votre histoire, un vrai livre relié. Aperçu gratuit avant paiement."/><meta property="og:site_name" content="Noustalgie"/>
 <meta property="og:image" content="https://noustalgie.fr/img/exemple/og-noustalgie.jpg"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -48,6 +48,11 @@
       "priceCurrency": "EUR",
       "availability": "https://schema.org/InStock",
       "url": "https://noustalgie.fr/#app",
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "FR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
         "shippingRate": {
@@ -83,6 +88,11 @@
       "priceCurrency": "EUR",
       "availability": "https://schema.org/InStock",
       "url": "https://noustalgie.fr/#app",
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "FR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
         "shippingRate": {
@@ -118,6 +128,11 @@
       "priceCurrency": "EUR",
       "availability": "https://schema.org/InStock",
       "url": "https://noustalgie.fr/#app",
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "FR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
         "shippingRate": {
@@ -149,7 +164,7 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link rel="preconnect" href="https://images.unsplash.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
@@ -1593,6 +1608,10 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
 .nst-gal-link:hover{background:#f6f4f0;}
 .nst-gal-link:focus-visible{outline:2px solid #1c1a18;outline-offset:3px;}
 .nst-gal-more p{margin:0;font:400 13px/1.5 'Hanken Grotesk',system-ui,sans-serif;color:#77726b;}
+/* Lien d'évitement : visible seulement au clavier */
+.nst-skip{position:absolute;left:16px;top:-80px;z-index:10000;padding:12px 22px;border-radius:999px;background:#1c1a18;color:#f5f0e8;font:500 14px/1 'Hanken Grotesk',system-ui,sans-serif;text-decoration:none;transition:top .15s;}
+.nst-skip:focus{top:12px;outline:2px solid #fff;outline-offset:2px;}
+main#main:focus{outline:none;}
 </style>
 <script type="application/ld+json">
 {
@@ -1705,6 +1724,7 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+<a class="nst-skip" href="#main" data-i18n="skip_main">Aller au contenu</a>
 
 <!-- BG -->
 <div class="bg-wrap">
@@ -1728,7 +1748,7 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
 
 
 <!-- NAV -->
-<div class="ed-wrap">
+<header><div class="ed-wrap">
 <nav class="ed-nav">
   <div class="ed-nav-links">
     <a href="#how" data-i18n="nav_how">Comment ça marche</a>
@@ -1750,6 +1770,8 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
     <button class="ed-nav-cta" onclick="startApp()" data-i18n="nav_cta">Composer mon album</button>
   </div>
 </nav>
+</div></header>
+<main id="main" tabindex="-1"><div class="ed-wrap">
 
 <section class="ed-hero">
   <div class="ed-hero-txt">
@@ -1761,7 +1783,7 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
     </div>
   </div>
   <div class="ed-hero-img"><div class="nst-demo" id="nstDemo" aria-label="Exemple d’album Noustalgie"></div>
-    <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=80&auto=format" alt="Couple enlacé, photo en noir et blanc" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
+    <img src="/img/exemple/photo-champ.jpg" alt="Couple enlacé, photo en noir et blanc" width="900" height="900" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
     <div class="ed-hero-cap"><div class="l" data-i18n="hero_cap_l">Édition limitée</div><div class="q" data-i18n="hero_cap_q">"Notre plus belle page"</div></div>
   </div>
 </section>
@@ -1781,10 +1803,10 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
 
 
 <div class="ed-gallery">
-  <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple souriant en noir et blanc" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple enlacé, moment de tendresse" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple élégant, portrait en extérieur" onerror="this.style.display='none'"/>
-  <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" alt="Couple heureux, complicité et amour" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" height="533" alt="Couple souriant en noir et blanc" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" height="533" alt="Couple enlacé, moment de tendresse" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" height="533" alt="Couple élégant, portrait en extérieur" onerror="this.style.display='none'"/>
+  <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80&auto=format" loading="lazy" decoding="async" width="400" height="533" alt="Couple heureux, complicité et amour" onerror="this.style.display='none'"/>
 </div>
 
 <section class="ed-price" id="pricing">
@@ -2110,6 +2132,7 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
     </div>
   </div>
 </section>
+</main>
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -2263,7 +2286,7 @@ const LANGS = {
     pay_name_lbl:'Prénom', pay_name_ph:'Emma', pay_last_lbl:'Nom', pay_last_ph:'Martin', pay_phone_lbl:'Téléphone (pour le livreur)', pay_phone_ph:'06 12 34 56 78', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
     pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Vous le recevrez dans 10 à 12 jours.', dl_pdf:'Télécharger aussi le PDF ↗',
-    footer_tag:'L\'album photo de votre histoire d\'amour.', footer_info:'Informations', footer_product:'Produit',
+    footer_tag:'L\'album photo de votre histoire d\'amour.', skip_main:'Aller au contenu', footer_info:'Informations', footer_product:'Produit',
     legal_mentions:'Mentions légales', legal_cgv:'CGV', legal_privacy:'Confidentialité', legal_contact:'Contact',
     footer_copy:'© 2026 Noustalgie. Tous droits réservés.', footer_made:"Fait à Lille", create_album:'Composer mon album',
     close_btn:'← Fermer', modal_title:'Votre petit mot 💌', modal_sub:'Cette légende apparaîtra sous cette photo dans votre livre.', modal_lbl:'Légende personnelle', modal_ph:'Notre premier soir à Paris...', cancel:'Annuler', save_word:'Sauvegarder',
@@ -2349,7 +2372,7 @@ const LANGS = {
     pay_name_lbl:'First name', pay_name_ph:'Emma', pay_last_lbl:'Last name', pay_last_ph:'Martin', pay_phone_lbl:'Phone (for the courier)', pay_phone_ph:'+33 6 12 34 56 78', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
     pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. You will receive it within 10 to 12 days.', dl_pdf:'Download the PDF too ↗',
-    footer_tag:'The photo book of your love story.', footer_info:'Information', footer_product:'Product',
+    footer_tag:'The photo book of your love story.', skip_main:'Skip to content', footer_info:'Information', footer_product:'Product',
     legal_mentions:'Legal notice', legal_cgv:'T&Cs', legal_privacy:'Privacy', legal_contact:'Contact',
     footer_copy:'© 2026 Noustalgie. All rights reserved.', footer_made:"Made in Lille", create_album:'Create my album',
     close_btn:'← Close', modal_title:'Your personal note 💌', modal_sub:'This caption will appear under the photo in your book.', modal_lbl:'Personal caption', modal_ph:'Our first night in Paris...', cancel:'Cancel', save_word:'Save',
@@ -2435,7 +2458,7 @@ const LANGS = {
     pay_name_lbl:'Vorname', pay_name_ph:'Emma', pay_last_lbl:'Nachname', pay_last_ph:'Martin', pay_phone_lbl:'Telefon (für den Zusteller)', pay_phone_ph:'+49 151 23456789', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
     pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL',
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Ihr erhaltet es in 10 bis 12 Tagen.', dl_pdf:'PDF auch herunterladen ↗',
-    footer_tag:'Das Fotobuch eurer Liebesgeschichte.', footer_info:'Informationen', footer_product:'Produkt',
+    footer_tag:'Das Fotobuch eurer Liebesgeschichte.', skip_main:'Zum Inhalt springen', footer_info:'Informationen', footer_product:'Produkt',
     legal_mentions:'Impressum', legal_cgv:'AGB', legal_privacy:'Datenschutz', legal_contact:'Kontakt',
     footer_copy:'© 2026 Noustalgie. Alle Rechte vorbehalten.', footer_made:"Gemacht in Lille", create_album:'Mein Album gestalten',
     close_btn:'← Schließen', modal_title:'Eure persönliche Notiz 💌', modal_sub:'Diese Bildunterschrift erscheint unter dem Foto.', modal_lbl:'Persönliche Bildunterschrift', modal_ph:'Unser erster Abend in Paris...', cancel:'Abbrechen', save_word:'Speichern',
@@ -2521,7 +2544,7 @@ const LANGS = {
     pay_name_lbl:'Nombre', pay_name_ph:'Emma', pay_last_lbl:'Apellidos', pay_last_ph:'Martin', pay_phone_lbl:'Teléfono (para el repartidor)', pay_phone_ph:'+34 612 34 56 78', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
     pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro se está imprimiendo. Lo recibiréis en 10 a 12 días.', dl_pdf:'Descargar también el PDF ↗',
-    footer_tag:'El álbum fotográfico de vuestra historia de amor.', footer_info:'Información', footer_product:'Producto',
+    footer_tag:'El álbum fotográfico de vuestra historia de amor.', skip_main:'Saltar al contenido', footer_info:'Información', footer_product:'Producto',
     legal_mentions:'Aviso legal', legal_cgv:'Condiciones', legal_privacy:'Privacidad', legal_contact:'Contacto',
     footer_copy:'© 2026 Noustalgie. Todos los derechos reservados.', footer_made:"Hecho en Lille", create_album:'Crear mi álbum',
     close_btn:'← Cerrar', modal_title:'Vuestro pequeño mensaje 💌', modal_sub:'Este pie de foto aparecerá bajo la foto en vuestro libro.', modal_lbl:'Pie de foto personal', modal_ph:'Nuestra primera noche en París...', cancel:'Cancelar', save_word:'Guardar',
@@ -2607,7 +2630,7 @@ const LANGS = {
     pay_name_lbl:'Nome', pay_name_ph:'Emma', pay_last_lbl:'Apelido', pay_last_ph:'Martin', pay_phone_lbl:'Telefone (para o estafeta)', pay_phone_ph:'+351 912 345 678', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
     pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Vão recebê-lo em 10 a 12 dias.', dl_pdf:'Descarregar também o PDF ↗',
-    footer_tag:'O álbum fotográfico da vossa história de amor.', footer_info:'Informações', footer_product:'Produto',
+    footer_tag:'O álbum fotográfico da vossa história de amor.', skip_main:'Saltar para o conteúdo', footer_info:'Informações', footer_product:'Produto',
     legal_mentions:'Aviso legal', legal_cgv:'CGV', legal_privacy:'Privacidade', legal_contact:'Contacto',
     footer_copy:'© 2026 Noustalgie. Todos os direitos reservados.', footer_made:"Feito em Lille", create_album:'Criar o meu álbum',
     close_btn:'← Fechar', modal_title:'A vossa mensagem pessoal 💌', modal_sub:'Esta legenda aparecerá sob a foto no vosso livro.', modal_lbl:'Legenda pessoal', modal_ph:'A nossa primeira noite em Paris...', cancel:'Cancelar', save_word:'Guardar',
@@ -7097,7 +7120,7 @@ NA.book3d = function ({ cover, photos, theme, spine, size, depth, fronts }) {
   };
   return el;
 };
-const SAMPLE_PHOTO = [{ data: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=78&auto=format', orient: 'portrait', focalY: 40 }];
+const SAMPLE_PHOTO = [{ data: '/img/exemple/photo-champ.jpg', orient: 'portrait', focalY: 40 }];
 const sampleCover = { layout: 'cover', slots: [{ p: 0, z: 1, f: 'none' }], t: { title: 'La lumière des dimanches', names: 'Léa & Hugo · 2026' } };
 
 /* ── Hero : livre 3D qui change de style et suit la souris ── */
