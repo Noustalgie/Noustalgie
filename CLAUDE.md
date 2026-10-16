@@ -26,6 +26,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - `api/` : fonctions Vercel. `create-checkout.js` (Stripe, **les prix sont recalculés ici** et doivent correspondre au site : 24/36/50 pages), `webhook.js` (commande Prodigi après paiement), `generate-pdf.js` (HTML de l'album → PDF via PDFShift), `chat.js` (textes par OpenAI), `tools.js` + `_fn/` (promo, suivi, annulation, upload…), `cleanup.js` (cron).
 - `vercel.json` : réécritures, redirections, en-têtes de sécurité (CSP : polices uniquement via Google Fonts).
 - `outils/` : `verifier-site.py` (tous les contrôles avant mise en ligne), `rendu.py` (captures fidèles sans réseau), `carte-du-code.mjs` (plan de index.html).
+- `video/` : films TikTok (rendu image par image dans Chromium, voir `video/package.json`). `video/oui` = « Le plus beau oui » (livre 3D, 38 s) ; son moteur sert aussi aux visuels du site (`node tools/oui-still.js` en mode studio, `node tools/og.js` pour les images de partage). Les rendus lourds vont dans `video/out/` (ignoré par git).
 - Variables d'environnement (sur Vercel, jamais dans le code) : STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PRODIGI_API_KEY, RESEND_API_KEY, NOTIFY_EMAIL, CLOUDINARY_*, PDFSHIFT_API_KEY, OPENAI_API_KEY, PROMO_CODES, CRON_SECRET.
 
 ## Règles qui ont déjà coûté cher
@@ -37,6 +38,13 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Délai réel de livraison : 10 à 12 jours. Ne jamais écrire 3-5 ou 5-7 jours.
 - Les chaînes `testi*` du dictionnaire sont des témoignages inventés : ne jamais les afficher.
 - Vouvoiement partout côté client. Espace insécable avant `? ! : ;` en français.
+
+## Référencement (SEO)
+
+- `python3 outils/audit-seo.py [--mots]` : audit statique équivalent à Semrush (titres, descriptions, liens, données structurées, en-têtes de cache, mots-clés). À relancer après toute modification de `public/`, viser 0 erreur.
+- Pages guides : `/guides.css?v=…` est en cache un an ; quand `guides.css` change, changer la valeur de `?v=` dans toutes les pages. Titres ≤ 60 caractères, descriptions ≤ 158.
+- Photos de haut de page et données Article : fichiers locaux de `/img/exemple/`, jamais de lien vers Unsplash. Toute nouvelle page : l'ajouter au plan du site, à `llms.txt` et à `/guides`.
+- jsPDF et heic2any se chargent à la demande (`nstLoadLib`, en tête de `index.html`), pas avec la page d'accueil.
 
 ## Direction artistique (choix de Gabin : éditorial noir et blanc, boutons pilule)
 
