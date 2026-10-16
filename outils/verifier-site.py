@@ -41,7 +41,8 @@ INSTANTANE = """() => [...document.querySelectorAll('[data-i18n],[data-nst],[dat
 async def navigateur():
     from playwright.async_api import async_playwright
     rendu.installer_polices()
-    srv = rendu.serveur(os.path.join(RACINE, 'public'))
+    i = sys.argv.index('--dossier') if '--dossier' in sys.argv else -1   # version construite (outils/preparer-production.mjs --sortie …)
+    srv = rendu.serveur(os.path.abspath(sys.argv[i + 1]) if i > 0 else os.path.join(RACINE, 'public'))
     port = srv.server_address[1]
     async with async_playwright() as p:
         nav = await p.chromium.launch()

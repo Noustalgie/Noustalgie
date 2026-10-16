@@ -141,15 +141,15 @@ function readRawBody(req) {
   });
 }
 
-// Gabarit email commun, aux couleurs du site
-const mail = (title, inner) => `<div style="background:#0e0b09;padding:32px 16px;font-family:Georgia,'Times New Roman',serif;">
-<div style="max-width:480px;margin:0 auto;background:#141008;border:1px solid rgba(210,175,120,.2);padding:32px 28px;color:#f2ebe0;">
-<div style="font-size:20px;margin-bottom:24px;">Nous<em style="color:#c9a05a;">talgie</em></div>
-<h2 style="font-weight:400;font-size:22px;margin:0 0 16px;">${title}</h2>
-<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:rgba(242,235,224,.8);">${inner}</div>
-<p style="font-family:Arial,sans-serif;font-size:12px;color:rgba(242,235,224,.4);margin-top:28px;">Une question ? Répondez simplement à cet email.</p>
+// Gabarit email commun, aux couleurs du site (papier clair, encre, bouton pilule : comme l'email « Recevoir le lien »)
+const mail = (title, inner) => `<div style="background:#f6f4f0;padding:32px 16px;font-family:Georgia,'Times New Roman',serif;">
+<div style="max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #e4dfd7;border-radius:14px;padding:32px 28px;color:#1c1a18;">
+<div style="font-size:20px;margin-bottom:24px;">Nous<em>talgie</em></div>
+<h2 style="font-weight:400;font-size:24px;margin:0 0 16px;">${title}</h2>
+<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#5f5a54;">${inner}</div>
+<p style="font-family:Arial,sans-serif;font-size:12px;color:#8b857d;margin-top:28px;">Une question ? Répondez simplement à cet email.</p>
 </div></div>`;
-const btn = (href, label) => `<div style="margin:24px 0;"><a href="${h(href)}" style="background:#c9a05a;color:#0e0b09;padding:14px 26px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block;">${label}</a></div>`;
+const btn = (href, label) => `<div style="margin:24px 0;"><a href="${h(href)}" style="background:#1c1a18;color:#ffffff;padding:14px 26px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;display:inline-block;">${label}</a></div>`;
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
@@ -201,7 +201,7 @@ module.exports = async (req, res) => {
       await sendEmail({
         to: email,
         subject: 'Votre album Noustalgie est prêt ♥',
-        html: mail(`Bonjour ${h(first)},`, `<p>Votre album <b>${h(names)}</b> est prêt.</p>${btn(pdfUrl, 'Télécharger mon album (PDF)')}<p style="color:rgba(242,235,224,.5);font-size:12px;">Lien valable 14 jours — pensez à l’enregistrer. N° de commande : ${orderNumber}</p>`),
+        html: mail(`Bonjour ${h(first)},`, `<p>Votre album <b>${h(names)}</b> est prêt.</p>${btn(pdfUrl, 'Télécharger mon album (PDF)')}<p style="color:#8b857d;font-size:12px;">Lien valable 14 jours : pensez à l’enregistrer. N° de commande : ${orderNumber}</p>`),
       });
     }
 
@@ -235,7 +235,7 @@ module.exports = async (req, res) => {
         to: email,
         subject: 'Votre livre Noustalgie part à l’impression ♥',
         html: mail(`Bonjour ${h(first)},`, `<p>Votre commande est confirmée : le livre <b>${h(names)}</b> part à l’impression.</p>
-          <p>N° de commande : <b style="color:#f2ebe0;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 10 à 12 jours environ</p>
+          <p>N° de commande : <b style="color:#1c1a18;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 10 à 12 jours environ</p>
           <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>${btn('https://noustalgie.fr/#suivi', 'Suivre ma commande')}`),
       });
     }

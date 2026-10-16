@@ -1,0 +1,15 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>banc d'essai du livre 3D</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script></head>
+<body><canvas id="gl"></canvas>
+<script type="module">
+import { createBook3D, DEFAULTS } from './src/book3d.js';
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 1080), H = +(q.get('h') || 1920);
+const canvas = document.getElementById('gl'); canvas.width = W; canvas.height = H; canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+await document.fonts.load('500 34px "Hanken Grotesk"');
+window.B = await createBook3D(canvas, { width: W, height: H, samples: +(q.get('samples') || 4), shadowSize: +(q.get('shadow') || 2048) });
+window.__shot = s => { const S = Object.assign(DEFAULTS(), s); if (s && s.flip) S.flip = s.flip; window.B.render(S); return true; };
+window.__ready = true;
+</script></body></html>

@@ -1,50 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://noustalgie.fr/</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album-couverture.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album-double-page.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album-pages.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/exemple-album</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-01.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-02.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-03.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-04.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-05.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-06.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-07.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-08.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-09.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-10.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-11.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-12.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-13.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-14.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-15.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-16.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-17.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-18.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-19.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-20.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-21.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-22.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-23.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/album/page-24.jpg</image:loc>
+    </image:image>
+      <video:video>
+      <video:thumbnail_loc>https://noustalgie.fr/video/le-plus-beau-oui.jpg</video:thumbnail_loc>
+      <video:title>Le plus beau oui : l'album de Léa et Hugo en 38 secondes</video:title>
+      <video:description>Le film de l'album d'exemple de Noustalgie : un livre de mariage feuilleté page après page, sur une musique originale. Léa et Hugo sont un couple imaginé, les pages sont réelles.</video:description>
+      <video:content_loc>https://noustalgie.fr/video/le-plus-beau-oui.mp4</video:content_loc>
+      <video:duration>38</video:duration>
+      <video:publication_date>2026-10-16</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://noustalgie.fr/idee-cadeau-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-couple-personnalise</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-mains.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/album-photo-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/idee-cadeau-noel-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-anniversaire-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/livre-personnalise-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -56,13 +152,13 @@
   </url>
   <url>
     <loc>https://noustalgie.fr/comment-faire-un-album-photo</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/texte-album-photo</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -74,92 +170,131 @@
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-pour-son-copain</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-pour-sa-copine</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-saint-valentin-personnalise</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-1-an-de-couple</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-couple-amis</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/album-photo-voyage</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/album-photo-mariage</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-montagne.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/comment-choisir-un-livre-photo</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/album-photo-ia</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-bouquet.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-anniversaire-de-mariage</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-champ.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-1-an-de-mariage</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-mains.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-10-ans-de-couple</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-mariage-personnalise</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+      <image:image>
+      <image:loc>https://noustalgie.fr/img/exemple/photo-portee.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-saint-valentin-femme</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-saint-valentin-homme</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://noustalgie.fr/album-photo-anniversaire</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/mentions-legales</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/cgv</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/confidentialite</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>
