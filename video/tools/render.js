@@ -5,6 +5,7 @@
 //   node tools/render.js --cues                       → exporte out/cues.json (repères des effets sonores)
 // Options : --fps 60 --workers 4 --from 0 --to 48 --scale 1 --res 1 --audio out/audio.wav --frames out/frames --out nom.mp4
 //   --scale : facteur de capture (aperçus) ; --res : résolution interne du canvas WebGL (compositions 3D)
+//   --query "mbmax=9" : paramètres d'adresse ajoutés à la composition ; --only liste.json : ne rendre que ces images (numéros)
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
@@ -25,7 +26,7 @@ async function openPage(base, scale = 1) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: scale });
   page.on('pageerror', e => console.error('[page error]', e.message));
   page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') console.error('[console]', m.text().slice(0, 300)); });
-  await page.goto(`${base}/${PAGE}?render&res=${RES}${args.includes('--samples') ? '&samples=' + opt('samples') : ''}`, { waitUntil: 'load' });
+  await page.goto(`${base}/${PAGE}?render&res=${RES}${args.includes('--samples') ? '&samples=' + opt('samples') : ''}${args.includes('--query') ? '&' + opt('query') : ''}`, { waitUntil: 'load' });
   await page.waitForFunction(() => typeof window.__seek === 'function', null, { timeout: 240000 });
   await page.evaluate(() => window.__ready);
   const cdp = await page.context().newCDPSession(page);
@@ -80,11 +81,14 @@ async function capture(cdp, file, format = 'jpeg') {
   console.log(`rendu ${total} images (${fps} i/s) avec ${workers} processus…`);
   const t0 = Date.now();
   let done = 0;
+  const only = opt('only') && opt('only') !== true ? JSON.parse(fs.readFileSync(opt('only'), 'utf8')) : null;   // liste d'images à (re)faire, réparties en alternance
   if (!opt('encode')) await Promise.all(Array.from({ length: workers }, async (_, w) => {
     const a = f0 + w * per, b = Math.min(f1, a + per);
-    if (a >= b) return;
+    if (!only && a >= b) return;
     const { browser, page, cdp } = await openPage(base);
-    for (let f = a; f < b; f++) {
+    const mine = only ? only.filter((_, i) => i % workers === w) : null;
+    for (let k = 0; k < (mine ? mine.length : b - a); k++) {
+      const f = mine ? mine[k] : a + k;
       const file = path.join(dir, `${String(f).padStart(5, '0')}.jpg`);
       if (!opt('force') && fs.existsSync(file) && fs.statSync(file).size > 0) { done++; continue; }
       await page.evaluate(t => window.__seek(t), f / fps);
