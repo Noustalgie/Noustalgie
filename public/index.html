@@ -2978,7 +2978,7 @@ async function detectFocalY(imgEl, orient){
   return null; // pas de détection -> heuristique
 }
 // Indicateur de chargement pendant l'upload/traitement des photos (rassure sur mobile)
-function showUploadLoader(done, total){
+function showUploadLoader(done, total, label){
   let el = document.getElementById('uploadLoader');
   if(!el){
     el = document.createElement('div');
@@ -2987,7 +2987,7 @@ function showUploadLoader(done, total){
     document.body.appendChild(el);
   }
   el.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></span>' +
-    (LANGS[currentLang].uploading || 'Ajout de vos photos') + (total? ' ' + done + '/' + total : '') + '...';
+    (label || (LANGS[currentLang].uploading || 'Ajout de vos photos') + (total? ' ' + done + '/' + total : '') + '...');
   el.style.display = 'flex';
 }
 function hideUploadLoader(){
@@ -5279,6 +5279,9 @@ let pickerAt = 0, gotFiles = false, cancelled = false;
 NA.pickerOpened = () => {
   pickerAt = Date.now(); gotFiles = false; cancelled = false; nlog('sélecteur de photos ouvert');
   try { sessionStorage.setItem('nst_picker', String(pickerAt)); } catch (e) {}
+  // Après « Ajouter », l'iPhone convertit chaque photo en JPEG avant de la transmettre : plusieurs secondes sans aucun signe.
+  // La pastille attend derrière le sélecteur et se voit dès qu'il se ferme.
+  if (!batch.total) showUploadLoader(0, 0, NA.t('ph_prep'));
 };
 function pickerBack(why) {
   if (!pickerAt || document.hidden) return;
@@ -5286,9 +5289,10 @@ function pickerBack(why) {
   setTimeout(() => {
     if (pickerAt !== t0 || gotFiles) return;
     pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {}
+    if (!batch.total) hideUploadLoader();
     nlog('retour du sélecteur (' + why + ') : aucune photo reçue d\'iOS');
     if (cancelled) toast(NA.t('ph_cancel'), 9000); else showPickHelp();
-  }, 1200);
+  }, cancelled ? 1200 : 25000);                                    // sans annulation, l'iPhone prépare peut-être encore les photos
 }
 function showPickHelp() {
   if (document.getElementById('nstPickHelp')) return;
@@ -5304,7 +5308,7 @@ window.addEventListener('focus', () => pickerBack('focus'));
   if (pickerAt && Date.now() - pickerAt > 600 && !(e.target && e.target.closest && e.target.closest('input[type=file]'))) pickerBack('toucher');
 }, { capture: true, passive: true }));
 document.addEventListener('cancel', e => {
-  if (e.target && e.target.type === 'file' && pickerAt) { cancelled = true; nlog('sélecteur annulé (signalé par le navigateur)'); pickerBack('annulation'); }
+  if (e.target && e.target.type === 'file' && pickerAt) { cancelled = true; nlog('sélecteur annulé (signalé par le navigateur)'); if (!batch.total) hideUploadLoader(); pickerBack('annulation'); }
 }, true);
 const EXT_OK = /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i;
 const isHeic = f => /\.(heic|heif)$/i.test(f.name || '') || /image\/hei[cf]/i.test(f.type || '');
@@ -5465,13 +5469,16 @@ NA.retryPhoto = i => { const p = S.photos[i]; if (!p || !p.failed) return; p.fai
 let lastSig = '', lastAt = 0;
 window.addPhotos = function (files) {
   const all = Array.from(files || []);
-  if (all.length) { gotFiles = true; pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {} }
+  if (all.length) {
+    gotFiles = true; pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {}
+    const aide = document.getElementById('nstPickHelp'); if (aide) aide.remove();   // l'aide « photos non transmises » n'a plus lieu d'être
+  }
   const sig = all.map(f => f.name + ':' + f.size + ':' + f.lastModified).join('|');
   if (sig && sig === lastSig && Date.now() - lastAt < 2500) return NA.photosReady();   // même sélection signalée deux fois (change + input)
   lastSig = sig; lastAt = Date.now();
   nlog('sélection : ' + all.length + ' fichier(s) · ' + [...new Set(all.map(f => f.type || 'sans type'))].join(', ') + ' · ' + Math.round(all.reduce((s, f) => s + (f.size || 0), 0) / 1048576) + ' Mo');
   const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
-  if (!list.length) { if (all.length) toast(NA.t('ph_none')); return NA.photosReady(); }
+  if (!list.length) { if (!batch.total) hideUploadLoader(); if (all.length) toast(NA.t('ph_none')); return NA.photosReady(); }
   // 1) Toutes les photos apparaissent tout de suite
   const added = list.map(f => ({ name: f.name || 'photo.jpg', file: f, pending: true }));
   added.forEach(p => S.photos.push(p));
