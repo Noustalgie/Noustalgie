@@ -1,0 +1,25 @@
+/* Le plus beau oui : composition verticale 1080 × 1920 */
+:root { --cream: #f5ede1; --warm: #ecc890; --ink: #1c1a18; --display: 'Playfair Display', Georgia, serif; --ui: 'Hanken Grotesk', 'Inter', system-ui, sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; overflow: hidden; }
+body { width: 1080px; height: 1920px; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0705; -webkit-font-smoothing: antialiased; }
+#gl { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; display: block; }
+#ui { position: absolute; inset: 0; pointer-events: none; }
+#flash { position: absolute; inset: 0; background: #fff1d8; opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+
+/* Légendes : colonne de gauche, loin des boutons TikTok (droite) et du bas */
+.cap { position: absolute; left: 84px; width: 800px; color: var(--cream); font: italic 400 76px/1.14 var(--display); letter-spacing: -0.012em; text-shadow: 0 2px 28px rgba(8, 4, 2, .75), 0 0 2px rgba(8, 4, 2, .5); text-wrap: balance; }
+.cap.sm { font-size: 64px; }
+.cap .w { display: inline-block; will-change: transform, opacity, filter; white-space: pre; }
+.cap em { font-style: normal; color: var(--warm); }
+.lab { position: absolute; left: 88px; font: 600 26px/1 var(--ui); letter-spacing: .26em; text-transform: uppercase; color: rgba(245, 237, 225, .62); text-shadow: 0 2px 14px rgba(8, 4, 2, .8); }
+
+/* Carte finale */
+.end { position: absolute; left: 0; right: 0; text-align: left; padding: 0 84px; color: var(--cream); }
+.end .l1 { font: italic 400 72px/1.14 var(--display); letter-spacing: -0.012em; text-shadow: 0 2px 28px rgba(8, 4, 2, .8); }
+.end .l2 { font: italic 500 92px/1.1 var(--display); letter-spacing: -0.014em; color: var(--warm); text-shadow: 0 2px 34px rgba(8, 4, 2, .8); margin-top: 18px; }
+.end .w { display: inline-block; will-change: transform, opacity, filter; white-space: pre; }
+.end .mark { margin-top: 74px; font: 500 58px/1 'Times New Roman', Times, serif; font-weight: 700; letter-spacing: -0.01em; color: var(--cream); text-shadow: 0 2px 22px rgba(8, 4, 2, .8); }
+.end .url { margin-top: 18px; font: 500 30px/1 var(--ui); letter-spacing: .06em; color: rgba(245, 237, 225, .8); }
+.end .fine { margin-top: 36px; font: 400 25px/1.4 var(--ui); color: rgba(245, 237, 225, .55); max-width: 640px; }

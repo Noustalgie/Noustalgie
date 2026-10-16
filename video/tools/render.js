@@ -1,8 +1,10 @@
-// Rendu image par image de la composition (index.html) avec Chromium, puis encodage ffmpeg.
-//   node tools/render.js                      → toutes les images + out/noustalgie-tiktok.mp4
-//   node tools/render.js --snap 1.2,6.6,30     → captures PNG de contrôle dans out/snaps/
-//   node tools/render.js --cues               → exporte out/cues.json (repères des effets sonores)
-// Options : --fps 60 --workers 4 --from 0 --to 48 --scale 1 --audio out/audio.wav
+// Rendu image par image d'une composition avec Chromium, puis encodage ffmpeg.
+//   node tools/render.js                              → composition index.html (v1, 48 s) → out/noustalgie-tiktok.mp4
+//   node tools/render.js --page oui/index.html        → « Le plus beau oui » (WebGL) → out/le-plus-beau-oui.mp4
+//   node tools/render.js --snap 1.2,6.6,30            → captures PNG de contrôle dans out/snaps/
+//   node tools/render.js --cues                       → exporte out/cues.json (repères des effets sonores)
+// Options : --fps 60 --workers 4 --from 0 --to 48 --scale 1 --res 1 --audio out/audio.wav --frames out/frames --out nom.mp4
+//   --scale : facteur de capture (aperçus) ; --res : résolution interne du canvas WebGL (compositions 3D)
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
@@ -13,13 +15,18 @@ const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'out');
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf('--' + k); return i < 0 ? d : (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true); };
+const PAGE = opt('page', 'index.html');
+const RES = opt('res', '1');
+const NAME = PAGE.startsWith('oui') ? 'le-plus-beau-oui' : 'noustalgie-tiktok';
+const GL = ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-gpu-vsync', '--disable-lcd-text', '--font-render-hinting=none'];
 
 async function openPage(base, scale = 1) {
-  const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--disable-lcd-text', '--font-render-hinting=none'] });
+  const browser = await chromium.launch({ args: GL });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: scale });
   page.on('pageerror', e => console.error('[page error]', e.message));
-  page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') console.error('[console]', m.text()); });
-  await page.goto(base + '/index.html?render', { waitUntil: 'load' });
+  page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') console.error('[console]', m.text().slice(0, 300)); });
+  await page.goto(`${base}/${PAGE}?render&res=${RES}${args.includes('--samples') ? '&samples=' + opt('samples') : ''}`, { waitUntil: 'load' });
+  await page.waitForFunction(() => typeof window.__seek === 'function', null, { timeout: 240000 });
   await page.evaluate(() => window.__ready);
   const cdp = await page.context().newCDPSession(page);
   return { browser, page, cdp };
@@ -38,29 +45,30 @@ async function capture(cdp, file, format = 'jpeg') {
   if (opt('cues')) {
     const { browser, page } = await openPage(base);
     const data = await page.evaluate(() => ({ duration: window.__duration, cues: window.CUES, beats: window.BEATS || null }));
-    fs.writeFileSync(path.join(OUT, 'cues.json'), JSON.stringify(data, null, 1));
+    fs.writeFileSync(path.join(OUT, opt('cuesfile', 'cues.json')), JSON.stringify(data, null, 1));
     console.log('cues:', data.cues.length, 'durée:', data.duration);
     await browser.close(); server.close(); return;
   }
 
   const snap = opt('snap');
   if (snap) {
-    const dir = path.join(OUT, 'snaps'); fs.mkdirSync(dir, { recursive: true });
+    const dir = path.join(OUT, opt('snapdir', 'snaps')); fs.mkdirSync(dir, { recursive: true });
     const scale = Number(opt('scale', 0.5));
     const { browser, page, cdp } = await openPage(base, scale);
     for (const t of String(snap).split(',').map(Number)) {
+      const t0 = Date.now();
       await page.evaluate(t => window.__seek(t), t);
       const f = path.join(dir, `t${t.toFixed(2).padStart(6, '0')}.png`);
       await capture(cdp, f, 'png');
-      console.log(f);
+      console.log(f, Date.now() - t0, 'ms');
     }
     await browser.close(); server.close(); return;
   }
 
   const fps = Number(opt('fps', 60));
   const workers = Number(opt('workers', 4));
-  const dir = path.join(OUT, 'frames'); fs.mkdirSync(dir, { recursive: true });
-  let duration = 48;
+  const dir = path.join(ROOT, opt('frames', path.join('out', 'frames'))); fs.mkdirSync(dir, { recursive: true });
+  let duration = Number(opt('duration', 48));
   if (!opt('encode')) {
     const probe = await openPage(base);
     duration = await probe.page.evaluate(() => window.__duration);
@@ -81,7 +89,7 @@ async function capture(cdp, file, format = 'jpeg') {
       if (!opt('force') && fs.existsSync(file) && fs.statSync(file).size > 0) { done++; continue; }
       await page.evaluate(t => window.__seek(t), f / fps);
       await capture(cdp, file);
-      if (++done % 120 === 0) {
+      if (++done % 30 === 0) {
         const el = (Date.now() - t0) / 1000;
         console.log(`${done}/${total} — ${(el / done * 1000).toFixed(0)} ms/image, reste ~${Math.round(el / done * (total - done))} s`);
       }
@@ -92,11 +100,11 @@ async function capture(cdp, file, format = 'jpeg') {
   console.log(`images terminées en ${Math.round((Date.now() - t0) / 1000)} s`);
 
   if (opt('noencode')) return;
-  const audio = opt('audio', path.join(OUT, 'audio.wav'));
-  const outFile = path.join(OUT, opt('out', 'noustalgie-tiktok.mp4'));
+  const audio = opt('audio', path.join(OUT, NAME === 'le-plus-beau-oui' ? 'audio-oui.wav' : 'audio.wav'));
+  const outFile = path.join(OUT, opt('out', NAME + '.mp4'));
   const ff = ['-y', '-framerate', String(fps), '-start_number', String(f0), '-i', path.join(dir, '%05d.jpg')];
   if (audio && fs.existsSync(audio)) ff.push('-ss', String(from), '-i', audio);
-  ff.push('-frames:v', String(total), '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-maxrate', '14M', '-bufsize', '28M', '-profile:v', 'high', '-level', '4.2', '-pix_fmt', 'yuv420p',
+  ff.push('-frames:v', String(total), '-c:v', 'libx264', '-preset', 'slow', '-crf', opt('crf', '18'), '-maxrate', opt('maxrate', '14M'), '-bufsize', '28M', '-profile:v', 'high', '-level', '4.2', '-pix_fmt', 'yuv420p',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-movflags', '+faststart');
   if (audio && fs.existsSync(audio)) ff.push('-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-shortest');
   ff.push(outFile);
