@@ -166,8 +166,23 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+<script>
+/* jsPDF et heic2any pèsent près de 2 Mo : ils ne sont plus chargés avec la page d'accueil, mais quand la zone de création approche
+   (ou au premier besoin : photo HEIC, téléchargement du PDF). nstLoadLib renvoie une promesse, appelable plusieurs fois. */
+(function () {
+  var SRC = { jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', heic2any: 'https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js' }, P = {};
+  window.nstLoadLib = function (name) {
+    if (!P[name]) P[name] = new Promise(function (ok) { var el = document.createElement('script'); el.src = SRC[name]; el.onload = function () { ok(true); }; el.onerror = function () { P[name] = null; ok(false); }; document.head.appendChild(el); });
+    return P[name];
+  };
+  function all() { window.nstLoadLib('jspdf'); window.nstLoadLib('heic2any'); }
+  window.addEventListener('DOMContentLoaded', function () {
+    var app = document.getElementById('app');
+    if (app && 'IntersectionObserver' in window) { var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { io.disconnect(); all(); } }, { rootMargin: '1200px 0px' }); io.observe(app); }
+    else all();
+  });
+})();
+</script>
 <style>
 :root {
   --bg:#0e0b09; --bg2:#141008; --bg3:#1c1610; --bg4:#221c14;
@@ -2927,7 +2942,7 @@ async function ensureConvertible(file){
   const isHeicType = file.type && (file.type==='image/heic'||file.type==='image/heif');
   if(!isHeic && !isHeicType) return file;
   // Si la librairie n'est pas chargée, on renvoie le fichier tel quel (Safari le gère)
-  if(typeof heic2any==='undefined') return file;
+  if(typeof heic2any==='undefined'){ await window.nstLoadLib('heic2any'); if(typeof heic2any==='undefined') return file; }
   try{
     const converted = await heic2any({ blob:file, toType:'image/jpeg', quality:0.92 });
     const blob = Array.isArray(converted)?converted[0]:converted;
@@ -4292,7 +4307,7 @@ function updateFormatPrices() {
 // ══════════════════════════════════════════
 function generateFinalPDF(){
   if(!S.story)return;
-  if(!window.jspdf){document.getElementById('pdfStatus').textContent='Loading...';return;}
+  if(!window.jspdf){document.getElementById('pdfStatus').textContent='Loading...';window.nstLoadLib('jspdf').then(function(){ if(window.jspdf) generateFinalPDF(); });return;}
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4'});
   const W=210,H=297;
@@ -7170,7 +7185,7 @@ if (wrapEl && panels.length) {
   const main = document.createElement('div'); main.className = 'nst-flow-main';
   panels[0].parentNode.insertBefore(flow, panels[0]);
   flow.appendChild(main); panels.forEach(p => main.appendChild(p));
-  live = document.createElement('aside'); live.className = 'nst-live'; live.setAttribute('aria-live', 'polite');
+  live = document.createElement('div'); live.className = 'nst-live'; live.setAttribute('aria-live', 'polite');
   flow.appendChild(live);
 }
 const year = new Date().getFullYear();
