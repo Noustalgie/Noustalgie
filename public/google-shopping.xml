@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+<channel>
+<title>Noustalgie</title>
+<link>https://noustalgie.fr/</link>
+<description>Albums photo de couple personnalisés, imprimés et livrés.</description>
+<item>
+<g:id>NOUST-LIVRE-24</g:id>
+<g:title>Album photo couple personnalisé 24 pages, couverture rigide 21 x 21 cm</g:title>
+<g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 24 pages, dès 14 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
+<g:link>https://noustalgie.fr/</g:link>
+<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
+<g:availability>in_stock</g:availability>
+<g:price>39.99 EUR</g:price>
+<g:condition>new</g:condition>
+<g:brand>Noustalgie</g:brand>
+<g:identifier_exists>no</g:identifier_exists>
+<g:item_group_id>NOUST-LIVRE</g:item_group_id>
+<g:size>24 pages</g:size>
+<g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
+<g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+</item>
+<item>
+<g:id>NOUST-LIVRE-36</g:id>
+<g:title>Album photo couple personnalisé 36 pages, couverture rigide 21 x 21 cm</g:title>
+<g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 36 pages, dès 20 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
+<g:link>https://noustalgie.fr/</g:link>
+<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
+<g:availability>in_stock</g:availability>
+<g:price>49.99 EUR</g:price>
+<g:condition>new</g:condition>
+<g:brand>Noustalgie</g:brand>
+<g:identifier_exists>no</g:identifier_exists>
+<g:item_group_id>NOUST-LIVRE</g:item_group_id>
+<g:size>36 pages</g:size>
+<g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
+<g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+</item>
+<item>
+<g:id>NOUST-LIVRE-50</g:id>
+<g:title>Album photo couple personnalisé 50 pages, couverture rigide 21 x 21 cm</g:title>
+<g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 50 pages, dès 31 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
+<g:link>https://noustalgie.fr/</g:link>
+<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
+<g:availability>in_stock</g:availability>
+<g:price>69.99 EUR</g:price>
+<g:condition>new</g:condition>
+<g:brand>Noustalgie</g:brand>
+<g:identifier_exists>no</g:identifier_exists>
+<g:item_group_id>NOUST-LIVRE</g:item_group_id>
+<g:size>50 pages</g:size>
+<g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
+<g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+</item>
+</channel>
+</rss>
