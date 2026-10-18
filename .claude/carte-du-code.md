@@ -433,7 +433,7 @@ Générée automatiquement (8339 lignes). Ouvrir une zone : Read avec offset = n
 
 - api/_fn/album.js (107 lignes) api/album.js — « Recevoir le lien de mon album »
 - api/_fn/cancel.js (28 lignes) 
-- api/_fn/carte.js (136 lignes) /api/carte?q=Lille — plan du lieu de rencontre pour la page « Là où tout a commencé ».
+- api/_fn/carte.js (239 lignes) /api/carte?q=Lille : plan du lieu de rencontre pour la page « Là où tout a commencé ».
 - api/_fn/order.js (35 lignes) Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
 - api/_fn/promo.js (19 lignes) api/promo.js — vérifie un code promo (codes dans la variable Vercel PROMO_CODES)
 - api/_fn/sign-upload.js (22 lignes) api/sign-upload.js — autorise le navigateur à envoyer UNE photo en pleine résolution

@@ -4906,7 +4906,7 @@ Object.assign(LAYOUTS, {
       + tx(pg, 'date', `position:absolute;left:${M}px;right:${M}px;top:${52 + fit(city, 112, 54, 6, 18) * 0.9 + 14}px;text-align:center;color:${T.ink};font:italic 400 26px/1 ${T.disp};`, '')
       + heartMap(C, 162, 214, 470, T)
       + tx(pg, 'coord', `position:absolute;left:${M - 20}px;right:${M - 20}px;bottom:62px;text-align:center;color:${T.ink};font:400 40px/1 ${T.disp};letter-spacing:.01em;white-space:nowrap;`, '')
-      + (C && C.roads ? `<div style="position:absolute;right:${M}px;bottom:40px;color:${T.muted};font:400 6.5px/1 ${T.ui};letter-spacing:.06em;">© OpenStreetMap</div>` : '') + folio(pg, T);
+      + (C && C.roads ? `<div style="position:absolute;right:${M}px;bottom:40px;color:${T.muted};font:400 6.5px/1 ${T.ui};letter-spacing:.06em;">© OpenMapTiles © OpenStreetMap</div>` : '') + folio(pg, T);
   } },
   metapes: { n: 4, text: true, mag: 'etapes', render(pg) {
     const T = MT();
