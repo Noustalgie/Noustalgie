@@ -1,0 +1,3 @@
+Lilita One et Gochi Hand (Google Fonts) : polices sous licence SIL Open Font License 1.1.
+Texte de la licence : https://openfontlicense.org/open-font-license-official-text/
+Utilisées pour les autocollants de la première slide TikTok (tools/mag-legendes.js).
