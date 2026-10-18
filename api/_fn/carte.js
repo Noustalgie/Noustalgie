@@ -6,7 +6,8 @@ const https = require('https');
 const { rateLimit } = require('../_lib/security');
 
 const UA = 'Noustalgie/1.0 (contact@noustalgie.fr)';
-const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+// Serveurs Overpass publics, essayés l'un après l'autre (le principal limite les adresses IP partagées des hébergeurs)
+const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
 const MAJOR = /^(motorway|trunk|primary|secondary)(_link)?$/;
 
 function request(url, { method = 'GET', body = null, timeout = 8000 } = {}) {
@@ -49,11 +50,13 @@ const radiusFor = type => (/^(city|town|county|state|district|borough|suburb)$/.
 
 async function overpass(lat, lon, R) {
   const A = `(around:${R},${lat},${lon})`;
-  const q = `[out:json][timeout:20];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|pedestrian)(_link)?$"]${A};`
+  const q = `[out:json][timeout:12];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|pedestrian)(_link)?$"]${A};`
     + `way["natural"="water"]${A};relation["natural"="water"]${A};way["waterway"="riverbank"]${A};way["waterway"~"^(river|canal)$"]${A};);out geom;`;
   let last;
   for (const url of OVERPASS) {
-    try { return await request(url, { method: 'POST', body: 'data=' + encodeURIComponent(q), timeout: 22000 }); } catch (e) { last = e; }
+    const t0 = Date.now();
+    try { return await request(url, { method: 'POST', body: 'data=' + encodeURIComponent(q), timeout: 9000 }); }
+    catch (e) { last = e; console.warn('[carte] Overpass', new URL(url).hostname, e.message, Date.now() - t0, 'ms'); }
   }
   throw last;
 }
@@ -116,7 +119,7 @@ async function handler(req, res) {
   if (q.length < 2) return res.status(400).json({ error: 'Lieu manquant.' });
   if (!rateLimit(req, 'carte', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de demandes.' });
   let g;
-  try { g = await geocode(q); } catch (e) { return res.status(502).json({ error: 'Lieu introuvable pour le moment.' }); }
+  try { g = await geocode(q); } catch (e) { console.warn('[carte] géocodage', e.message); return res.status(502).json({ error: 'Lieu introuvable pour le moment.' }); }
   if (!g) return res.status(404).json({ error: 'Lieu introuvable.' });
   const base = { name: g.name, lat: Math.round(g.lat * 1e4) / 1e4, lon: Math.round(g.lon * 1e4) / 1e4 };
   if (/^(country|state)$/.test(g.type)) { res.setHeader('Cache-Control', 'public, s-maxage=2592000'); return res.json(base); }
