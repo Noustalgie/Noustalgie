@@ -1,0 +1,80 @@
+[
+ {
+  "f": "/public/img/exemple/photos/allee.jpg",
+  "w": 600,
+  "h": 900,
+  "n": "allee.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/arche.jpg",
+  "w": 900,
+  "h": 579,
+  "n": "arche.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/assis.jpg",
+  "w": 900,
+  "h": 600,
+  "n": "assis.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/bouquet.jpg",
+  "w": 900,
+  "h": 764,
+  "n": "bouquet.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/invites.jpg",
+  "w": 658,
+  "h": 900,
+  "n": "invites.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/montagne.jpg",
+  "w": 1700,
+  "h": 1133,
+  "n": "montagne.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photos/sortie.jpg",
+  "w": 900,
+  "h": 600,
+  "n": "sortie.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-bouquet.jpg",
+  "w": 764,
+  "h": 764,
+  "n": "photo-bouquet.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-champ.jpg",
+  "w": 900,
+  "h": 900,
+  "n": "photo-champ.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-lumieres.jpg",
+  "w": 900,
+  "h": 900,
+  "n": "photo-lumieres.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-mains.jpg",
+  "w": 900,
+  "h": 900,
+  "n": "photo-mains.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-montagne.jpg",
+  "w": 900,
+  "h": 900,
+  "n": "photo-montagne.jpg"
+ },
+ {
+  "f": "/public/img/exemple/photo-portee.jpg",
+  "w": 900,
+  "h": 900,
+  "n": "photo-portee.jpg"
+ }
+]

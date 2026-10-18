@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Avant / après : le magazine Noustalgie</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+  <div id="before">
+    <div id="phone"><div id="screen">
+      <div class="bar"><span>21:07</span><span class="bat"></span></div>
+      <div class="head"><b>Récents</b><span>3 214 photos</span></div>
+      <div id="grid"></div>
+    </div></div>
+  </div>
+  <div id="ui"></div>
+  <div id="flash"></div>
+</div>
+<script src="../node_modules/gsap/dist/gsap.min.js"></script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

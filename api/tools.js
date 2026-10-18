@@ -9,6 +9,7 @@ const H = {
   track: require('./_fn/track'),
   cancel: require('./_fn/cancel'),
   order: require('./_fn/order'),
+  carte: require('./_fn/carte'),
 };
 const ALIAS = { 'order-status': 'track' };
 

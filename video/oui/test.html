@@ -9,7 +9,8 @@ const q = new URLSearchParams(location.search);
 const W = +(q.get('w') || 1080), H = +(q.get('h') || 1920);
 const canvas = document.getElementById('gl'); canvas.width = W; canvas.height = H; canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 await document.fonts.load('500 34px "Hanken Grotesk"');
-window.B = await createBook3D(canvas, { width: W, height: H, samples: +(q.get('samples') || 4), shadowSize: +(q.get('shadow') || 2048) });
+window.B = await createBook3D(canvas, { width: W, height: H, samples: +(q.get('samples') || 4), shadowSize: +(q.get('shadow') || 2048),
+  base: q.get('base') || undefined, spine: q.get('spine') ? JSON.parse(q.get('spine')) : undefined });
 window.__shot = s => { const S = Object.assign(DEFAULTS(), s); if (s && s.flip) S.flip = s.flip; window.B.render(S); return true; };
 window.__ready = true;
 </script></body></html>

@@ -168,7 +168,7 @@
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Pinyon+Script&family=Homemade+Apple&display=swap" rel="stylesheet"/>
 <script>
 /* jsPDF et heic2any pèsent près de 2 Mo : ils ne sont plus chargés avec la page d'accueil, mais quand la zone de création approche
    (ou au premier besoin : photo HEIC, téléchargement du PDF). nstLoadLib renvoie une promesse, appelable plusieurs fois. */
@@ -1630,6 +1630,29 @@ html body .footer-bottom{border-top:1px solid var(--v6-line);}
 .nst-skip{position:absolute;left:16px;top:-80px;z-index:10000;padding:12px 22px;border-radius:999px;background:#1c1a18;color:#f5f0e8;font:500 14px/1 'Hanken Grotesk',system-ui,sans-serif;text-decoration:none;transition:top .15s;}
 .nst-skip:focus{top:12px;outline:2px solid #fff;outline-offset:2px;}
 main#main:focus{outline:none;}
+
+/* Questionnaire « Votre magazine » : rubriques repliables, point noir quand une rubrique est remplie, quiz en pastilles */
+html body #app .mq{border-top:1px solid var(--v6-line);}
+html body #app .mq:last-of-type{border-bottom:1px solid var(--v6-line);}
+html body #app .mq>summary{list-style:none;display:grid;grid-template-columns:1fr auto;column-gap:16px;align-items:center;padding:15px 2px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+html body #app .mq>summary::-webkit-details-marker{display:none;}
+html body #app .mq-s{grid-column:1;font:600 15px/1.3 var(--v6-ui);color:var(--v6-ink);}
+html body #app .mq-d{grid-column:1;font:400 13.5px/1.45 var(--v6-ui);color:var(--v6-mut);}
+html body #app .mq>summary::after{content:"";grid-column:2;grid-row:1/span 2;width:32px;height:32px;border:1px solid var(--v6-line2);border-radius:999px;background:linear-gradient(var(--v6-ink),var(--v6-ink)) center/11px 1.5px no-repeat,linear-gradient(var(--v6-ink),var(--v6-ink)) center/1.5px 11px no-repeat;transition:transform .3s var(--v6-ease),border-color .3s var(--v6-ease);}
+html body #app .mq[open]>summary::after{transform:rotate(45deg);border-color:var(--v6-ink);}
+html body #app .mq.on .mq-s::after{content:"";display:inline-block;width:7px;height:7px;margin-left:9px;border-radius:50%;background:var(--v6-ink);vertical-align:2px;}
+html body #app .mq-b{padding:0 2px 18px;}
+html body #app .mq-b textarea{min-height:7.4em;max-height:22em;line-height:1.55;field-sizing:content;}
+html body #app .mq-b #qLetter{min-height:12em;}
+html body #app .mq-note{margin:0 0 14px;font:400 13.5px/1.5 var(--v6-ui);color:var(--v6-mut);}
+html body #app .mq-quiz{display:grid;gap:14px;}
+html body #app .mq-qr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center;}
+html body #app .mq-qt{font:500 14px/1.4 var(--v6-ui);color:var(--v6-ink);}
+html body #app .mq-ch{display:flex;gap:6px;flex-wrap:wrap;}
+html body #app .mq-ch button{min-height:38px;padding:0 15px;border:1px solid var(--v6-line2);border-radius:999px;background:#fff;color:var(--v6-ink);font:500 13px/1 var(--v6-ui);cursor:pointer;transition:background-color .25s var(--v6-ease),color .25s var(--v6-ease),border-color .25s var(--v6-ease);}
+html body #app .mq-ch button:hover{border-color:var(--v6-ink);}
+html body #app .mq-ch button[aria-pressed="true"]{background:var(--v6-ink);border-color:var(--v6-ink);color:#fff;}
+@media (max-width:600px){html body #app .mq-qr{grid-template-columns:1fr;}html body #app .mq-ch button{flex:1 1 0;padding:0 10px;}}
 </style>
 <script type="application/ld+json">
 {
@@ -1924,6 +1947,60 @@ main#main:focus{outline:none;}
         <textarea id="qHabit" data-i18n-ph="q_habit_ph" placeholder="ex : on s'appelle 'Doudou', nos soirées pizza du vendredi..."></textarea>
         <label class="fl" data-i18n="q_special_lbl">Ce qui rend votre relation spéciale</label>
         <textarea id="qSpecial" data-i18n-ph="q_special_ph" placeholder="ex : on se comprend sans parler, on rit de tout..."></textarea>
+      </div>
+      <div class="card" id="mqCard">
+        <div class="card-hd" data-i18n="mq_hd">Votre magazine</div>
+        <div class="card-title" data-i18n="mq_title">Les rubriques de votre album</div>
+        <div class="card-sub" style="margin-bottom:1rem;" data-i18n="mq_sub">Tout est facultatif. Chaque rubrique remplie devient une page de votre magazine ; les autres laissent la place à vos photos.</div>
+        <details class="mq" data-mq="city">
+          <summary><span class="mq-s" data-i18n="mq_city_s">Là où tout a commencé</span><span class="mq-d" data-i18n="mq_city_d">Le plan de votre rencontre, dans un cœur</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qCity" data-i18n="mq_city_lbl">Ville ou lieu de votre rencontre</label>
+            <input type="text" id="qCity" autocomplete="off" data-i18n-ph="mq_city_ph" placeholder="ex : Lille, place du Théâtre"/>
+          </div>
+        </details>
+        <details class="mq" data-mq="miles">
+          <summary><span class="mq-s" data-i18n="mq_miles_s">Vos grandes étapes</span><span class="mq-d" data-i18n="mq_miles_d">Une frise avec vos dates</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qMiles" data-i18n="mq_miles_lbl">Une étape par ligne : la date, l’étape, et un petit mot si vous voulez</label>
+            <textarea id="qMiles" rows="4" data-i18n-ph="mq_miles_ph" placeholder="12/11/2019 - La rencontre - un café qui a duré trois heures&#10;14/02/2020 - Premier « je t’aime »&#10;18/07/2021 - Premières vacances - Lisbonne"></textarea>
+          </div>
+        </details>
+        <details class="mq" data-mq="songs">
+          <summary><span class="mq-s" data-i18n="mq_songs_s">Votre playlist</span><span class="mq-d" data-i18n="mq_songs_d">Les chansons de votre histoire</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qSongs" data-i18n="mq_songs_lbl">Une chanson par ligne : le titre, puis l’artiste</label>
+            <textarea id="qSongs" rows="4" data-i18n-ph="mq_songs_ph" placeholder="La Vie en rose - Louis Armstrong&#10;Yellow - Coldplay&#10;Ta reine - Angèle"></textarea>
+          </div>
+        </details>
+        <details class="mq" data-mq="places">
+          <summary><span class="mq-s" data-i18n="mq_places_s">Vos adresses préférées</span><span class="mq-d" data-i18n="mq_places_d">Les lieux qui comptent pour vous deux</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qPlaces" data-i18n="mq_places_lbl">Une adresse par ligne : le lieu, la ville, et pourquoi vous l’aimez</label>
+            <textarea id="qPlaces" rows="4" data-i18n-ph="mq_places_ph" placeholder="Le Café des Arts - Lille - notre table du dimanche&#10;La dune du Pyla - Pyla-sur-Mer - le dernier bus raté"></textarea>
+          </div>
+        </details>
+        <details class="mq" data-mq="trips">
+          <summary><span class="mq-s" data-i18n="mq_trips_s">Vos voyages</span><span class="mq-d" data-i18n="mq_trips_d">Le récapitulatif de vos escapades</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qTrips" data-i18n="mq_trips_lbl">Une destination par ligne, avec l’année</label>
+            <textarea id="qTrips" rows="3" data-i18n-ph="mq_trips_ph" placeholder="Lisbonne - 2021&#10;Rome - 2023"></textarea>
+          </div>
+        </details>
+        <details class="mq" data-mq="quiz">
+          <summary><span class="mq-s" data-i18n="mq_quiz_s">Qui est le plus… ?</span><span class="mq-d" data-i18n="mq_quiz_d">Le quiz spécial couple</span></summary>
+          <div class="mq-b">
+            <p class="mq-note" data-i18n="mq_quiz_note">Touchez un prénom pour chaque question. Sans réponse, la case restera à cocher ensemble, une fois le livre reçu.</p>
+            <div class="mq-quiz" id="qQuiz"></div>
+          </div>
+        </details>
+        <details class="mq" data-mq="letter">
+          <summary><span class="mq-s" data-i18n="mq_letter_s">Votre lettre d’amour</span><span class="mq-d" data-i18n="mq_letter_d">La dernière page, rien que pour l’autre</span></summary>
+          <div class="mq-b">
+            <label class="fl" for="qLetter" data-i18n="mq_letter_lbl">Écrivez-la vous-même, ou laissez-nous la rédiger à partir de vos réponses</label>
+            <textarea id="qLetter" rows="7" data-i18n-ph="mq_letter_ph" placeholder="Mon cœur, …"></textarea>
+          </div>
+        </details>
       </div>
       <div class="btn-row"><button class="btn btn-gold" onclick="goTab(1)" data-i18n="next_photos">Suivant : nos photos →</button></div>
     </div>
@@ -2230,7 +2307,7 @@ const LANGS = {
     occ1:'Surprise romantique', occ2:'Saint-Valentin', occ3:'Anniversaire de couple', occ4:'Noël', occ5:'Mariage', occ6:'Cadeau pour un proche',
     uploading:'Ajout de vos photos',
     gen_steps:['Analyse de vos photos...','Sélection de vos plus beaux moments...',"Rédaction de votre histoire d'amour...",'Composition des pages...','Mise en page de votre album...','Application des dernières touches...','Presque prêt...'],
-    extra_hd:'Pour aller plus loin', extra_title:'Rendez votre album unique', extra_sub:'Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.', q_meet_lbl:'Où et comment vous êtes-vous rencontrés ?', q_meet_ph:'ex : à une soirée chez des amis, en septembre 2021...', q_memory_lbl:'Un souvenir qui compte particulièrement', q_memory_ph:'ex : notre premier voyage à Rome, le jour où...', q_habit_lbl:'Un surnom, une habitude ou un petit truc à vous', q_habit_ph:"ex : on s'appelle 'Doudou', nos soirées pizza du vendredi...", q_special_lbl:'Ce qui rend votre relation spéciale', q_special_ph:'ex : on se comprend sans parler, on rit de tout...',
+    extra_hd:'Pour aller plus loin', extra_title:'Rendez votre album unique', extra_sub:'Ces questions sont facultatives, mais chaque réponse rend votre histoire plus personnelle et plus juste. Écrivez avec vos mots, même simplement.', q_meet_lbl:'Où et comment vous êtes-vous rencontrés ?', q_meet_ph:'ex : à une soirée chez des amis, en septembre 2021...', q_memory_lbl:'Un souvenir qui compte particulièrement', q_memory_ph:'ex : notre premier voyage à Rome, le jour où...', q_habit_lbl:'Un surnom, une habitude ou un petit truc à vous', q_habit_ph:"ex : on s'appelle 'Doudou', nos soirées pizza du vendredi...", q_special_lbl:'Ce qui rend votre relation spéciale', q_special_ph:'ex : on se comprend sans parler, on rit de tout...', mq_hd:"Votre magazine", mq_title:"Les rubriques de votre album", mq_sub:"Tout est facultatif. Chaque rubrique remplie devient une page de votre magazine ; les autres laissent la place à vos photos.", mq_city_s:"Là où tout a commencé", mq_city_d:"Le plan de votre rencontre, dans un cœur", mq_city_lbl:"Ville ou lieu de votre rencontre", mq_city_ph:"ex : Lille, place du Théâtre", mq_miles_s:"Vos grandes étapes", mq_miles_d:"Une frise avec vos dates", mq_miles_lbl:"Une étape par ligne : la date, l’étape, et un petit mot si vous voulez", mq_miles_ph:"12/11/2019 - La rencontre - un café qui a duré trois heures\n14/02/2020 - Premier « je t’aime »\n18/07/2021 - Premières vacances - Lisbonne", mq_songs_s:"Votre playlist", mq_songs_d:"Les chansons de votre histoire", mq_songs_lbl:"Une chanson par ligne : le titre, puis l’artiste", mq_songs_ph:"La Vie en rose - Louis Armstrong\nYellow - Coldplay\nTa reine - Angèle", mq_places_s:"Vos adresses préférées", mq_places_d:"Les lieux qui comptent pour vous deux", mq_places_lbl:"Une adresse par ligne : le lieu, la ville, et pourquoi vous l’aimez", mq_places_ph:"Le Café des Arts - Lille - notre table du dimanche\nLa dune du Pyla - Pyla-sur-Mer - le dernier bus raté", mq_trips_s:"Vos voyages", mq_trips_d:"Le récapitulatif de vos escapades", mq_trips_lbl:"Une destination par ligne, avec l’année", mq_trips_ph:"Lisbonne - 2021\nRome - 2023", mq_quiz_s:"Qui est le plus… ?", mq_quiz_d:"Le quiz spécial couple", mq_quiz_note:"Touchez un prénom pour chaque question. Sans réponse, la case restera à cocher ensemble, une fois le livre reçu.", mq_both:"Les deux", mq_letter_s:"Votre lettre d’amour", mq_letter_d:"La dernière page, rien que pour l’autre", mq_letter_lbl:"Écrivez-la vous-même, ou laissez-nous la rédiger à partir de vos réponses", mq_letter_ph:"Mon cœur, …",
     hero_cap_l:'Édition limitée', hero_cap_q:'"Notre plus belle page"', how_d1:'Choisissez vos plus beaux clichés et renseignez vos prénoms.', how_d2:"L'album se compose sous vos yeux, page après page.", how_d3:'Imprimé sur papier photo, relié, livré en 10 à 12 jours.', stat_from:"Dès 39,99€",
     tier_essentiel:'Essentiel', tier_classique:'Classique', tier_premium:'Premium', word_book:'Livre', price_pages_20:"pages · dès 14 photos", price_pages_30:"pages · dès 20 photos", price_pages_50:"pages · dès 31 photos",
     faq_head:'Vos questions', faq_title:"Tout ce qu'il faut savoir",
@@ -2316,7 +2393,7 @@ const LANGS = {
     occ1:'Romantic surprise', occ2:"Valentine's Day", occ3:'Couple anniversary', occ4:'Christmas', occ5:'Wedding', occ6:'Gift for a loved one',
     uploading:'Adding your photos',
     gen_steps:['Analysing your photos...','Selecting your most beautiful moments...','Writing your love story...','Composing the pages...','Laying out your album...','Adding the final touches...','Almost ready...'],
-    extra_hd:'Go further', extra_title:'Make your album unique', extra_sub:'These questions are optional, but each answer makes your story more personal and more accurate. Write in your own words, even simply.', q_meet_lbl:'Where and how did you meet?', q_meet_ph:'e.g. at a friends party, in September 2021...', q_memory_lbl:'A memory that matters to you', q_memory_ph:'e.g. our first trip to Rome, the day when...', q_habit_lbl:'A nickname, a habit or a little thing of yours', q_habit_ph:"e.g. we call each other 'Bubs', our Friday pizza nights...", q_special_lbl:'What makes your relationship special', q_special_ph:'e.g. we understand each other without words, we laugh at everything...',
+    extra_hd:'Go further', extra_title:'Make your album unique', extra_sub:'These questions are optional, but each answer makes your story more personal and more accurate. Write in your own words, even simply.', q_meet_lbl:'Where and how did you meet?', q_meet_ph:'e.g. at a friends party, in September 2021...', q_memory_lbl:'A memory that matters to you', q_memory_ph:'e.g. our first trip to Rome, the day when...', q_habit_lbl:'A nickname, a habit or a little thing of yours', q_habit_ph:"e.g. we call each other 'Bubs', our Friday pizza nights...", q_special_lbl:'What makes your relationship special', q_special_ph:'e.g. we understand each other without words, we laugh at everything...', mq_hd:"Your magazine", mq_title:"The sections of your album", mq_sub:"Everything is optional. Each section you fill in becomes a page of your magazine; the others leave room for your photos.", mq_city_s:"Where it all began", mq_city_d:"The map of where you met, inside a heart", mq_city_lbl:"City or place where you met", mq_city_ph:"e.g. Manchester, Albert Square", mq_miles_s:"Your big milestones", mq_miles_d:"A timeline with your dates", mq_miles_lbl:"One milestone per line: the date, the milestone, and a few words if you like", mq_miles_ph:"12/11/2019 - We met - a coffee that lasted three hours\n14/02/2020 - First “I love you”\n18/07/2021 - First holiday - Lisbon", mq_songs_s:"Your playlist", mq_songs_d:"The songs of your story", mq_songs_lbl:"One song per line: the title, then the artist", mq_songs_ph:"Can’t Help Falling in Love - Elvis Presley\nYellow - Coldplay\nPerfect - Ed Sheeran", mq_places_s:"Your favourite places", mq_places_d:"The places that matter to you both", mq_places_lbl:"One place per line: the name, the city, and why you love it", mq_places_ph:"The Corner Café - Bristol - our Sunday table\nDurdle Door - Dorset - the last bus we missed", mq_trips_s:"Your travels", mq_trips_d:"A recap of your getaways", mq_trips_lbl:"One destination per line, with the year", mq_trips_ph:"Lisbon - 2021\nRome - 2023", mq_quiz_s:"Who’s the most…?", mq_quiz_d:"The quiz for couples", mq_quiz_note:"Tap a name for each question. With no answer, the box stays empty so you can tick it together once the book arrives.", mq_both:"Both", mq_letter_s:"Your love letter", mq_letter_d:"The last page, just for your partner", mq_letter_lbl:"Write it yourself, or let us write it from your answers", mq_letter_ph:"My love, …",
     hero_cap_l:'Limited edition', hero_cap_q:'"Our most beautiful page"', how_d1:'Pick your best photos and enter your first names.', how_d2:'The album takes shape before your eyes, page by page.', how_d3:'Printed on photo paper, bound, delivered in 10 to 12 days.', stat_from:"From €39.99",
     tier_essentiel:'Essential', tier_classique:'Classic', tier_premium:'Premium', word_book:'Book', price_pages_20:"pages · from 14 photos", price_pages_30:"pages · from 20 photos", price_pages_50:"pages · from 31 photos",
     faq_head:'Your questions', faq_title:'Everything you need to know',
@@ -2402,7 +2479,7 @@ const LANGS = {
     occ1:'Romantische Überraschung', occ2:'Valentinstag', occ3:'Paar-Jahrestag', occ4:'Weihnachten', occ5:'Hochzeit', occ6:'Geschenk für einen geliebten Menschen',
     uploading:'Fotos werden hinzugefügt',
     gen_steps:['Eure Fotos werden analysiert...','Eure schönsten Momente werden ausgewählt...','Eure Liebesgeschichte wird geschrieben...','Die Seiten werden zusammengestellt...','Euer Album wird gestaltet...','Letzte Feinheiten...','Fast fertig...'],
-    extra_hd:'Noch persönlicher', extra_title:'Macht euer Album einzigartig', extra_sub:'Diese Fragen sind optional, aber jede Antwort macht eure Geschichte persönlicher und stimmiger. Schreibt mit euren eigenen Worten, ganz einfach.', q_meet_lbl:'Wo und wie habt ihr euch kennengelernt?', q_meet_ph:'z. B. auf einer Party bei Freunden, im September 2021...', q_memory_lbl:'Eine Erinnerung, die euch besonders wichtig ist', q_memory_ph:'z. B. unsere erste Reise nach Rom, der Tag, als...', q_habit_lbl:'Ein Spitzname, eine Gewohnheit oder eine kleine Eigenart', q_habit_ph:"z. B. wir nennen uns 'Schatz', unsere Pizza-Freitage...", q_special_lbl:'Was eure Beziehung besonders macht', q_special_ph:'z. B. wir verstehen uns ohne Worte, wir lachen über alles...',
+    extra_hd:'Noch persönlicher', extra_title:'Macht euer Album einzigartig', extra_sub:'Diese Fragen sind optional, aber jede Antwort macht eure Geschichte persönlicher und stimmiger. Schreibt mit euren eigenen Worten, ganz einfach.', q_meet_lbl:'Wo und wie habt ihr euch kennengelernt?', q_meet_ph:'z. B. auf einer Party bei Freunden, im September 2021...', q_memory_lbl:'Eine Erinnerung, die euch besonders wichtig ist', q_memory_ph:'z. B. unsere erste Reise nach Rom, der Tag, als...', q_habit_lbl:'Ein Spitzname, eine Gewohnheit oder eine kleine Eigenart', q_habit_ph:"z. B. wir nennen uns 'Schatz', unsere Pizza-Freitage...", q_special_lbl:'Was eure Beziehung besonders macht', q_special_ph:'z. B. wir verstehen uns ohne Worte, wir lachen über alles...', mq_hd:"Euer Magazin", mq_title:"Die Rubriken eures Albums", mq_sub:"Alles ist optional. Jede ausgefüllte Rubrik wird zu einer Seite eures Magazins; die anderen lassen Platz für eure Fotos.", mq_city_s:"Dort, wo alles begann", mq_city_d:"Der Stadtplan eures Kennenlernens, in einem Herzen", mq_city_lbl:"Stadt oder Ort eures Kennenlernens", mq_city_ph:"z. B. München, Marienplatz", mq_miles_s:"Eure großen Meilensteine", mq_miles_d:"Eine Zeitleiste mit euren Daten", mq_miles_lbl:"Ein Meilenstein pro Zeile: das Datum, der Meilenstein und, wenn ihr mögt, ein paar Worte", mq_miles_ph:"12.11.2019 - Das Kennenlernen - ein Kaffee, der drei Stunden dauerte\n14.02.2020 - Das erste „Ich liebe dich“\n18.07.2021 - Erster Urlaub - Lissabon", mq_songs_s:"Eure Playlist", mq_songs_d:"Die Songs eurer Geschichte", mq_songs_lbl:"Ein Song pro Zeile: Titel, dann Interpret", mq_songs_ph:"Atemlos durch die Nacht - Helene Fischer\nYellow - Coldplay\nEin Kompliment - Sportfreunde Stiller", mq_places_s:"Eure Lieblingsorte", mq_places_d:"Die Orte, die euch beiden wichtig sind", mq_places_lbl:"Ein Ort pro Zeile: der Name, die Stadt und warum ihr ihn liebt", mq_places_ph:"Café am Markt - Hamburg - unser Sonntagstisch\nLeuchtturm Westerhever - Nordfriesland - der verpasste letzte Bus", mq_trips_s:"Eure Reisen", mq_trips_d:"Eure Ausflüge im Überblick", mq_trips_lbl:"Ein Reiseziel pro Zeile, mit dem Jahr", mq_trips_ph:"Lissabon - 2021\nRom - 2023", mq_quiz_s:"Wer ist am …?", mq_quiz_d:"Das Quiz für Paare", mq_quiz_note:"Tippt bei jeder Frage auf einen Vornamen. Ohne Antwort bleibt das Kästchen leer, damit ihr es gemeinsam ankreuzen könnt, sobald das Buch bei euch ist.", mq_both:"Beide", mq_letter_s:"Euer Liebesbrief", mq_letter_d:"Die letzte Seite, nur füreinander", mq_letter_lbl:"Schreibt ihn selbst oder lasst uns ihn aus euren Antworten verfassen", mq_letter_ph:"Mein Schatz, …",
     hero_cap_l:'Limitierte Auflage', hero_cap_q:'"Unsere schönste Seite"', how_d1:'Wählen Sie Ihre schönsten Fotos und geben Sie Ihre Vornamen ein.', how_d2:'Das Album entsteht vor Ihren Augen, Seite für Seite.', how_d3:'Auf Fotopapier gedruckt, gebunden, in 10 bis 12 Tagen geliefert.', stat_from:"Ab 39,99€",
     tier_essentiel:'Essential', tier_classique:'Klassik', tier_premium:'Premium', word_book:'Buch', price_pages_20:"Seiten · ab 14 Fotos", price_pages_30:"Seiten · ab 20 Fotos", price_pages_50:"Seiten · ab 31 Fotos",
     faq_head:'Ihre Fragen', faq_title:'Alles, was Sie wissen müssen',
@@ -2488,7 +2565,7 @@ const LANGS = {
     occ1:'Sorpresa romántica', occ2:'San Valentín', occ3:'Aniversario de pareja', occ4:'Navidad', occ5:'Boda', occ6:'Regalo para un ser querido',
     uploading:'Añadiendo vuestras fotos',
     gen_steps:['Analizando vuestras fotos...','Seleccionando vuestros mejores momentos...','Escribiendo vuestra historia de amor...','Componiendo las páginas...','Maquetando vuestro álbum...','Aplicando los últimos detalles...','Casi listo...'],
-    extra_hd:'Ir más lejos', extra_title:'Haced único vuestro álbum', extra_sub:'Estas preguntas son opcionales, pero cada respuesta hace vuestra historia más personal y más auténtica. Escribid con vuestras palabras, aunque sea de forma sencilla.', q_meet_lbl:'¿Dónde y cómo os conocisteis?', q_meet_ph:'ej: en una fiesta de amigos, en septiembre de 2021...', q_memory_lbl:'Un recuerdo que os importa especialmente', q_memory_ph:'ej: nuestro primer viaje a Roma, el día en que...', q_habit_lbl:'Un apodo, una costumbre o algo vuestro', q_habit_ph:"ej: nos llamamos 'Cari', nuestras noches de pizza de los viernes...", q_special_lbl:'Lo que hace especial vuestra relación', q_special_ph:'ej: nos entendemos sin hablar, nos reímos de todo...',
+    extra_hd:'Ir más lejos', extra_title:'Haced único vuestro álbum', extra_sub:'Estas preguntas son opcionales, pero cada respuesta hace vuestra historia más personal y más auténtica. Escribid con vuestras palabras, aunque sea de forma sencilla.', q_meet_lbl:'¿Dónde y cómo os conocisteis?', q_meet_ph:'ej: en una fiesta de amigos, en septiembre de 2021...', q_memory_lbl:'Un recuerdo que os importa especialmente', q_memory_ph:'ej: nuestro primer viaje a Roma, el día en que...', q_habit_lbl:'Un apodo, una costumbre o algo vuestro', q_habit_ph:"ej: nos llamamos 'Cari', nuestras noches de pizza de los viernes...", q_special_lbl:'Lo que hace especial vuestra relación', q_special_ph:'ej: nos entendemos sin hablar, nos reímos de todo...', mq_hd:"Vuestra revista", mq_title:"Las secciones de vuestro álbum", mq_sub:"Todo es opcional. Cada sección que rellenéis se convierte en una página de vuestra revista; las demás dejan sitio a vuestras fotos.", mq_city_s:"Donde todo empezó", mq_city_d:"El plano de vuestro encuentro, dentro de un corazón", mq_city_lbl:"Ciudad o lugar donde os conocisteis", mq_city_ph:"ej: Sevilla, plaza de España", mq_miles_s:"Vuestras grandes etapas", mq_miles_d:"Una línea del tiempo con vuestras fechas", mq_miles_lbl:"Una etapa por línea: la fecha, la etapa y, si queréis, unas palabras", mq_miles_ph:"12/11/2019 - Nos conocimos - un café que duró tres horas\n14/02/2020 - El primer «te quiero»\n18/07/2021 - Primeras vacaciones - Lisboa", mq_songs_s:"Vuestra playlist", mq_songs_d:"Las canciones de vuestra historia", mq_songs_lbl:"Una canción por línea: el título y luego el artista", mq_songs_ph:"Eres tú - Mocedades\nYellow - Coldplay\nSolamente tú - Pablo Alborán", mq_places_s:"Vuestros sitios favoritos", mq_places_d:"Los lugares que cuentan para los dos", mq_places_lbl:"Un sitio por línea: el nombre, la ciudad y por qué os encanta", mq_places_ph:"Café Comercial - Madrid - nuestra mesa de los domingos\nPlaya de la Concha - San Sebastián - el último autobús que perdimos", mq_trips_s:"Vuestros viajes", mq_trips_d:"El resumen de vuestras escapadas", mq_trips_lbl:"Un destino por línea, con el año", mq_trips_ph:"Lisboa - 2021\nRoma - 2023", mq_quiz_s:"¿Quién es el más…?", mq_quiz_d:"El quiz para parejas", mq_quiz_note:"Tocad un nombre en cada pregunta. Sin respuesta, la casilla quedará vacía para marcarla juntos cuando recibáis el libro.", mq_both:"Los dos", mq_letter_s:"Vuestra carta de amor", mq_letter_d:"La última página, solo para la otra persona", mq_letter_lbl:"Escribidla vosotros mismos o dejad que la redactemos a partir de vuestras respuestas", mq_letter_ph:"Mi amor, …",
     hero_cap_l:'Edición limitada', hero_cap_q:'"Nuestra página más bonita"', how_d1:'Elige tus mejores fotos e introduce vuestros nombres.', how_d2:'El álbum se compone ante tus ojos, página a página.', how_d3:'Impreso en papel fotográfico, encuadernado, entregado en 10 a 12 días.', stat_from:"Desde 39,99€",
     tier_essentiel:'Esencial', tier_classique:'Clásico', tier_premium:'Premium', word_book:'Libro', price_pages_20:"páginas · desde 14 fotos", price_pages_30:"páginas · desde 20 fotos", price_pages_50:"páginas · desde 31 fotos",
     faq_head:'Tus preguntas', faq_title:'Todo lo que necesitas saber',
@@ -2574,7 +2651,7 @@ const LANGS = {
     occ1:'Surpresa romântica', occ2:'Dia dos Namorados', occ3:'Aniversário de casal', occ4:'Natal', occ5:'Casamento', occ6:'Presente para alguém querido',
     uploading:'A adicionar as vossas fotos',
     gen_steps:['A analisar as vossas fotos...','A selecionar os vossos melhores momentos...','A escrever a vossa história de amor...','A compor as páginas...','A criar o layout do vosso álbum...','A aplicar os últimos toques...','Quase pronto...'],
-    extra_hd:'Ir mais longe', extra_title:'Tornem o vosso álbum único', extra_sub:'Estas perguntas são opcionais, mas cada resposta torna a vossa história mais pessoal e mais verdadeira. Escrevam com as vossas palavras, mesmo de forma simples.', q_meet_lbl:'Onde e como se conheceram?', q_meet_ph:'ex: numa festa de amigos, em setembro de 2021...', q_memory_lbl:'Uma memória que é especialmente importante', q_memory_ph:'ex: a nossa primeira viagem a Roma, o dia em que...', q_habit_lbl:'Uma alcunha, um hábito ou algo vosso', q_habit_ph:"ex: chamamo-nos 'Amor', as nossas noites de pizza à sexta...", q_special_lbl:'O que torna a vossa relação especial', q_special_ph:'ex: entendemo-nos sem falar, rimo-nos de tudo...',
+    extra_hd:'Ir mais longe', extra_title:'Tornem o vosso álbum único', extra_sub:'Estas perguntas são opcionais, mas cada resposta torna a vossa história mais pessoal e mais verdadeira. Escrevam com as vossas palavras, mesmo de forma simples.', q_meet_lbl:'Onde e como se conheceram?', q_meet_ph:'ex: numa festa de amigos, em setembro de 2021...', q_memory_lbl:'Uma memória que é especialmente importante', q_memory_ph:'ex: a nossa primeira viagem a Roma, o dia em que...', q_habit_lbl:'Uma alcunha, um hábito ou algo vosso', q_habit_ph:"ex: chamamo-nos 'Amor', as nossas noites de pizza à sexta...", q_special_lbl:'O que torna a vossa relação especial', q_special_ph:'ex: entendemo-nos sem falar, rimo-nos de tudo...', mq_hd:"A vossa revista", mq_title:"As secções do vosso álbum", mq_sub:"Tudo é opcional. Cada secção preenchida passa a ser uma página da vossa revista; as outras deixam espaço para as vossas fotos.", mq_city_s:"Onde tudo começou", mq_city_d:"O mapa de onde se conheceram, dentro de um coração", mq_city_lbl:"Cidade ou local onde se conheceram", mq_city_ph:"ex: Porto, Praça da Liberdade", mq_miles_s:"As vossas grandes etapas", mq_miles_d:"Uma linha do tempo com as vossas datas", mq_miles_lbl:"Uma etapa por linha: a data, a etapa e, se quiserem, umas palavras", mq_miles_ph:"12/11/2019 - Conhecemo-nos - um café que durou três horas\n14/02/2020 - O primeiro «amo-te»\n18/07/2021 - Primeiras férias - Barcelona", mq_songs_s:"A vossa playlist", mq_songs_d:"As canções da vossa história", mq_songs_lbl:"Uma canção por linha: o título e depois o artista", mq_songs_ph:"Amar pelos dois - Salvador Sobral\nYellow - Coldplay\nTudo o que eu te dou - Pedro Abrunhosa", mq_places_s:"Os vossos sítios favoritos", mq_places_d:"Os lugares que contam para os dois", mq_places_lbl:"Um sítio por linha: o nome, a cidade e porque o adoram", mq_places_ph:"Café A Brasileira - Lisboa - a nossa mesa de domingo\nPraia da Marinha - Lagoa - o último autocarro que nos escapou", mq_trips_s:"As vossas viagens", mq_trips_d:"O resumo das vossas escapadinhas", mq_trips_lbl:"Um destino por linha, com o ano", mq_trips_ph:"Barcelona - 2021\nRoma - 2023", mq_quiz_s:"Quem é o mais…?", mq_quiz_d:"O quiz para casais", mq_quiz_note:"Toquem num nome em cada pergunta. Sem resposta, a caixa fica vazia para assinalarem juntos quando receberem o livro.", mq_both:"Os dois", mq_letter_s:"A vossa carta de amor", mq_letter_d:"A última página, só para a outra pessoa", mq_letter_lbl:"Escrevam-na vocês próprios ou deixem-nos redigi-la a partir das vossas respostas", mq_letter_ph:"Meu amor, …",
     hero_cap_l:'Edição limitada', hero_cap_q:'"A nossa página mais bonita"', how_d1:'Escolha as suas melhores fotos e introduza os vossos nomes.', how_d2:'O álbum compõe-se diante dos seus olhos, página a página.', how_d3:'Impresso em papel fotográfico, encadernado, entregue em 10 a 12 dias.', stat_from:"Desde 39,99€",
     tier_essentiel:'Essencial', tier_classique:'Clássico', tier_premium:'Premium', word_book:'Livro', price_pages_20:"páginas · a partir de 14 fotos", price_pages_30:"páginas · a partir de 20 fotos", price_pages_50:"páginas · a partir de 31 fotos",
     faq_head:'As suas perguntas', faq_title:'Tudo o que precisa de saber',
@@ -4395,6 +4472,10 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 /* ── Thèmes ─────────────────────────────────────────────────────── */
 const THEMES = {
+  magazine:   { name: 'Magazine',   paper: '#FBF9F6', ink: '#161412', muted: '#6E6862', rule: '#E6E0D8', accent: '#7A1D2E', rose: '#E7B3BC',
+                display: "'Instrument Serif','Playfair Display',Georgia,serif", disp: "'Instrument Serif','Playfair Display',Georgia,serif", mast: "'Bodoni Moda','Playfair Display',Didot,Georgia,serif",
+                script: "'Pinyon Script','Playfair Display',cursive", hand: "'Homemade Apple','Caveat',cursive", body: "'Libre Baskerville',Georgia,serif", ui: "'Inter',system-ui,sans-serif",
+                filter: '', border: 0, fullBias: 0.45, titleItalic: false, bodyScale: 0.92 },
   galerie:    { name: 'Galerie',    paper: '#FBFAF7', ink: '#1C1A18', muted: '#8B857D', rule: '#E4DFD7', accent: '#1C1A18',
                 display: "'Playfair Display',Georgia,serif", body: "'Libre Baskerville',Georgia,serif", ui: "'Inter',system-ui,sans-serif",
                 filter: '', border: 0, fullBias: 0.35, titleItalic: true },
@@ -4686,13 +4767,571 @@ const LAYOUTS = {
       + `<div style="position:absolute;left:0;right:0;bottom:${M}px;text-align:center;color:${T.muted};opacity:.7;font:400 13px/1 ${T.display};">Nous<i>talgie</i></div>`;
   } },
 };
+/* ══ Style Magazine : le livre comme un magazine de couple ══════════════════
+   Rubriques (couverture à titres, édito et sommaire, « là où tout a commencé » et sa carte, étapes,
+   une année en photos, playlist, adresses, voyages, interview, quiz, mots mêlés, raisons, bucket list,
+   lettre, quatrième de couverture). Chaque texte reste modifiable (data-t), chaque photo recadrable. */
+const MT = () => {
+  const T = theme(), M0 = THEMES.magazine, dark = parseInt(String(T.paper).slice(1, 3), 16) < 0x70;
+  const mix = (a, b, k) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.substr(i, 2), 16) * (1 - k) + parseInt(b.substr(i, 2), 16) * k).toString(16).padStart(2, '0')).join('');
+  return Object.assign({ mast: T.display, disp: M0.disp, script: M0.script, hand: M0.hand, rose: mix(T.accent, T.paper, 0.58), cardInk: dark ? '#1C1A18' : T.ink }, T);
+};
+const LMAG = {
+  fr: {"mast": "Nous", "issue": "N°01 · Édition spéciale · {y}", "k1": "Interview exclusive", "k1s": "Les coulisses de leur rencontre", "k2": "5 raisons de s’aimer", "k2s": "et bien plus encore", "edito": "Édito", "sommaire": "Au sommaire", "debut1": "Là où tout a", "debut2": "commencé", "note": "J’ai hâte de te revoir !", "etapes1": "Nos", "etapes2": "étapes", "annee1": "Une année", "annee2": "en", "annee3": "photos", "play1": "notre", "play2": "playlist", "track": "Morceau", "side": "Face A", "adr1": "nos adresses", "adr2": "préférées", "voy1": "Nos", "voy2": "voyages", "stamp": "Bon voyage", "itw1": "Interview", "itw2": "exclusive", "itws": "Les coulisses de leur rencontre", "quiz1": "Qui est le plus", "quiz3": "Spécial couple", "both": "les deux", "mots1": "Trouvez", "mots2": "les mots", "rai1": "raisons", "rai2": "de t’aimer", "bucket1": "Bucket list", "bucket2": "à deux", "lettre1": "Une lettre", "lettre2": "pour toi", "hello": "Mon cœur,", "sign": "Je t’aime.", "back1": "Édition limitée", "price": "Prix : inestimable", "chap": "Chapitre", "toc": {"debut": "Là où tout a commencé", "etapes": "Nos grandes étapes", "annee": "Une année en photos", "playlist": "Notre playlist", "adresses": "Nos adresses préférées", "voyages": "Nos voyages", "memory": "Notre souvenir", "interview": "Interview exclusive", "raisons": "Cinq raisons de t’aimer", "quiz": "Qui est le plus… ?", "mots": "Trouvez les mots", "bucket": "Notre bucket list", "lettre": "Une lettre pour toi"}, "months": ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"], "quiz": ["Qui cuisine le mieux ?", "Qui est toujours en retard ?", "Qui s’endort le premier ?", "Qui a dit « je t’aime » en premier ?", "Qui est le plus romantique ?", "Qui se perd le plus souvent ?", "Qui prend toute la couverture ?", "Qui est le plus mauvais perdant ?", "Qui organise les voyages ?", "Qui craque le premier après une dispute ?"], "words": ["AMOUR", "BISOU", "CALIN", "TENDRESSE", "COMPLICE"], "itwq": ["Votre première impression ?", "Le souvenir que vous racontez le plus ?", "Votre petit rituel à deux ?", "Ce qui vous fait rire ensemble ?", "Et la suite ?"], "k3p": {"adresses": "leurs adresses", "playlist": "leur playlist", "voyages": "leurs voyages", "etapes": "leurs grandes étapes", "secrets": "leurs petits secrets"}, "and": " et ", "k3t": " : ils vous disent tout", "west": "O", "me": "Moi", "you": "Toi", "edito_def": "Ce magazine raconte notre histoire, page après page : nos débuts, nos endroits, nos chansons, et tout ce qu’on se promet encore.", "voy_def": "Partir à deux, se perdre exprès, revenir avec des souvenirs plein les poches et l’envie de repartir.", "back_def": "À toutes les pages qu’il nous reste à écrire.", "motdoux": "un mot doux", "souvenir": "notre souvenir"},
+  en: {"mast": "Us", "issue": "No. 01 · Special edition · {y}", "k1": "Exclusive interview", "k1s": "Behind the scenes of how they met", "k2": "5 reasons to love", "k2s": "and so much more", "edito": "Intro", "sommaire": "In this issue", "debut1": "Where it all", "debut2": "began", "note": "I can’t wait to see you again!", "etapes1": "Our", "etapes2": "milestones", "annee1": "A year", "annee2": "in", "annee3": "photos", "play1": "our", "play2": "playlist", "track": "Track", "side": "Side A", "adr1": "our favourite", "adr2": "places", "voy1": "Our", "voy2": "travels", "stamp": "Bon voyage", "itw1": "Exclusive", "itw2": "interview", "itws": "Behind the scenes of how they met", "quiz1": "Who’s the most", "quiz3": "Couples special", "both": "both", "mots1": "Find", "mots2": "the words", "rai1": "reasons", "rai2": "to love you", "bucket1": "Bucket list", "bucket2": "for two", "lettre1": "A letter", "lettre2": "for you", "hello": "My love,", "sign": "I love you.", "back1": "Limited edition", "price": "Price: priceless", "chap": "Chapter", "toc": {"debut": "Where it all began", "etapes": "Our big milestones", "annee": "A year in photos", "playlist": "Our playlist", "adresses": "Our favourite places", "voyages": "Our travels", "memory": "Our memory", "interview": "Exclusive interview", "raisons": "Five reasons to love you", "quiz": "Who’s the most…?", "mots": "Find the words", "bucket": "Our bucket list", "lettre": "A letter for you"}, "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "quiz": ["Who cooks best?", "Who’s always late?", "Who falls asleep first?", "Who said “I love you” first?", "Who’s the most romantic?", "Who gets lost most often?", "Who hogs the covers?", "Who’s the worst loser?", "Who plans the trips?", "Who gives in first after an argument?"], "words": ["LOVE", "KISS", "CUDDLE", "DARLING", "TENDERNESS"], "itwq": ["Your first impression?", "The memory you retell the most?", "Your little ritual for two?", "What makes you laugh together?", "And what’s next?"], "k3p": {"adresses": "their favourite places", "playlist": "their playlist", "voyages": "their travels", "etapes": "their big milestones", "secrets": "their little secrets"}, "and": " and ", "k3t": ": they tell you everything", "west": "W", "me": "Me", "you": "You", "edito_def": "This magazine tells our story, page after page: our beginnings, our places, our songs, and everything we still promise each other.", "voy_def": "Setting off together, getting lost on purpose, coming back with pockets full of memories and the urge to go again.", "back_def": "To all the pages we still have to write.", "motdoux": "a love note", "souvenir": "our memory"},
+  de: {"mast": "Wir", "issue": "Nr. 01 · Sonderausgabe · {y}", "k1": "Exklusives Interview", "k1s": "Hinter den Kulissen ihres Kennenlernens", "k2": "5 Gründe zu lieben", "k2s": "und noch viel mehr", "edito": "Intro", "sommaire": "In dieser Ausgabe", "debut1": "Dort, wo alles", "debut2": "begann", "note": "Ich kann’s kaum erwarten, dich wiederzusehen!", "etapes1": "Die", "etapes2": "Meilensteine", "annee1": "Ein Jahr", "annee2": "in", "annee3": "Fotos", "play1": "unsere", "play2": "Playlist", "track": "Titel", "side": "Seite A", "adr1": "unsere liebsten", "adr2": "Orte", "voy1": "Unsere", "voy2": "Reisen", "stamp": "Gute Reise", "itw1": "Exklusives", "itw2": "Interview", "itws": "Hinter den Kulissen ihres Kennenlernens", "quiz1": "Wer ist am", "quiz3": "Paar-Spezial", "both": "beide", "mots1": "Findet", "mots2": "die Wörter", "rai1": "Gründe,", "rai2": "dich zu lieben", "bucket1": "Bucket List", "bucket2": "für zwei", "lettre1": "Ein Brief", "lettre2": "für dich", "hello": "Mein Schatz,", "sign": "Ich liebe dich.", "back1": "Limitierte Auflage", "price": "Preis: unbezahlbar", "chap": "Kapitel", "toc": {"debut": "Dort, wo alles begann", "etapes": "Unsere großen Meilensteine", "annee": "Ein Jahr in Fotos", "playlist": "Unsere Playlist", "adresses": "Unsere liebsten Orte", "voyages": "Unsere Reisen", "memory": "Unsere Erinnerung", "interview": "Exklusives Interview", "raisons": "Fünf Gründe, dich zu lieben", "quiz": "Wer ist am …?", "mots": "Findet die Wörter", "bucket": "Unsere Bucket List", "lettre": "Ein Brief für dich"}, "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"], "quiz": ["Wer kocht am besten?", "Wer kommt immer zu spät?", "Wer schläft zuerst ein?", "Wer hat zuerst „Ich liebe dich“ gesagt?", "Wer ist am romantischsten?", "Wer verläuft sich am häufigsten?", "Wer klaut die ganze Decke?", "Wer kann am schlechtesten verlieren?", "Wer organisiert die Reisen?", "Wer gibt nach einem Streit zuerst nach?"], "words": ["LIEBE", "KUSS", "KUSCHELN", "SCHATZ", "ZUNEIGUNG"], "itwq": ["Euer erster Eindruck?", "Die Erinnerung, die ihr am häufigsten erzählt?", "Euer kleines Ritual zu zweit?", "Was bringt euch gemeinsam zum Lachen?", "Und wie geht es weiter?"], "k3p": {"adresses": "ihre Lieblingsorte", "playlist": "ihre Playlist", "voyages": "ihre Reisen", "etapes": "ihre großen Meilensteine", "secrets": "ihre kleinen Geheimnisse"}, "and": " und ", "k3t": ": sie erzählen euch alles", "west": "W", "me": "Ich", "you": "Du", "edito_def": "Dieses Magazin erzählt unsere Geschichte, Seite für Seite: unsere Anfänge, unsere Orte, unsere Lieder und alles, was wir uns noch versprechen.", "voy_def": "Zu zweit aufbrechen, sich absichtlich verlaufen, mit Taschen voller Erinnerungen zurückkehren und gleich wieder los wollen.", "back_def": "Für alle Seiten, die uns noch zu schreiben bleiben.", "motdoux": "ein Liebeswort", "souvenir": "unsere Erinnerung"},
+  es: {"mast": "Nosotros", "issue": "N.º 01 · Edición especial · {y}", "k1": "Entrevista exclusiva", "k1s": "Los bastidores de su encuentro", "k2": "5 razones para amar", "k2s": "y mucho más", "edito": "Intro", "sommaire": "En este número", "debut1": "Donde todo", "debut2": "empezó", "note": "¡Qué ganas de volver a verte!", "etapes1": "Las", "etapes2": "etapas", "annee1": "Un año", "annee2": "en", "annee3": "fotos", "play1": "nuestra", "play2": "playlist", "track": "Tema", "side": "Cara A", "adr1": "nuestros sitios", "adr2": "favoritos", "voy1": "Nuestros", "voy2": "viajes", "stamp": "Buen viaje", "itw1": "Entrevista", "itw2": "exclusiva", "itws": "Los bastidores de su encuentro", "quiz1": "¿Quién es el más", "quiz3": "Especial pareja", "both": "los dos", "mots1": "Encontrad", "mots2": "las palabras", "rai1": "razones", "rai2": "para amarte", "bucket1": "Bucket list", "bucket2": "para dos", "lettre1": "Una carta", "lettre2": "para ti", "hello": "Mi amor,", "sign": "Te quiero.", "back1": "Edición limitada", "price": "Precio: inestimable", "chap": "Capítulo", "toc": {"debut": "Donde todo empezó", "etapes": "Nuestras grandes etapas", "annee": "Un año en fotos", "playlist": "Nuestra playlist", "adresses": "Nuestros sitios favoritos", "voyages": "Nuestros viajes", "memory": "Nuestro recuerdo", "interview": "Entrevista exclusiva", "raisons": "Cinco razones para amarte", "quiz": "¿Quién es el más…?", "mots": "Encontrad las palabras", "bucket": "Nuestra bucket list", "lettre": "Una carta para ti"}, "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"], "quiz": ["¿Quién cocina mejor?", "¿Quién llega siempre tarde?", "¿Quién se duerme primero?", "¿Quién dijo «te quiero» primero?", "¿Quién es el más romántico?", "¿Quién se pierde más a menudo?", "¿Quién se lleva toda la manta?", "¿Quién pierde peor?", "¿Quién organiza los viajes?", "¿Quién cede primero tras una discusión?"], "words": ["AMOR", "BESO", "ABRAZO", "TERNURA", "COMPLICE"], "itwq": ["¿Vuestra primera impresión?", "¿El recuerdo que más contáis?", "¿Vuestro pequeño ritual de pareja?", "¿Qué os hace reír juntos?", "¿Y qué viene ahora?"], "k3p": {"adresses": "sus sitios favoritos", "playlist": "su playlist", "voyages": "sus viajes", "etapes": "sus grandes etapas", "secrets": "sus pequeños secretos"}, "and": " y ", "k3t": ": os lo cuentan todo", "west": "O", "me": "Yo", "you": "Tú", "edito_def": "Esta revista cuenta nuestra historia, página tras página: nuestros comienzos, nuestros lugares, nuestras canciones y todo lo que todavía nos prometemos.", "voy_def": "Irnos los dos, perdernos a propósito, regresar con los bolsillos llenos de recuerdos y con ganas de volver a irnos.", "back_def": "A todas las páginas que nos quedan por escribir.", "motdoux": "una nota de amor", "souvenir": "nuestro recuerdo"},
+  pt: {"mast": "Nós", "issue": "N.º 01 · Edição especial · {y}", "k1": "Entrevista exclusiva", "k1s": "Os bastidores de como se conheceram", "k2": "5 razões para amar", "k2s": "e muito mais", "edito": "Intro", "sommaire": "Nesta edição", "debut1": "Onde tudo", "debut2": "começou", "note": "Mal posso esperar por te rever!", "etapes1": "As", "etapes2": "etapas", "annee1": "Um ano", "annee2": "em", "annee3": "fotos", "play1": "a nossa", "play2": "playlist", "track": "Faixa", "side": "Lado A", "adr1": "os nossos sítios", "adr2": "favoritos", "voy1": "As nossas", "voy2": "viagens", "stamp": "Boa viagem", "itw1": "Entrevista", "itw2": "exclusiva", "itws": "Os bastidores de como se conheceram", "quiz1": "Quem é o mais", "quiz3": "Especial casais", "both": "os dois", "mots1": "Encontrem", "mots2": "as palavras", "rai1": "razões", "rai2": "para te amar", "bucket1": "Bucket list", "bucket2": "a dois", "lettre1": "Uma carta", "lettre2": "para ti", "hello": "Meu amor,", "sign": "Amo-te.", "back1": "Edição limitada", "price": "Preço: inestimável", "chap": "Capítulo", "toc": {"debut": "Onde tudo começou", "etapes": "As nossas grandes etapas", "annee": "Um ano em fotos", "playlist": "A nossa playlist", "adresses": "Os nossos sítios favoritos", "voyages": "As nossas viagens", "memory": "A nossa recordação", "interview": "Entrevista exclusiva", "raisons": "Cinco razões para te amar", "quiz": "Quem é o mais…?", "mots": "Encontrem as palavras", "bucket": "A nossa bucket list", "lettre": "Uma carta para ti"}, "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"], "quiz": ["Quem cozinha melhor?", "Quem se atrasa sempre?", "Quem adormece primeiro?", "Quem disse «amo-te» primeiro?", "Quem é o mais romântico?", "Quem se perde mais vezes?", "Quem fica com o cobertor todo?", "Quem é pior a perder?", "Quem organiza as viagens?", "Quem cede primeiro depois de uma discussão?"], "words": ["AMOR", "BEIJO", "ABRACO", "CARINHO", "CUMPLICE"], "itwq": ["A vossa primeira impressão?", "A recordação que mais contam?", "O vosso pequeno ritual a dois?", "O que vos faz rir juntos?", "E a seguir?"], "k3p": {"adresses": "os seus sítios favoritos", "playlist": "a sua playlist", "voyages": "as suas viagens", "etapes": "as suas grandes etapas", "secrets": "os seus pequenos segredos"}, "and": " e ", "k3t": ": contam-vos tudo", "west": "O", "me": "Eu", "you": "Tu", "edito_def": "Esta revista conta a nossa história, página após página: os nossos começos, os nossos lugares, as nossas canções e tudo o que ainda prometemos um ao outro.", "voy_def": "Partir a dois, perder-nos de propósito, regressar com os bolsos cheios de recordações e vontade de voltar a partir.", "back_def": "A todas as páginas que nos restam por escrever.", "motdoux": "um bilhete de amor", "souvenir": "a nossa recordação"},
+};
+const lm = k => { const d = LMAG[curLang()] || LMAG.fr; return d[k] != null ? d[k] : LMAG.fr[k]; };
+const MONTHS = () => lm('months');
+
+/* Décors */
+let MAGID = 0;
+const svgHeart = (x, y, s, fill, rot = 0, op = 1) => `<svg style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;transform:rotate(${rot}deg);opacity:${op};overflow:visible" viewBox="0 0 100 100"><path d="M50 88C18 64 6 44 12 28 18 12 38 10 50 26 62 10 82 12 88 28 94 44 82 64 50 88Z" fill="${fill}"/></svg>`;
+const svgHeartLine = (x, y, s, color, rot = 0) => `<svg style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;transform:rotate(${rot}deg);overflow:visible" viewBox="0 0 100 100"><path d="M50 86C20 64 8 45 13 29 18 14 37 12 50 28 63 12 82 14 87 29 92 45 80 64 50 86Z" fill="none" stroke="${color}" stroke-width="4" stroke-linejoin="round"/></svg>`;
+const svgCurl = (x, y, w, color, rot = 0, flip = false) => `<svg style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${w / 2}px;transform:rotate(${rot}deg)${flip ? ' scaleX(-1)' : ''};overflow:visible" viewBox="0 0 120 60"><path d="M4 42C26 8 56 6 60 30 63 50 38 52 34 38 30 22 66 14 110 30" fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round"/><path d="M100 21 112 30 99 37" fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const tape = (x, y, w, rot) => `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:24px;background:rgba(226,214,192,.82);transform:rotate(${rot}deg);box-shadow:0 1px 2px rgba(60,40,20,.12);clip-path:polygon(3% 0,97% 8%,100% 100%,0 92%);"></div>`;
+const folioShadow = 'box-shadow:0 12px 26px -14px rgba(40,26,14,.5),0 1px 3px rgba(40,26,14,.14);';
+function polaroid(pg, i, x, y, w, h, rot, capKey, capPh) {   // photo instantanée : bord blanc, bas plus large pour l'écriture
+  const T = MT(), cap = capKey != null;
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w + 22}px;height:${h + (cap ? 54 : 22)}px;background:#fff;${folioShadow}transform:rotate(${rot}deg);">`
+    + `<div style="position:absolute;left:11px;top:11px;width:${w}px;height:${h}px;">${slot(pg, i, 0, 0, w, h, { border: 0 })}</div>`
+    + (cap ? tx(pg, capKey, `position:absolute;left:8px;right:8px;bottom:12px;text-align:center;color:${T.cardInk};font:400 13px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, capPh || '') : '')
+    + `</div>`;
+}
+function barcode(x, y, w, h, seed) {
+  let s = 2166136261; for (const c of String(seed || 'nous')) s = Math.imul(s ^ c.charCodeAt(0), 16777619) >>> 0;
+  let bars = '', cx = 7;
+  while (cx < w - 8) { s = (Math.imul(s, 1103515245) + 12345) >>> 0; const bw = 1 + (s >>> 13) % 3; if ((s >>> 19) & 3) bars += `<rect x="${cx}" y="6" width="${bw}" height="${h - 24}"/>`; cx += bw + 1 + ((s >>> 23) & 1); }
+  const d = String(s % 1e12).padStart(12, '0');
+  return `<svg style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="#fff"/><g fill="#141414">${bars}</g><text x="${w / 2}" y="${h - 6}" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="8.5" letter-spacing="1.4" fill="#141414">${d.slice(0, 1)} ${d.slice(1, 7)} ${d.slice(7)}</text></svg>`;
+}
+// Carte du lieu de rencontre dans un cœur (tracés OpenStreetMap préparés par /api/carte, en 0..1000)
+const HEART = 'M500 900C196 694 74 526 94 352 112 198 250 122 372 150 434 164 478 206 500 252 522 206 566 164 628 150 750 122 888 198 906 352 926 526 804 694 500 900Z';
+function heartMap(C, x, y, s, T) {
+  const id = 'nstH' + (++MAGID), has = !!(C && C.roads);
+  const layer = has ? (C.water ? `<path d="${C.water}" fill="${T.rose}" opacity=".32"/>` : '')
+      + (C.rivers ? `<path d="${C.rivers}" fill="none" stroke="${T.rose}" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" opacity=".32"/>` : '')
+      + `<path d="${C.roads}" fill="none" stroke="${T.rose}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".88"/>`
+      + (C.major ? `<path d="${C.major}" fill="none" stroke="${T.rose}" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>` : '')
+    : Array.from({ length: 8 }, (_, k) => { const f = 1 - k * 0.11; return `<path d="${HEART}" fill="none" stroke="${T.rose}" stroke-width="${2.6 / f}" opacity=".55" transform="translate(${500 * (1 - f)} ${520 * (1 - f)}) scale(${f})"/>`; }).join('');
+  return `<svg style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;overflow:visible" viewBox="0 0 1000 1000"><defs><clipPath id="${id}"><path d="${HEART}"/></clipPath></defs>`
+    + `<g clip-path="url(#${id})"><rect width="1000" height="1000" fill="${T.accent}"/>${layer}</g>`
+    + `<path d="M500 552C458 520 440 496 446 470 452 448 480 442 500 464 520 442 548 448 554 470 560 496 542 520 500 552Z" fill="#fff"/></svg>`;
+}
+// Mots mêlés : grille déterministe (même album, même grille), mots à l'endroit
+function wordGrid(words, n, seed) {
+  let s = 2166136261; for (const c of String(seed)) s = Math.imul(s ^ c.charCodeAt(0), 16777619) >>> 0;
+  const rnd = () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; };
+  const G = Array.from({ length: n }, () => Array(n).fill(''));
+  const DIRS = [[1, 0], [0, 1], [1, 1]], placed = [];
+  words.slice().sort((a, b) => b.length - a.length).forEach(w => {
+    if (w.length > n) return;
+    for (let tries = 0; tries < 200; tries++) {
+      const [dx, dy] = DIRS[Math.floor(rnd() * DIRS.length)];
+      const x0 = Math.floor(rnd() * (n - (dx ? w.length : 1) + 1)), y0 = Math.floor(rnd() * (n - (dy ? w.length : 1) + 1));
+      let ok = true;
+      for (let k = 0; k < w.length && ok; k++) { const c = G[y0 + dy * k][x0 + dx * k]; if (c && c !== w[k]) ok = false; }
+      if (!ok) continue;
+      for (let k = 0; k < w.length; k++) G[y0 + dy * k][x0 + dx * k] = w[k];
+      placed.push(w); return;
+    }
+  });
+  const AL = 'ABCDEFGHIJKLMNOPRSTUVEAEIOUSNRT';
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!G[y][x]) G[y][x] = AL[Math.floor(rnd() * AL.length)];
+  return { grid: G, placed };
+}
+const plain = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]/g, '');
+// Le mot le plus parlant d'un nom (« La dune du Pyla » → Pyla) : sans article, nom propre d'abord, puis le plus long
+const SMALL = new Set('le la les l du de des d au aux et un une the of and a an el los las del o os as do da dos das der die das den dem und von'.split(' '));
+const keyWord = s => String(s || '').split(/[\s,'’-]+/).filter(w => w.length >= 3 && !SMALL.has(w.toLowerCase()))
+  .sort((a, b) => (/^\p{Lu}/u.test(b) - /^\p{Lu}/u.test(a)) || b.length - a.length)[0] || '';
+// Numéro de page imprimé (folio) et sommaire calculés au rendu : toujours justes, même après un déplacement de page
+const pageIndex = pg => (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? NA.pages.indexOf(pg) : -1;
+function folio(pg, T) {
+  const i = pageIndex(pg); if (i <= 0 || i >= NA.pages.length - 1) return '';
+  const left = i % 2 === 0, mast = (NA.pages[0] && NA.pages[0].t && NA.pages[0].t.mast) || lm('mast');
+  return `<div style="position:absolute;bottom:30px;${left ? `left:${M}px` : `right:${M}px`};color:${T.muted};font:600 9px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;pointer-events:none;">${left ? `${String(i + 1).padStart(2, '0')} · ${esc(mast)}` : `${esc(mast)} · ${String(i + 1).padStart(2, '0')}`}</div>`;
+}
+const TOC_KEYS = ['debut', 'etapes', 'annee', 'playlist', 'adresses', 'voyages', 'memory', 'interview', 'raisons', 'quiz', 'mots', 'bucket', 'lettre'];
+
+/* Rubriques */
+Object.assign(LAYOUTS, {
+  mcover: { n: 1, text: true, mag: 'cover', render(pg) {
+    const T = MT(), mast = String(pg.t.mast || ''), ms = clamp(Math.floor(700 / Math.max(3, mast.length) / 0.7), 70, 182), names = pg.t.names || '';
+    const top = 30 + ms * 0.84;
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + `<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,8,6,.42),rgba(10,8,6,0) 34%,rgba(10,8,6,0) 50%,rgba(10,8,6,.66));pointer-events:none;"></div>`
+      + tx(pg, 'mast', `position:absolute;left:0;right:0;top:24px;text-align:center;color:#fff;font:400 ${ms}px/.84 ${T.mast};font-variation-settings:'opsz' 96;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;`, lm('mast'))
+      + tx(pg, 'issue', `position:absolute;left:0;right:0;top:${Math.round(top + 16)}px;text-align:center;color:rgba(255,255,255,.94);font:600 10px/1 ${T.ui};letter-spacing:.32em;text-transform:uppercase;`, '')
+      + tx(pg, 'k2', `position:absolute;right:${M}px;top:${Math.round(top + 66)}px;width:230px;text-align:right;color:#fff;font:400 42px/.95 ${T.disp};text-transform:uppercase;text-shadow:0 1px 16px rgba(0,0,0,.28);`, '')
+      + tx(pg, 'k2s', `position:absolute;right:${M}px;top:${Math.round(top + 158)}px;width:220px;text-align:right;color:#fff;font:italic 400 17px/1.25 ${T.disp};text-shadow:0 1px 12px rgba(0,0,0,.3);`, '')
+      + tx(pg, 'k1', `position:absolute;left:${M}px;top:400px;width:200px;color:#fff;font:400 31px/.98 ${T.disp};text-transform:uppercase;text-shadow:0 1px 16px rgba(0,0,0,.28);`, '')
+      + tx(pg, 'k1s', `position:absolute;left:${M}px;top:472px;width:200px;color:#fff;font:italic 400 15px/1.35 ${T.body};text-shadow:0 1px 12px rgba(0,0,0,.32);`, '')
+      + tx(pg, 'title', `position:absolute;left:${M}px;bottom:200px;width:520px;color:#fff;font:italic 400 24px/1.15 ${T.disp};text-shadow:0 1px 14px rgba(0,0,0,.3);`, '')
+      + tx(pg, 'names', `position:absolute;left:${M}px;bottom:112px;width:540px;color:#fff;font:400 ${fit(names, 76, 46, 10, 28)}px/.92 ${T.disp};text-transform:uppercase;letter-spacing:.005em;white-space:nowrap;text-shadow:0 2px 20px rgba(0,0,0,.3);`, 'Vos prénoms')
+      + tx(pg, 'k3', `position:absolute;left:${M}px;bottom:${M}px;width:430px;color:#fff;font:700 11.5px/1.5 ${T.ui};letter-spacing:.07em;text-transform:uppercase;`, '')
+      + barcode(PX - M - 92, PX - M - 64, 92, 64, names + (pg.t.issue || ''));
+  } },
+  medito: { n: 0, text: true, mag: 'edito', render(pg) {
+    const T = MT(), d = pg.t.text || '';
+    const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
+    const RH = toc.length > 9 ? 42 : 52;
+    const rows = toc.slice(0, 13).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
+      + `<div style="position:absolute;left:0;top:${RH > 42 ? 10 : 7}px;width:58px;color:${T.accent};font:400 ${RH > 42 ? 30 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
+      + `<div style="position:absolute;left:62px;top:${RH > 42 ? 17 : 13}px;right:0;color:${T.ink};font:400 13.5px/1.25 ${T.body};">${esc(lm('toc')[k] || '')}</div></div>`).join('');
+    return tx(pg, 'h', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 112px/.86 ${T.disp};text-transform:uppercase;`, lm('edito'))
+      + `<div style="position:absolute;left:${M}px;top:176px;width:46px;height:2px;background:${T.accent};"></div>`
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:206px;width:282px;color:${T.ink};font:italic 400 ${fit(d, 30, 15, 50, 520)}px/1.5 ${T.disp};`, 'Votre dédicace…')
+      + tx(pg, 'sign', `position:absolute;left:${M}px;bottom:${M + 28}px;width:282px;color:${T.ink};font:400 17px/1.3 ${T.hand};`, '')
+      + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${T.rule};"></div>`
+      + tx(pg, 'toc', `position:absolute;left:430px;top:64px;width:300px;color:${T.ink};font:400 34px/1 ${T.disp};`, lm('sommaire'))
+      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(13, toc.length) * RH}px;">${rows}</div>`;
+  } },
+  mdebut: { n: 2, text: true, mag: 'debut', render(pg) {
+    const T = MT(), txt = pg.t.text || '';
+    return tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:46px;color:${T.ink};font:400 50px/1.1 ${T.script};transform:rotate(-7deg);transform-origin:left bottom;white-space:nowrap;`, lm('debut1'))
+      + tx(pg, 'h2', `position:absolute;left:${M}px;top:104px;color:${T.ink};font:400 ${Math.min(108, Math.floor(368 / (0.5 * Math.max(4, String(pg.t.h2 || '').length))))}px/.84 ${T.disp};text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;`, lm('debut2'))
+      + polaroid(pg, 0, 448, 56, 250, 286, 3.2, 'c0')
+      + polaroid(pg, 1, 412, 452, 250, 196, -4.2, null)
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:236px;width:300px;color:${T.ink};font:400 ${Math.round(fit(txt, 14.5, 11.5, 300, 760) * (T.bodyScale || 1) * 10) / 10}px/1.74 ${T.body};text-align:justify;hyphens:auto;`, 'Votre rencontre…')
+      + `<div style="position:absolute;left:${M + 4}px;top:592px;width:214px;height:104px;background:#F4EEE3;transform:rotate(-4deg);${folioShadow}"></div>` + tape(M + 76, 580, 72, -7)
+      + tx(pg, 'note', `position:absolute;left:${M + 18}px;top:618px;width:188px;color:${T.cardInk};font:400 15px/1.55 ${T.hand};transform:rotate(-4deg);text-align:center;`, '')
+      + svgHeart(352, 640, 34, T.accent, -12) + folio(pg, T);
+  } },
+  mcarte: { n: 0, text: true, mag: 'carte', render(pg) {
+    const T = MT(), city = String(pg.t.city || ''), C = (typeof NA !== 'undefined' && NA.info && NA.info.carte) || null;
+    return tx(pg, 'city', `position:absolute;left:${M - 20}px;right:${M - 20}px;top:52px;text-align:center;color:${T.ink};font:400 ${fit(city, 112, 54, 6, 18)}px/.9 ${T.disp};text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;`, 'Votre ville')
+      + tx(pg, 'date', `position:absolute;left:${M}px;right:${M}px;top:${52 + fit(city, 112, 54, 6, 18) * 0.9 + 14}px;text-align:center;color:${T.ink};font:italic 400 26px/1 ${T.disp};`, '')
+      + heartMap(C, 162, 214, 470, T)
+      + tx(pg, 'coord', `position:absolute;left:${M - 20}px;right:${M - 20}px;bottom:62px;text-align:center;color:${T.ink};font:400 40px/1 ${T.disp};letter-spacing:.01em;white-space:nowrap;`, '')
+      + (C && C.roads ? `<div style="position:absolute;right:${M}px;bottom:40px;color:${T.muted};font:400 6.5px/1 ${T.ui};letter-spacing:.06em;">© OpenMapTiles © OpenStreetMap</div>` : '') + folio(pg, T);
+  } },
+  metapes: { n: 4, text: true, mag: 'etapes', render(pg) {
+    const T = MT();
+    const frames = [0, 1, 2, 3].map(i => slot(pg, i, 46 + i * 222, 34, 196, 132, { border: 0 })).join('');
+    const holes = `repeating-linear-gradient(90deg,transparent 0 9px,#F2EDE6 9px 21px,transparent 21px 30px)`;
+    const strip = `<div style="position:absolute;left:-60px;top:318px;width:${PX + 120}px;height:200px;background:#141210;transform:rotate(-8deg);box-shadow:0 14px 30px -18px rgba(0,0,0,.6);">`
+      + `<div style="position:absolute;left:0;right:0;top:9px;height:14px;background:${holes};"></div><div style="position:absolute;left:0;right:0;bottom:9px;height:14px;background:${holes};"></div>`
+      + `<div style="position:absolute;left:60px;top:0;width:${PX}px;height:200px;">${frames}</div></div>`;
+    const POS = [[M, 236], [300, 206], [536, 176], [M + 10, 590], [300, 556], [536, 526]];
+    const items = POS.map(([x, y], k) => {
+      const i = k + 1;
+      if (!CTX.editing && !pg.t['d' + i] && !pg.t['e' + i] && !pg.t['x' + i]) return '';
+      return tx(pg, 'd' + i, `position:absolute;left:${x}px;top:${y}px;width:196px;color:${T.ink};font:400 21px/1 ${T.disp};letter-spacing:.02em;`, '')
+        + tx(pg, 'e' + i, `position:absolute;left:${x}px;top:${y + 26}px;width:196px;color:${T.accent};font:italic 400 19px/1.1 ${T.disp};`, '')
+        + tx(pg, 'x' + i, `position:absolute;left:${x}px;top:${y + 52}px;width:190px;color:${T.ink};font:400 10.5px/1.5 ${T.body};max-height:48px;overflow:hidden;`, '');
+    }).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:40px;color:${T.ink};font:400 48px/1 ${T.script};white-space:nowrap;`, lm('etapes1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 70}px;top:44px;color:${T.ink};font:400 84px/.84 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('etapes2'))
+      + strip + items
+      + svgCurl(226, 300, 60, T.accent, 30) + svgCurl(470, 650, 60, T.accent, -160) + svgHeart(704, 590, 30, T.accent, 14) + svgHeartLine(470, 140, 30, T.accent, -14)
+      + folio(pg, T);
+  } },
+  mannee: { n: 6, text: true, mag: 'annee', render(pg) {
+    const T = MT(), right = pg.v === 1;
+    const ROT = right ? [2, -2.5, 1.5, -1.5, 2.5, -2] : [-2.5, 2, -1.5, 2.5, -2, 1.5];
+    const cells = Array.from({ length: clamp(pg.slots.length || 6, 1, 6) }, (_, i) => i).map(i => {
+      const c = i % 3, r = Math.floor(i / 3), w = 176, h = 176;
+      return polaroid(pg, i, M - 4 + c * 224 + (r ? 14 : 0), 204 + r * 268, w, h, ROT[i], 'm' + (i + 1));
+    }).join('');
+    const title = right
+      ? tx(pg, 'h2', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;`, lm('annee2'))
+        + tx(pg, 'h3', `position:absolute;left:${M + 140}px;top:40px;color:${T.ink};font:400 92px/1.1 ${T.script};`, lm('annee3'))
+      : tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('annee1'));
+    return title + cells + folio(pg, T);
+  } },
+  mplay_a: { n: 1, text: true, mag: 'playlist', render(pg) {
+    const T = MT(), song = pg.t.song || '';
+    const ic = (d, x) => `<svg style="position:absolute;left:${x}px;top:614px;width:40px;height:40px" viewBox="0 0 40 40"><path d="${d}" fill="#fff"/></svg>`;
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + `<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,8,6,.16),rgba(10,8,6,.05) 40%,rgba(10,8,6,.6));pointer-events:none;"></div>`
+      + tx(pg, 'h1', `position:absolute;left:${M + 10}px;top:262px;color:#fff;font:400 70px/1 ${T.script};text-shadow:0 2px 18px rgba(0,0,0,.3);`, lm('play1'))
+      + tx(pg, 'h2', `position:absolute;left:${M}px;top:326px;color:#fff;font:400 132px/.84 ${T.disp};text-transform:uppercase;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.28);`, lm('play2'))
+      + tx(pg, 'num', `position:absolute;left:${M}px;top:500px;color:#fff;font:600 13px/1 ${T.ui};letter-spacing:.2em;text-transform:uppercase;`, '')
+      + tx(pg, 'song', `position:absolute;left:${M}px;top:524px;width:560px;color:#fff;font:italic 400 ${fit(song, 30, 20, 20, 60)}px/1.15 ${T.disp};`, '')
+      + `<div style="position:absolute;left:${M}px;top:586px;width:${W}px;height:3px;background:rgba(255,255,255,.35);border-radius:3px;"><div style="width:38%;height:100%;background:#fff;border-radius:3px;"></div><div style="position:absolute;left:38%;top:-6px;width:15px;height:15px;margin-left:-7px;background:#fff;border-radius:50%;"></div></div>`
+      + `<div style="position:absolute;left:${M}px;top:598px;width:${W}px;color:rgba(255,255,255,.85);font:500 10px/1 ${T.ui};letter-spacing:.08em;"><span>1:24</span><span style="float:right">3:47</span></div>`
+      + ic('M10 10h4v20h-4zM30 10v20L15 20z', 300) + `<svg style="position:absolute;left:372px;top:604px;width:60px;height:60px" viewBox="0 0 60 60"><circle cx="30" cy="30" r="29" fill="#fff"/><rect x="21" y="18" width="6" height="24" rx="1.5" fill="#141210"/><rect x="33" y="18" width="6" height="24" rx="1.5" fill="#141210"/></svg>` + ic('M26 10h4v20h-4zM10 10v20l15-10z', 454);
+  } },
+  mplay_b: { n: 9, text: true, mag: 'playlist', render(pg) {
+    const T = MT();
+    const cells = Array.from({ length: clamp(pg.slots.length || 9, 1, 9) }, (_, i) => i).map(i => {
+      const c = i % 3, r = Math.floor(i / 3), x = M + c * 238, y = 96 + r * 218;
+      return slot(pg, i, x, y, 158, 158, { border: 0 })
+        + tx(pg, 'a' + (i + 1), `position:absolute;left:${x}px;top:${y + 166}px;width:178px;color:${T.ink};font:700 10.5px/1.25 ${T.ui};letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;overflow:hidden;`, '')
+        + tx(pg, 's' + (i + 1), `position:absolute;left:${x}px;top:${y + 182}px;width:178px;color:${T.muted};font:400 11px/1.25 ${T.ui};white-space:nowrap;overflow:hidden;`, '');
+    }).join('');
+    return tx(pg, 'side', `position:absolute;left:${M}px;top:50px;color:${T.muted};font:600 10px/1 ${T.ui};letter-spacing:.3em;text-transform:uppercase;`, lm('side')) + cells + folio(pg, T);
+  } },
+  madresses: { n: 4, text: true, mag: 'adresses', render(pg) {
+    const T = MT();
+    const POS = [[M, 224], [418, 150], [M, 486], [418, 412]].slice(0, clamp(pg.slots.length || 4, 1, 4));
+    const items = POS.map(([x, y], k) => {
+      const i = k + 1;
+      return slot(pg, k, x, y, 300, 140, { border: 0 })
+        + tx(pg, 'n' + i, `position:absolute;left:${x}px;top:${y + 150}px;width:300px;color:${T.ink};font:400 22px/1.05 ${T.disp};white-space:nowrap;overflow:hidden;`, '')
+        + tx(pg, 'c' + i, `position:absolute;left:${x}px;top:${y + 176}px;width:300px;color:${T.accent};font:600 9.5px/1 ${T.ui};letter-spacing:.18em;text-transform:uppercase;`, '')
+        + tx(pg, 'x' + i, `position:absolute;left:${x}px;top:${y + 192}px;width:296px;color:${T.ink};font:400 10.5px/1.5 ${T.body};max-height:48px;overflow:hidden;`, '');
+    }).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 70px/.88 ${T.disp};white-space:nowrap;`, lm('adr1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 96}px;top:108px;color:${T.ink};font:400 54px/1.1 ${T.script};white-space:nowrap;`, lm('adr2'))
+      + items + folio(pg, T);
+  } },
+  mvoyages: { n: 3, text: true, mag: 'voyages', render(pg) {
+    const T = MT(), txt = pg.t.text || '';
+    const stamp = `<svg style="position:absolute;left:580px;top:566px;width:132px;height:132px;transform:rotate(-14deg);opacity:.85" viewBox="0 0 132 132"><defs><path id="nstSt${++MAGID}" d="M66 66m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="66" cy="66" r="62" fill="none" stroke="${T.accent}" stroke-width="2.5"/><circle cx="66" cy="66" r="34" fill="none" stroke="${T.accent}" stroke-width="1.5"/><text font-family="Inter,Arial,sans-serif" font-size="12.5" font-weight="700" letter-spacing="3" fill="${T.accent}"><textPath href="#nstSt${MAGID}">${esc(String(lm('stamp')).toUpperCase())} · ${esc(String(lm('stamp')).toUpperCase())} ·</textPath></text><path d="M50 72l26-12-8 22-5-8z" fill="${T.accent}"/></svg>`;
+    return tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:40px;color:${T.ink};font:400 52px/1 ${T.script};`, lm('voy1'))
+      + tx(pg, 'h2', `position:absolute;left:${M}px;top:96px;color:${T.ink};font:400 108px/.84 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('voy2'))
+      + tx(pg, 'year', `position:absolute;left:${M + 4}px;top:196px;color:${T.accent};font:italic 400 30px/1 ${T.disp};`, '')
+      + `<div style="position:absolute;left:420px;top:52px;width:322px;height:278px;background:#fff;padding:10px;box-sizing:border-box;transform:rotate(2.5deg);${folioShadow}"><div style="position:relative;width:302px;height:258px;">${slot(pg, 0, 0, 0, 302, 258, { border: 0 })}</div></div>` + tape(540, 38, 86, -4)
+      + polaroid(pg, 1, M + 2, 272, 220, 210, -3.5, 'c2') + tape(M + 80, 262, 70, 6)
+      + polaroid(pg, 2, 404, 372, 214, 172, 3, 'c3')
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:570px;width:300px;color:${T.ink};font:400 ${fit(txt, 12.5, 10.5, 200, 520)}px/1.65 ${T.body};`, '')
+      + `<div style="position:absolute;left:404px;top:612px;width:166px;height:100px;background:#F4EEE3;border-left:4px dashed ${T.rule};${folioShadow}transform:rotate(-2deg);"></div>`
+      + tx(pg, 'dest', `position:absolute;left:420px;top:624px;width:144px;color:${T.cardInk};font:600 10px/1.65 ${T.ui};letter-spacing:.08em;text-transform:uppercase;transform:rotate(-2deg);max-height:80px;overflow:hidden;`, '')
+      + stamp + folio(pg, T);
+  } },
+  minterview: { n: 1, text: true, mag: 'interview', render(pg) {
+    const T = MT(), blanks = !pg.t.a1 && !pg.t.a2;
+    const qa = [1, 2, 3, 4, 5].filter(i => CTX.editing || pg.t['q' + i]).map(i => {
+      const left = i <= 3, x = left ? M : 420, y = left ? 270 + (i - 1) * 150 : 430 + (i - 4) * 140, w = left ? 318 : 310;
+      const line = `<div style="position:absolute;left:${x}px;top:${y + 34}px;width:${w}px;height:84px;background:repeating-linear-gradient(to bottom,transparent 0 26px,${T.rule} 26px 27px);"></div>`;
+      return tx(pg, 'q' + i, `position:absolute;left:${x}px;top:${y}px;width:${w}px;color:${T.accent};font:700 10.5px/1.35 ${T.ui};letter-spacing:.08em;text-transform:uppercase;`, '')
+        + (blanks ? line : tx(pg, 'a' + i, `position:absolute;left:${x}px;top:${y + 34}px;width:${w}px;color:${T.ink};font:400 ${T.bodyScale ? 12 : 12.5}px/1.62 ${T.body};max-height:${left ? 108 : 96}px;overflow:hidden;`, ''));
+    }).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M}px;top:56px;color:${T.ink};font:400 100px/.84 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('itw1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 150}px;top:118px;color:${T.ink};font:400 56px/1.1 ${T.script};white-space:nowrap;`, lm('itw2'))
+      + tx(pg, 'sub', `position:absolute;left:${M}px;top:206px;width:330px;color:${T.muted};font:italic 400 16px/1.3 ${T.disp};`, '')
+      + polaroid(pg, 0, 452, 150, 236, 220, 3, null)
+      + qa + folio(pg, T);
+  } },
+  mquiz: { n: 0, text: true, mag: 'quiz', render(pg) {
+    const T = MT(), ans = String(pg.t.ans || '').split(',').map(x => +x || 0), n1 = pg.t.n1 || '', n2 = pg.t.n2 || '';
+    const mark = (on, x, y) => on ? `<div style="position:absolute;left:${x}px;top:${y - 6}px;width:34px;text-align:center;color:${T.accent};font:400 26px/1 ${T.hand};">✕</div>`
+      : `<div style="position:absolute;left:${x + 8}px;top:${y + 2}px;width:16px;height:16px;border:1.5px solid ${T.rule};border-radius:50%;"></div>`;
+    const rows = Array.from({ length: 10 }, (_, k) => {
+      const y = 270 + k * 44, a = ans[k] || 0;
+      return tx(pg, 'q' + (k + 1), `position:absolute;left:${M}px;top:${y}px;width:420px;color:${T.ink};font:400 15px/1.3 ${T.body};white-space:nowrap;overflow:hidden;`, '')
+        + mark(a === 1 || a === 3, 548, y) + mark(a === 2 || a === 3, 650, y);
+    }).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:46px;color:${T.ink};font:400 54px/1.1 ${T.script};white-space:nowrap;`, lm('quiz1'))
+      + `<div style="position:absolute;left:${M + 360}px;top:24px;color:${T.ink};font:400 170px/1 ${T.disp};">?</div>`
+      + tx(pg, 'h3', `position:absolute;left:${M}px;top:130px;color:${T.ink};font:400 46px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('quiz3'))
+      + `<div style="position:absolute;left:530px;top:218px;width:70px;text-align:center;color:${T.ink};font:400 17px/1.1 ${T.disp};text-transform:uppercase;overflow:hidden;white-space:nowrap;">${esc(n1)}</div>`
+      + `<div style="position:absolute;left:632px;top:218px;width:70px;text-align:center;color:${T.ink};font:400 17px/1.1 ${T.disp};text-transform:uppercase;overflow:hidden;white-space:nowrap;">${esc(n2)}</div>`
+      + `<div style="position:absolute;left:${M}px;top:252px;width:${W}px;height:1px;background:${T.rule};"></div>`
+      + rows + folio(pg, T);
+  } },
+  mmots: { n: 0, text: true, mag: 'mots', render(pg) {
+    const T = MT(), words = String(pg.t.words || '').split(/[,\n]/).map(plain).filter(w => w.length >= 3 && w.length <= 12).slice(0, 12);
+    const N = 12, cell = 37, gx = 286, gy = 254;
+    const { grid } = wordGrid(words, N, (pg.t.seed || '') + words.join(''));
+    const letters = grid.map((row, y) => row.map((c, x) => `<div style="position:absolute;left:${x * cell}px;top:${y * cell}px;width:${cell}px;height:${cell}px;line-height:${cell}px;text-align:center;">${c}</div>`).join('')).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('mots1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 196}px;top:146px;color:${T.ink};font:400 58px/1.1 ${T.script};white-space:nowrap;`, lm('mots2'))
+      + tx(pg, 'words', `position:absolute;left:${M}px;top:262px;width:190px;color:${T.ink};font:600 11.5px/24px ${T.ui};letter-spacing:.14em;text-transform:uppercase;`, 'Un mot par ligne')
+      + `<div style="position:absolute;left:${gx - 18}px;top:${gy - 18}px;width:${N * cell + 36}px;height:${N * cell + 36}px;background:${T.rose};opacity:.35;"></div>`
+      + `<div style="position:absolute;left:${gx}px;top:${gy}px;width:${N * cell}px;height:${N * cell}px;background:#fff;color:${T.cardInk};font:500 17px/1 ${T.ui};${folioShadow}">${letters}</div>`
+      + svgHeartLine(gx + N * cell - 6, gy - 40, 40, T.accent, 14) + folio(pg, T);
+  } },
+  mraisons: { n: 0, text: true, mag: 'raisons', render(pg) {
+    const T = MT();
+    const POS = [[M + 250, 70], [M + 330, 210], [M, 360], [M + 300, 470], [M + 30, 600]];
+    const items = POS.map(([x, y], k) => `<div style="position:absolute;left:${x}px;top:${y}px;color:${T.accent};font:400 54px/1 ${T.disp};">${k + 1}</div>`
+      + tx(pg, 'r' + (k + 1), `position:absolute;left:${x + 50}px;top:${y + 12}px;width:${k === 2 || k === 4 ? 290 : 260}px;color:${T.ink};font:italic 400 19px/1.3 ${T.disp};`, '')).join('');
+    return `<div style="position:absolute;left:${M - 8}px;top:40px;color:${T.ink};font:400 260px/.8 ${T.disp};">5</div>`
+      + tx(pg, 'h1', `position:absolute;left:${M + 6}px;top:256px;color:${T.ink};font:400 50px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('rai1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 40}px;top:296px;color:${T.ink};font:400 40px/1.1 ${T.script};white-space:nowrap;`, lm('rai2'))
+      + items + svgHeart(640, 640, 50, T.accent, 10) + svgHeartLine(690, 600, 30, T.accent, -16) + folio(pg, T);
+  } },
+  mbucket: { n: 0, text: true, mag: 'bucket', render(pg) {
+    const T = MT(), n = Math.min(8, String(pg.t.items || '').split('\n').filter(x => x.trim()).length || 6);
+    const boxes = Array.from({ length: n }, (_, k) => `<div style="position:absolute;left:${M + 70}px;top:${276 + k * 54}px;width:17px;height:17px;border:1.6px solid ${T.ink};"></div>`).join('');
+    return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 100px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('bucket1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 300}px;top:140px;color:${T.ink};font:400 54px/1.1 ${T.script};white-space:nowrap;`, lm('bucket2'))
+      + boxes + tx(pg, 'items', `position:absolute;left:${M + 104}px;top:262px;width:520px;color:${T.ink};font:400 15px/54px ${T.hand};white-space:nowrap;`, 'Une envie par ligne')
+      + svgHeart(660, 116, 40, T.accent, 12) + svgCurl(560, 640, 70, T.accent, -20) + folio(pg, T);
+  } },
+  mlettre_a: { n: 0, text: true, mag: 'lettre', render(pg) {
+    const T = MT();
+    return `<svg style="position:absolute;left:157px;top:226px;width:480px;height:360px;overflow:visible" viewBox="0 0 480 360">`
+      + `<path d="M0 120L240 0 480 120V360H0Z" fill="${T.accent}" opacity=".88"/><rect x="58" y="-6" width="364" height="250" fill="#FFFDF9" transform="rotate(-4 240 120)" style="filter:drop-shadow(0 6px 10px rgba(0,0,0,.18))"/>`
+      + `<path d="M0 120L240 250 480 120V360H0Z" fill="${T.accent}"/><path d="M0 360L210 210M480 360L270 210" stroke="rgba(0,0,0,.18)" stroke-width="2"/></svg>`
+      + tx(pg, 'h1', `position:absolute;left:220px;top:262px;width:354px;text-align:center;color:${T.cardInk};font:400 64px/.9 ${T.disp};text-transform:uppercase;transform:rotate(-4deg);white-space:nowrap;`, lm('lettre1'))
+      + tx(pg, 'h2', `position:absolute;left:220px;top:326px;width:354px;text-align:center;color:${T.accent};font:400 50px/1.1 ${T.script};transform:rotate(-4deg);white-space:nowrap;`, lm('lettre2'))
+      + svgHeart(379, 228, 36, T.rose, -6) + folio(pg, T);
+  } },
+  mlettre_b: { n: 0, text: true, mag: 'lettre', render(pg) {
+    const T = MT(), txt = pg.t.text || '';
+    return `<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 32.9%,rgba(0,0,0,.035) 33.3%,rgba(0,0,0,0) 33.8%,rgba(0,0,0,0) 66.2%,rgba(0,0,0,.03) 66.6%,rgba(0,0,0,0) 67%);pointer-events:none;"></div>`
+      + tx(pg, 'hello', `position:absolute;left:${M + 16}px;top:78px;color:${T.accent};font:400 23px/1.2 ${T.hand};`, lm('hello'))
+      + tx(pg, 'text', `position:absolute;left:${M + 16}px;top:136px;width:600px;color:${T.accent};font:400 ${fit(txt, 19, 13, 380, 1300)}px/2.05 ${T.hand};`, 'Votre lettre…')
+      + tx(pg, 'sign', `position:absolute;left:${M + 16}px;bottom:${M + 30}px;width:420px;color:${T.accent};font:400 19px/1.6 ${T.hand};`, '')
+      + svgHeart(600, 600, 64, T.accent, 12, .9) + folio(pg, T);
+  } },
+  // Pages de texte du magazine : mot doux / citation, article (souvenir, film, météo), liste, page à écrire
+  mquote: { n: 0, text: true, mag: 'quote', render(pg) {
+    const T = MT(), txt = pg.t.text || '';
+    if ((pg.v || 0) % 2) return svgHeartLine(PX / 2 - 230, 160, 460, T.rose, 0)
+      + `<div style="position:absolute;left:150px;right:150px;top:150px;bottom:190px;display:flex;align-items:center;justify-content:center;">`
+      + tx(pg, 'text', `position:relative;width:100%;text-align:center;color:${T.ink};font:italic 400 ${fit(txt, 44, 26, 30, 200)}px/1.18 ${T.disp};`, 'Une phrase…') + `</div>` + folio(pg, T);
+    return tx(pg, 'h', `position:absolute;left:${M}px;top:${M + 64}px;color:${T.accent};font:400 64px/1.1 ${T.script};`, '')
+      + tx(pg, 'text', `position:absolute;left:${M}px;right:${M + 30}px;top:${M + 176}px;color:${T.ink};font:400 ${fit(txt, 54, 30, 30, 220)}px/1.1 ${T.disp};`, 'Un mot doux…')
+      + `<div style="position:absolute;left:${M}px;bottom:${M + 76}px;width:46px;height:2px;background:${T.accent};"></div>`
+      + svgHeart(PX - M - 58, PX - M - 112, 38, T.accent, -10) + folio(pg, T);
+  } },
+  mprose: { n: 1, text: true, mag: 'prose', render(pg) {
+    const T = MT(), txt = pg.t.text || '', ttl = String(pg.t.title || ''), photo = pg.slots.length > 0;
+    const tw = photo ? 372 : W, fs = fit(ttl, 88, 50, 8, 32), lines = Math.max(1, Math.ceil(ttl.length * fs * 0.46 / tw));
+    const y = M + 52 + lines * fs * 0.9 + 26;
+    return tx(pg, 'h', `position:absolute;left:${M}px;top:${M}px;color:${T.accent};font:400 40px/1.1 ${T.script};`, '')
+      + tx(pg, 'title', `position:absolute;left:${M}px;top:${M + 52}px;width:${tw}px;color:${T.ink};font:400 ${fs}px/.9 ${T.disp};text-transform:uppercase;`, 'Titre')
+      + `<div style="position:absolute;left:${M}px;top:${y}px;width:46px;height:2px;background:${T.accent};"></div>`
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:${y + 30}px;width:${tw}px;max-height:${PX - M - 70 - y - 30}px;overflow:hidden;${photo ? '' : 'column-count:2;column-gap:44px;'}color:${T.ink};font:400 ${fit(txt, 15.5, 12, 260, 1000)}px/1.78 ${T.body};`, 'Votre texte…')
+      + (photo ? polaroid(pg, 0, 470, 150, 236, 300, 3, 'cap', '') + svgHeart(452, 560, 30, T.accent, -12) : '')
+      + tx(pg, 'foot', `position:absolute;left:${M}px;bottom:${M + 14}px;width:${tw}px;color:${T.muted};font:italic 400 17px/1.4 ${T.disp};`, '')
+      + folio(pg, T);
+  } },
+  mlist: { n: 0, text: true, mag: 'list', render(pg) {
+    const T = MT(), items = String(pg.t.items || '').split('\n').filter(x => x.trim()).slice(0, 6), RH = 70;
+    const rows = items.map((_, i) => `<div style="position:absolute;left:0;top:${i * RH}px;width:${W}px;height:${RH}px;border-top:1px solid ${T.rule};"><div style="position:absolute;left:0;top:19px;color:${T.accent};font:400 32px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div></div>`).join('');
+    return tx(pg, 'title', `position:absolute;left:${M}px;top:${M + 20}px;width:${W}px;color:${T.ink};font:400 ${fit(pg.t.title, 80, 50, 10, 30)}px/.9 ${T.disp};text-transform:uppercase;`, 'Titre')
+      + svgCurl(M + 6, 236, 90, T.accent, 0)
+      + `<div style="position:absolute;left:${M}px;top:300px;width:${W}px;">${CTX.editing ? '' : rows}</div>`
+      + tx(pg, 'items', `position:absolute;left:${M + 70}px;top:300px;width:${W - 70}px;color:${T.ink};font:400 17px/${RH}px ${T.body};white-space:nowrap;overflow:hidden;`, 'Une chose par ligne')
+      + folio(pg, T);
+  } },
+  mjournal: { n: 0, text: true, mag: 'journal', render(pg) {
+    const T = MT(), rules = Array.from({ length: 10 }, (_, i) => `<div style="position:absolute;left:${M}px;right:${M}px;top:${318 + i * 40}px;height:1px;background:${T.rule};"></div>`).join('');
+    return tx(pg, 'title', `position:absolute;left:${M}px;top:${M + 20}px;width:${W}px;color:${T.ink};font:400 ${fit(pg.t.title, 80, 50, 10, 30)}px/.9 ${T.disp};text-transform:uppercase;`, 'Titre')
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:${M + 130}px;width:540px;color:${T.accent};font:400 30px/1.3 ${T.script};`, '')
+      + rules + svgHeartLine(PX - M - 64, PX - M - 96, 50, T.rose, 8) + folio(pg, T);
+  } },
+  mchap: { n: 1, text: true, hybrid: 'chapter', mag: 'chap', render(pg) {
+    const T = MT(), half = PX / 2, left = !(pg.v % 2), tx0 = left ? half + 40 : M, tw = half - 40 - M;
+    return slot(pg, 0, left ? 0 : half, 0, half, PX, { border: 0 })
+      + tx(pg, 'num', `position:absolute;left:${tx0}px;top:${M + 6}px;color:${T.accent};font:600 10px/1 ${T.ui};letter-spacing:.3em;text-transform:uppercase;`, '')
+      + tx(pg, 'title', `position:absolute;left:${tx0}px;top:${M + 34}px;width:${tw}px;color:${T.ink};font:400 ${fit(pg.t.title, 64, 40, 10, 34)}px/.92 ${T.disp};text-transform:uppercase;`, 'Titre du chapitre')
+      + `<div style="position:absolute;left:${tx0}px;top:356px;width:40px;height:2px;background:${T.accent};"></div>`
+      + tx(pg, 'text', `position:absolute;left:${tx0}px;top:384px;width:${tw}px;color:${T.ink};font:400 ${fit(pg.t.text, 14, 11.5, 160, 420)}px/1.74 ${T.body};`, 'Quelques lignes…')
+      + folio(pg, T);
+  } },
+  mback: { n: 0, text: true, mag: 'back', render(pg) {
+    const T = MT(), txt = pg.t.text || '';
+    return tx(pg, 'text', `position:absolute;left:110px;right:110px;top:250px;text-align:center;color:${T.ink};font:italic 400 ${fit(txt, 34, 24, 30, 140)}px/1.3 ${T.disp};`, 'Un dernier mot…')
+      + tx(pg, 'names', `position:absolute;left:${M}px;right:${M}px;top:470px;text-align:center;color:${T.accent};font:400 30px/1.2 ${T.script};`, '')
+      + `<div style="position:absolute;left:${M}px;bottom:${M}px;color:${T.muted};font:600 9.5px/1.7 ${T.ui};letter-spacing:.22em;text-transform:uppercase;">${esc(lm('back1'))}<br>${esc(lm('price'))}</div>`
+      + `<div style="position:absolute;left:0;right:0;bottom:${M + 6}px;text-align:center;color:${T.muted};opacity:.8;font:400 14px/1 ${T.disp};">Nous<i>talgie</i></div>`
+      + barcode(PX - M - 100, PX - M - 66, 100, 66, txt);
+  } },
+});
+/* ── Planificateur Magazine ─────────────────────────────────────────
+   Les rubriques n'apparaissent que si le couple a donné de quoi les remplir (étapes, playlist, adresses,
+   voyages, photos datées) ; les pages restantes vont aux photos, puis aux mots doux. Les doubles pages
+   (là où tout a commencé + carte, année en photos, playlist, lettre) tombent toujours face à face. */
+function fmtCoord(lat, lon) {
+  if (lat == null || lon == null || isNaN(lat) || isNaN(lon)) return '';
+  return `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : lm('west')}`;
+}
+function k3Line(on) {
+  const P = lm('k3p'), parts = ['adresses', 'playlist', 'voyages', 'etapes'].filter(k => on[k]).map(k => P[k]).slice(0, 3);
+  if (parts.length < 2) parts.push(P.secrets);
+  const s = parts.length > 1 ? parts.slice(0, -1).join(', ') + lm('and') + parts[parts.length - 1] : parts[0];
+  return s.charAt(0).toUpperCase() + s.slice(1) + lm('k3t');
+}
+// Douze photos datées sur au moins six mois différents (sinon pas d'« année en photos » : elle serait fausse)
+function yearPhotos(order) {
+  const ph = photos(), now = Date.now(), byMonth = new Map();
+  order.forEach(i => { const d = ph[i] && ph[i].date; if (!d || d > now - 2 * 864e5) return; const D = new Date(d), k = D.getFullYear() * 12 + D.getMonth(); if (!byMonth.has(k)) byMonth.set(k, []); byMonth.get(k).push(i); });
+  if (byMonth.size < 6) return null;
+  const keys = [...byMonth.keys()].sort((a, b) => a - b), pick = [];
+  for (let r = 0; pick.length < 12 && r < 12; r++) keys.forEach(k => { const l = byMonth.get(k); if (pick.length < 12 && l[r] != null) pick.push(l[r]); });
+  return pick.length < 12 ? null : pick.sort((a, b) => ph[a].date - ph[b].date);
+}
+const MIN_PH_PAGES = { 24: 6, 36: 10, 50: 15 };
+
+function planMagazine(nPages, story, info) {
+  story = story || {}; info = info || {};
+  const ph = photos(), N = ph.length, t = tierOf(nPages), I = nPages - 2;
+  const names = info.names || '', n1 = info.n1 || '', n2 = info.n2 || '', mag = story.mag || {}, ch = story.chapters || [];
+  const C = Math.max(1, t.chapters), now = new Date(), year = now.getFullYear();
+  const cap = i => (info.captions && info.captions[i]) || (story.captions && story.captions[i]) || '';
+  const ED = story.magEdits || {}, ed = (layout, v) => ED[layout + ':' + (v || 0)] || {};
+  const miles = (info.milestones || []).filter(m => m && (m.date || m.title)).slice(0, 6);
+  const songs = (info.songs || []).filter(s => s && s.title).slice(0, 9);
+  const places = (info.places || []).filter(p => p && p.name).slice(0, 4);
+  const trips = (info.trips || []).filter(x => x && x.dest).slice(0, 6);
+  const carte = info.carte || null, city = (carte && carte.name) || info.city || '';
+  const order = ph.map((_, i) => i).slice(1);
+  const annee = order.length >= 24 ? yearPhotos(order) : null;
+
+  // 1) rubriques : [pages, double page, photos propres, priorité (la plus basse part en premier si la place manque)]
+  const on = { edito: [1, 0, 0, 99], debut: [2, 1, 2, 99], interview: [1, 0, 1, 90], raisons: [1, 0, 0, 80], quiz: [1, 0, 0, 72], lettre: [2, 1, 0, 95] };
+  for (let c = 1; c < C; c++) on['chap' + c] = [1, 0, 1, 60 - c];
+  if (miles.length >= 2) on.etapes = [1, 0, 0, 66];
+  if (songs.length >= 3) on.playlist = [2, 1, 1, 64];
+  if (places.length >= 2) on.adresses = [1, 0, Math.min(places.length, 4), 62];
+  if (trips.length) on.voyages = [1, 0, 3, 54];
+  if (story.memory && story.memory.text) on.memory = [1, 0, 1, 57];
+  if (annee) on.annee = [2, 1, 12, 40];
+  on.mots = [1, 0, 0, 30]; on.bucket = [1, 0, 0, 20];
+  const sum = j => Object.values(on).reduce((a, b) => a + b[j], 0);
+  const minK = MIN_PH_PAGES[nPages] || Math.round(I / 3);
+  // l'année en photos seulement s'il reste ensuite de quoi faire de vraies pages photo
+  if (on.annee && N - 1 - sum(2) < Math.ceil(minK * 1.5)) delete on.annee;
+  // peu de photos : les rubriques reprennent des photos déjà placées plutôt que de vider les pages photo
+  const share = N - 1 - sum(2) < minK;
+  if (share) ['adresses', 'voyages', 'playlist', 'interview', 'memory'].forEach(k => { if (on[k]) on[k][2] = 0; });
+  let K, R;
+  for (;;) {
+    const P = sum(0); R = Math.max(0, N - 1 - sum(2));
+    const kmin = Math.min(R, minK);
+    if (P + kmin <= I) { K = Math.min(R, I - P); break; }
+    const drop = Object.entries(on).filter(([, b]) => b[3] < 90).sort((a, b) => a[1][3] - b[1][3])[0];
+    if (!drop) { K = Math.max(0, I - P); break; }
+    delete on[drop[0]];
+  }
+  let fill = I - sum(0) - K;
+
+  // 2) ordre des rubriques ; les pages photo de chaque chapitre s'intercalent
+  const per = Array.from({ length: C }, (_, c) => Math.floor((c + 1) * K / C) - Math.floor(c * K / C));
+  const units = [], unit = k => { if (on[k]) units.push({ k, n: on[k][0], spread: !!on[k][1] }); };
+  const phUnits = c => { for (let j = 0; j < per[c]; j++) units.push({ k: 'ph', n: 1 }); if (fill > 0 && c < C - 1) { units.push({ k: 'note', n: 1 }); fill--; } };
+  unit('edito'); unit('debut'); phUnits(0); unit('etapes');
+  if (C > 1) { unit('chap1'); phUnits(1); }
+  unit('annee'); unit('playlist');
+  if (C > 2) { unit('chap2'); phUnits(2); }
+  unit('adresses'); unit('voyages'); unit('memory'); unit('interview'); unit('raisons');
+  if (C > 3) { unit('chap3'); phUnits(3); }
+  unit('quiz'); unit('mots'); unit('bucket');
+  if (C > 4) { unit('chap4'); phUnits(4); }
+  while (fill-- > 0) units.push({ k: 'note', n: 1 });
+  unit('lettre');
+  // la dernière page intérieure est seule (face à la 4e de couverture) : une page simple passe après la lettre
+  const li = units.length - 1;
+  if (units[li] && units[li].spread) { const j = units.map((u, i) => (!u.spread && u.k !== 'edito' ? i : -1)).filter(i => i >= 0).pop(); if (j != null && j >= 0) units.push(units.splice(j, 1)[0]); }
+  // les doubles pages commencent sur une page paire (gauche) : on avance une page simple si besoin
+  const seq = []; let at = 1;
+  while (units.length) {
+    const u = units.shift();
+    if (u.spread && at % 2 === 1) {
+      const j = units.findIndex(x => !x.spread);
+      const b = seq.map((x, i) => (!x.spread && x.k !== 'edito' && x.half == null ? i : -1)).filter(i => i >= 0).pop();
+      if (j >= 0 && j < units.length - 1) { const [s1] = units.splice(j, 1); seq.push(s1); at += 1; }
+      else if (b != null && b >= 0) { const [s1] = seq.splice(b, 1); units.unshift(s1); at -= 1; }
+      else { seq.push({ k: u.k, n: 1, half: 0 }); units.unshift({ k: u.k, n: 1, half: 1 }); at += 1; continue; }
+    }
+    seq.push(u); at += u.n;
+  }
+
+  // 3) pages, photos prises dans l'ordre du couple (les doubles décoratives réutilisent des photos déjà placées)
+  const used = new Set([0]); if (on.annee) annee.forEach(i => used.add(i));
+  const fresh = k => { const out = []; for (const i of order) { if (out.length >= k) break; if (!used.has(i)) { used.add(i); out.push(i); } } return out; };
+  const again = (k, seed) => { const src = order.length ? order : [0]; return Array.from({ length: k }, (_, j) => src[(Math.floor(j * src.length / k) + seed) % src.length]); };
+  const freshOr = (k, seed) => { const a = fresh(k); return a.length >= k ? a : a.concat(again(k - a.length, seed)); };
+  const pick = (k, seed) => (share ? again(k, seed) : freshOr(k, seed));
+  const counts = K > 0 ? distribute(Math.min(R, K * 4), K) : [];
+  const notes = (story.notes || []).filter(Boolean).slice();
+  const pages = [], tag = (pg, k) => { if (k) pg.k = k; return pg; };
+  const mk = (layout, idxs, tt, k, v) => {
+    const e = ed(layout, v), pg = mkPage(layout, idxs, Object.assign(tt || {}, e));
+    if (Object.keys(e).length) pg.e = Object.fromEntries(Object.keys(e).map(x => [x, 1]));
+    if (v != null) pg.v = v; return tag(pg, k);
+  };
+  let pj = 0, single = 0;
+  const extra = ['quote', 'film', 'disputes', 'weather'].filter(k => story[k] && (!Array.isArray(story[k]) || story[k].length));
+  const L = (k, s) => { const v = lm('toc'); return (v && v[k]) || s || ''; };
+  pages.push(mk('mcover', [0], { mast: lm('mast'), issue: lm('issue').replace('{y}', `${MONTHS()[now.getMonth()]} ${year}`), k1: lm('k1'), k1s: lm('k1s'), k2: lm('k2'), k2s: lm('k2s'), k3: k3Line(on), title: story.title || '', names }));
+  const build = {
+    edito: () => [mk('medito', [], { h: lm('edito'), text: info.dedication || lm('edito_def'), sign: info.dedication ? n1 : '', toc: lm('sommaire') })],
+    debut: () => {
+      const a = freshOr(2, 0);
+      const left = mk('mdebut', a, { h1: lm('debut1'), h2: lm('debut2'), text: (ch[0] && ch[0].text) || '', c0: cap(a[0]), note: lm('note') }, 'debut');
+      const right = city ? mk('mcarte', [], { city, date: info.meet || '', coord: fmtCoord(carte && carte.lat, carte && carte.lon) })
+        : (() => { const b = freshOr(1, 2); return mk('full', b, { cap: cap(b[0]) }); })();
+      return [left, right];
+    },
+    etapes: () => {
+      const tt = { h1: lm('etapes1'), h2: lm('etapes2') };
+      miles.forEach((m, i) => { tt['d' + (i + 1)] = m.date || ''; tt['e' + (i + 1)] = m.title || ''; tt['x' + (i + 1)] = m.note || (mag.milestones && mag.milestones[i]) || ''; });
+      return [mk('metapes', again(4, 1), tt, 'etapes')];
+    },
+    annee: () => {
+      const multi = new Set(annee.map(i => new Date(ph[i].date).getFullYear())).size > 1;
+      const lab2 = i => { const D = new Date(ph[i].date); return MONTHS()[D.getMonth()] + (multi ? ' ' + D.getFullYear() : ''); };
+      const half = v => { const tt = v ? { h2: lm('annee2'), h3: lm('annee3') } : { h1: lm('annee1') }; annee.slice(v * 6, v * 6 + 6).forEach((i, j) => { tt['m' + (j + 1)] = lab2(i); }); return mk('mannee', annee.slice(v * 6, v * 6 + 6), tt, v ? null : 'annee', v); };
+      return [half(0), half(1)];
+    },
+    playlist: () => {
+      const s0 = songs[0], tt = { side: lm('side') };
+      songs.forEach((s, i) => { tt['a' + (i + 1)] = s.artist || ''; tt['s' + (i + 1)] = s.title || ''; });
+      return [mk('mplay_a', pick(1, 3), { h1: lm('play1'), h2: lm('play2'), num: `${lm('track')} 01`, song: s0.title + (s0.artist ? ' · ' + s0.artist : '') }, 'playlist'), mk('mplay_b', again(songs.length, 2), tt)];
+    },
+    adresses: () => {
+      const tt = { h1: lm('adr1'), h2: lm('adr2') };
+      places.forEach((p, i) => { tt['n' + (i + 1)] = p.name; tt['c' + (i + 1)] = p.city || ''; tt['x' + (i + 1)] = p.note || (mag.places && mag.places[i]) || ''; });
+      return [mk('madresses', pick(places.length, 3), tt, 'adresses')];
+    },
+    voyages: () => {
+      const ys = trips.map(x => +x.year).filter(Boolean), yr = ys.length ? (Math.min(...ys) === Math.max(...ys) ? String(ys[0]) : `${Math.min(...ys)} · ${Math.max(...ys)}`) : '';
+      return [mk('mvoyages', pick(3, 4), { h1: lm('voy1'), h2: lm('voy2'), year: yr, text: mag.trips || lm('voy_def'), dest: trips.map(x => x.dest + (x.year ? ' · ' + x.year : '')).join('\n'), c2: (trips[0] || {}).dest || '', c3: (trips[1] || {}).dest || '' }, 'voyages')];
+    },
+    memory: () => { const a = pick(1, 8); return [mk('mprose', a, { h: lm('souvenir'), title: story.memory.title || L('memory'), text: story.memory.text, cap: cap(a[0]) }, 'memory')]; },
+    interview: () => {
+      const qa = Array.isArray(mag.interview) ? mag.interview.filter(x => x && x.q && x.a).slice(0, 5) : [];
+      const tt = { h1: lm('itw1'), h2: lm('itw2'), sub: lm('itws') };
+      const Q = qa.length >= 3 ? qa : lm('itwq').map(q => ({ q, a: '' }));
+      Q.forEach((x, i) => { tt['q' + (i + 1)] = x.q; tt['a' + (i + 1)] = x.a || ''; });
+      return [mk('minterview', pick(1, 5), tt, 'interview')];
+    },
+    raisons: () => { const tt = { h1: lm('rai1'), h2: lm('rai2') }; (story.love || []).slice(0, 5).forEach((r, i) => { tt['r' + (i + 1)] = r; }); return [mk('mraisons', [], tt, 'raisons')]; },
+    quiz: () => { const tt = { h1: lm('quiz1'), h3: lm('quiz3'), n1: n1 || lm('me'), n2: n2 || lm('you'), ans: (info.quiz || []).join(',') }; lm('quiz').forEach((q, i) => { tt['q' + (i + 1)] = q; }); return [mk('mquiz', [], tt, 'quiz')]; },
+    mots: () => {
+      const cand = [n1, n2, city, ...places.map(p => p.name), ...trips.map(x => x.dest)].map(keyWord).concat(lm('words')).map(plain).filter(w => w.length >= 3 && w.length <= 12);
+      return [mk('mmots', [], { h1: lm('mots1'), h2: lm('mots2'), words: [...new Set(cand)].slice(0, 10).join('\n'), seed: names }, 'mots')];
+    },
+    bucket: () => [mk('mbucket', [], { h1: lm('bucket1'), h2: lm('bucket2'), items: (story.wishlist || []).slice(0, 8).join('\n') }, 'bucket')],
+    lettre: () => [mk('mlettre_a', [], { h1: lm('lettre1'), h2: lm('lettre2') }, 'lettre'), mk('mlettre_b', [], { hello: lm('hello'), text: info.letter || mag.loveLetter || story.letter || '', sign: lm('sign') + (n1 ? '\n' + n1 : '') })],
+    ph: () => {
+      const idxs = fresh(counts[pj] || 1); pj++;
+      if (!idxs.length) return build.note();
+      const pick = pickLayout(idxs, pj), pg = mkPage(pick.layout, pick.idxs, {});
+      if (pg.layout === 'frame') pg.v = (single++) % 3;
+      const c = pick.idxs.map(cap).find(Boolean); if (c) pg.t.cap = c;
+      return [pg];
+    },
+    note: () => {
+      if (notes.length) return [mkPage('mquote', [], { h: lm('motdoux'), text: notes.shift() })];
+      const k = extra.shift(), ttl = x => (story.titles && story.titles[x]) || lab(x);
+      if (k === 'quote') { const q = mkPage('mquote', [], { text: story.quote }); q.v = 1; return [tag(q, 'quote')]; }
+      if (k === 'film') return [tag(mkPage('mprose', [], { title: ttl('film'), text: story.film, foot: `${lab('starring')} ${n1}${n2 ? ' ' + lab('and') + ' ' + n2 : ''}` }), 'film')];
+      if (k === 'disputes') return [tag(mkPage('mlist', [], { title: ttl('disputes'), items: story.disputes.slice(0, 6).join('\n') }), 'disputes')];
+      if (k === 'weather') return [tag(mkPage('mprose', [], { title: ttl('weather'), text: story.weather }), 'weather')];
+      return [tag(mkPage('mjournal', [], { title: ttl('journal'), text: story.journal_prompt || '' }), 'journal')];
+    },
+  };
+  for (let c = 1; c < 5; c++) build['chap' + c] = () => { const a = freshOr(1, 6 + c), x = ch[c] || {}; return [mk('mchap', a, { num: `${lm('chap')} ${ROMAN[c]}`, title: x.title || '', text: x.text || '' }, null, c)]; };
+  const made = {};
+  seq.forEach(u => {
+    if (u.half != null) { made[u.k] = made[u.k] || build[u.k](); pages.push(made[u.k][u.half]); return; }
+    build[u.k]().forEach(p => pages.push(p));
+  });
+  while (pages.length > nPages - 1) pages.splice(pages.length - 1, 1);
+  while (pages.length < nPages - 1) build.note().forEach(p => pages.push(p));
+  pages.push(mk('mback', [], { text: story.closing || lm('back_def'), names }, 'closing'));
+  return pages;
+}
+
 const PHOTO_LAYOUTS = n => Object.keys(LAYOUTS).filter(k => !LAYOUTS[k].text && !LAYOUTS[k].spread && LAYOUTS[k].n === n);
 
+const FOLIO_PH = new Set(['frame', 'duo', 'stack', 'trio', 'strip', 'grid']);
 function renderPage(pg, opts = {}) {
   const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, thumb: false, photos: null, theme: null }, opts);
   const T = theme(), Ly = LAYOUTS[pg.layout] || LAYOUTS.frame;
   let html;
-  try { html = Ly.render(pg, T); } catch (e) { console.error('render', pg.layout, e); html = ''; }
+  try { html = Ly.render(pg, T); if (T.mast && FOLIO_PH.has(pg.layout)) html += folio(pg, MT()); } catch (e) { console.error('render', pg.layout, e); html = ''; }
   CTX = prev;
   return `<div class="nst-canvas" style="position:relative;width:${PX}px;height:${PX}px;overflow:hidden;background:${T.paper};color:${T.ink};">${html}</div>`;
 }
@@ -4942,8 +5581,8 @@ function fixSpreads(pages) {
 /* ── Export ────────────────────────────────────────────────────── */
 window.NA = window.NA || {};
 Object.assign(window.NA, {
-  PX, THEMES, LAYOUTS, FILTERS, PHOTO_LAYOUTS, theme: window.NA.theme || 'galerie', pages: window.NA.pages || [], cur: 0,
-  renderPage, plan, minPhotos, photoPageCount, esc, lab, autoPos, cropCost, pickLayout,
+  PX, THEMES, LAYOUTS, FILTERS, PHOTO_LAYOUTS, theme: window.NA.theme || 'magazine', pages: window.NA.pages || [], cur: 0,
+  renderPage, plan: planMagazine, planClassic: plan, magLabel: lm, minPhotos, photoPageCount, esc, lab, autoPos, cropCost, pickLayout,
   spreadOf, pairOf, makeSpread, unmakeSpread, syncSpread, fixSpreads,
 });
 })();
@@ -5555,7 +6194,45 @@ function coupleInfo() {
     answers: { meet: val('qMeet'), memory: val('qMemory'), habit: val('qHabit'), special: val('qSpecial') },
     facts: [['How they met', val('qMeet')], ['A meaningful memory', val('qMemory')], ['A nickname, habit or inside joke', val('qHabit')], ['What makes them special', val('qSpecial')]].filter(x => x[1]),
     captions: Object.assign({}, S.captions || {}),
+    ...magAnswers(),
   };
+}
+
+/* ── Questionnaire « Votre magazine » : une réponse par ligne, séparateurs souples (« - », « | », « ; », « · ») ── */
+const MQ_SEP = /\s+[-–—]\s+|\s*[|;·]\s*/;
+const MQ_DATE = /^((?:\d{1,2}[\/.-]){1,2}\d{2,4}|\d{1,2}(?:er)?\s+[a-zà-ÿ]+\.?\s+\d{4}|[a-zà-ÿ]+\.?\s+\d{4}|\d{4})(?=$|[\s,:;·|–—-])[\s,:;·|–—-]*/i;
+const mqLines = id => val(id).split(/\n+/).map(l => l.trim().replace(/^[-•*]\s*/, '')).filter(Boolean).slice(0, 12);
+const mqParts = (l, comma) => {
+  let p = l.split(MQ_SEP).map(x => x.trim()).filter(Boolean);
+  if (p.length < 2 && comma && l.includes(',')) { const i = l.indexOf(','); p = [l.slice(0, i).trim(), l.slice(i + 1).trim()].filter(Boolean); }
+  return p;
+};
+function magAnswers() {
+  const milestones = mqLines('qMiles').map(l => {
+    const m = l.match(MQ_DATE), p = mqParts(m ? l.slice(m[0].length) : l);
+    return { date: m ? m[1] : '', title: p[0] || '', note: p.slice(1).join(' - ') };
+  }).filter(m => m.date || m.title);
+  const songs = mqLines('qSongs').map(l => { const p = mqParts(l, true); return { title: p[0] || '', artist: p.slice(1).join(', ') }; }).filter(x => x.title);
+  const places = mqLines('qPlaces').map(l => {
+    const p = mqParts(l, true), city = p.length > 2 || (p[1] && p[1].split(/\s+/).length <= 3 && /^[A-ZÀ-Ý]/.test(p[1]));
+    return city ? { name: p[0], city: p[1], note: p.slice(2).join(' - ') } : { name: p[0] || '', city: '', note: p.slice(1).join(' - ') };
+  }).filter(x => x.name);
+  const trips = mqLines('qTrips').map(l => {
+    const year = (l.match(/\b(?:19|20)\d{2}\b/) || [''])[0];
+    return { dest: l.replace(year, ' ').split(MQ_SEP).map(x => x.replace(/^[\s,;·|–—-]+|[\s,;·|–—-]+$/g, '')).filter(Boolean).join(', '), year };
+  }).filter(x => x.dest);
+  const q = (window.NSTQ && NSTQ.a || []).slice(0, 10).map(v => v | 0);
+  return { city: val('qCity'), milestones, songs, places, trips, quiz: q.some(Boolean) ? q : [], letter: val('qLetter') };
+}
+// Plan du lieu de rencontre (rues et eau OpenStreetMap, préparées par /api/carte) ; sans réponse, la page garde son cœur décoratif
+async function fetchCarte(q) {
+  if (!q) return null;
+  const ctl = window.AbortController ? new AbortController() : null, to = ctl ? setTimeout(() => ctl.abort(), 25000) : 0;
+  try {
+    const r = await fetch('/api/carte?q=' + encodeURIComponent(q), { signal: ctl ? ctl.signal : undefined });
+    const j = r.ok ? await r.json() : null;
+    return j && j.name ? j : null;
+  } catch (e) { return null; } finally { if (to) clearTimeout(to); }
 }
 
 const OCCASION_HINT = {
@@ -5575,6 +6252,8 @@ function storyPrompt(info, nPages, chapterScenes) {
 → notes[0] MUST be built around it, and one item of "love" MUST mention it. If it contains a nickname, write the nickname exactly as given, at least once.`);
   if (A.special) rules.push(`WHAT MAKES THEM SPECIAL (their own words): """${A.special}"""
 → "letter" MUST be built on this, and "closing" MUST echo it.`);
+  const more = magFacts(info);
+  if (more) rules.push(`OTHER FACTS THEY GAVE (use them where they fit naturally, keep names and dates exactly as written, never contradict them):\n${more}`);
   const facts = rules.length
     ? `THEIR ANSWERS — the heart of the book. Follow each placement rule. Keep their specific details (names of places, nicknames, objects, words); never contradict them, never invent other events, places or dates:\n\n${rules.join('\n\n')}`
     : 'They shared no personal answers: stay universal and sensory, grounded in what the photos show. Never invent places, dates, trips or events.';
@@ -5604,6 +6283,53 @@ Return ONLY a JSON object with exactly these keys:
  "closing": "a last line for the final page, max 18 words"
 }
 Chapters follow a natural arc (beginnings → everyday life → what they build → what comes next) and match their photos.`;
+}
+
+/* ── Textes des rubriques du magazine (interview, étapes, adresses, voyages, lettre), écrits à partir de leurs seules réponses ── */
+function magFacts(info) {
+  const L = [];
+  if (info.city) L.push(`- Where they met: ${info.city}`);
+  (info.milestones || []).forEach(m => L.push(`- Milestone: ${[m.date, m.title, m.note].filter(Boolean).join(' · ')}`));
+  (info.places || []).forEach(p => L.push(`- Favourite place: ${[p.name, p.city, p.note].filter(Boolean).join(' · ')}`));
+  (info.trips || []).forEach(x => L.push(`- Trip: ${[x.dest, x.year].filter(Boolean).join(' · ')}`));
+  if ((info.songs || []).length) L.push(`- Their songs: ${info.songs.map(x => x.title + (x.artist ? ' (' + x.artist + ')' : '')).join(', ')}`);
+  return L.join('\n');
+}
+function magazinePrompt(info) {
+  const A = info.answers || {}, src = [];
+  if (A.meet) src.push(`- How they met: """${A.meet}"""`);
+  if (A.memory) src.push(`- A memory that matters: """${A.memory}"""`);
+  if (A.habit) src.push(`- A nickname, habit or inside joke: """${A.habit}"""`);
+  if (A.special) src.push(`- What makes them special: """${A.special}"""`);
+  const more = magFacts(info); if (more) src.push(more);
+  const miles = info.milestones || [], places = info.places || [], trips = info.trips || [];
+  const nQ = Math.min(5, Object.values(A).filter(Boolean).length + (miles.length ? 1 : 0) + (places.length ? 1 : 0) + (trips.length ? 1 : 0));
+  const keys = [];
+  if (nQ >= 3) keys.push(`"interview": [${nQ} items {"q": "a short magazine-style question, max 9 words", "a": "their answer, in the first person plural, 1-3 sentences, built ONLY from the facts above"}]`);
+  if (miles.length) keys.push(`"milestones": [${miles.length} strings, one per milestone in this order, each max 14 words, tender or playful, consistent with its title and date: ${JSON.stringify(miles.map(m => [m.date, m.title, m.note].filter(Boolean).join(' · ')))}]`);
+  if (places.length) keys.push(`"places": [${places.length} strings, one per place in this order, why it matters to them, each max 16 words: ${JSON.stringify(places.map(p => [p.name, p.city, p.note].filter(Boolean).join(' · ')))}]`);
+  if (trips.length) keys.push(`"trips": "2 sentences about their travels, naming these destinations, no invented anecdote: ${trips.map(x => x.dest).join(', ')}"`);
+  if (!info.letter) keys.push(`"loveLetter": "a love letter from ${info.n1} to ${info.n2 || 'the other'}, 7-9 sentences, intimate and concrete, built on their answers, no greeting line and no signature"`);
+  if (!keys.length) return '';
+  return `You write short texts for a couple's photo book designed like a magazine about them. Voice: warm, precise, understated; small concrete images, no clichés ("soulmate", "my other half", "forever and always"). Never use the em dash character.
+Language: write everything in ${LANG_NAME[lang()] || 'French'}, natural and native.
+Couple: ${info.names}${info.meet ? `, together since ${info.meet}` : ''}.
+THEIR ANSWERS, the only facts you may use (never invent places, dates, events, names or quotes beyond them):
+${src.join('\n') || '(none)'}
+Return ONLY a JSON object with exactly these keys:
+{
+ ${keys.join(',\n ')}
+}`;
+}
+function cleanMag(m) {
+  const s = (x, n) => (typeof x === 'string' ? x.replace(/\s*—\s*/g, ', ').trim().slice(0, n) : '');
+  const out = {};
+  if (Array.isArray(m.interview)) out.interview = m.interview.map(x => x && { q: s(x.q, 90), a: s(x.a, 420) }).filter(x => x && x.q && x.a).slice(0, 5);
+  if (Array.isArray(m.milestones)) out.milestones = m.milestones.map(x => s(x, 140));
+  if (Array.isArray(m.places)) out.places = m.places.map(x => s(x, 160));
+  if (m.trips) out.trips = s(m.trips, 400);
+  if (m.loveLetter) out.loveLetter = s(m.loveLetter, 1600);
+  return out;
 }
 
 /* ── Vérification : chaque réponse du couple doit vraiment apparaître dans le livre ── */
@@ -5733,6 +6459,10 @@ window.runGeneration = async function () {
     const chapterScenes = Array.from({ length: C }, (_, c) => (cap.scenes || []).slice(1 + Math.floor(c * rest / C), 1 + Math.floor((c + 1) * rest / C)).filter(Boolean).slice(0, 10));
     // 2) l'histoire, construite autour de leurs réponses et de leurs photos
     if (msg) msg.textContent = NA.t('g_write');
+    const carteP = fetchCarte(info.city);
+    const magQ = magazinePrompt(info);
+    const magP = !magQ ? Promise.resolve({}) : callAI({ max_tokens: 1700, temperature: 0.85, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: magQ }] }, 2, 'magazine')
+      .catch(e => { console.warn('[Noustalgie] textes du magazine', e); return {}; });
     let story = null;
     try {
       story = await callAI({ max_tokens: 2800, temperature: 0.9, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: storyPrompt(info, nPages, chapterScenes) }] }, 3, 'histoire');
@@ -5748,6 +6478,8 @@ window.runGeneration = async function () {
       story = defaultStory(info);
     }
     story.captions = captions;
+    story.mag = cleanMag(await magP);
+    info.carte = await carteP;
     S.story = story;
     NA.info = info;
     NA.pages = NA.plan(nPages, story, info);
@@ -5777,6 +6509,7 @@ function showIssue() {
 
 /* ══ 3. Éditeur ══ */
 const ED = { sel: null, drag: null, dirty: new Set() };
+const LIST_KEYS = new Set(['items', 'words', 'dest']);            // champs « une chose par ligne » (style Magazine)
 const isWide = () => window.matchMedia('(min-width: 900px)').matches;
 const snap = () => JSON.stringify({ theme: NA.theme, pages: NA.pages });
 NA.hist = NA.hist || []; NA.fut = NA.fut || [];
@@ -5906,7 +6639,7 @@ function drawTools() {
 
   }
   if (sel.text) {
-    const isList = pg.layout === 'list' || pg.layout === 'checklist';
+    const isList = pg.layout === 'list' || pg.layout === 'checklist' || LIST_KEYS.has(sel.text);
     html += `<div class="nst-sec"><label for="nstTxt">${NA.t('text')}${isList ? NA.t('text_list') : ''}</label><textarea id="nstTxt" rows="${isList ? 7 : 4}">${esc(pg.t[sel.text] || '')}</textarea><p class="nst-note">${NA.t('ai_alt')}</p>
       <div class="nst-chips">${[['shorter', NA.t('rw_short')], ['tender', NA.t('rw_tender')], ['funny', NA.t('rw_funny')], ['again', NA.t('rw_again')]].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
       <p class="nst-note" id="nstAiMsg"></p></div>`;
@@ -5936,7 +6669,7 @@ async function rewrite(kind) {
   const m = $('nstAiMsg'); if (m) m.textContent = NA.t('writing');
   const how = { shorter: 'Make it noticeably shorter, keep the essence.', tender: 'Make it more tender and intimate.', funny: 'Make it lighter and gently funny.', again: 'Write a fresh alternative with the same purpose.' }[kind];
   const info = NA.info || coupleInfo();
-  const isList = pg.layout === 'list' || pg.layout === 'checklist';
+  const isList = pg.layout === 'list' || pg.layout === 'checklist' || LIST_KEYS.has(sel.text);
   try {
     const j = await callAI({ max_tokens: 600, temperature: 1, response_format: { type: 'json_object' }, messages: [{ role: 'user', content:
 `Rewrite one text of a couple's printed photo book (${info.names}). ${how} Language: ${LANG_NAME[lang()] || 'French'}. No clichés, never invent facts.${isList ? ' Keep it as a list: one item per line, same number of items.' : ''}
@@ -6058,6 +6791,7 @@ function bindEditor() {
     const t = e.target.closest('.nst-t'); if (!t) return;
     const page = +t.closest('.nst-page').dataset.page;
     NA.pages[page].t[t.dataset.t] = t.innerText.replace(/\n{3,}/g, '\n\n').replace(/\s+$/, '');
+    (NA.pages[page].e = NA.pages[page].e || {})[t.dataset.t] = 1;
     const ta = $('nstTxt'); if (ta && document.activeElement !== ta) ta.value = NA.pages[page].t[t.dataset.t];
     clearTimeout(ED.tt); ED.tt = setTimeout(() => { drawThumb(page); saveLocalSoon(); }, 400);
   });
@@ -6106,6 +6840,7 @@ function bindEditor() {
     if (e.target.id === 'nstTxt' && ED.sel && ED.sel.text) {
       const i = ED.sel.page, key = ED.sel.text;
       NA.pages[i].t[key] = e.target.value.replace(/\n{3,}/g, '\n\n');
+      (NA.pages[i].e = NA.pages[i].e || {})[key] = 1;
       const node = document.querySelector(`#nstSpread .nst-page[data-page="${i}"] .nst-t[data-t="${key}"]`);
       if (node) node.innerText = NA.pages[i].t[key];
       clearTimeout(ED.tt); ED.tt = setTimeout(() => { drawThumb(i); saveLocalSoon(); }, 400);
@@ -6265,7 +7000,7 @@ async function uploadPhotos(onProgress, all) {
   await Promise.all([worker(), worker(), worker(), worker()]);
 }
 const READY = '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){window.__r=true})});function nstReady(){return window.__r}<\/script>';
-const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=block" rel="stylesheet"/>';
+const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Pinyon+Script&family=Homemade+Apple&display=block" rel="stylesheet"/>';
 function docHtml(body, widthMm) {
   return '<!DOCTYPE html><html><head><meta charset="UTF-8"/>' + FONTS
     + '<style>@page{size:' + widthMm + 'mm 210mm;margin:0}*{margin:0;padding:0;box-sizing:border-box}html,body{width:' + widthMm + 'mm}.page{width:' + widthMm + 'mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}.nst-canvas{transform:scale(' + (793.7 / NA.PX) + ');transform-origin:0 0}.cv{position:absolute;top:0;width:210mm;height:210mm;overflow:hidden}</style>'
@@ -6473,6 +7208,55 @@ window.processPayment = async function () {
   };
   apply();
   if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function (l) { const r = o.apply(this, arguments); try { apply(); } catch (e) {} return r; }; }
+})();
+
+/* Questionnaire « Votre magazine » : quiz « Qui est le plus… ? » en pastilles, point noir sur les rubriques remplies, réponses gardées 7 jours */
+(function () {
+  if (!window.NA || !NA.magLabel || !document.getElementById('mqCard')) return;
+  const $ = id => document.getElementById(id), esc = NA.esc;
+  const IDS = ['qMeet', 'qMemory', 'qHabit', 'qSpecial', 'qCity', 'qMiles', 'qSongs', 'qPlaces', 'qTrips', 'qLetter'];
+  const FIELD = { city: 'qCity', miles: 'qMiles', songs: 'qSongs', places: 'qPlaces', trips: 'qTrips', letter: 'qLetter' };
+  window.NSTQ = window.NSTQ || { a: [] };
+  const T = () => (typeof LANGS !== 'undefined' && LANGS[typeof currentLang !== 'undefined' && currentLang || 'fr']) || {};
+  const nm = (id, k) => (($(id) && $(id).value) || '').trim() || NA.magLabel(k);
+  function renderQuiz() {
+    const box = $('qQuiz'); if (!box) return;
+    const opts = [nm('name1', 'me'), nm('name2', 'you'), T().mq_both || 'Les deux'];
+    box.innerHTML = NA.magLabel('quiz').map((q, i) => `<div class="mq-qr"><div class="mq-qt" id="mqq${i}">${esc(q)}</div><div class="mq-ch" role="group" aria-labelledby="mqq${i}">`
+      + opts.map((o, k) => `<button type="button" data-q="${i}" data-v="${k + 1}" aria-pressed="${NSTQ.a[i] === k + 1}">${esc(o)}</button>`).join('') + '</div></div>').join('');
+  }
+  function mark() {
+    document.querySelectorAll('#mqCard .mq').forEach(d => {
+      const k = d.dataset.mq, el = $(FIELD[k]);
+      d.classList.toggle('on', k === 'quiz' ? NSTQ.a.some(Boolean) : !!(el && el.value.trim()));
+    });
+  }
+  function save() {
+    try { const d = { a: NSTQ.a, at: Date.now() }; IDS.forEach(id => { if ($(id)) d[id] = $(id).value; }); localStorage.setItem('noustalgie_mag', JSON.stringify(d)); } catch (e) {}
+  }
+  try {
+    const d = JSON.parse(localStorage.getItem('noustalgie_mag') || 'null');
+    if (d && Date.now() - d.at < 7 * 864e5) {
+      IDS.forEach(id => { const el = $(id); if (el && d[id] && !el.value) el.value = d[id]; });
+      if (Array.isArray(d.a)) NSTQ.a = d.a;
+    }
+  } catch (e) {}
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('#qQuiz button[data-q]'); if (!b) return;
+    const i = +b.dataset.q, v = +b.dataset.v;
+    NSTQ.a[i] = NSTQ.a[i] === v ? 0 : v;                  // second appui : on retire la réponse
+    b.parentNode.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.v === NSTQ.a[i])));
+    mark(); save();
+  });
+  document.addEventListener('input', e => {
+    const id = e.target && e.target.id;
+    if (IDS.includes(id)) { mark(); save(); }
+    if (id === 'name1' || id === 'name2') renderQuiz();
+  });
+  renderQuiz(); mark();
+  window.addEventListener('load', () => setTimeout(renderQuiz, 400));       // prénoms remis par le brouillon
+  if (typeof window.setLang === 'function') { const o = window.setLang; window.setLang = function () { const r = o.apply(this, arguments); try { renderQuiz(); } catch (e) {} return r; }; }
+  if (typeof window.clearDraft === 'function') { const c = window.clearDraft; window.clearDraft = function () { try { localStorage.removeItem('noustalgie_mag'); } catch (e) {} return c.apply(this, arguments); }; }
 })();
 
 /* ════════════════════════════════════════════════════════════════
@@ -6754,17 +7538,20 @@ NA.albumPanel = function () {
 };
 
 /* ── Remettre les textes (y compris modifiés à la main) dans l'histoire avant de recomposer ── */
+// Style Magazine : textes modifiés à la main (pg.e) repris tels quels ; le reste (couverture, sommaire…) se recalcule
+const MAG_KEEP = new Set(['mcover', 'medito', 'mdebut', 'mcarte', 'metapes', 'mplay_a', 'mplay_b', 'madresses', 'mvoyages', 'minterview', 'mraisons', 'mquiz', 'mmots', 'mbucket', 'mlettre_a', 'mlettre_b', 'mback']);
 function syncStory() {
   const s = JSON.parse(JSON.stringify(S.story || {})), P = NA.pages, info = NA.info || E.coupleInfo();
   s.titles = s.titles || {};
   if (P[0] && P[0].t.title) s.title = P[0].t.title;
   const ch = P.filter(p => p.layout === 'chapter' || p.layout === 'chapterp');
   s.chapters = s.chapters || []; ch.forEach((p, i) => { s.chapters[i] = { title: p.t.title || '', text: p.t.text || '' }; });
-  const notes = P.filter(p => p.layout === 'note' || p.layout === 'notep').map(p => p.t.text || '');
+  const notes = P.filter(p => p.layout === 'note' || p.layout === 'notep' || (p.layout === 'mquote' && !p.k)).map(p => p.t.text || '');
   s.notes = notes.concat((s.notes || []).slice(notes.length));
   const lines = v => String(v || '').split('\n').map(x => x.trim()).filter(Boolean);
+  s.magEdits = s.magEdits || {};
   P.forEach(p => {
-    if (!p.k) return;
+    if (!p.k && !MAG_KEEP.has(p.layout) && p.layout !== 'mchap') return;
     if (p.t.title != null && ['love', 'disputes', 'wish', 'film', 'weather', 'letter', 'journal'].includes(p.k)) s.titles[p.k] = p.t.title;
     if (p.k === 'love') s.love = lines(p.t.items);
     if (p.k === 'disputes') s.disputes = lines(p.t.items);
@@ -6777,6 +7564,9 @@ function syncStory() {
     if (p.k === 'closing') s.closing = p.t.text;
     if (p.k === 'memory') s.memory = { title: p.t.title || '', text: p.t.text || '' };
     if (p.layout === 'dedication') info.dedication = p.t.text;
+    if (MAG_KEEP.has(p.layout) && p.e) { const o = s.magEdits[p.layout + ':' + (p.v || 0)] = {}; Object.keys(p.e).forEach(k => { o[k] = p.t[k]; }); }
+    if (p.layout === 'mdebut') s.chapters[0] = Object.assign({}, s.chapters[0], { text: p.t.text || '' });
+    if (p.layout === 'mchap' && p.v) s.chapters[p.v] = { title: p.t.title || '', text: p.t.text || '' };
   });
   info.captions = info.captions || {};
   P.forEach(p => { if (p.slots.length && p.t.cap) info.captions[p.slots[0].p] = p.t.cap; });
@@ -6986,11 +7776,11 @@ window.addEventListener('hashchange', () => { if (location.hash === '#suivi') tr
 
 /* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
 Object.entries({
-  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
-  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
-  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
-  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
-  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
+  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
+  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
+  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
+  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
+  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 const stageWrap = document.querySelector('.nst-stagewrap');
 let ebar = null;
@@ -7002,6 +7792,18 @@ if (stageWrap) {
     const page = +b.dataset.page;
     E.select(b.dataset.slot != null ? { page, slot: +b.dataset.slot } : { page, text: b.dataset.text });
   });
+}
+// Libellé lisible d'un champ : nom connu (ek_city…), sinon style Magazine « lettre + numéro » (h1 → Titre 1, q3 → Question 3)
+const EK_BASE = { h: 'title', d: 'date', e: 'step', x: 'text', m: 'month', s: 'song', q: 'question', r: 'reason', k: 'kline', c: 'cap', n: 'name', a: 'answer' };
+function ekLabel(layout, key) {
+  const own = t('ek_' + key); if (own !== 'ek_' + key) return own;
+  const m = /^([a-z])(\d+)(s?)$/.exec(key) || (key === 'h' ? [key, 'h', '', ''] : null); if (!m) return key;
+  let base = m[3] ? 'ksub' : EK_BASE[m[1]];
+  if (m[1] === 'a' && layout === 'mplay_b') base = 'artist';
+  if (m[1] === 'n' && layout === 'madresses') base = 'place';
+  if (m[1] === 'c' && layout === 'madresses') base = 'city';
+  const lab = base ? t('ek_' + base) : '';
+  return lab && lab !== 'ek_' + base ? lab + (m[2] && m[2] !== '0' ? ' ' + m[2] : '') : key;
 }
 function drawEbar() {
   if (!ebar || !NA.pages.length) return;
@@ -7016,7 +7818,7 @@ function drawEbar() {
     });
     [...host.querySelectorAll('.nst-t[data-t]')].forEach(tx => {
       const key = tx.dataset.t, on = sel.page === i && sel.text === key;
-      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-text="${esc(key)}">✎ ${pre}${t('ek_' + key) !== 'ek_' + key ? t('ek_' + key) : key}</button>`);
+      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-text="${esc(key)}">✎ ${pre}${ekLabel(NA.pages[i].layout, key)}</button>`);
     });
   });
   ebar.innerHTML = parts.length ? `<span class="nst-eb-lbl">${t('eb_lbl')}</span><div class="nst-eb-row">${parts.join('')}</div>` : '';
