@@ -15,6 +15,9 @@ POLICES = {  # nom Google Fonts -> (paquet npm, nom de famille déclaré par le 
     'Inter': ('@fontsource/inter', None), 'Playfair Display': ('@fontsource/playfair-display', None),
     'Libre Baskerville': ('@fontsource/libre-baskerville', None), 'Cormorant Garamond': ('@fontsource/cormorant-garamond', None),
     'Hanken Grotesk': ('@fontsource-variable/hanken-grotesk', 'Hanken Grotesk Variable'),
+    # style Magazine de l'album
+    'Instrument Serif': ('@fontsource/instrument-serif', None), 'Bodoni Moda': ('@fontsource-variable/bodoni-moda', 'Bodoni Moda Variable'),
+    'Pinyon Script': ('@fontsource/pinyon-script', None), 'Homemade Apple': ('@fontsource/homemade-apple', None),
 }
 CACHE = os.path.expanduser('~/.cache/noustalgie-polices')
 NM = os.path.join(CACHE, 'node_modules')
@@ -40,7 +43,8 @@ def css_polices(url):
         d = os.path.join(NM, paquet)
         fichiers = [f for f in os.listdir(d) if f.endswith('.css')]
         if nom_var:
-            choix = [f for f in ('wght.css', 'wght-italic.css') if f in fichiers] or ['index.css']
+            choix = ([f for f in ('opsz.css', 'opsz-italic.css') if f in fichiers]          # taille optique (Bodoni Moda)
+                     or [f for f in ('wght.css', 'wght-italic.css') if f in fichiers] or ['index.css'])
         else:
             choix = [f for f in fichiers if re.match(r'^\d{3}(-italic)?\.css$', f)]
         for f in choix:

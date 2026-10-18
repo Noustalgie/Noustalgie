@@ -71,6 +71,10 @@
     {
       "source": "/api/order-summary",
       "destination": "/api/tools?fn=order"
+    },
+    {
+      "source": "/api/carte",
+      "destination": "/api/tools?fn=carte"
     }
   ],
   "redirects": [
