@@ -48,3 +48,23 @@ Aperçu dans un navigateur : `npm run preview` puis ouvrir `/index.html?play` ou
 
 Pour utiliser de vraies photos, remplacer les fichiers de `assets/photos/` (mêmes noms),
 puis relancer `npm run pages`, `python3 tools/thumbs.py` et `npm run render`.
+
+## Magazine : album vitrine, slides et « Avant / après »
+
+L'album d'exemple « Léa & Hugo » au style Magazine (24 pages, les 13 vraies photos de `public/img/exemple`,
+le vrai plan de Lille renvoyé par `/api/carte`) est décrit dans `mag/vitrine.json`.
+
+```bash
+python3 tools/mag-pages.py          # pages rendues par le vrai moteur du site → out/mag/pages/page-01…24.jpg (1588 px)
+node tools/mag-slides.js            # 11 slides TikTok, livre 3D sur la table → out/mag/slides/ (1080 × 1920)
+node tools/mag-plats.js             # les mêmes slides, pages à plat sur fond clair → out/mag/plats/
+node tools/render.js --page mag/index.html --cues --cuesfile cues-mag.json
+python3 tools/audio_mag.py          # musique (120 BPM) + bruitage → out/audio-mag.wav (+ -music, -sfx)
+node tools/render.js --page mag/index.html --fps 30 --workers 4 --frames out/frames-mag \
+  --audio out/audio-mag.wav --out mag-avant-apres.mp4
+```
+
+`mag/` : film de 22 s. 0–4 s la pellicule du téléphone (« Avant »), 4 s le drop et le magazine imprimé
+(« Après »), une page par temps, gros plans en alternance, 18 s carte finale (noustalgie.fr, aperçu gratuit,
+livré en 10 à 12 jours). Textes en TikTok Sans (licence OFL, `assets/fonts/TikTokSans-OFL.txt`).
+`out/audio-mag-sfx.wav` contient le bruitage seul, pour poser un son tendance TikTok par-dessus.

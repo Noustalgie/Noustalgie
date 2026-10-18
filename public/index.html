@@ -4878,7 +4878,7 @@ Object.assign(LAYOUTS, {
     const T = MT(), d = pg.t.text || '';
     const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
     const RH = toc.length > 9 ? 42 : 52;
-    const rows = toc.slice(0, 12).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
+    const rows = toc.slice(0, 13).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
       + `<div style="position:absolute;left:0;top:${RH > 42 ? 10 : 7}px;width:58px;color:${T.accent};font:400 ${RH > 42 ? 30 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
       + `<div style="position:absolute;left:62px;top:${RH > 42 ? 17 : 13}px;right:0;color:${T.ink};font:400 13.5px/1.25 ${T.body};">${esc(lm('toc')[k] || '')}</div></div>`).join('');
     return tx(pg, 'h', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 112px/.86 ${T.disp};text-transform:uppercase;`, lm('edito'))
@@ -4887,7 +4887,7 @@ Object.assign(LAYOUTS, {
       + tx(pg, 'sign', `position:absolute;left:${M}px;bottom:${M + 28}px;width:282px;color:${T.ink};font:400 17px/1.3 ${T.hand};`, '')
       + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${T.rule};"></div>`
       + tx(pg, 'toc', `position:absolute;left:430px;top:64px;width:300px;color:${T.ink};font:400 34px/1 ${T.disp};`, lm('sommaire'))
-      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(12, toc.length) * RH}px;">${rows}</div>`;
+      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(13, toc.length) * RH}px;">${rows}</div>`;
   } },
   mdebut: { n: 2, text: true, mag: 'debut', render(pg) {
     const T = MT(), txt = pg.t.text || '';
@@ -6509,6 +6509,7 @@ function showIssue() {
 
 /* ══ 3. Éditeur ══ */
 const ED = { sel: null, drag: null, dirty: new Set() };
+const LIST_KEYS = new Set(['items', 'words', 'dest']);            // champs « une chose par ligne » (style Magazine)
 const isWide = () => window.matchMedia('(min-width: 900px)').matches;
 const snap = () => JSON.stringify({ theme: NA.theme, pages: NA.pages });
 NA.hist = NA.hist || []; NA.fut = NA.fut || [];
@@ -6638,7 +6639,7 @@ function drawTools() {
 
   }
   if (sel.text) {
-    const isList = pg.layout === 'list' || pg.layout === 'checklist';
+    const isList = pg.layout === 'list' || pg.layout === 'checklist' || LIST_KEYS.has(sel.text);
     html += `<div class="nst-sec"><label for="nstTxt">${NA.t('text')}${isList ? NA.t('text_list') : ''}</label><textarea id="nstTxt" rows="${isList ? 7 : 4}">${esc(pg.t[sel.text] || '')}</textarea><p class="nst-note">${NA.t('ai_alt')}</p>
       <div class="nst-chips">${[['shorter', NA.t('rw_short')], ['tender', NA.t('rw_tender')], ['funny', NA.t('rw_funny')], ['again', NA.t('rw_again')]].map(([k, n]) => `<button class="nst-chip" data-rewrite="${k}">${n}</button>`).join('')}</div>
       <p class="nst-note" id="nstAiMsg"></p></div>`;
@@ -6668,7 +6669,7 @@ async function rewrite(kind) {
   const m = $('nstAiMsg'); if (m) m.textContent = NA.t('writing');
   const how = { shorter: 'Make it noticeably shorter, keep the essence.', tender: 'Make it more tender and intimate.', funny: 'Make it lighter and gently funny.', again: 'Write a fresh alternative with the same purpose.' }[kind];
   const info = NA.info || coupleInfo();
-  const isList = pg.layout === 'list' || pg.layout === 'checklist';
+  const isList = pg.layout === 'list' || pg.layout === 'checklist' || LIST_KEYS.has(sel.text);
   try {
     const j = await callAI({ max_tokens: 600, temperature: 1, response_format: { type: 'json_object' }, messages: [{ role: 'user', content:
 `Rewrite one text of a couple's printed photo book (${info.names}). ${how} Language: ${LANG_NAME[lang()] || 'French'}. No clichés, never invent facts.${isList ? ' Keep it as a list: one item per line, same number of items.' : ''}
@@ -7775,11 +7776,11 @@ window.addEventListener('hashchange', () => { if (location.hash === '#suivi') tr
 
 /* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
 Object.entries({
-  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
-  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
-  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
-  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
-  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
+  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
+  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
+  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
+  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
+  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 const stageWrap = document.querySelector('.nst-stagewrap');
 let ebar = null;
@@ -7791,6 +7792,18 @@ if (stageWrap) {
     const page = +b.dataset.page;
     E.select(b.dataset.slot != null ? { page, slot: +b.dataset.slot } : { page, text: b.dataset.text });
   });
+}
+// Libellé lisible d'un champ : nom connu (ek_city…), sinon style Magazine « lettre + numéro » (h1 → Titre 1, q3 → Question 3)
+const EK_BASE = { h: 'title', d: 'date', e: 'step', x: 'text', m: 'month', s: 'song', q: 'question', r: 'reason', k: 'kline', c: 'cap', n: 'name', a: 'answer' };
+function ekLabel(layout, key) {
+  const own = t('ek_' + key); if (own !== 'ek_' + key) return own;
+  const m = /^([a-z])(\d+)(s?)$/.exec(key) || (key === 'h' ? [key, 'h', '', ''] : null); if (!m) return key;
+  let base = m[3] ? 'ksub' : EK_BASE[m[1]];
+  if (m[1] === 'a' && layout === 'mplay_b') base = 'artist';
+  if (m[1] === 'n' && layout === 'madresses') base = 'place';
+  if (m[1] === 'c' && layout === 'madresses') base = 'city';
+  const lab = base ? t('ek_' + base) : '';
+  return lab && lab !== 'ek_' + base ? lab + (m[2] && m[2] !== '0' ? ' ' + m[2] : '') : key;
 }
 function drawEbar() {
   if (!ebar || !NA.pages.length) return;
@@ -7805,7 +7818,7 @@ function drawEbar() {
     });
     [...host.querySelectorAll('.nst-t[data-t]')].forEach(tx => {
       const key = tx.dataset.t, on = sel.page === i && sel.text === key;
-      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-text="${esc(key)}">✎ ${pre}${t('ek_' + key) !== 'ek_' + key ? t('ek_' + key) : key}</button>`);
+      parts.push(`<button type="button" class="nst-eb${on ? ' on' : ''}" data-page="${i}" data-text="${esc(key)}">✎ ${pre}${ekLabel(NA.pages[i].layout, key)}</button>`);
     });
   });
   ebar.innerHTML = parts.length ? `<span class="nst-eb-lbl">${t('eb_lbl')}</span><div class="nst-eb-row">${parts.join('')}</div>` : '';

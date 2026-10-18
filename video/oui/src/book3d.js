@@ -65,10 +65,10 @@ function paperNormal(size = 512) { // grain de papier : normale légère
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
 }
 
-function spineTexture(text) {
+function spineTexture(text, bg = '#ebe5d8', fg = '#2a2622') {
   const c = document.createElement('canvas'); c.width = 1024; c.height = 96; const x = c.getContext('2d');
-  x.fillStyle = '#ebe5d8'; x.fillRect(0, 0, 1024, 96);
-  x.fillStyle = '#2a2622'; x.font = '500 34px "Hanken Grotesk", Inter, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillStyle = bg; x.fillRect(0, 0, 1024, 96);
+  x.fillStyle = fg; x.font = '500 34px "Hanken Grotesk", Inter, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
   x.letterSpacing = '8px'; x.fillText(text, 512, 50);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
 }
@@ -159,7 +159,7 @@ export const DEFAULTS = () => ({
   studio: 0, bgColor: 0xd0c9bd, keyColor: 0xfff0dc, top: 0, shadowRadius: 12, fogNear: 220, fogFar: 520,
 });
 
-export async function createBook3D(canvas, { width = 1080, height = 1920, base = '/site/img/exemple/album/', samples = 4, shadowSize = 2048 } = {}) {
+export async function createBook3D(canvas, { width = 1080, height = 1920, base = '/site/img/exemple/album/', samples = 4, shadowSize = 2048, spine: spineOpt = {} } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(1); renderer.setSize(width, height, false);
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -237,7 +237,7 @@ export async function createBook3D(canvas, { width = 1080, height = 1920, base =
   coverMesh.position.set(BW / 2, BT / 2, 0); coverMesh.castShadow = coverMesh.receiveShadow = true; front.add(coverMesh);
   const backBoard = new THREE.Mesh(new THREE.BoxGeometry(BW, BT, BH), [edgeMat, edgeMat, mat(blank, THREE.FrontSide), mat(pageTex[24], THREE.FrontSide), edgeMat, edgeMat]);
   backBoard.position.set(BW / 2, BT / 2, 0); backBoard.castShadow = backBoard.receiveShadow = true; book.add(backBoard);
-  const spineTex = spineTexture('LÉA & HUGO · 2026');
+  const spineTex = spineTexture(spineOpt.text || 'LÉA & HUGO · 2026', spineOpt.bg, spineOpt.fg);
   const spineMat = new THREE.MeshStandardMaterial({ map: spineTex, roughness: 0.92 });
   const spine = new THREE.Mesh(new THREE.BoxGeometry(0.34, 1, BH), [edgeMat, spineMat, edgeMat, edgeMat, edgeMat, edgeMat]);
   spine.castShadow = spine.receiveShadow = true; book.add(spine);
