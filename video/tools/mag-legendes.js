@@ -12,10 +12,11 @@ const W = 1080, H = 1440;
 const OUT = path.join(ROOT, 'out', 'mag', 'carrousel');
 const ACCROCHE = '/site/img/exemple/photo-champ.jpg';
 
-// haut / bas : légende (une ligne par élément) ; petit : ligne plus petite sous la légende du bas
+// haut / bas : légende (une ligne par élément) ; petit : ligne plus petite sous la légende du bas ;
+// y : hauteur de la légende du bas (fraction de l'image) quand l'album occupe sa place habituelle
 const SLIDES = [
   { n: 1, accroche: true },
-  { n: 2, haut: ['💌 Aperçu gratuit sur noustalgie.fr'], bas: ['Un magazine', 'personnalisé ❤️'] },
+  { n: 2, haut: ['💌 Aperçu gratuit sur noustalgie.fr'], bas: ['Un magazine', 'personnalisé ❤️'], y: 0.81 },
   { n: 3, bas: ['Le début de votre', 'love story 🥰'] },
   { n: 4, haut: ['Vos grandes étapes 🎞️'] },
   { n: 5, bas: ['Vos souvenirs,', 'mois par mois 📸'] },
@@ -25,7 +26,7 @@ const SLIDES = [
   { n: 9, bas: ['Votre bucket list', 'à deux ✨'] },
   { n: 10, bas: ['Des jeux et quiz', 'sur vous 🎲'] },
   { n: 11, bas: ['Une lettre d’amour pour', 'lui dire tout ce que vous', 'avez sur le cœur 💌'] },
-  { n: 12, bas: ['Créez le vôtre', 'sur noustalgie.fr ✨'], petit: 'Aperçu gratuit · livré en 10 à 12 jours' },
+  { n: 12, bas: ['Créez le vôtre', 'sur noustalgie.fr ✨'], petit: 'Aperçu gratuit · livré en 10 à 12 jours', y: 0.09 },
 ];
 
 const CSS = `
@@ -54,7 +55,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000}
 `;
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const emo = s => esc(s).replace(/(\p{Extended_Pictographic}️?)/gu, '<span class="e">$1</span>');
-const cap = (lines, cls, petit) => `<div class="cap ${cls}">${lines.map(emo).join('<br>')}${petit ? `<span class="petit">${emo(petit)}</span>` : ''}</div>`;
+const cap = (lines, cls, petit, y) => `<div class="cap ${cls}"${y ? ` style="top:${Math.round(H * y)}px"` : ''}>${lines.map(emo).join('<br>')}${petit ? `<span class="petit">${emo(petit)}</span>` : ''}</div>`;
 
 const COEUR = '<svg width="96" height="86" viewBox="0 0 24 22" style="left:-112px;top:22px;filter:blur(1.2px)"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.4 2 4 6 4c2.4 0 3.8 1.5 6 3.6C14.2 5.5 15.6 4 18 4c4 0 5.7 4.4 4 7.7C19.5 16.4 12 21 12 21z" fill="#f78fb8"/></svg>';
 const ETOILE = (x, y, s, fill, stroke) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" style="left:calc(100% + ${x}px);top:${y}px"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.4 6.7L12 17l-6.1 3.3 1.4-6.7-5-4.6 6.8-.8z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
@@ -67,7 +68,7 @@ function html(sl) {
       + `${ETOILE(4, -14, 70, 'rgba(255,255,255,.15)', '#fbd3e2')}${ETOILE(-8, 62, 36, '#f78fb8', '#f78fb8')}</span></div></div>`;
   }
   const f = String(sl.n).padStart(2, '0');
-  return `<div id="s"><img class="fond" src="/out/mag/photos/${f}.jpg">${sl.haut ? cap(sl.haut, 'haut') : ''}${sl.bas ? cap(sl.bas, 'bas', sl.petit) : ''}</div>`;
+  return `<div id="s"><img class="fond" src="/out/mag/photos/${f}.jpg">${sl.haut ? cap(sl.haut, 'haut') : ''}${sl.bas ? cap(sl.bas, 'bas', sl.petit, sl.y) : ''}</div>`;
 }
 
 (async () => {

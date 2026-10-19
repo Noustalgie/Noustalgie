@@ -352,17 +352,13 @@
    }
   },
   {
-   "id": "souvenir",
-   "k": "memory",
-   "layout": "mprose",
+   "id": "photo-mains",
+   "layout": "full",
    "ph": [
-    "photo-lumieres"
+    "photo-mains"
    ],
    "t": {
-    "h": "notre souvenir",
-    "title": "Le dernier bus",
-    "cap": "La nuit des étoiles",
-    "text": "À la dune du Pyla, le soleil s’est couché trop lentement. Le dernier bus est parti sans nous, nos chaussures à la main. On a attendu le premier sous une couverture prêtée par un inconnu, en comptant les étoiles et en refaisant le monde. Depuis, chaque fois qu’un bus nous file sous le nez, on sourit."
+    "cap": "Ta main dans la mienne, toujours"
    }
   },
   {

@@ -31,12 +31,12 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
 <a class="logo" href="/">Nous<em>talgie</em></a>
 <div class="ok" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
 <h1 id="t">Merci, <em>c’est commandé</em></h1>
-<p class="sub" id="sub">Un email de confirmation va vous parvenir dans quelques minutes. Gardez-le : il contient votre numéro de commande.</p>
+<p class="sub" id="sub">Un email de confirmation va vous parvenir dans quelques minutes. Gardez-le : il contient votre numéro de commande.</p>
 <div class="card" id="card"><div class="row"><span>Produit</span><b>Livre imprimé 21 × 21 cm, couverture rigide</b></div><div class="row"><span>Livraison estimée</span><b>Environ 10 à 12 jours</b></div></div>
 <p class="eb">La suite</p>
 <ol id="steps"><li>Votre album part à l’impression chez notre imprimeur partenaire.</li><li>Vous recevez le numéro de suivi par email dès l’expédition.</li><li>Livraison chez vous en 10 à 12 jours environ.</li></ol>
 <div class="btns"><a class="btn dark" href="/">Retour à l’accueil</a><a class="btn line" id="trk" href="/#suivi">Suivre ma commande</a></div>
-<p class="help">Une question ? <a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></p>
+<p class="help">Une question ? <a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></p>
 </main>
 
 <script>
@@ -52,7 +52,7 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
     clearAlbum();
     var pdf = o.format === 'pdf';
     document.getElementById('t').innerHTML = 'Merci' + (o.firstName ? ' ' + esc(o.firstName) : '') + ', <em>c’est commandé</em>';
-    document.getElementById('sub').innerHTML = 'Un email de confirmation vient de partir' + (o.email ? ' à <b>' + esc(o.email) + '</b>' : '') + '. Gardez-le : il contient votre numéro de commande.';
+    document.getElementById('sub').innerHTML = 'Un email de confirmation vient de partir' + (o.email ? ' à <b>' + esc(o.email) + '</b>' : '') + '. Gardez-le : il contient votre numéro de commande.';
     var rows = [['Produit', pdf ? 'Album numérique (PDF)' : 'Livre imprimé 21 × 21 cm, couverture rigide'], ['Pages', o.pages ? esc(o.pages) + ' pages' : ''], ['Montant payé', o.price ? esc(o.price) + ' €' : ''], [pdf ? 'Envoi' : 'Livraison estimée', pdf ? 'Par email, dans quelques minutes' : 'Environ 10 à 12 jours']];
     document.getElementById('card').innerHTML = rows.filter(function (r) { return r[1]; }).map(function (r) { return '<div class="row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
     if (pdf) {
