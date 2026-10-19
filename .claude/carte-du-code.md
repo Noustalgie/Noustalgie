@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8507 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8509 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (8507 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 1733-1820 : <script type="application/ld+json"> (4 Ko)
 - lignes 2362-4526 : <script> (182 Ko)
 - lignes 4527-5842 : <script> (121 Ko)
-- lignes 5843-8481 : <script> (221 Ko)
-- lignes 8482-8504 : <script> (1 Ko)
+- lignes 5843-8483 : <script> (221 Ko)
+- lignes 8484-8506 : <script> (1 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -62,12 +62,12 @@ Générée automatiquement (8507 lignes). Ouvrir une zone : Read avec offset = n
  7007  4. Sauvegarde locale (IndexedDB : photos comprises)
  7042  5. Impression : photos en pleine résolution + PDF hébergé
  7143  6. Paiement
- 8046  1. Livre 3D réutilisable
- 8143  2. Aperçu en direct pendant la création (ordinateur)
- 8177  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8279  4. Génération vivante : leurs photos se posent dans un livre
- 8305  5. Récapitulatif de commande avec LEUR couverture
- 8333  6. Finitions : apparition au défilement, page tournée
+ 8048  1. Livre 3D réutilisable
+ 8145  2. Aperçu en direct pendant la création (ordinateur)
+ 8179  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8281  4. Génération vivante : leurs photos se posent dans un livre
+ 8307  5. Récapitulatif de commande avec LEUR couverture
+ 8335  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -369,76 +369,76 @@ Générée automatiquement (8507 lignes). Ouvrir une zone : Read avec offset = n
  7333  renderQuiz
  7339  mark
  7345  save
- 7390  mail
- 7537  backLbl
- 7542  toc
- 7549  show
- 7556  openLegal
- 7564  hideLegal
- 7565  closeLegal
- 7593  cur
- 7602  paint
- 7627  lang
- 7632  applyUI
- 7639  setLang
- 7659  syncStory
- 7693  ensureStoryFor
- 7709  recompose
- 7723  addInput
- 7742  removePhoto
- 7795  saveLink
- 7817  openFromLink
- 7827  set
- 7845  trHide
- 7847  trackOverlay
- 7855  close
- 7892  ouvrir
- 7918  ekLabel
- 7929  drawEbar
- 7954  coach
- 7960  done
- 7966  goTab
- 7975  draw
- 8003  payLabel
- 8014  highlightPal
- 8019  setLang
- 8034  lang
- 8047  spineColors
- 8074  sampleCover
- 8093  auto
- 8094  build
- 8101  name
- 8127  build
- 8136  nst70
- 8156  names
- 8157  renderLive
- 8170  flowMode
- 8179  exifDate
- 8189  readAscii
- 8190  scan
- 8207  addPhotos
- 8216  remap
- 8217  applyOrder
- 8230  movePhoto
- 8233  sortByDate
- 8242  renderPhotosPlus
- 8281  startGenAnim
- 8293  tick
- 8301  stopGenAnim
- 8303  runGeneration
- 8306  renderSummary
- 8319  syncPrice
- 8329  goTab
- 8351  setLang
- 8368  lang
- 8399  applyText
- 8408  fromFrance
- 8416  fromOSM
- 8435  close
- 8436  render
- 8444  pick
- 8452  search
- 8488  etape
+ 7392  mail
+ 7539  backLbl
+ 7544  toc
+ 7551  show
+ 7558  openLegal
+ 7566  hideLegal
+ 7567  closeLegal
+ 7595  cur
+ 7604  paint
+ 7629  lang
+ 7634  applyUI
+ 7641  setLang
+ 7661  syncStory
+ 7695  ensureStoryFor
+ 7711  recompose
+ 7725  addInput
+ 7744  removePhoto
+ 7797  saveLink
+ 7819  openFromLink
+ 7829  set
+ 7847  trHide
+ 7849  trackOverlay
+ 7857  close
+ 7894  ouvrir
+ 7920  ekLabel
+ 7931  drawEbar
+ 7956  coach
+ 7962  done
+ 7968  goTab
+ 7977  draw
+ 8005  payLabel
+ 8016  highlightPal
+ 8021  setLang
+ 8036  lang
+ 8049  spineColors
+ 8076  sampleCover
+ 8095  auto
+ 8096  build
+ 8103  name
+ 8129  build
+ 8138  nst70
+ 8158  names
+ 8159  renderLive
+ 8172  flowMode
+ 8181  exifDate
+ 8191  readAscii
+ 8192  scan
+ 8209  addPhotos
+ 8218  remap
+ 8219  applyOrder
+ 8232  movePhoto
+ 8235  sortByDate
+ 8244  renderPhotosPlus
+ 8283  startGenAnim
+ 8295  tick
+ 8303  stopGenAnim
+ 8305  runGeneration
+ 8308  renderSummary
+ 8321  syncPrice
+ 8331  goTab
+ 8353  setLang
+ 8370  lang
+ 8401  applyText
+ 8410  fromFrance
+ 8418  fromOSM
+ 8437  close
+ 8438  render
+ 8446  pick
+ 8454  search
+ 8490  etape
 
 ## api/
 

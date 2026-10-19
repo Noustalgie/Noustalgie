@@ -875,7 +875,7 @@ img{max-width:100%;}
 .nst-ed{--ink:#1c1a18;--mut:#77726b;--line:#e3dfd9;--desk:#ecE9e4;font-family:'Hanken Grotesk',system-ui,sans-serif;color:var(--ink);}
 .nst-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
 .nst-themes{display:flex;gap:6px;flex-wrap:wrap;}
-@media (max-width:640px){.nst-bar{flex-direction:column;align-items:stretch;}.nst-themes{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}.nst-theme{flex:0 0 auto;padding:6px 10px 6px 6px;font-size:12.5px;}.nst-bar-r .nst-btn{flex:1;}}
+@media (max-width:640px){.nst-bar{flex-direction:column;align-items:stretch;flex-wrap:nowrap;}.nst-themes{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0;}.nst-theme{flex:0 0 auto;padding:6px 10px 6px 6px;font-size:12.5px;}.nst-bar-r .nst-btn{flex:1;}}
 .nst-theme{display:inline-flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border:1px solid var(--line);background:#fff;color:var(--ink);font:500 13px/1 'Hanken Grotesk',sans-serif;cursor:pointer;border-radius:2px;}
 .nst-theme i{width:22px;height:22px;background:var(--p);border:1px solid rgba(0,0,0,.12);position:relative;}
 .nst-theme i::after{content:"";position:absolute;left:5px;right:5px;bottom:5px;height:3px;background:var(--a);}
@@ -7348,8 +7348,10 @@ window.processPayment = async function () {
   try {
     const d = JSON.parse(localStorage.getItem('noustalgie_mag') || 'null');
     if (d && Date.now() - d.at < 7 * 864e5) {
-      IDS.forEach(id => { const el = $(id); if (el && d[id] && !el.value) el.value = d[id]; });
-      if (Array.isArray(d.a)) NSTQ.a = d.a;
+      // une réponse reprise de la dernière visite s'affiche (rubrique ouverte) : jamais de texte caché qui finirait dans l'album sans qu'on le voie
+      const ouvrir = el => { const det = el && el.closest('details'); if (det) det.open = true; };
+      IDS.forEach(id => { const el = $(id); if (el && d[id] && !el.value) { el.value = d[id]; ouvrir(el); } });
+      if (Array.isArray(d.a)) { NSTQ.a = d.a; if (d.a.some(Boolean)) ouvrir($('qQuiz')); }
     }
   } catch (e) {}
   document.addEventListener('click', e => {
