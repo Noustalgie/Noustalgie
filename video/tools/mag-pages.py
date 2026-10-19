@@ -1,6 +1,7 @@
 # Album vitrine « magazine » : rend les 24 pages de mag/vitrine.json avec le vrai moteur du site
 # (NA.renderPage de public/index.html), en 1588 px, pour les slides et le film.
 #   python3 tools/mag-pages.py [--theme magazine]   → out/mag/pages/page-01.jpg … page-24.jpg
+#                                                    + pano-g.jpg / pano-d.jpg (double page paysage des slides, clé « pano »)
 import asyncio, json, os, sys
 VIDEO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEPOT = os.path.dirname(VIDEO)
@@ -21,7 +22,8 @@ async def main():
     rendu.installer_polices()
     srv = rendu.serveur(DEPOT)
     pages = [{'layout': p['layout'], 'v': p.get('v', 0), 'k': p.get('k'), 't': p['t'],
-              'slots': [{'p': IDX[n], 'z': 1, 'f': 'none'} for n in p.get('ph', [])]} for p in SPEC['pages']]
+              'slots': [{'p': IDX[n], 'f': 'none', 'z': 1, **p.get('cadre', {})} for n in p.get('ph', [])]} for p in SPEC['pages'] + SPEC.get('pano', [])]
+    noms = [f'page-{i + 1:02d}' for i in range(len(SPEC['pages']))] + ['pano-g', 'pano-d'][:len(SPEC.get('pano', []))]
     photos = [{'data': o['f'], 'w': o['w'], 'h': o['h'], 'ratio': o['w'] / o['h'],
                'orient': 'portrait' if o['w'] / o['h'] < 0.8 else 'paysage' if o['w'] / o['h'] > 1.25 else 'carre'} for o in PH]
     async with async_playwright() as p:
@@ -39,13 +41,13 @@ async def main():
             await pg.evaluate("""async (i) => { const host = document.getElementById('nstShot');
               host.innerHTML = NA.renderPage(NA.pages[i], { photos: window.__photos, theme: NA.theme });
               await document.fonts.ready; await Promise.all([...host.querySelectorAll('img')].map(im => im.decode().catch(() => {}))); }""", i)
-            f = os.path.join(OUT, f'page-{i + 1:02d}.png')
+            f = os.path.join(OUT, noms[i] + '.png')
             await pg.locator('#nstShot').screenshot(path=f)
             Image.open(f).convert('RGB').save(f[:-4] + '.jpg', quality=93)
             os.remove(f)
         await nav.close()
     if errs:
         sys.exit('erreurs JavaScript : ' + '; '.join(errs))
-    print(len(pages), 'pages dans', os.path.relpath(OUT, VIDEO))
+    print(len(SPEC['pages']), 'pages', '+ double page paysage' if SPEC.get('pano') else '', 'dans', os.path.relpath(OUT, VIDEO))
 
 asyncio.run(main())

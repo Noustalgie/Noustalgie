@@ -2,22 +2,31 @@
 //   node tools/mag-ecran.js   → out/mag/decor/site-mobile.png (1170 × 2532)
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+const { execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 const { serve } = require('./serve');
 
 const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'out', 'mag', 'decor');
+// polices réelles du site, y compris celles de la couverture de l'album (Bodoni Moda, Pinyon Script…) : mêmes copies
+// locales qu'outils/rendu.py, sinon la couverture du haut de page s'affiche dans une police de remplacement
+const OUTILS = path.join(ROOT, '..', 'outils');
+const NM = path.join(os.homedir(), '.cache', 'noustalgie-polices', 'node_modules');
+const cssPolices = u => execFileSync('python3', ['-c', 'import sys; sys.path.insert(0, sys.argv[1]); import rendu; rendu.installer_polices(); sys.stdout.write(rendu.css_polices(sys.argv[2]))', OUTILS, u]).toString();
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const site = await serve(path.join(ROOT, '..', 'public'));        // le site à la racine (liens absolus /img/…)
-  const FONTS = path.join(ROOT, 'assets', 'fonts');
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 390, height: 830 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
-  // polices du site depuis assets/fonts, servies sur le même domaine (comme en ligne, sans dépendre du réseau)
-  await page.route('**/__polices/*', r => r.fulfill({ path: path.join(FONTS, path.basename(new URL(r.request().url()).pathname)), contentType: 'font/woff2' }));
+  await page.route('**/*', r => {
+    const u = r.request().url();
+    if (u.includes('fonts.googleapis.com/css')) return r.fulfill({ contentType: 'text/css', body: cssPolices(u) });
+    if (u.includes('fonts.gstatic.com/__local/')) return r.fulfill({ path: path.join(NM, u.split('/__local/')[1]), contentType: 'font/woff2', headers: { 'access-control-allow-origin': '*' } });
+    return u.startsWith('http://127.0.0.1') ? r.continue() : r.abort();
+  });
   await page.goto(`http://127.0.0.1:${site.address().port}/index.html`, { waitUntil: 'networkidle', timeout: 60000 });
-  await page.addStyleTag({ content: fs.readFileSync(path.join(FONTS, 'fonts.css'), 'utf8').replace(/url\((\w[^)]*\.woff2)\)/g, 'url(/__polices/$1)') });
   await page.evaluate(async () => { await document.fonts.load('400 40px "Playfair Display"'); await document.fonts.load('400 16px "Hanken Grotesk"'); await document.fonts.ready; });
   await page.waitForTimeout(800);
   const shot = path.join(OUT, '_site.png');
