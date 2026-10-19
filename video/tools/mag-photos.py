@@ -5,6 +5,7 @@ Prérequis : python3 tools/mag-pages.py (pages) et python3 tools/decor.py (textu
   python3.11 -m venv ~/blender-venv && ~/blender-venv/bin/pip install bpy==5.0.1
   ~/blender-venv/bin/python tools/mag-photos.py [--only 3,4] [--draft]
   → out/mag/photos/brut/NN.png (rendu) et out/mag/photos/NN.jpg (grain et netteté de téléphone)
+  (la version années 70 lit out/mag/pages-seventies : python3 tools/mag-pages.py --theme seventies)
   ~/blender-venv/bin/python tools/mag-photos.py --site [--only album-couverture]
   → out/mag/site/*.jpg : visuels du site (images d'album des guides, fonds des images de partage)
 """
@@ -38,8 +39,9 @@ LT = 0.0003         # épaisseur d'un feuillet
 NL = 11             # feuillets entre les plats
 
 
-def page(n):
-    return os.path.join(PAGES, 'page-%02d.jpg' % n)
+def page(n, d=PAGES):
+    """n : numéro de page ou nom de fichier (pano-g.jpg…) ; d : dossier des pages (une version de style)"""
+    return os.path.join(d, n if isinstance(n, str) else 'page-%02d.jpg' % n)
 
 
 # ── matériaux ──
@@ -415,13 +417,15 @@ SHOTS = [
     spread(3, 1, -22),
     spread(4, 2, 16, 2),
     spread(5, 3, -18, -2),
-    spread(6, 4, 18),
-    spread(7, 5, -20, -2),
-    spread(8, 6, 15, 2),
-    spread(9, 9, -22),
-    spread(10, 8, 16, 2),
-    spread(11, 10, -18),
-    dict(n=12, closed=1, book=(0.04, -0.28, -14), phone=(-0.14, -0.18, -18), cam=dict(target=(-0.005, -0.27, 0), dist=0.40, elev=72, azim=-30, roll=2)),
+    dict(spread(6, 7, 13, 1, dist=0.43, dx=0.03), pages=('pano-g.jpg', 'pano-d.jpg')),   # double page paysage (clé « pano » de mag/vitrine.json), vue entière
+    spread(7, 4, 18),
+    spread(8, 5, -20, -2),
+    spread(9, 6, 15, 2),
+    spread(10, 9, -22),
+    spread(11, 8, 16, 2),
+    spread(12, 10, -18),
+    dict(spread(13, 1, -22), dir='pages-seventies'),                    # la slide 3 en style Années 70 (même cadrage)
+    dict(n=14, closed=1, book=(0.04, -0.28, -14), phone=(-0.14, -0.18, -18), cam=dict(target=(-0.005, -0.27, 0), dist=0.40, elev=72, azim=-30, roll=2)),
 ]
 
 
@@ -487,8 +491,9 @@ def main():
                 tel.location = (px, py, 0); tel.rotation_euler = (0, 0, math.radians(pr))
                 phone(os.path.join(DECOR, 'site-mobile.png'), tel)
         else:
-            k = s['spread']
-            open_book(page(2 * k + 1) if k > 0 else None, page(2 * k + 2), k, piv)
+            k, d = s['spread'], os.path.join(ROOT, 'out', 'mag', s.get('dir', 'pages'))
+            g, r = s.get('pages', (2 * k + 1, 2 * k + 2))
+            open_book(page(g, d) if k > 0 else None, page(r, d), k, piv)
         place_camera(co, **s['cam'])
         raw = os.path.join(OUT, 'brut', name + '.png')
         sc.render.filepath = raw

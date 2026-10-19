@@ -395,5 +395,33 @@
     "names": "Léa & Hugo"
    }
   }
+ ],
+ "pano": [
+  {
+   "layout": "spreadL",
+   "ph": [
+    "montagne"
+   ],
+   "t": {},
+   "cadre": {
+    "x": 0,
+    "y": 92,
+    "z": 1.3
+   }
+  },
+  {
+   "layout": "spreadR",
+   "ph": [
+    "montagne"
+   ],
+   "t": {
+    "cap": "Et le reste du monde peut attendre"
+   },
+   "cadre": {
+    "x": 0,
+    "y": 92,
+    "z": 1.3
+   }
+  }
  ]
 }

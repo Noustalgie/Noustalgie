@@ -4700,8 +4700,9 @@ const LAYOUTS = {
   } },
   spreadR: { n: 1, spread: 'R', name: 'Double page', render(pg, T) {
     const cap = pg.t.cap;
+    // voile de lisibilité ancré dans le coin de la légende : il s'éteint avant la pliure (un dégradé sur toute la largeur s'y arrêtait net)
     return slot(pg, 0, -PX, 0, 2 * PX, PX, { border: 0, hd: true })
-      + ((cap || CTX.editing) ? `<div style="position:absolute;left:0;right:0;bottom:0;height:220px;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));pointer-events:none;"></div>`
+      + ((cap || CTX.editing) ? `<div style="position:absolute;left:0;right:0;bottom:0;height:220px;background:radial-gradient(120% 100% at 100% 100%,rgba(0,0,0,.55),rgba(0,0,0,0) 85%);pointer-events:none;"></div>`
       + tx(pg, 'cap', `position:absolute;right:${M}px;bottom:52px;width:520px;text-align:right;color:#fff;font:italic 22px/1.45 ${T.display};text-shadow:0 1px 12px rgba(0,0,0,.35);`, 'Une légende…') : '');
   } },
   frame: { n: 1, name: 'Encadrée', render(pg, T) {
@@ -7523,6 +7524,8 @@ contact: { tab: 'Contact', html: `
 <p>Noustalgie livre en France et dans de nombreux pays d'Europe. Saisissez précisément votre pays dans l'adresse de livraison ; pour une destination particulière, écrivez-nous avant de commander.</p>
 ` },
 };
+// Espace insécable avant : ; ! ? (typographie française), pour la fenêtre comme pour les pages générées (outils/pages-legales.mjs)
+Object.values(PAGES).forEach(p => { p.html = p.html.replace(/ ([:;!?])(?=[\s<]|$)/g, ' $1'); });
 
 /* ── Affichage : onglets, sommaire, fermeture (Échap), focus ── */
 const ov = document.getElementById('legalOverlay'), box = document.getElementById('legalContent');
@@ -8489,6 +8492,9 @@ country.addEventListener('change', () => { lastQ = ''; close(); if (line1.value.
   var NOMS = ['1-couple', '2-photos', '3-composition', '4-apercu', '5-commande'];
   var og = window.goTab;
   if (typeof og === 'function') window.goTab = function (n) { var r = og.apply(this, arguments); if (NOMS[n]) etape(NOMS[n]); return r; };
+  // arrivée directe sur le questionnaire (liens « /#app » des guides, sans startApp) : comptée au premier champ touché
+  var p0 = document.getElementById('panel0');
+  if (p0) p0.addEventListener('focusin', function () { etape(NOMS[0]); }, { once: true });
   var oa = window.addPhotos;
   if (typeof oa === 'function') window.addPhotos = function () { etape('2b-photos-ajoutees'); return oa.apply(this, arguments); };
   var op = window.processPayment;

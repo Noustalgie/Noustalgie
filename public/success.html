@@ -62,4 +62,13 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
   }).catch(function () {});
 })();
 </script>
+<script>
+/* Entonnoir de commande (Vercel Web Analytics, comme l'accueil) : le paiement réussi est la dernière étape, comptée une fois par visite */
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+(function () {
+  try { if (sessionStorage.getItem('nstEtape7')) return; sessionStorage.setItem('nstEtape7', '1'); } catch (e) {}
+  window.va('pageview', { route: '/_etape/7-paiement-reussi', path: '/_etape/7-paiement-reussi' });
+})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body></html>

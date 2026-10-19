@@ -1,6 +1,6 @@
 // Carrousel TikTok « magazine » : légendes posées sur les photos de tools/mag-photos.py, comme sur le carrousel de
 // référence (texte blanc cerné de noir, émojis), et slide d'accroche (photo du couple, autocollants).
-//   node tools/mag-legendes.js   → out/mag/carrousel/01.jpg … 12.jpg (1080 × 1440)
+//   node tools/mag-legendes.js   → out/mag/carrousel/01.jpg … 14.jpg (1080 × 1440)
 //                                 + out/mag/carrousel/sans-texte/ (mêmes images sans légende, pour écrire le texte dans TikTok)
 const path = require('path');
 const fs = require('fs');
@@ -20,13 +20,15 @@ const SLIDES = [
   { n: 3, bas: ['Le début de votre', 'love story 🥰'] },
   { n: 4, haut: ['Vos grandes étapes 🎞️'] },
   { n: 5, bas: ['Vos souvenirs,', 'mois par mois 📸'] },
-  { n: 6, bas: ['La bande son', 'de votre histoire 💿'] },
-  { n: 7, haut: ['Vos adresses préférées 😍'], bas: ['et vos voyages ✈️'] },
-  { n: 8, bas: ['Une interview', 'exclusive 🎤'] },
-  { n: 9, bas: ['Votre bucket list', 'à deux ✨'] },
-  { n: 10, bas: ['Des jeux et quiz', 'sur vous 🎲'] },
-  { n: 11, bas: ['Une lettre d’amour pour', 'lui dire tout ce que vous', 'avez sur le cœur 💌'] },
-  { n: 12, bas: ['Créez le vôtre', 'sur noustalgie.fr ✨'], petit: 'Aperçu gratuit · livré en 10 à 12 jours', y: 0.09 },
+  { n: 6, bas: ['Votre plus belle photo,', 'en double page 🌄'] },
+  { n: 7, bas: ['La bande son', 'de votre histoire 💿'] },
+  { n: 8, haut: ['Vos adresses préférées 😍'], bas: ['et vos voyages ✈️'] },
+  { n: 9, bas: ['Une interview', 'exclusive 🎤'] },
+  { n: 10, bas: ['Votre bucket list', 'à deux ✨'] },
+  { n: 11, bas: ['Des jeux et quiz', 'sur vous 🎲'] },
+  { n: 12, bas: ['Une lettre d’amour pour', 'lui dire tout ce que vous', 'avez sur le cœur 💌'] },
+  { n: 13, bas: ['Nouveau\u00a0: la version', 'années 70 🕺'] },
+  { n: 14, bas: ['Créez le vôtre', 'sur noustalgie.fr ✨'], petit: 'Aperçu gratuit · livré en 10 à 12 jours', y: 0.09 },
 ];
 
 const CSS = `
