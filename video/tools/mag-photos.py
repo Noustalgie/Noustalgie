@@ -5,6 +5,8 @@ Prérequis : python3 tools/mag-pages.py (pages) et python3 tools/decor.py (textu
   python3.11 -m venv ~/blender-venv && ~/blender-venv/bin/pip install bpy==5.0.1
   ~/blender-venv/bin/python tools/mag-photos.py [--only 3,4] [--draft]
   → out/mag/photos/brut/NN.png (rendu) et out/mag/photos/NN.jpg (grain et netteté de téléphone)
+  ~/blender-venv/bin/python tools/mag-photos.py --site [--only album-couverture]
+  → out/mag/site/*.jpg : visuels du site (images d'album des guides, fonds des images de partage)
 """
 import math
 import os
@@ -19,10 +21,11 @@ from PIL import Image, ImageFilter
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 PAGES = os.path.join(ROOT, 'out', 'mag', 'pages')
 DECOR = os.path.join(ROOT, 'out', 'mag', 'decor')
-OUT = os.path.join(ROOT, 'out', 'mag', 'photos')
 args = sys.argv[1:]
+SITE = '--site' in args
+OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else 'photos')
 DRAFT = '--draft' in args
-ONLY = [int(n) for n in args[args.index('--only') + 1].split(',')] if '--only' in args else None
+ONLY = [int(n) if n.isdigit() else n for n in args[args.index('--only') + 1].split(',')] if '--only' in args else None
 W, H = (540, 720) if DRAFT else (1080, 1440)
 EXPO = float(args[args.index('--expo') + 1]) if '--expo' in args else -2.5
 GLOW = 2.0          # luminosité de l'écran du téléphone
@@ -423,24 +426,51 @@ SHOTS = [
 
 
 def finish(src, dst):
-    """rendu → photo de téléphone : légère netteté, grain fin, JPEG"""
+    """rendu → photo de téléphone : légère netteté, grain fin, JPEG (visuels du site : sans grain, JPEG léger)"""
     im = Image.open(src).convert('RGB')
     im = im.filter(ImageFilter.UnsharpMask(radius=1.4, percent=55, threshold=2))
+    if SITE:
+        im.save(dst, quality=80, optimize=True, progressive=True, subsampling=2)
+        return
     a = np.asarray(im).astype(np.float32)
-    rng = np.random.default_rng(int(os.path.basename(src)[:2]))
+    rng = np.random.default_rng(sum(map(ord, os.path.basename(src))))
     lum = rng.normal(0, 2.2, a.shape[:2])[..., None]
     chroma = rng.normal(0, 0.8, a.shape)
     a = np.clip(a + lum + chroma, 0, 255).astype(np.uint8)
     Image.fromarray(a).save(dst, quality=93, subsampling=0)
 
 
+# ── visuels du site : mêmes décor et lumière, cadrages carrés (images d'album des guides) et 1200 × 630 (partage) ──
+def site_spread(name, k, tilt, dist=0.38, elev=62, azim=-32, res=(1200, 1200), right=0.0):
+    """double page k centrée ; right : visée décalée vers la droite de l'image (l'album passe à gauche)"""
+    a = math.radians(azim)
+    cx, cy = 0.0, -0.26
+    return dict(name=name, res=res, spread=k, book=(cx, cy, azim + tilt),
+                cam=dict(target=(cx + right * math.cos(a), cy + right * math.sin(a), 0), dist=dist, elev=elev, azim=azim))
+
+
+SITE_SHOTS = [
+    dict(name='album-couverture', res=(1200, 1200), closed=1, book=(0.0, -0.25, -50), cam=dict(target=(-0.03, -0.24, 0), dist=0.35, elev=70, azim=-32)),
+    site_spread('album-double-page', 1, -16),           # « Là où tout a commencé » et le plan de la ville
+    site_spread('album-pages', 2, 14),                  # nos étapes
+    site_spread('album-souvenirs', 3, -12),             # une année en photos
+    site_spread('album-tour', 10, 15),                  # la lettre
+    dict(name='og-fond', res=(1200, 630), closed=1, book=(0.0, -0.25, -46),
+         cam=dict(target=(0.15 * math.cos(math.radians(-32)), -0.255 + 0.15 * math.sin(math.radians(-32)), 0), dist=0.5, elev=66, azim=-32)),
+    site_spread('og-exemple-fond', 1, -10, dist=0.6, elev=60, res=(1200, 630), right=0.17),
+]
+
+
 def main():
     os.makedirs(os.path.join(OUT, 'brut'), exist_ok=True)
     sc, co = scene_setup()
-    for s in SHOTS:
-        if ONLY and s['n'] not in ONLY:
+    for s in (SITE_SHOTS if SITE else SHOTS):
+        name = s.get('name') or '%02d' % s['n']
+        if ONLY and s.get('n', name) not in ONLY and name not in ONLY:
             continue
         t0 = time.time()
+        rx, ry = s.get('res', (1080, 1440))
+        sc.render.resolution_x, sc.render.resolution_y = (rx // 2, ry // 2) if DRAFT else (rx, ry)
         for ob in [o for o in bpy.data.objects if o.name.startswith(('album', 'pivot'))]:
             bpy.data.objects.remove(ob, do_unlink=True)
         piv = bpy.data.objects.new('pivot', None); sc.collection.objects.link(piv)
@@ -460,11 +490,11 @@ def main():
             k = s['spread']
             open_book(page(2 * k + 1) if k > 0 else None, page(2 * k + 2), k, piv)
         place_camera(co, **s['cam'])
-        raw = os.path.join(OUT, 'brut', '%02d.png' % s['n'])
+        raw = os.path.join(OUT, 'brut', name + '.png')
         sc.render.filepath = raw
         bpy.ops.render.render(write_still=True)
-        finish(raw, os.path.join(OUT, '%02d.jpg' % s['n']))
-        print('photo', s['n'], round(time.time() - t0), 's', flush=True)
+        finish(raw, os.path.join(OUT, name + '.jpg'))
+        print('photo', name, round(time.time() - t0), 's', flush=True)
 
 
 if __name__ == '__main__':

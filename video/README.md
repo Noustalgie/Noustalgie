@@ -86,3 +86,15 @@ node tools/mag-legendes.js          # carrousel final → out/mag/carrousel/01�
 La slide 1 (accroche) reprend la photo `photo-champ.jpg` avec des autocollants en Lilita One et Gochi Hand
 (licence OFL, `assets/fonts/LilitaOne-GochiHand-OFL.txt`). Les cadrages, l'exposition et la teinte du bois se
 règlent en tête de `tools/mag-photos.py` (`SHOTS`, `EXPO`) et de `tools/decor.py` (`WOOD_GAIN`).
+
+Les photos d'album du site (`public/img/exemple/album-*.jpg`, 1200 × 1200) et les fonds des images de partage
+sortent du même décor :
+
+```bash
+~/blender-venv/bin/python tools/mag-photos.py --site [--only album-pages]   # → out/mag/site/ (cadrages : SITE_SHOTS)
+cp out/mag/site/album-*.jpg ../public/img/exemple/
+node tools/og.js out/mag/site/og-fond.jpg ../public/img/exemple/og-noustalgie.jpg "L’album photo <em>qui raconte votre histoire</em>" "Vos photos, votre histoire écrite, un vrai livre relié. Aperçu gratuit avant de commander." --panneau
+node tools/og.js out/mag/site/og-exemple-fond.jpg ../public/img/exemple/og-exemple-album.jpg "Un exemple d’album, <em>page après page</em>" "Les 24 pages de l’album de Léa et Hugo, au style Magazine." --panneau
+```
+
+Quand une de ces images change, changer aussi son `alt` et ses légendes (`figcaption`) dans toutes les pages de `public/`.
