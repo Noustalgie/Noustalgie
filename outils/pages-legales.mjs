@@ -92,6 +92,7 @@ function page(cle, meta, contenu, css) {
 <body>
 <header class="g-nav"><a class="g-logo" href="/">Noustalgie</a><a class="g-cta" href="/#app">Composer mon album</a></header>
 <main class="g-wrap">
+<a class="g-back" href="/" onclick="if(document.referrer.indexOf(location.origin+'/')===0&&history.length>1){history.back();return false}">← Retour</a>
 <nav class="g-crumbs" aria-label="Fil d'Ariane"><a href="/">Accueil</a> / ${meta.nom}</nav>
 <article class="g-body g-legal">
 ${contenu}
