@@ -2,5 +2,10 @@
   "name": "noustalgie",
   "version": "1.1.0",
   "private": true,
-  "engines": { "node": "24.x" }
+  "engines": {
+    "node": "24.x"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
 }

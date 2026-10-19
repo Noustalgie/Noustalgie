@@ -2,7 +2,9 @@
 // Étape de construction Vercel (vercel.json → "buildCommand") :
 //   1. régénère les pages légales à partir du texte de index.html (outils/pages-legales.mjs) ;
 //   2. sort le grand <style> et les gros scripts de index.html dans /assets (noms hachés, cache d'un an),
-//      pour que la page d'accueil servie soit légère (rapport texte/HTML, cache entre deux visites).
+//      pour que la page d'accueil servie soit légère (rapport texte/HTML, cache entre deux visites) ;
+//   3. minimise ces fichiers avec esbuild (dépendance de développement : `npm install` à la racine).
+//      Les noms globaux (onclick="goTab(1)"…) sont gardés : esbuild ne renomme pas le niveau supérieur d'un script classique.
 // Le fichier source reste unique : on continue de modifier public/index.html comme avant ; seule la copie
 // déployée est découpée. Sur Vercel (VERCEL=1) le travail se fait dans public/ ; en local, dans une copie :
 //   node outils/preparer-production.mjs --sortie /tmp/construit
@@ -18,6 +20,14 @@ const SEUIL = 4096;   // les petits scripts du <head> (erreurs, chargement à la
 
 const empreinte = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 10);
 
+// esbuild absent (dépôt cloné sans `npm install`) : en local on prévient et on garde les fichiers lisibles ; sur Vercel on s'arrête
+let esbuild = null;
+try { esbuild = await import('esbuild'); } catch (e) {
+  if (process.env.VERCEL) throw new Error('esbuild introuvable : la construction doit minimiser le CSS et le JavaScript');
+  console.warn('esbuild introuvable (npm install) : fichiers non minimisés');
+}
+export const minimiser = (code, loader) => (esbuild ? esbuild.transformSync(code, { loader, minify: true, legalComments: 'none', charset: 'utf8' }).code : code);
+
 export function decouper(html) {
   const fichiers = [];
   // 1. la feuille de style du <head> (le premier </style> ferme la vraie balise ; les suivants sont dans des chaînes JS)
@@ -25,7 +35,7 @@ export function decouper(html) {
   const a = html.indexOf('<style>');
   if (a < 0 || a > finTete) throw new Error('<style> du <head> introuvable');
   const b = html.indexOf('</style>', a);
-  const css = html.slice(a + 7, b);
+  const css = minimiser(html.slice(a + 7, b), 'css');
   const nomCss = `/assets/accueil.${empreinte(css)}.css`;
   fichiers.push([nomCss, css]);
   html = html.slice(0, a) + `<link rel="stylesheet" href="${nomCss}"/>` + html.slice(b + 8);
@@ -41,8 +51,9 @@ export function decouper(html) {
     const ouv = html.slice(o, finOuv + 1), code = html.slice(finOuv + 1, ferme);
     out += html.slice(i, o);
     if (ouv === '<script>' && code.length > SEUIL) {
-      const nom = `/assets/accueil-${++n}.${empreinte(code)}.js`;
-      fichiers.push([nom, code]);
+      const js = minimiser(code, 'js');
+      const nom = `/assets/accueil-${++n}.${empreinte(js)}.js`;
+      fichiers.push([nom, js]);
       out += `<script src="${nom}"></script>`;
     } else out += ouv + code + '</script>';
     i = ferme + 9;
