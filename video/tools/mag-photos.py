@@ -81,7 +81,8 @@ def material(name, color=(0.8, 0.8, 0.8), image=None, rough=0.45, coat=0.0, coat
 
 def paper(path):
     """page imprimée : papier photo satiné"""
-    return material('page:' + os.path.basename(path), image=path, rough=0.33, spec=0.42, bump=(900, 0.04))
+    # nom du matériau = dossier + fichier : page-03.jpg existe en plusieurs styles (pages/, pages-seventies/)
+    return material('page:' + os.path.join(os.path.basename(os.path.dirname(path)), os.path.basename(path)), image=path, rough=0.33, spec=0.42, bump=(900, 0.04))
 
 
 def wood_material():
