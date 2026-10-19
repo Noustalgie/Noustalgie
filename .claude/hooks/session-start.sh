@@ -15,7 +15,9 @@ cd "$CLAUDE_PROJECT_DIR"
 python3 -m pip install --quiet --disable-pip-version-check --root-user-action=ignore \
   'playwright==1.56.0' pillow numpy scipy soundfile pedalboard pyloudnorm
 
-# Node : moteur des films et des visuels du site (gsap, three)
+# Node : esbuild (minimise le CSS et le JavaScript de la construction de production), puis le moteur
+# des films et des visuels du site (gsap, three)
+npm install --silent --no-audit --no-fund
 npm install --prefix video --silent --no-audit --no-fund
 
 # Polices réelles des captures (outils/rendu.py), gardées dans ~/.cache

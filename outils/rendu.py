@@ -18,6 +18,9 @@ POLICES = {  # nom Google Fonts -> (paquet npm, nom de famille déclaré par le 
     # style Magazine de l'album
     'Instrument Serif': ('@fontsource/instrument-serif', None), 'Bodoni Moda': ('@fontsource-variable/bodoni-moda', 'Bodoni Moda Variable'),
     'Pinyon Script': ('@fontsource/pinyon-script', None), 'Homemade Apple': ('@fontsource/homemade-apple', None),
+    # style Années 70
+    'Special Elite': ('@fontsource/special-elite', None), 'Caprasimo': ('@fontsource/caprasimo', None),
+    'Jost': ('@fontsource/jost', None), 'Yellowtail': ('@fontsource/yellowtail', None),
 }
 CACHE = os.path.expanduser('~/.cache/noustalgie-polices')
 NM = os.path.join(CACHE, 'node_modules')
