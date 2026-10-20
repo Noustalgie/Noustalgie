@@ -85,6 +85,18 @@ node tools/mag-ecran.js             # écran du téléphone de la dernière phot
 node tools/mag-legendes.js          # carrousel final → out/mag/carrousel/01…13.jpg (+ sans-texte/, + 01-copain/01-copine : autres accroches)
 ```
 
+Deuxième décor et deuxième album (carrousel de Noël, octobre 2026) : Jade et Malo, rencontrés à Paris, album entier
+en style Années 70 (`mag/vitrine-paris.json`, avec le vrai plan de Paris de `/api/carte`), sur un lit en lin froissé
+avec un plaid écossais et une guirlande lumineuse. Accroche sans dessin : la photo et un texte simple. Légendes au
+style natif de TikTok (texte noir sur bandeau blanc), plus lisibles sur un fond clair.
+
+```bash
+python3 tools/mag-pages.py --vitrine mag/vitrine-paris.json --theme seventies   # → out/mag/pages-paris-seventies/
+python3 tools/mag-pages.py --vitrine mag/vitrine-paris.json                     # → out/mag/pages-paris/ (version couleur, slide 12)
+~/blender-venv/bin/python tools/mag-photos.py --decor lit --pages pages-paris-seventies --autre pages-paris   # → out/mag/photos-lit/
+node tools/mag-legendes.js --decor lit   # → out/mag/carrousel-lit/01…13.jpg (+ sans-texte/, 01-copain, 01-copine)
+```
+
 Slide 6 : la double page paysage (photo recadrée par `cadre` dans `vitrine.json` pour garder le couple hors de la pliure).
 Slide 12 : la double page de la slide 3 en style Années 70 (pages de `out/mag/pages-seventies`).
 Carrousel d'octobre 2026 (13 slides) : nouveaux angles par rapport au précédent (TikTok pénalise les images republiées),
