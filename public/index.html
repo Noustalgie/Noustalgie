@@ -1711,6 +1711,9 @@ html body #app .mq-ch button[aria-pressed="true"]{background:var(--v6-ink);borde
   .nst-som-n{font-size:22px;}
 }
 @media (prefers-reduced-motion:reduce){.nst-som-sp{transition:none;transform:none;}}
+/* Aperçu en direct : la carte reste collée en haut de l'écran. Sur Mac, le point de fuite du livre restait là où la carte était
+   avant de se coller (livre cisaillé en descendant) : pas de perspective ici. Une perspective dans transform fait disparaître le livre dans WebKit. */
+.nst-live .b3d{perspective:none;}
 </style>
 <script type="application/ld+json">
 {
