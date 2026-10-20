@@ -1409,6 +1409,8 @@ html body .modal-x{min-width:44px;min-height:44px;display:inline-flex;align-item
 .nst-ph-box p{margin:0 0 10px;color:#5f5a54;}
 .nst-ph-box ul{margin:0 0 16px;padding-left:18px;}.nst-ph-box li{margin:0 0 6px;}
 .nst-ph-box button{width:100%;min-height:48px;border-radius:999px;border:0;background:#1c1a18;color:#fff;font:500 15px 'Hanken Grotesk',sans-serif;cursor:pointer;}
+.nst-ph-box .nst-ph-mail{display:flex;align-items:center;justify-content:center;min-height:48px;margin-top:10px;border:1px solid #1c1a18;border-radius:999px;color:#1c1a18;font:500 15px 'Hanken Grotesk',sans-serif;text-decoration:none;text-align:center;}
+.nst-ph-box .nst-ph-x{margin-top:4px;min-height:44px;background:none;color:#5f5a54;}
 
 /* ═══ v5.4 — lisibilité ═══ */
 .nst-live-ded.empty{color:#77726b;}
@@ -5848,7 +5850,7 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
-  ph_prep: 'Préparation de vos photos…', ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre téléphone n’a envoyé aucune photo. Cela arrive quand les photos sont stockées sur iCloud (« Optimiser le stockage ») et que l’iPhone n’a plus assez d’espace ou de connexion pour les télécharger.', ph_help_1: 'Libérez un peu d’espace : Réglages › Général › Stockage iPhone.', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
+  ph_prep: 'Préparation de vos photos…', ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre iPhone n’a pas pu préparer les photos choisies\u00a0: cela arrive surtout quand il manque d’espace de stockage, ou quand les photos sont sur iCloud («\u00a0Optimiser le stockage\u00a0») et qu’il ne peut pas les télécharger.', ph_help_n: '{0} photo(s) sur {1} n’ont pas pu être transmises.', ph_help_0: 'Aucune photo n’est arrivée de votre iPhone.', ph_help_4: 'Ajoutez-les en plusieurs fois, 5 à 10 à la fois\u00a0: l’iPhone a besoin de bien moins de place.', ph_help_1: 'Libérez de l’espace\u00a0: Photos › Albums › Supprimés récemment › Tout supprimer, ou Réglages › Général › Stockage iPhone.', ph_retry_few: 'Réessayer avec moins de photos', ph_mail: 'M’envoyer le lien pour l’ordinateur', ph_mail_s: 'Mon album Noustalgie', ph_mail_b: 'Pour continuer mon album sur ordinateur\u00a0: https://noustalgie.fr/#app', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
   undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
@@ -5876,7 +5878,7 @@ fr: {
   tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 10 à 12 jours après la commande.', tr_busy: 'Recherche…',
 },
 en: {
-  ph_prep: 'Preparing your photos…', ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your phone did not send any photo. This happens when photos are stored in iCloud (“Optimize Storage”) and the iPhone lacks the space or connection to download them.', ph_help_1: 'Free up some space: Settings › General › iPhone Storage.', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
+  ph_prep: 'Preparing your photos…', ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your iPhone could not prepare the photos you chose: this mostly happens when it is short on storage, or when the photos are in iCloud (“Optimize Storage”) and it cannot download them.', ph_help_n: '{0} of {1} photo(s) could not be sent.', ph_help_0: 'No photo arrived from your iPhone.', ph_help_4: 'Add them in several goes, 5 to 10 at a time: your iPhone needs far less space.', ph_help_1: 'Free up space: Photos › Albums › Recently Deleted › Delete All, or Settings › General › iPhone Storage.', ph_retry_few: 'Try again with fewer photos', ph_mail: 'Email me the link for my computer', ph_mail_s: 'My Noustalgie album', ph_mail_b: 'To continue my album on a computer: https://noustalgie.fr/#app', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
   undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
@@ -5904,7 +5906,7 @@ en: {
   tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 10 to 12 days after ordering.', tr_busy: 'Searching…',
 },
 de: {
-  ph_prep: 'Eure Fotos werden vorbereitet…', ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer Telefon hat kein Foto gesendet. Das passiert, wenn Fotos in iCloud liegen („Speicher optimieren“) und dem iPhone Platz oder Verbindung zum Laden fehlt.', ph_help_1: 'Etwas Speicher freigeben: Einstellungen › Allgemein › iPhone-Speicher.', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
+  ph_prep: 'Eure Fotos werden vorbereitet…', ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer iPhone konnte die ausgewählten Fotos nicht vorbereiten: Das passiert vor allem, wenn der Speicher knapp ist, oder wenn die Fotos in iCloud liegen („Speicher optimieren“) und es sie nicht laden kann.', ph_help_n: '{0} von {1} Foto(s) konnten nicht übertragen werden.', ph_help_0: 'Von eurem iPhone ist kein Foto angekommen.', ph_help_4: 'Fügt sie in mehreren Durchgängen hinzu, 5 bis 10 auf einmal: Das iPhone braucht dann viel weniger Platz.', ph_help_1: 'Speicher freigeben: Fotos › Alben › Zuletzt gelöscht › Alle löschen, oder Einstellungen › Allgemein › iPhone-Speicher.', ph_retry_few: 'Mit weniger Fotos erneut versuchen', ph_mail: 'Link für den Computer per E-Mail senden', ph_mail_s: 'Unser Noustalgie-Album', ph_mail_b: 'Um unser Album am Computer fortzusetzen: https://noustalgie.fr/#app', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
   undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
@@ -5932,7 +5934,7 @@ de: {
   tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 10 bis 12 Tage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
-  ph_prep: 'Preparando tus fotos…', ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu teléfono no envió ninguna foto. Ocurre cuando las fotos están en iCloud («Optimizar almacenamiento») y al iPhone le falta espacio o conexión para descargarlas.', ph_help_1: 'Libera algo de espacio: Ajustes › General › Almacenamiento del iPhone.', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
+  ph_prep: 'Preparando tus fotos…', ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu iPhone no pudo preparar las fotos elegidas: pasa sobre todo cuando le falta espacio de almacenamiento, o cuando las fotos están en iCloud («Optimizar almacenamiento») y no puede descargarlas.', ph_help_n: 'No se pudieron enviar {0} de {1} foto(s).', ph_help_0: 'No ha llegado ninguna foto de tu iPhone.', ph_help_4: 'Añádelas en varias veces, de 5 a 10 cada vez: el iPhone necesita mucho menos espacio.', ph_help_1: 'Libera espacio: Fotos › Álbumes › Eliminado › Eliminar todo, o Ajustes › General › Almacenamiento del iPhone.', ph_retry_few: 'Reintentar con menos fotos', ph_mail: 'Enviarme el enlace para el ordenador', ph_mail_s: 'Mi álbum Noustalgie', ph_mail_b: 'Para continuar mi álbum en el ordenador: https://noustalgie.fr/#app', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
   undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
@@ -5960,7 +5962,7 @@ es: {
   tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 10 a 12 días tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
-  ph_prep: 'A preparar as tuas fotos…', ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu telemóvel não enviou nenhuma foto. Acontece quando as fotos estão no iCloud («Otimizar armazenamento») e o iPhone não tem espaço ou ligação para as descarregar.', ph_help_1: 'Liberta algum espaço: Definições › Geral › Armazenamento do iPhone.', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
+  ph_prep: 'A preparar as tuas fotos…', ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu iPhone não conseguiu preparar as fotos escolhidas: acontece sobretudo quando falta espaço de armazenamento, ou quando as fotos estão no iCloud («Otimizar armazenamento») e não as consegue descarregar.', ph_help_n: 'Não foi possível enviar {0} de {1} foto(s).', ph_help_0: 'Não chegou nenhuma foto do teu iPhone.', ph_help_4: 'Adiciona-as em várias vezes, 5 a 10 de cada vez: o iPhone precisa de muito menos espaço.', ph_help_1: 'Liberta espaço: Fotografias › Álbuns › Apagados › Apagar tudo, ou Definições › Geral › Armazenamento do iPhone.', ph_retry_few: 'Tentar de novo com menos fotos', ph_mail: 'Enviar-me a ligação para o computador', ph_mail_s: 'O meu álbum Noustalgie', ph_mail_b: 'Para continuar o meu álbum no computador: https://noustalgie.fr/#app', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
   undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
@@ -6065,16 +6067,33 @@ function pickerBack(why) {
     pickerAt = 0; try { sessionStorage.removeItem('nst_picker'); } catch (e) {}
     if (!batch.total) hideUploadLoader();
     nlog('retour du sélecteur (' + why + ') : aucune photo reçue d\'iOS');
-    if (cancelled) toast(NA.t('ph_cancel'), 9000); else showPickHelp();
+    // annulée après une longue sélection : sans doute des photos choisies que l'iPhone n'a pas pu préparer
+    if (cancelled && Date.now() - t0 < 9000) toast(NA.t('ph_cancel'), 9000); else showPickHelp();
   }, cancelled ? 1200 : 25000);                                    // sans annulation, l'iPhone prépare peut-être encore les photos
 }
-function showPickHelp() {
+// Dernier champ photo ouvert (questionnaire ou éditeur), pour le rouvrir depuis la fenêtre d'aide
+let lastInput = null;
+document.addEventListener('click', e => { if (e.target && e.target.type === 'file') lastInput = e.target; }, true);
+// Photos non transmises (stockage plein, originaux restés sur iCloud) : n photos sur total, ou rien du tout
+function showPickHelp(n, total) {
   if (document.getElementById('nstPickHelp')) return;
   const m = document.createElement('div'); m.id = 'nstPickHelp'; m.className = 'nst-pickhelp'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
-  m.innerHTML = `<div class="nst-ph-box"><h3>${NA.t('ph_help_t')}</h3><p>${NA.t('ph_help_p')}</p><ul><li>${NA.t('ph_help_1')}</li><li>${NA.t('ph_help_2')}</li><li>${NA.t('ph_help_3')}</li></ul><button type="button">${NA.t('coach_ok')}</button></div>`;
+  const mail = 'mailto:?subject=' + encodeURIComponent(NA.t('ph_mail_s')) + '&body=' + encodeURIComponent(NA.t('ph_mail_b'));
+  m.innerHTML = `<div class="nst-ph-box"><h3>${NA.t('ph_help_t')}</h3><p>${n ? NA.t('ph_help_n', n, total) : NA.t('ph_help_0')} ${NA.t('ph_help_p')}</p>`
+    + `<ul>${['ph_help_4', 'ph_help_1', 'ph_help_2', 'ph_help_3'].map(k => `<li>${NA.t(k)}</li>`).join('')}</ul>`
+    + `<button type="button" data-act="retry">${NA.t('ph_retry_few')}</button><a class="nst-ph-mail" href="${mail}">${NA.t('ph_mail')}</a>`
+    + `<button type="button" class="nst-ph-x" data-act="close">${NA.t('close')}</button></div>`;
   document.body.appendChild(m);
   const close = () => m.remove();
-  m.addEventListener('click', e => { if (e.target === m || e.target.closest('button')) close(); });
+  m.addEventListener('click', e => {
+    if (e.target.closest('.nst-ph-mail')) return void setTimeout(close, 400);       // laisser partir le lien mailto avant de fermer
+    if (e.target.closest('[data-act=retry]')) {                                      // nouvel essai : le sélecteur se rouvre tout de suite
+      close(); const f = lastInput || document.querySelector('#app input[type=file]');
+      if (f) { f.value = ''; if (NA.pickerOpened) NA.pickerOpened(); f.click(); }
+      return;
+    }
+    if (e.target === m || e.target.closest('[data-act=close]')) close();
+  });
 }
 document.addEventListener('visibilitychange', () => pickerBack('retour'));
 window.addEventListener('focus', () => pickerBack('focus'));
@@ -6216,7 +6235,8 @@ function pump() {
     if (typeof hideUploadLoader === 'function') hideUploadLoader();
     if (typeof renderPhotos === 'function') renderPhotos();
     nlog('vignettes : ' + (batch.total - failed.length) + '/' + batch.total + ' photo(s) ajoutée(s)');
-    if (failed.length) toast(NA.t('ph_fail', failed.length), 9000);
+    // photos illisibles (copie impossible) ou aucune photo lisible : même cause côté iPhone, on l'explique au lieu d'un simple bandeau
+    if (failed.length) { if (failed.length === batch.total || failed.some(p => p.illisible)) showPickHelp(failed.length, batch.total); else toast(NA.t('ph_fail', failed.length), 9000); }
     batch = { total: 0, done: 0, items: [] };
   })().finally(() => { pumping = null; if (Q.length) pump(); else pump2(); });
   return pumping;
@@ -6251,8 +6271,11 @@ window.addPhotos = function (files) {
   if (sig && sig === lastSig && Date.now() - lastAt < 2500) return NA.photosReady();   // même sélection signalée deux fois (change + input)
   lastSig = sig; lastAt = Date.now();
   nlog('sélection : ' + all.length + ' fichier(s) · ' + [...new Set(all.map(f => f.type || 'sans type'))].join(', ') + ' · ' + Math.round(all.reduce((s, f) => s + (f.size || 0), 0) / 1048576) + ' Mo');
-  const list = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
-  if (!list.length) { if (!batch.total) hideUploadLoader(); if (all.length) toast(NA.t('ph_none')); return NA.photosReady(); }
+  const images = all.filter(f => (f.type || '').startsWith('image/') || EXT_OK.test(f.name || '') || !f.type);
+  // fichier vide ou de quelques octets : l'iPhone n'a pas pu préparer la photo (stockage plein, original resté sur iCloud)
+  const vides = images.filter(f => (f.size || 0) < 2048), list = images.filter(f => (f.size || 0) >= 2048);
+  if (vides.length) { nlog(vides.length + ' fichier(s) vide(s) reçu(s) d\'iOS : ' + vides.map(f => (f.size || 0) + ' o').join(', ')); showPickHelp(vides.length, images.length); }
+  if (!list.length) { if (!batch.total) hideUploadLoader(); if (all.length && !vides.length) toast(NA.t('ph_none')); return NA.photosReady(); }
   // 1) Toutes les photos apparaissent tout de suite
   const added = list.map(f => ({ name: f.name || 'photo.jpg', file: f, pending: true }));
   added.forEach(p => S.photos.push(p));
@@ -6261,7 +6284,7 @@ window.addPhotos = function (files) {
     const f = p.file;
     p.ready = f.arrayBuffer()
       .then(buf => { if (!buf.byteLength) throw new Error('vide'); p.file = new File([buf], f.name || 'photo.jpg', { type: f.type || 'image/jpeg', lastModified: f.lastModified || Date.now() }); })
-      .catch(e => nlog('lecture impossible : ' + (f.name || '?') + ' (' + ((e && (e.name || e.message)) || 'erreur') + ')'));
+      .catch(e => { p.illisible = true; nlog('lecture impossible : ' + (f.name || '?') + ' (' + ((e && (e.name || e.message)) || 'erreur') + ')'); });
   });
   NA.pages = [];                                                   // les photos ont changé : l'album sera recomposé
   batch.total += added.length; batch.items.push(...added);
