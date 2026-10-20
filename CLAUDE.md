@@ -54,6 +54,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Après « Ajouter » dans le sélecteur de photos, Safari fait convertir chaque photo en JPEG par l'iPhone avant de les transmettre : plusieurs secondes sans aucun signal, et aucun site ne peut l'éviter (`accept` n'y change rien). Ne jamais conclure « photos non transmises » tant que le navigateur n'a pas signalé d'annulation : la pastille « Préparation de vos photos… » couvre cette attente.
 - iPhone sans stockage libre (ou originaux restés sur iCloud) : iOS ne transmet rien, ou des fichiers vides ou de quelques octets (135 o). `addPhotos` écarte tout fichier de moins de 2 Ko. La fenêtre `showPickHelp` explique le problème et propose de réessayer 5 à 10 photos à la fois (le sélecteur se rouvre d'un geste), de vider « Supprimés récemment », ou de recevoir le lien par email pour continuer sur ordinateur. Aucun site ne peut forcer l'iPhone à préparer une photo sans place libre.
 - Livre 3D (`NA.book3d`) dans un élément collé (`position: sticky`, carte « Votre livre » de l'aperçu en direct) : sur Mac, le point de fuite de la `perspective` reste là où l'élément était avant de se coller, et le livre se cisaille en descendant. Aucun moteur Linux ne le reproduit (Chromium, Firefox, WebKitGTK). Dans un élément collé, pas de perspective (`.nst-live .b3d{perspective:none}`), et jamais `perspective()` dans `transform` : WebKit n'affiche plus le livre du tout.
+- Fond fixe en `z-index:-1` (pseudo-élément de `body`) : il disparaît si `body` a un fond, qui se peint par-dessus. La couleur va sur `html`, `body` reste transparent. Pour juger un fond fixe, capturer écran par écran : une capture `full_page` étire l'élément `position:fixed` sur toute la hauteur de la page et ne montre plus la photo.
 
 ## Référencement (SEO)
 
@@ -66,6 +67,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 
 - Titres : Playfair Display (comme les albums). Interface : Hanken Grotesk. Le logo du menu reste en Times New Roman gras.
 - Un seul accent : l'encre `#1c1a18`. Gris chauds `#5f5a54` / `#e4dfd7`. Pas de nouvelle couleur sans accord.
+- Fond du site (choix de Gabin) : le couple dans la montagne, flouté dans le fichier même (`/img/fond-site.jpg`, 19 Ko) et voilé, fixe derrière tout le contenu (`html body::before`). Les textes gris posés directement sur la photo passent en `#4a4540` (contraste AA mesuré sur l'image), ceux des cartes blanches gardent `#5f5a54`. Les guides et les pages légales (`guides.css`) restent blancs.
 - Formes : boutons pilule, champs 12 px, cartes 20 px, livres et pages à angles vifs.
 - Pas de tiret cadratin (—) dans les textes visibles, pas d'étiquette en capitales au-dessus de chaque titre.
 - Skills de design dans `.claude/skills/` : `design-taste-frontend` et `redesign-existing-projects` (Taste Skill, licence MIT). Les lire avant tout travail visuel.

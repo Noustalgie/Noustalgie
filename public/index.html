@@ -1714,6 +1714,18 @@ html body #app .mq-ch button[aria-pressed="true"]{background:var(--v6-ink);borde
 /* Aperçu en direct : la carte reste collée en haut de l'écran. Sur Mac, le point de fuite du livre restait là où la carte était
    avant de se coller (livre cisaillé en descendant) : pas de perspective ici. Une perspective dans transform fait disparaître le livre dans WebKit. */
 .nst-live .b3d{perspective:none;}
+
+/* ═══ Fond du site (choix de Gabin) : le couple dans la montagne, flouté dans le fichier même et voilé, fixe derrière tout le contenu ═══
+   Voile mesuré sur l'image : les textes gris posés sur la photo passent en #4a4540 (contraste AA partout, téléphone compris). */
+html{background:#DCDBD6;}
+html body{background:transparent!important;}   /* un fond sur body recouvrirait la photo (z-index -1) */
+html body::before{content:"";position:fixed;left:0;right:0;top:0;height:100vh;height:100lvh;z-index:-1;pointer-events:none;
+  background:radial-gradient(70% 60% at 100% 0%,rgba(250,249,246,.35),rgba(250,249,246,0)),linear-gradient(rgba(250,249,246,.55),rgba(250,249,246,.62) 55%,rgba(250,249,246,.76)),url(/img/fond-site.jpg) center 75%/cover no-repeat;}
+html body .ed-wrap,html body .nst-how,html body #app,html body #faq,html body footer{background:transparent!important;}
+html body nav.ed-nav{background:rgba(250,249,246,.7)!important;}
+html body #exemples{background:rgba(255,255,255,.3)!important;}
+html body .ed-hero-img.has-demo,html body #nstDemo{background:transparent!important;}
+html body :is(.ed-lead,.nst-demo-cap span,.nst-fr p,.nst-fr-facts,.nst-70-p,.nst-70-n,.nst-70 figcaption,#exemples p,.nst-som-n,.nst-som-t,.ed-note,#app .eyebrow,#app [data-i18n="app_sub"],.mob-prog-count,.nst-eb-lbl,.nst-th>span){color:#4a4540!important;}
 </style>
 <script type="application/ld+json">
 {
