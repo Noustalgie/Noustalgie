@@ -63,6 +63,9 @@ module.exports = async (req, res) => {
       const ref = `album-${new Date().toISOString().slice(0, 10)}-${crypto.randomBytes(5).toString('hex')}`;
       const out = await pdfshift({ ...base, format, filename: ref + (K === 'full' ? '' : '-' + K) + '.pdf', wait_for: 'nstReady' }, KEY);
       let j = null; try { j = JSON.parse(out.body.toString()); } catch (e) {}
+      // PDF au-delà de la limite de PDFShift : la taille réelle permet au site de relancer avec des photos plus légères
+      const lourd = out.status === 400 && /document is ([\d.]+) ?Mb/i.exec(out.body.toString());
+      if (lourd) { console.error('generate-pdf: PDF trop lourd,', lourd[1], 'Mo'); return res.status(413).json({ error: 'too_big', sizeMb: parseFloat(lourd[1]) }); }
       if (out.status !== 200 || !j || !j.url) throw new Error(`PDFShift ${out.status}: ${out.body.toString().slice(0, 300)}`);
       // Copie durable chez nous (30 jours, cf. cron cleanup). Si ça échoue, le lien PDFShift reste valable.
       const copy = await uploadRemote({ url: j.url, resourceType: 'raw', folder: 'noustalgie/pdf', publicId: ref + (K === 'full' ? '' : '-' + K) + '.pdf' });

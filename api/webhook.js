@@ -165,7 +165,9 @@ module.exports = async (req, res) => {
 
   let event;
   try { event = JSON.parse(rawBody); } catch (e) { return res.status(400).send('Invalid JSON'); }
-  if (event.type !== 'checkout.session.completed') return res.status(200).json({ received: true, ignored: event.type });
+  // Paiement immédiat (carte, Apple Pay, PayPal, Klarna…) : « completed » déjà payé. Paiement confirmé plus tard
+  // (prélèvement SEPA…) : « completed » non payé, ignoré, puis « async_payment_succeeded » une fois l'argent reçu.
+  if (event.type !== 'checkout.session.completed' && event.type !== 'checkout.session.async_payment_succeeded') return res.status(200).json({ received: true, ignored: event.type });
 
   const session = event.data.object;
   if (session.payment_status !== 'paid') return res.status(200).json({ received: true, ignored: 'unpaid' });

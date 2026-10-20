@@ -4608,9 +4608,12 @@ const themeKey = () => CTX.theme || NA.theme;
 const theme = () => THEMES[themeKey()] || THEMES.galerie;
 const photos = () => CTX.photos || (typeof S !== 'undefined' && S.photos) || [];
 
+// Impression : PDFShift refuse un PDF de plus de 15 Mo. PRINT.area cumule la surface des photos imprimées pour choisir
+// avant l'envoi PRINT.scale, qui allège la définition des photos des gros albums (cf. generateAlbumPDF).
+const PRINT = { scale: 1, area: 0 };
 function printSrc(p, cssW, maxW) {
   if (p.pid && p.cloud) {
-    const w = clamp(Math.ceil(cssW / PX * 2480), 600, maxW || 2480); // 300 dpi (limité à la résolution de la photo ; double page : jusqu'à 4960 px)
+    const w = clamp(Math.ceil(cssW / PX * 2480 * PRINT.scale), 600, maxW || 2480); // 300 dpi (limité à la résolution de la photo ; double page : jusqu'à 4960 px)
     return `https://res.cloudinary.com/${p.cloud}/image/upload/c_limit,w_${w},q_86,f_jpg/${p.pid}`;
   }
   return p.full || p.data;   // (les photos sont envoyées en HD avant l'impression ; ceci n'est qu'un secours)
@@ -4678,13 +4681,17 @@ function slot(pg, i, x, y, w, h, o = {}) {
     const z = s.z || 1, fx = s.x != null ? s.x : ap.x, fy = s.y != null ? s.y : ap.y;
     const filt = [T.filter, FILTERS[s.f] || ''].filter(Boolean).join(' ');
     const src = CTX.print ? printSrc(p, w * z, o.hd ? 4960 : 2480) : (CTX.thumb && p.thumb ? p.thumb : p.data);
-    inner = `<img src="${src}" alt="" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${fx}% ${fy}%;transform:scale(${z});transform-origin:${fx}% ${fy}%;${filt ? `filter:${filt};` : ''}"/>`;
+    // Impression : un filtre CSS ou le grain obligent Chrome à réenregistrer la photo sans compression (PDF de 40 à 70 Mo) ;
+    // data-fx la fait redessiner une fois dans un JPEG, mêmes filtre et grain, avant le PDF (nstBake)
+    const cuire = CTX.print && (filt || T.grain);
+    if (CTX.print) PRINT.area += (w - 2 * b) * (h - 2 * b) * (cuire ? 1.1 : 1) * (o.hd ? 0.5 : 1);   // double page : une photo pour deux pages
+    inner = `<img src="${src}" alt="" draggable="false"${cuire ? ` data-fx="${filt}" data-g="${T.grain ? 1 : 0}" data-x="${fx}" data-y="${fy}" data-z="${z}"` : ''} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${fx}% ${fy}%;transform:scale(${z});transform-origin:${fx}% ${fy}%;${filt ? `filter:${filt};` : ''}"/>`;
   } else {
     inner = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:${T.muted};font:14px ${T.ui};">+</div>`;
   }
   const frame = b ? `background:${T.card || '#fff'};padding:${b}px;box-sizing:border-box;${T.round ? `border-radius:${T.round}px;` : ''}` : `background:${T.rule};`;
-  const grain = T.grain && p && !CTX.thumb ? `<div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 56%,rgba(18,12,6,.30) 100%);"></div>`
-    + `<div style="position:absolute;inset:0;pointer-events:none;background:${GRAIN} 0 0/170px 170px;mix-blend-mode:overlay;opacity:.85;"></div>` : '';
+  const grain = T.grain && p && !CTX.thumb ? `<div class="nst-grain" style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 56%,rgba(18,12,6,.30) 100%);"></div>`
+    + `<div class="nst-grain nst-grain-n" style="position:absolute;inset:0;pointer-events:none;background:${GRAIN} 0 0/170px 170px;mix-blend-mode:overlay;opacity:.85;"></div>` : '';
   return `<div class="nst-slot" data-slot="${i}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;${frame}">`
        + `<div style="position:relative;width:100%;height:100%;overflow:hidden;">${inner}${grain}</div></div>`;
 }
@@ -5485,7 +5492,9 @@ function renderPage(pg, opts = {}) {
   let html;
   try { html = Ly.render(pg, T); if (T.mast && FOLIO_PH.has(pg.layout)) html += folio(pg, MT()); } catch (e) { console.error('render', pg.layout, e); html = ''; }
   CTX = prev;
-  return `<div class="nst-canvas" style="position:relative;width:${PX}px;height:${PX}px;overflow:hidden;background:${T.paper};${T.paperTex ? `background-image:${PAPER};` : ''}color:${T.ink};">${html}</div>`;
+  // Impression : le bruit SVG du papier serait refait en grande image sur chaque page ; une tuile commune le remplace (nstBake)
+  const tex = !T.paperTex ? '' : opts.print ? `background-image:${PAPER.slice(0, PAPER.indexOf(',url('))},var(--nst-paper,none);background-size:auto,240px 240px;` : `background-image:${PAPER};`;
+  return `<div class="nst-canvas" style="position:relative;width:${PX}px;height:${PX}px;overflow:hidden;background:${T.paper};${tex}color:${T.ink};">${html}</div>`;
 }
 
 /* ── Planificateur ─────────────────────────────────────────────── */
@@ -5736,6 +5745,7 @@ Object.assign(window.NA, {
   PX, THEMES, LAYOUTS, FILTERS, PHOTO_LAYOUTS, theme: window.NA.theme || 'magazine', pages: window.NA.pages || [], cur: 0,
   renderPage, plan: planMagazine, planClassic: plan, magLabel: lm, minPhotos, photoPageCount, esc, lab, autoPos, cropCost, pickLayout,
   spreadOf, pairOf, makeSpread, unmakeSpread, syncSpread, fixSpreads,
+  print: PRINT, paperTile: PAPER.slice(PAPER.indexOf(',url(') + 5, -1),
 });
 })();
 
@@ -7126,10 +7136,71 @@ async function uploadPhotos(onProgress, all) {
   }
   await Promise.all([worker(), worker(), worker(), worker()]);
 }
-const READY = '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){window.__r=true})});function nstReady(){return window.__r}<\/script>';
+/* Exécuté dans le document d'impression (Chrome de PDFShift), avant le PDF. Chrome réenregistre sans compression toute photo
+   à filtre CSS ou à grain fondu : chacune est redessinée une fois dans un JPEG, mêmes filtre, vignette et grain, recadrage compris.
+   Le bruit du papier devient une tuile commune. En cas d'échec (CORS, décodage), la photo garde son filtre CSS, comme avant.
+   Sans dépendance extérieure : la fonction est recopiée telle quelle dans le document. */
+function nstBake(done) {
+  var K0 = 2480 / 794, S = window.__nstScale || 1, fini = false;
+  var end = function () { if (!fini) { fini = true; done(); } };
+  setTimeout(end, 25000);
+  var load = function (url, cors) { return new Promise(function (ok, ko) { var im = new Image(); if (cors) im.crossOrigin = 'anonymous'; im.onload = function () { ok(im); }; im.onerror = ko; im.src = url; }); };
+  var jpeg = function (c) { return new Promise(function (ok, ko) { c.toBlob(function (b) { if (b) ok(b); else ko(new Error('toBlob')); }, 'image/jpeg', 0.86); }); };
+  var one = function (img) {
+    var box = img.parentElement, W = box.offsetWidth, H = box.offsetHeight, d = img.dataset;
+    var gr = d.g === '1' ? box.querySelector('.nst-grain-n') : null;
+    return load(img.currentSrc || img.src, true).then(function (src) {
+      var z = +d.z || 1, fx = +d.x / 100, fy = +d.y / 100, nw = src.naturalWidth, nh = src.naturalHeight;
+      var s = Math.max(W / nw, H / nh), dw = nw * s * z, dh = nh * s * z, ox = W * fx, oy = H * fy;
+      var l = ox + z * ((W - nw * s) * fx - ox), t = oy + z * ((H - nh * s) * fy - oy);   // object-fit:cover + object-position, puis scale(z) autour de l'origine
+      var K = Math.max(1, Math.min(K0 * S, 1 / (s * z)));                               // jamais plus fin que la photo elle-même
+      var c = document.createElement('canvas'), cw = c.width = Math.round(W * K), ch = c.height = Math.round(H * K), g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, cw, ch);
+      if (d.fx) g.filter = d.fx;
+      g.drawImage(src, l * K, t * K, dw * K, dh * K);
+      g.filter = 'none';
+      if (!gr) return jpeg(c);
+      // vignette : radial-gradient(ellipse at 50% 45%, transparent 56%, rgba(18,12,6,.30) 100%), taille farthest-corner
+      var cx = cw / 2, cy = ch * 0.45, k = Math.min(cx, cw - cx) / Math.min(cy, ch - cy);
+      var ry = Math.sqrt(Math.pow(Math.max(cx, cw - cx) / k, 2) + Math.pow(Math.max(cy, ch - cy), 2)), rx = k * ry;
+      g.save(); g.translate(cx, cy); g.scale(rx / ry, 1);
+      var v = g.createRadialGradient(0, 0, 0, 0, 0, ry); v.addColorStop(0.56, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(18,12,6,.30)');
+      g.fillStyle = v; g.fillRect(-cx * ry / rx, -cy, cw * ry / rx, ch); g.restore();
+      // grain : tuile SVG de 170 px fondue en « overlay » à 85 %
+      var m = /url\(["']?(.*?)["']?\)$/.exec(getComputedStyle(gr).backgroundImage.split(', ')[0]);
+      return load(m[1], false).then(function (n) {
+        var T = Math.max(1, Math.round(170 * K)), tc = document.createElement('canvas'); tc.width = tc.height = T; tc.getContext('2d').drawImage(n, 0, 0, T, T);
+        g.globalCompositeOperation = 'overlay'; g.globalAlpha = 0.85; g.fillStyle = g.createPattern(tc, 'repeat'); g.fillRect(0, 0, cw, ch);
+        return jpeg(c);
+      });
+    }).then(function (b) {
+      return new Promise(function (ok) {
+        img.onload = img.onerror = function () { ok(); };
+        img.style.filter = 'none'; img.style.objectFit = 'fill'; img.style.transform = 'none';
+        img.src = URL.createObjectURL(b);
+        [].slice.call(box.querySelectorAll('.nst-grain')).forEach(function (e) { e.remove(); });
+      });
+    }).catch(function () {});
+  };
+  var jobs = [], imgs = [].slice.call(document.querySelectorAll('img[data-fx]'));
+  for (var w = 0; w < 3; w++) jobs.push((function suite() { var im = imgs.shift(); return im ? one(im).then(suite) : Promise.resolve(); })());
+  var pm = document.querySelector('meta[name="nst-paper"]');
+  if (pm) jobs.push(load(pm.content, false).then(function (n) {
+    var c = document.createElement('canvas'); c.width = c.height = 480; c.getContext('2d').drawImage(n, 0, 0, 480, 480);
+    return new Promise(function (ok) { c.toBlob(function (b) {
+      if (!b) return ok();
+      var u = URL.createObjectURL(b); document.documentElement.style.setProperty('--nst-paper', 'url(' + u + ')');
+      load(u, false).then(ok, ok);
+    }, 'image/png'); });
+  }).catch(function () {}));
+  Promise.all(jobs).then(function () { requestAnimationFrame(function () { requestAnimationFrame(end); }); });
+}
+const READY = '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){(' + nstBake.toString() + ')(function(){window.__r=true})})});function nstReady(){return window.__r}<\/script>';
 const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Pinyon+Script&family=Homemade+Apple&family=Special+Elite&family=Caprasimo&family=Jost:wght@400;500;600&family=Yellowtail&display=block" rel="stylesheet"/>';
 function docHtml(body, widthMm) {
   return '<!DOCTYPE html><html><head><meta charset="UTF-8"/>' + FONTS
+    + ((NA.THEMES[NA.theme] || {}).paperTex ? '<meta name="nst-paper" content="' + NA.paperTile + '"/>' : '')
+    + '<script>window.__nstScale=' + NA.print.scale + '<\/script>'
     + '<style>@page{size:' + widthMm + 'mm 210mm;margin:0}*{margin:0;padding:0;box-sizing:border-box}html,body{width:' + widthMm + 'mm}.page{width:' + widthMm + 'mm;height:210mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}.nst-canvas{transform:scale(' + (793.7 / NA.PX) + ');transform-origin:0 0}.cv{position:absolute;top:0;width:210mm;height:210mm;overflow:hidden}</style>'
     + READY + '</head><body>' + body + '</body></html>';
 }
@@ -7164,8 +7235,23 @@ window.generateAlbumPDF = async function (onStep, opts) {
   if (opts.country && n - 2 >= 24) {   // Prodigi : 24 pages intérieures minimum pour le format avec tranche
     try { const s = await fetch('/api/spine', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pages: n, country: opts.country }) }).then(r => r.json()); spineMm = s && s.widthMm > 0 ? s.widthMm : null; } catch (e) {}
   }
-  const jobs = [gen(printHtml())];
-  if (spineMm) jobs.push(gen(coverHtml(spineMm), { kind: 'cover', albumPages: n, spineMm }), gen(innerHtml(), { kind: 'inner', albumPages: n }));
+  // PDFShift refuse un PDF de plus de 15 Mo : l'échelle des photos part de la surface imprimée (≈ 0,2 octet par pixel à 300 dpi,
+  // mesuré sur de vraies photos en JPEG q86 ; 12 Mo visés), puis se corrige d'après la taille réelle renvoyée en cas de refus
+  const P = NA.print;
+  P.scale = 1; P.area = 0; printHtml();
+  const s0 = Math.min(1, Math.sqrt(12e6 / Math.max(1, P.area * Math.pow(2480 / NA.PX, 2) * 0.2)));
+  const doc = (make, s) => { P.scale = s; try { return make(); } finally { P.scale = 1; } };
+  const tries = async (make, extra) => {
+    let s = s0, r = {};
+    for (let i = 0; i < 3; i++) {
+      r = await gen(doc(make, s), extra);
+      if (!r || r.error !== 'too_big' || !(r.sizeMb > 0)) break;
+      s *= Math.min(0.85, Math.sqrt(11 / r.sizeMb));
+    }
+    return r;
+  };
+  const jobs = [tries(printHtml)];
+  if (spineMm) jobs.push(tries(() => coverHtml(spineMm), { kind: 'cover', albumPages: n, spineMm }), tries(innerHtml, { kind: 'inner', albumPages: n }));
   const [full, cover, inner] = await Promise.all(jobs);
   if (!full || !full.url || !full.proof) throw new Error((full && full.error) || 'PDF');
   const spine = cover && cover.url && cover.proof && inner && inner.url && inner.proof
@@ -7420,8 +7506,8 @@ window.processPayment = async function () {
 
 /* ── À compléter par Gabin : chaque ligne vide est simplement masquée ── */
 const CFG = {
-  maj: '28 septembre 2026',
-  telephone: '',                 // obligatoire (LCEN) : ex. '06 12 34 56 78'
+  maj: '20 octobre 2026',
+  telephone: '06 85 91 28 28',   // obligatoire (LCEN)
   rcs: '',                       // ex. 'RCS Lille Métropole 100 004 738' si immatriculé
   mediateur: { nom: '', site: '', adresse: '' }, // obligatoire (Code conso, L616-1)
 };

@@ -112,8 +112,9 @@ module.exports = async (req, res) => {
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
     names: cut(names, 200), style: cut(style, 100), pdf_url: cut(pdfUrl, 480), format: fmt, price: priceStr, promo: appliedPromo,
   };
+  // Moyens de paiement : ceux activés dans le tableau de bord Stripe (carte, Apple Pay, Google Pay, PayPal, paiement en plusieurs
+  // fois Klarna…), que Stripe filtre selon le montant et le pays. Un paiement confirmé plus tard passe par async_payment_succeeded (webhook).
   const params = {
-    'payment_method_types[]': 'card',
     'line_items[0][price_data][currency]': 'eur',
     'line_items[0][price_data][product_data][name]': `Album Noustalgie · ${pagesNum} pages`,
     'line_items[0][price_data][product_data][description]': `${fmt === 'pdf' ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide, livraison incluse'}${names ? ' · ' + cut(names, 120) : ''}`,
