@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8535 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8547 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -8,13 +8,13 @@ Générée automatiquement (8535 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 22-33 : <script type="application/ld+json"> (0 Ko)
 - lignes 34-169 : <script type="application/ld+json"> (4 Ko)
 - lignes 172-188 : <script> (1 Ko)
-- lignes 189-1717 : <style> (129 Ko)
-- lignes 1718-1737 : <script type="application/ld+json"> (1 Ko)
-- lignes 1738-1825 : <script type="application/ld+json"> (4 Ko)
-- lignes 2367-4531 : <script> (182 Ko)
-- lignes 4532-5847 : <script> (121 Ko)
-- lignes 5848-8509 : <script> (226 Ko)
-- lignes 8510-8532 : <script> (1 Ko)
+- lignes 189-1729 : <style> (131 Ko)
+- lignes 1730-1749 : <script type="application/ld+json"> (1 Ko)
+- lignes 1750-1837 : <script type="application/ld+json"> (4 Ko)
+- lignes 2379-4543 : <script> (182 Ko)
+- lignes 4544-5859 : <script> (121 Ko)
+- lignes 5860-8521 : <script> (226 Ko)
+- lignes 8522-8544 : <script> (1 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -55,390 +55,391 @@ Générée automatiquement (8535 lignes). Ouvrir une zone : Read avec offset = n
  1420  v5.5 — finitions demandées
  1446  v6 · Direction artistique « Taste Skill » (refonte en mode préservation)
  1624  galerie d'accueil : lien vers l'album d'exemple complet
- 4852  Style Magazine : le livre comme un magazine de couple
- 6023  1. Import des photos : une version écran + une version impression
- 6313  2. Génération : histoire + légendes à partir des photos
- 6625  3. Éditeur
- 7033  4. Sauvegarde locale (IndexedDB : photos comprises)
- 7068  5. Impression : photos en pleine résolution + PDF hébergé
- 7169  6. Paiement
- 8074  1. Livre 3D réutilisable
- 8171  2. Aperçu en direct pendant la création (ordinateur)
- 8205  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8307  4. Génération vivante : leurs photos se posent dans un livre
- 8333  5. Récapitulatif de commande avec LEUR couverture
- 8361  6. Finitions : apparition au défilement, page tournée
+ 1718  Fond du site (choix de Gabin) : le couple dans la montagne, flouté dans le fichier même et voilé, fixe derrièr
+ 4864  Style Magazine : le livre comme un magazine de couple
+ 6035  1. Import des photos : une version écran + une version impression
+ 6325  2. Génération : histoire + légendes à partir des photos
+ 6637  3. Éditeur
+ 7045  4. Sauvegarde locale (IndexedDB : photos comprises)
+ 7080  5. Impression : photos en pleine résolution + PDF hébergé
+ 7181  6. Paiement
+ 8086  1. Livre 3D réutilisable
+ 8183  2. Aperçu en direct pendant la création (ordinateur)
+ 8217  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8319  4. Génération vivante : leurs photos se posent dans un livre
+ 8345  5. Récapitulatif de commande avec LEUR couverture
+ 8373  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
- 1853  <header>
- 1854  <nav class="ed-nav">
- 1876  <main id="main" tabindex="-1">
- 1878  <section class="ed-hero">
- 1887  <div class="nst-demo" id="nstDemo"
- 1893  <section class="nst-how nst-frise" id="how">
- 1907  <section class="nst-70" id="annees70" aria-labelledby="nst70T">
- 1929  <section class="ed-price" id="pricing">
- 1962  <section class="section app-section" id="app">
- 1989  <div class="panel active" id="panel0"
- 2074  <div class="panel" id="panel1"
- 2115  <div class="panel" id="panel2"
- 2141  <div class="panel" id="panel3"
- 2142  <div id="nstEd"
- 2169  <div class="panel" id="panel4"
- 2171  <div id="payForm"
- 2249  <section class="ed-faq-section" id="faq">
- 2297  <footer>
- 2346  <div class="legal-overlay" id="legalOverlay"
- 2352  <div class="modal-bg" id="msgModal"
+ 1865  <header>
+ 1866  <nav class="ed-nav">
+ 1888  <main id="main" tabindex="-1">
+ 1890  <section class="ed-hero">
+ 1899  <div class="nst-demo" id="nstDemo"
+ 1905  <section class="nst-how nst-frise" id="how">
+ 1919  <section class="nst-70" id="annees70" aria-labelledby="nst70T">
+ 1941  <section class="ed-price" id="pricing">
+ 1974  <section class="section app-section" id="app">
+ 2001  <div class="panel active" id="panel0"
+ 2086  <div class="panel" id="panel1"
+ 2127  <div class="panel" id="panel2"
+ 2153  <div class="panel" id="panel3"
+ 2154  <div id="nstEd"
+ 2181  <div class="panel" id="panel4"
+ 2183  <div id="payForm"
+ 2261  <section class="ed-faq-section" id="faq">
+ 2309  <footer>
+ 2358  <div class="legal-overlay" id="legalOverlay"
+ 2364  <div class="modal-bg" id="msgModal"
 
 ## Dictionnaires de langue (LANGS)
 
- 2372  LANGS.fr
- 2459  LANGS.en
- 2546  LANGS.de
- 2633  LANGS.es
- 2720  LANGS.pt
+ 2384  LANGS.fr
+ 2471  LANGS.en
+ 2558  LANGS.de
+ 2645  LANGS.es
+ 2732  LANGS.pt
 
 ## Fonctions
 
   177  nstLoadLib
   181  all
- 2811  toggleLangMenu
- 2812  pickLang
- 2814  setLang
- 2853  highlightPal
- 2873  selectPricing
- 2888  onSlider
- 2901  onInAppSlider
- 2924  animNum
- 2930  toggleCmp
- 2949  saveDraft
- 2968  restoreDraft
- 2975  set
- 2983  clearDraft
- 3007  goTab
- 3046  edPickPrice
- 3052  toggleFaq
- 3053  startApp
- 3058  addPhotosFromEditor
- 3091  ensureConvertible
- 3109  detectFocalY
- 3129  showUploadLoader
- 3141  hideUploadLoader
- 3145  addPhotos
- 3153  processBatch
- 3190  getMinPhotos
- 3194  renderPhotos
- 3210  removePhoto
- 3216  openMsgModal
- 3217  closeMsgModal
- 3218  saveMsgModal
- 3223  selStyle
- 3228  log
- 3238  setProgress
- 3249  api
- 3279  runGeneration
- 3511  renderBookPreview
- 3521  pg
- 3528  _take
- 3539  pickIdx
- 3545  ph
- 3546  imgT
- 3555  img
- 3564  wantTall
- 3565  wantSquare
- 3566  wantWide
- 3971  avRender
- 4008  reapplyTexts
- 4009  avBuildThumbs
- 4022  avNext
- 4023  avPrev
- 4030  toggleEditor
- 4031  edTab
- 4032  refreshEditor
- 4033  refreshTextFields
- 4061  estRows
- 4070  liveText
- 4083  setActiveSlot
- 4084  edSelectPhoto
- 4085  updateFilter
- 4086  updateCrop
- 4087  updateZoom
- 4088  toggleBW
- 4089  applySlotEditsToDOM
- 4093  saveTextStyle
- 4094  updateTextStyle
- 4095  toggleTextStyle
- 4096  setTextSize
- 4106  applyTextStylesToDOM
- 4107  edSelectLayout
- 4108  applyEdit
- 4109  applyLayoutOverride
- 4110  applyTextLive
- 4111  resetEdit
- 4115  initCropGestures
- 4119  editorOpen
- 4120  curSlot
- 4128  snapshotPage
- 4129  undoEdit
- 4131  openFullPreview
- 4138  base64ToBlob
- 4150  fetchWithTimeout
- 4165  processPayment
- 4264  generateAlbumPDF
- 4271  compressPhotoForPdf
- 4335  generateAlbumPDF_UNUSED
- 4402  applyPromo
- 4423  selectFormat
- 4445  updateFormatPrices
- 4459  generateFinalPDF
- 4476  addPage
- 4502  openLegal
- 4503  closeLegal
- 4542  clamp
- 4588  curLang
- 4595  themeKey
- 4596  theme
- 4597  photos
- 4599  printSrc
- 4611  faceSpan
- 4614  autoPos
- 4619  fit
- 4622  L
- 4645  cropCost
- 4660  slot
- 4681  tx
- 4688  fit
- 4689  orientOf
- 4856  MT
- 4858  mix
- 4869  MONTHS
- 4873  svgHeart
- 4874  svgHeartLine
- 4875  svgCurl
- 4876  tape
- 4878  polaroid
- 4885  barcode
- 4894  heartMap
- 4906  wordGrid
- 4908  rnd
- 4934  folio
- 4950  col
- 4954  seal
- 5063  ic
- 5128  mark
- 5250  fmtCoord
- 5254  k3Line
- 5261  yearPhotos
- 5272  kmBetween
- 5277  villesT
- 5284  planMagazine
- 5366  again
- 5367  freshOr
- 5368  pick
- 5372  mk
- 5380  L
- 5470  renderPage
- 5489  tierOf
- 5490  photoPageCount
- 5491  minPhotos
- 5494  distribute
- 5510  pickLayout
- 5527  chooseLayout
- 5540  mkPage
- 5544  plan
- 5580  tag
- 5583  takePhoto
- 5654  pairOf
- 5656  relayout
- 5662  makeSpread
- 5680  unmakeSpread
- 5696  syncSpread
- 5704  fixSpreads
- 5743  loadDetector
- 5748  go
- 5758  loadImg
- 5762  saliency
- 5789  subjectFromFaces
- 5798  analyze
- 5824  analyzeAll
- 5996  t
- 6017  lang
- 6018  nPagesSel
- 6019  promo
- 6024  loadImage
- 6026  toJpeg
- 6048  was
- 6065  pickerBack
- 6081  showPickHelp
- 6090  close
- 6112  within
- 6113  decodeFile
- 6143  hdBlob
- 6153  importFile
- 6174  toast
- 6187  geom
- 6192  prepThumb
- 6198  prepFull
- 6204  dropPhoto
- 6210  tile
- 6219  pump
- 6247  pump2
- 6267  addPhotos
- 6300  renderPhotos
- 6319  browserTag
- 6320  callAI
- 6348  thumb
- 6350  coupleInfo
- 6364  mqParts
- 6369  magAnswers
- 6388  fetchCarte
- 6398  fetchVilles
- 6410  storyPrompt
- 6449  magFacts
- 6459  magazinePrompt
- 6481  cleanMag
- 6482  s
- 6494  captionPhotos
- 6516  defaultStory
- 6551  runGeneration
- 6615  showIssue
- 6628  isWide
- 6629  snap
- 6631  H
- 6632  commit
- 6633  restore
- 6634  undo
- 6635  redo
- 6636  updUndo
- 6641  visible
- 6649  mountPage
- 6654  scaleHost
- 6663  drawStage
- 6677  drawThumb
- 6681  drawStrip
- 6688  markStrip
- 6694  drawThemes
- 6699  revealStage
- 6705  drawAll
- 6706  refreshPage
- 6708  afterSlotEdit
- 6715  go
- 6716  step
- 6721  highlightSel
- 6731  drawTools
- 6781  rewrite
- 6798  swapPhoto
- 6809  movePage
- 6819  bindEditor
- 6992  openReader
- 6995  draw
- 6999  close
- 7001  next
- 7017  renderBookPreview
- 7035  idb
- 7036  idbSet
- 7037  idbGet
- 7038  idbDel
- 7039  saveLocal
- 7045  offerResume
- 7069  fullBlob
- 7087  dataUrlToBlob
- 7088  uploadPhotos
- 7090  todo
- 7096  worker
- 7119  docHtml
- 7125  printHtml
- 7126  innerHtml
- 7128  spineStyle
- 7132  spineText
- 7133  defaultSpine
- 7134  coverHtml
- 7142  generateAlbumPDF
- 7148  gen
- 7179  processPayment
- 7219  goTab
- 7246  lang
- 7256  img
- 7281  stop
- 7312  upd
- 7338  apply
- 7357  T
- 7358  nm
- 7359  renderQuiz
- 7365  mark
- 7371  save
- 7418  mail
- 7565  backLbl
- 7570  toc
- 7577  show
- 7584  openLegal
- 7592  hideLegal
- 7593  closeLegal
- 7621  cur
- 7630  paint
- 7655  lang
- 7660  applyUI
- 7667  setLang
- 7687  syncStory
- 7721  ensureStoryFor
- 7737  recompose
- 7751  addInput
- 7770  removePhoto
- 7823  saveLink
- 7845  openFromLink
- 7855  set
- 7873  trHide
- 7875  trackOverlay
- 7883  close
- 7920  ouvrir
- 7946  ekLabel
- 7957  drawEbar
- 7982  coach
- 7988  done
- 7994  goTab
- 8003  draw
- 8031  payLabel
- 8042  highlightPal
- 8047  setLang
- 8062  lang
- 8075  spineColors
- 8102  sampleCover
- 8121  auto
- 8122  build
- 8129  name
- 8155  build
- 8164  nst70
- 8184  names
- 8185  renderLive
- 8198  flowMode
- 8207  exifDate
- 8217  readAscii
- 8218  scan
- 8235  addPhotos
- 8244  remap
- 8245  applyOrder
- 8258  movePhoto
- 8261  sortByDate
- 8270  renderPhotosPlus
- 8309  startGenAnim
- 8321  tick
- 8329  stopGenAnim
- 8331  runGeneration
- 8334  renderSummary
- 8347  syncPrice
- 8357  goTab
- 8379  setLang
- 8396  lang
- 8427  applyText
- 8436  fromFrance
- 8444  fromOSM
- 8463  close
- 8464  render
- 8472  pick
- 8480  search
- 8516  etape
+ 2823  toggleLangMenu
+ 2824  pickLang
+ 2826  setLang
+ 2865  highlightPal
+ 2885  selectPricing
+ 2900  onSlider
+ 2913  onInAppSlider
+ 2936  animNum
+ 2942  toggleCmp
+ 2961  saveDraft
+ 2980  restoreDraft
+ 2987  set
+ 2995  clearDraft
+ 3019  goTab
+ 3058  edPickPrice
+ 3064  toggleFaq
+ 3065  startApp
+ 3070  addPhotosFromEditor
+ 3103  ensureConvertible
+ 3121  detectFocalY
+ 3141  showUploadLoader
+ 3153  hideUploadLoader
+ 3157  addPhotos
+ 3165  processBatch
+ 3202  getMinPhotos
+ 3206  renderPhotos
+ 3222  removePhoto
+ 3228  openMsgModal
+ 3229  closeMsgModal
+ 3230  saveMsgModal
+ 3235  selStyle
+ 3240  log
+ 3250  setProgress
+ 3261  api
+ 3291  runGeneration
+ 3523  renderBookPreview
+ 3533  pg
+ 3540  _take
+ 3551  pickIdx
+ 3557  ph
+ 3558  imgT
+ 3567  img
+ 3576  wantTall
+ 3577  wantSquare
+ 3578  wantWide
+ 3983  avRender
+ 4020  reapplyTexts
+ 4021  avBuildThumbs
+ 4034  avNext
+ 4035  avPrev
+ 4042  toggleEditor
+ 4043  edTab
+ 4044  refreshEditor
+ 4045  refreshTextFields
+ 4073  estRows
+ 4082  liveText
+ 4095  setActiveSlot
+ 4096  edSelectPhoto
+ 4097  updateFilter
+ 4098  updateCrop
+ 4099  updateZoom
+ 4100  toggleBW
+ 4101  applySlotEditsToDOM
+ 4105  saveTextStyle
+ 4106  updateTextStyle
+ 4107  toggleTextStyle
+ 4108  setTextSize
+ 4118  applyTextStylesToDOM
+ 4119  edSelectLayout
+ 4120  applyEdit
+ 4121  applyLayoutOverride
+ 4122  applyTextLive
+ 4123  resetEdit
+ 4127  initCropGestures
+ 4131  editorOpen
+ 4132  curSlot
+ 4140  snapshotPage
+ 4141  undoEdit
+ 4143  openFullPreview
+ 4150  base64ToBlob
+ 4162  fetchWithTimeout
+ 4177  processPayment
+ 4276  generateAlbumPDF
+ 4283  compressPhotoForPdf
+ 4347  generateAlbumPDF_UNUSED
+ 4414  applyPromo
+ 4435  selectFormat
+ 4457  updateFormatPrices
+ 4471  generateFinalPDF
+ 4488  addPage
+ 4514  openLegal
+ 4515  closeLegal
+ 4554  clamp
+ 4600  curLang
+ 4607  themeKey
+ 4608  theme
+ 4609  photos
+ 4611  printSrc
+ 4623  faceSpan
+ 4626  autoPos
+ 4631  fit
+ 4634  L
+ 4657  cropCost
+ 4672  slot
+ 4693  tx
+ 4700  fit
+ 4701  orientOf
+ 4868  MT
+ 4870  mix
+ 4881  MONTHS
+ 4885  svgHeart
+ 4886  svgHeartLine
+ 4887  svgCurl
+ 4888  tape
+ 4890  polaroid
+ 4897  barcode
+ 4906  heartMap
+ 4918  wordGrid
+ 4920  rnd
+ 4946  folio
+ 4962  col
+ 4966  seal
+ 5075  ic
+ 5140  mark
+ 5262  fmtCoord
+ 5266  k3Line
+ 5273  yearPhotos
+ 5284  kmBetween
+ 5289  villesT
+ 5296  planMagazine
+ 5378  again
+ 5379  freshOr
+ 5380  pick
+ 5384  mk
+ 5392  L
+ 5482  renderPage
+ 5501  tierOf
+ 5502  photoPageCount
+ 5503  minPhotos
+ 5506  distribute
+ 5522  pickLayout
+ 5539  chooseLayout
+ 5552  mkPage
+ 5556  plan
+ 5592  tag
+ 5595  takePhoto
+ 5666  pairOf
+ 5668  relayout
+ 5674  makeSpread
+ 5692  unmakeSpread
+ 5708  syncSpread
+ 5716  fixSpreads
+ 5755  loadDetector
+ 5760  go
+ 5770  loadImg
+ 5774  saliency
+ 5801  subjectFromFaces
+ 5810  analyze
+ 5836  analyzeAll
+ 6008  t
+ 6029  lang
+ 6030  nPagesSel
+ 6031  promo
+ 6036  loadImage
+ 6038  toJpeg
+ 6060  was
+ 6077  pickerBack
+ 6093  showPickHelp
+ 6102  close
+ 6124  within
+ 6125  decodeFile
+ 6155  hdBlob
+ 6165  importFile
+ 6186  toast
+ 6199  geom
+ 6204  prepThumb
+ 6210  prepFull
+ 6216  dropPhoto
+ 6222  tile
+ 6231  pump
+ 6259  pump2
+ 6279  addPhotos
+ 6312  renderPhotos
+ 6331  browserTag
+ 6332  callAI
+ 6360  thumb
+ 6362  coupleInfo
+ 6376  mqParts
+ 6381  magAnswers
+ 6400  fetchCarte
+ 6410  fetchVilles
+ 6422  storyPrompt
+ 6461  magFacts
+ 6471  magazinePrompt
+ 6493  cleanMag
+ 6494  s
+ 6506  captionPhotos
+ 6528  defaultStory
+ 6563  runGeneration
+ 6627  showIssue
+ 6640  isWide
+ 6641  snap
+ 6643  H
+ 6644  commit
+ 6645  restore
+ 6646  undo
+ 6647  redo
+ 6648  updUndo
+ 6653  visible
+ 6661  mountPage
+ 6666  scaleHost
+ 6675  drawStage
+ 6689  drawThumb
+ 6693  drawStrip
+ 6700  markStrip
+ 6706  drawThemes
+ 6711  revealStage
+ 6717  drawAll
+ 6718  refreshPage
+ 6720  afterSlotEdit
+ 6727  go
+ 6728  step
+ 6733  highlightSel
+ 6743  drawTools
+ 6793  rewrite
+ 6810  swapPhoto
+ 6821  movePage
+ 6831  bindEditor
+ 7004  openReader
+ 7007  draw
+ 7011  close
+ 7013  next
+ 7029  renderBookPreview
+ 7047  idb
+ 7048  idbSet
+ 7049  idbGet
+ 7050  idbDel
+ 7051  saveLocal
+ 7057  offerResume
+ 7081  fullBlob
+ 7099  dataUrlToBlob
+ 7100  uploadPhotos
+ 7102  todo
+ 7108  worker
+ 7131  docHtml
+ 7137  printHtml
+ 7138  innerHtml
+ 7140  spineStyle
+ 7144  spineText
+ 7145  defaultSpine
+ 7146  coverHtml
+ 7154  generateAlbumPDF
+ 7160  gen
+ 7191  processPayment
+ 7231  goTab
+ 7258  lang
+ 7268  img
+ 7293  stop
+ 7324  upd
+ 7350  apply
+ 7369  T
+ 7370  nm
+ 7371  renderQuiz
+ 7377  mark
+ 7383  save
+ 7430  mail
+ 7577  backLbl
+ 7582  toc
+ 7589  show
+ 7596  openLegal
+ 7604  hideLegal
+ 7605  closeLegal
+ 7633  cur
+ 7642  paint
+ 7667  lang
+ 7672  applyUI
+ 7679  setLang
+ 7699  syncStory
+ 7733  ensureStoryFor
+ 7749  recompose
+ 7763  addInput
+ 7782  removePhoto
+ 7835  saveLink
+ 7857  openFromLink
+ 7867  set
+ 7885  trHide
+ 7887  trackOverlay
+ 7895  close
+ 7932  ouvrir
+ 7958  ekLabel
+ 7969  drawEbar
+ 7994  coach
+ 8000  done
+ 8006  goTab
+ 8015  draw
+ 8043  payLabel
+ 8054  highlightPal
+ 8059  setLang
+ 8074  lang
+ 8087  spineColors
+ 8114  sampleCover
+ 8133  auto
+ 8134  build
+ 8141  name
+ 8167  build
+ 8176  nst70
+ 8196  names
+ 8197  renderLive
+ 8210  flowMode
+ 8219  exifDate
+ 8229  readAscii
+ 8230  scan
+ 8247  addPhotos
+ 8256  remap
+ 8257  applyOrder
+ 8270  movePhoto
+ 8273  sortByDate
+ 8282  renderPhotosPlus
+ 8321  startGenAnim
+ 8333  tick
+ 8341  stopGenAnim
+ 8343  runGeneration
+ 8346  renderSummary
+ 8359  syncPrice
+ 8369  goTab
+ 8391  setLang
+ 8408  lang
+ 8439  applyText
+ 8448  fromFrance
+ 8456  fromOSM
+ 8475  close
+ 8476  render
+ 8484  pick
+ 8492  search
+ 8528  etape
 
 ## api/
 
