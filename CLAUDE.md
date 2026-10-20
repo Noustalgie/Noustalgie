@@ -52,6 +52,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Un serveur de test sert `public/` comme racine (`rendu.serveur('public')`, page `/index.html`) : servi depuis la racine du dépôt (`/public/index.html`), les chemins `/img/...` répondent 404 et les photos du haut de page paraissent vides alors que le site va bien.
 - Ne jamais couper la sortie d'un script de rendu ou de test avec `| head` : il meurt (SIGPIPE) avant d'écrire ses fichiers et on regarde d'anciens rendus. Rediriger vers un fichier, puis `tail`.
 - Après « Ajouter » dans le sélecteur de photos, Safari fait convertir chaque photo en JPEG par l'iPhone avant de les transmettre : plusieurs secondes sans aucun signal, et aucun site ne peut l'éviter (`accept` n'y change rien). Ne jamais conclure « photos non transmises » tant que le navigateur n'a pas signalé d'annulation : la pastille « Préparation de vos photos… » couvre cette attente.
+- iPhone sans stockage libre (ou originaux restés sur iCloud) : iOS ne transmet rien, ou des fichiers vides ou de quelques octets (135 o). `addPhotos` écarte tout fichier de moins de 2 Ko. La fenêtre `showPickHelp` explique le problème et propose de réessayer 5 à 10 photos à la fois (le sélecteur se rouvre d'un geste), de vider « Supprimés récemment », ou de recevoir le lien par email pour continuer sur ordinateur. Aucun site ne peut forcer l'iPhone à préparer une photo sans place libre.
 
 ## Référencement (SEO)
 
