@@ -78,17 +78,20 @@ fenêtre : rendu Blender Cycles (lancer de rayons), puis légendes blanches cern
 Remplace `tools/mag-plats.js` (pages à plat sur fond clair), gardé pour mémoire.
 
 ```bash
-python3.11 -m venv ~/blender-venv && ~/blender-venv/bin/pip install bpy==5.0.1   # Blender en module Python (une fois)
+python3.11 -m venv ~/blender-venv && ~/blender-venv/bin/pip install bpy==5.0.1 pillow numpy   # Blender en module Python (une fois)
 python3 tools/decor.py              # textures du bois et du jute, couleurs calées sur les photos de référence → out/mag/decor/
 node tools/mag-ecran.js             # écran du téléphone de la dernière photo (accueil du site en mobile)
-~/blender-venv/bin/python tools/mag-photos.py [--only 3,4] [--draft]   # photos 2 à 14 → out/mag/photos/ (≈ 4 min chacune)
-node tools/mag-legendes.js          # carrousel final → out/mag/carrousel/01…14.jpg (+ sans-texte/)
+~/blender-venv/bin/python tools/mag-photos.py [--only 3,4] [--draft]   # photos 2 à 13 → out/mag/photos/ (≈ 4 min chacune)
+node tools/mag-legendes.js          # carrousel final → out/mag/carrousel/01…13.jpg (+ sans-texte/, + 01-copain/01-copine : autres accroches)
 ```
 
 Slide 6 : la double page paysage (photo recadrée par `cadre` dans `vitrine.json` pour garder le couple hors de la pliure).
-Slide 13 : la slide 3 en style Années 70 (même cadrage, pages de `out/mag/pages-seventies`).
-L'écran du téléphone (slide 14) prend les vraies polices du site (comme `outils/rendu.py`), sinon la couverture du haut de page est fausse.
-La slide 1 (accroche) reprend la photo `photo-champ.jpg` avec des autocollants en Lilita One et Gochi Hand
+Slide 12 : la double page de la slide 3 en style Années 70 (pages de `out/mag/pages-seventies`).
+Carrousel d'octobre 2026 (13 slides) : nouveaux angles par rapport au précédent (TikTok pénalise les images republiées),
+accroche « Idée cadeau Couple » avec l'étiquette « Pour Noël », et deux variantes pour republier le même carrousel
+(« pour ton copain », « pour ta copine »). La date de Noël de la slide 13 suit `NOEL` de `public/index.html`.
+L'écran du téléphone (slide 13) prend les vraies polices du site (comme `outils/rendu.py`), sinon la couverture du haut de page est fausse.
+La slide 1 (accroche) reprend la photo `photo-portee.jpg` (le couple de la couverture) avec des autocollants en Lilita One et Gochi Hand
 (licence OFL, `assets/fonts/LilitaOne-GochiHand-OFL.txt`). Les cadrages, l'exposition et la teinte du bois se
 règlent en tête de `tools/mag-photos.py` (`SHOTS`, `EXPO`) et de `tools/decor.py` (`WOOD_GAIN`).
 
