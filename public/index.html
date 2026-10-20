@@ -1723,8 +1723,25 @@ html body::before{content:"";position:fixed;left:0;right:0;top:0;height:100vh;he
   background:radial-gradient(70% 60% at 100% 0%,rgba(250,249,246,.35),rgba(250,249,246,0)),linear-gradient(rgba(250,249,246,.55),rgba(250,249,246,.62) 55%,rgba(250,249,246,.76)),url(/img/fond-site.jpg) center 75%/cover no-repeat;}
 html body .ed-wrap,html body .nst-how,html body #app,html body #faq,html body footer{background:transparent!important;}
 html body nav.ed-nav{background:rgba(250,249,246,.7)!important;}
+html body nav.ed-nav{top:0;}   /* l'ancienne règle nav{top:32px} (bandeau supprimé) décalait le menu et laissait une bande vide en haut */
 html body #exemples{background:rgba(255,255,255,.3)!important;}
 html body .ed-hero-img.has-demo,html body #nstDemo{background:transparent!important;}
+/* Accueil : leurs prénoms sur la couverture du haut de page (champ sous le livre) */
+.nst-try{position:relative;width:min(420px,90%);margin-top:-10px;}
+.nst-try input[type=text]{width:100%;height:50px;padding:0 58px 0 18px;border:1px solid #d9d3ca;border-radius:12px;background:rgba(255,255,255,.92);color:#1c1a18;font:500 16px 'Hanken Grotesk',sans-serif;box-shadow:0 6px 18px rgba(40,30,20,.06);transition:border-color .2s,box-shadow .2s;}
+.nst-try input[type=text]::placeholder{color:#6f6a63;font:500 16px 'Hanken Grotesk',sans-serif;font-style:normal;}
+.nst-try input[type=text]:focus{outline:none;border-color:#1c1a18;box-shadow:0 0 0 3px rgba(28,26,24,.1);}
+.nst-try-go{position:absolute;right:6px;top:6px;width:38px;height:38px;border:0;border-radius:50%;background:#1c1a18;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s;}
+.nst-try-go:hover{transform:translateX(2px);}
+.nst-try-go:focus-visible{outline:2px solid #1c1a18;outline-offset:2px;}
+html body .nst-try input[type=text]:focus-visible{outline:none!important;}   /* bordure foncée et halo suffisent, sans double contour */
+/* téléphone : le livre et le champ des prénoms remontent dans le premier écran ; « Comment ça marche » est la section suivante */
+@media (max-width:700px){html body .ed-hero .ed-btn-out{display:none!important;}html body .ed-hero-txt{padding-bottom:20px;}html body #nstDemo{padding-top:12px;}}
+.nst-try input[type=text]{margin:0;}
+/* Noël : date limite de commande (récapitulatif et tarifs), masquée après la date */
+.nst-noel[hidden]{display:none!important;}
+.nst-sum-txt .nst-noel{color:#1c1a18;font-weight:500;}
+html body #pricing .ed-note.nst-noel{margin-top:6px;color:#1c1a18!important;font-weight:500;}
 html body :is(.ed-lead,.nst-demo-cap span,.nst-fr p,.nst-fr-facts,.nst-70-p,.nst-70-n,.nst-70 figcaption,#exemples p,.nst-som-n,.nst-som-t,.ed-note,#app .eyebrow,#app [data-i18n="app_sub"],.mob-prog-count,.nst-eb-lbl,.nst-th>span){color:#4a4540!important;}
 </style>
 <script type="application/ld+json">
@@ -1897,7 +1914,7 @@ html body :is(.ed-lead,.nst-demo-cap span,.nst-fr p,.nst-fr-facts,.nst-70-p,.nst
     </div>
   </div>
   <div class="ed-hero-img"><div class="nst-demo" id="nstDemo" aria-label="Exemple d’album Noustalgie"></div>
-    <img src="/img/exemple/photo-champ.jpg" alt="Couple enlacé, photo en noir et blanc" width="900" height="900" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
+    <img src="/img/exemple/photo-portee.jpg" alt="Le marié portant la mariée dans un champ" width="900" height="900" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
     <div class="ed-hero-cap"><div class="l" data-i18n="hero_cap_l">Édition limitée</div><div class="q" data-i18n="hero_cap_q">"Notre plus belle page"</div></div>
   </div>
 </section>
@@ -8162,11 +8179,11 @@ const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').m
 
 /* ── Textes (5 langues) ── */
 Object.entries({
-  fr: { sum_free: 'Livraison offerte', sum_pdf: 'Album numérique (PDF)', sort_date: 'Trier par date de prise de vue', set_cover: 'Mettre en couverture', drag_photos: 'Glissez les photos pour changer leur ordre : la première devient la couverture.', live_title: 'Votre livre', live_sub: 'Il prend forme à mesure que vous écrivez.', live_ph: 'Vos prénoms', live_meta: '{0} pages · {1} photos', live_ded: 'Votre dédicace apparaîtra ici.', gen_title: 'Votre livre se compose', sum_title: 'Votre livre', sum_meta: '{0} pages · style {1}', sum_spec: 'Couverture rigide · 21 × 21 cm · papier photo', sum_edit: 'Revoir l’album', cover_ex: 'Exemple de couverture', cover_ex70: 'Exemple de couverture · style Années 70', th_new: 'Nouveau', covers: ['Toutes nos premières fois', 'La lumière des dimanches', 'Et devant nous, toute la vue'], sorted: 'Photos triées de la plus ancienne à la plus récente.' },
-  en: { sum_free: 'Free delivery', sum_pdf: 'Digital album (PDF)', sort_date: 'Sort by date taken', set_cover: 'Use as cover', drag_photos: 'Drag photos to change their order: the first one becomes the cover.', live_title: 'Your book', live_sub: 'It takes shape as you write.', live_ph: 'Your names', live_meta: '{0} pages · {1} photos', live_ded: 'Your dedication will appear here.', gen_title: 'Your book is coming together', sum_title: 'Your book', sum_meta: '{0} pages · {1} style', sum_spec: 'Hardcover · 21 × 21 cm · photo paper', sum_edit: 'Review the album', cover_ex: 'Example cover', cover_ex70: 'Example cover · 70s style', th_new: 'New', covers: ['All our firsts', 'The light of Sundays', 'And the whole view ahead of us'], sorted: 'Photos sorted from oldest to newest.' },
-  de: { sum_free: 'Kostenloser Versand', sum_pdf: 'Digitales Album (PDF)', sort_date: 'Nach Aufnahmedatum sortieren', set_cover: 'Als Cover verwenden', drag_photos: 'Zieht die Fotos, um die Reihenfolge zu ändern: das erste wird zum Cover.', live_title: 'Euer Buch', live_sub: 'Es nimmt Gestalt an, während ihr schreibt.', live_ph: 'Eure Vornamen', live_meta: '{0} Seiten · {1} Fotos', live_ded: 'Eure Widmung erscheint hier.', gen_title: 'Euer Buch entsteht', sum_title: 'Euer Buch', sum_meta: '{0} Seiten · Stil {1}', sum_spec: 'Hardcover · 21 × 21 cm · Fotopapier', sum_edit: 'Album ansehen', cover_ex: 'Beispiel-Cover', cover_ex70: 'Beispiel-Cover · 70er-Stil', th_new: 'Neu', covers: ['Alle unsere ersten Male', 'Das Licht der Sonntage', 'Und vor uns die ganze Aussicht'], sorted: 'Fotos vom ältesten zum neuesten sortiert.' },
-  es: { sum_free: 'Envío gratis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar por fecha de la foto', set_cover: 'Usar como portada', drag_photos: 'Arrastra las fotos para cambiar su orden: la primera será la portada.', live_title: 'Vuestro libro', live_sub: 'Toma forma mientras escribís.', live_ph: 'Vuestros nombres', live_meta: '{0} páginas · {1} fotos', live_ded: 'Vuestra dedicatoria aparecerá aquí.', gen_title: 'Vuestro libro se compone', sum_title: 'Vuestro libro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Tapa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Revisar el álbum', cover_ex: 'Ejemplo de portada', cover_ex70: 'Ejemplo de portada · estilo años 70', th_new: 'Nuevo', covers: ['Todas nuestras primeras veces', 'La luz de los domingos', 'Y ante nosotros, toda la vista'], sorted: 'Fotos ordenadas de la más antigua a la más reciente.' },
-  pt: { sum_free: 'Envio grátis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar pela data da foto', set_cover: 'Usar como capa', drag_photos: 'Arrasta as fotos para mudar a ordem: a primeira será a capa.', live_title: 'O vosso livro', live_sub: 'Ganha forma à medida que escrevem.', live_ph: 'Os vossos nomes', live_meta: '{0} páginas · {1} fotos', live_ded: 'A vossa dedicatória aparecerá aqui.', gen_title: 'O vosso livro está a ganhar forma', sum_title: 'O vosso livro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Capa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Rever o álbum', cover_ex: 'Exemplo de capa', cover_ex70: 'Exemplo de capa · estilo anos 70', th_new: 'Novo', covers: ['Todas as nossas primeiras vezes', 'A luz dos domingos', 'E à nossa frente, toda a vista'], sorted: 'Fotos ordenadas da mais antiga à mais recente.' },
+  fr: { sum_free: 'Livraison offerte', sum_pdf: 'Album numérique (PDF)', sort_date: 'Trier par date de prise de vue', set_cover: 'Mettre en couverture', drag_photos: 'Glissez les photos pour changer leur ordre : la première devient la couverture.', live_title: 'Votre livre', live_sub: 'Il prend forme à mesure que vous écrivez.', live_ph: 'Vos prénoms', live_meta: '{0} pages · {1} photos', live_ded: 'Votre dédicace apparaîtra ici.', gen_title: 'Votre livre se compose', sum_title: 'Votre livre', sum_meta: '{0} pages · style {1}', sum_spec: 'Couverture rigide · 21 × 21 cm · papier photo', sum_edit: 'Revoir l’album', cover_ex: 'Exemple de couverture', cover_ex70: 'Exemple de couverture · style Années 70', hero_try: 'Essayez avec vos deux prénoms', hero_try_go: 'Créer notre album avec ces prénoms', cover_you: 'Votre couverture', cover_you70: 'Votre couverture · style Années 70', noel: 'Livré avant Noël en France pour toute commande passée au plus tard le {0}.', th_new: 'Nouveau', covers: ['Toutes nos premières fois', 'La lumière des dimanches', 'Et devant nous, toute la vue'], sorted: 'Photos triées de la plus ancienne à la plus récente.' },
+  en: { sum_free: 'Free delivery', sum_pdf: 'Digital album (PDF)', sort_date: 'Sort by date taken', set_cover: 'Use as cover', drag_photos: 'Drag photos to change their order: the first one becomes the cover.', live_title: 'Your book', live_sub: 'It takes shape as you write.', live_ph: 'Your names', live_meta: '{0} pages · {1} photos', live_ded: 'Your dedication will appear here.', gen_title: 'Your book is coming together', sum_title: 'Your book', sum_meta: '{0} pages · {1} style', sum_spec: 'Hardcover · 21 × 21 cm · photo paper', sum_edit: 'Review the album', cover_ex: 'Example cover', cover_ex70: 'Example cover · 70s style', hero_try: 'Try it with your two first names', hero_try_go: 'Create our album with these names', cover_you: 'Your cover', cover_you70: 'Your cover · 70s style', noel: 'Delivered in France before Christmas for orders placed by {0}.', th_new: 'New', covers: ['All our firsts', 'The light of Sundays', 'And the whole view ahead of us'], sorted: 'Photos sorted from oldest to newest.' },
+  de: { sum_free: 'Kostenloser Versand', sum_pdf: 'Digitales Album (PDF)', sort_date: 'Nach Aufnahmedatum sortieren', set_cover: 'Als Cover verwenden', drag_photos: 'Zieht die Fotos, um die Reihenfolge zu ändern: das erste wird zum Cover.', live_title: 'Euer Buch', live_sub: 'Es nimmt Gestalt an, während ihr schreibt.', live_ph: 'Eure Vornamen', live_meta: '{0} Seiten · {1} Fotos', live_ded: 'Eure Widmung erscheint hier.', gen_title: 'Euer Buch entsteht', sum_title: 'Euer Buch', sum_meta: '{0} Seiten · Stil {1}', sum_spec: 'Hardcover · 21 × 21 cm · Fotopapier', sum_edit: 'Album ansehen', cover_ex: 'Beispiel-Cover', cover_ex70: 'Beispiel-Cover · 70er-Stil', hero_try: 'Probiert es mit euren Vornamen', hero_try_go: 'Unser Album mit diesen Namen erstellen', cover_you: 'Euer Cover', cover_you70: 'Euer Cover · 70er-Stil', noel: 'Lieferung in Frankreich vor Weihnachten bei Bestellung bis zum {0}.', th_new: 'Neu', covers: ['Alle unsere ersten Male', 'Das Licht der Sonntage', 'Und vor uns die ganze Aussicht'], sorted: 'Fotos vom ältesten zum neuesten sortiert.' },
+  es: { sum_free: 'Envío gratis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar por fecha de la foto', set_cover: 'Usar como portada', drag_photos: 'Arrastra las fotos para cambiar su orden: la primera será la portada.', live_title: 'Vuestro libro', live_sub: 'Toma forma mientras escribís.', live_ph: 'Vuestros nombres', live_meta: '{0} páginas · {1} fotos', live_ded: 'Vuestra dedicatoria aparecerá aquí.', gen_title: 'Vuestro libro se compone', sum_title: 'Vuestro libro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Tapa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Revisar el álbum', cover_ex: 'Ejemplo de portada', cover_ex70: 'Ejemplo de portada · estilo años 70', hero_try: 'Pruébalo con vuestros nombres', hero_try_go: 'Crear nuestro álbum con estos nombres', cover_you: 'Vuestra portada', cover_you70: 'Vuestra portada · estilo años 70', noel: 'Entrega en Francia antes de Navidad para pedidos hasta el {0}.', th_new: 'Nuevo', covers: ['Todas nuestras primeras veces', 'La luz de los domingos', 'Y ante nosotros, toda la vista'], sorted: 'Fotos ordenadas de la más antigua a la más reciente.' },
+  pt: { sum_free: 'Envio grátis', sum_pdf: 'Álbum digital (PDF)', sort_date: 'Ordenar pela data da foto', set_cover: 'Usar como capa', drag_photos: 'Arrasta as fotos para mudar a ordem: a primeira será a capa.', live_title: 'O vosso livro', live_sub: 'Ganha forma à medida que escrevem.', live_ph: 'Os vossos nomes', live_meta: '{0} páginas · {1} fotos', live_ded: 'A vossa dedicatória aparecerá aqui.', gen_title: 'O vosso livro está a ganhar forma', sum_title: 'O vosso livro', sum_meta: '{0} páginas · estilo {1}', sum_spec: 'Capa dura · 21 × 21 cm · papel fotográfico', sum_edit: 'Rever o álbum', cover_ex: 'Exemplo de capa', cover_ex70: 'Exemplo de capa · estilo anos 70', hero_try: 'Experimente com os vossos nomes', hero_try_go: 'Criar o nosso álbum com estes nomes', cover_you: 'A vossa capa', cover_you70: 'A vossa capa · estilo anos 70', noel: 'Entrega em França antes do Natal para encomendas até {0}.', th_new: 'Novo', covers: ['Todas as nossas primeiras vezes', 'A luz dos domingos', 'E à nossa frente, toda a vista'], sorted: 'Fotos ordenadas da mais antiga à mais recente.' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 
 /* ════ 1. Livre 3D réutilisable ════ */
@@ -8213,12 +8230,12 @@ function sampleCover(i, title, names) {
   const cap = document.createElement('div'); cap.className = 'nst-demo-cap';
   cap.innerHTML = `<span id="nstDemoName"></span><div class="nst-demo-dots">${SAMPLE_PHOTO.map((x, i) => `<button type="button"${i ? '' : ' class="on"'}></button>`).join('')}</div>`;
   host.appendChild(cap);
-  let book = null, cur = 0, timer;
-  const THEME = i => (i === 1 ? 'seventies' : 'magazine'), label = i => t(i === 1 ? 'cover_ex70' : 'cover_ex');   // la 2e couverture montre le style Années 70
+  let book = null, cur = 0, timer, nm = '';                 // nm : prénoms tapés sous le livre (vide : Léa & Hugo)
+  const THEME = i => (i === 1 ? 'seventies' : 'magazine'), label = i => t((nm ? 'cover_you' : 'cover_ex') + (i === 1 ? '70' : ''));   // la 2e couverture montre le style Années 70
   const show = i => { cur = (i + SAMPLE_PHOTO.length) % SAMPLE_PHOTO.length; book.showTheme(cur); cap.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === cur)); const n = $('nstDemoName'); if (n) n.textContent = label(cur); };
   const auto = () => { clearInterval(timer); if (!RM) timer = setInterval(() => show(cur + 1), 4000); };
   const build = () => {                                     // reconstruit aussi au changement de langue (libellés de la couverture)
-    const b = NA.book3d({ photos: SAMPLE_PHOTO, theme: 'magazine', spine: 'Léa & Hugo · 2026', size, depth: Math.round(size * 0.055), fronts: SAMPLE_PHOTO.map((x, i) => ({ cover: sampleCover(i), theme: THEME(i) })) });
+    const b = NA.book3d({ photos: SAMPLE_PHOTO, theme: 'magazine', spine: `${nm || 'Léa & Hugo'} · ${new Date().getFullYear()}`, size, depth: Math.round(size * 0.055), fronts: SAMPLE_PHOTO.map((x, i) => ({ cover: sampleCover(i, null, nm), theme: THEME(i) })) });
     b.classList.add('b3d-hero');
     b.addEventListener('click', () => { show(cur + 1); auto(); });
     if (book) book.replaceWith(b); else host.insertBefore(b, cap);
@@ -8235,8 +8252,32 @@ function sampleCover(i, title, names) {
     });
     zone.addEventListener('pointerleave', () => { book.querySelector('.b3d-in').style.transform = ''; });
   }
-  name(); auto();
-  NA.heroName = () => { build(); name(); };
+  // Leurs prénoms sur la couverture dès la première seconde, puis repris dans le questionnaire
+  const form = document.createElement('form'); form.className = 'nst-try'; form.noValidate = true;
+  form.innerHTML = `<input type="text" id="nstTry" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go"><button type="submit" class="nst-try-go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`;
+  host.appendChild(form);
+  const inp = form.querySelector('input'), go = form.querySelector('button');
+  const words = () => { inp.placeholder = t('hero_try'); inp.setAttribute('aria-label', t('hero_try')); go.setAttribute('aria-label', t('hero_try_go')); };
+  // « Léa & Hugo », « Léa et Hugo », « Léa, Hugo » ou « Léa Hugo » → ['Léa', 'Hugo']
+  const parts = s => {
+    let p = s.split(/\s*(?:&|\+|,|\/|\s(?:et|and|und|y|e)\s)\s*/i).map(x => x.trim()).filter(Boolean);
+    if (p.length === 1 && /^\S+\s+\S+$/.test(p[0])) p = p[0].split(/\s+/);
+    return p.slice(0, 2).map(x => x.charAt(0).toLocaleUpperCase() + x.slice(1));
+  };
+  const apply = () => {
+    const p = parts(inp.value); nm = p.join(' & '); build(); name();
+    [['name1', p[0] || ''], ['name2', p[1] || '']].forEach(([id, v]) => { const f = $(id); if (f && f.value !== v) { f.value = v; f.dispatchEvent(new Event('input', { bubbles: true })); } });
+  };
+  let tt;
+  inp.addEventListener('input', () => { clearTimeout(tt); tt = setTimeout(apply, 160); });
+  form.addEventListener('submit', e => { e.preventDefault(); clearTimeout(tt); if (inp.value.trim()) apply(); inp.blur(); startApp(); });
+  // retour sur le site : les prénoms repris du questionnaire (7 jours) reviennent sur la couverture
+  window.addEventListener('load', () => setTimeout(() => {
+    const p = [$('name1'), $('name2')].map(f => ((f && f.value) || '').trim()).filter(Boolean);
+    if (p.length && !inp.value) { inp.value = p.join(' & '); nm = inp.value; build(); name(); }
+  }, 600));
+  words(); name(); auto();
+  NA.heroName = () => { build(); name(); words(); };
 })();
 
 /* ── Tarifs : un petit livre par format, épaisseur réelle ── */
@@ -8429,13 +8470,22 @@ const origGen = window.runGeneration;
 window.runGeneration = async function () { startGenAnim(); try { return await origGen.apply(this, arguments); } finally { stopGenAnim(); } };
 
 /* ════ 5. Récapitulatif de commande avec LEUR couverture ════ */
+/* ── Noël : date limite de commande pour recevoir le livre avant le 24 (à revoir chaque année avec le calendrier de fin d'année de Prodigi) ── */
+const NOEL = new Date(2026, 11, 6, 23, 59, 59);              // délai réel 10 à 12 jours, plus une marge pour les transporteurs en décembre
+const noel = () => (Date.now() <= NOEL ? t('noel', NOEL.toLocaleDateString(lang(), { day: 'numeric', month: 'long' })) : '');
+(function () {
+  const n = document.querySelector('#pricing .ed-note'); if (!n || !noel()) return;
+  const d = document.createElement('div'); d.className = 'ed-note nst-noel'; n.after(d);
+  const fill = () => { d.textContent = noel(); };
+  fill(); const prev = NA.heroName; NA.heroName = () => { if (prev) prev(); fill(); };     // suit le changement de langue
+})();
 function renderSummary() {
   const form = $('payForm'); if (!form || !NA.pages || !NA.pages.length) return;
   let box = $('nstSum');
   if (!box) { box = document.createElement('div'); box.id = 'nstSum'; box.className = 'nst-sum'; form.insertBefore(box, form.firstChild); }
   const n = NA.pages.length, th = (NA.THEMES[NA.theme] || NA.THEMES.galerie).name, sp = NA.spineText != null ? NA.spineText : ((NA.info && NA.info.names) ? `${NA.info.names} · ${year}` : '');
   box.innerHTML = `<div class="nst-sum-book"></div><div class="nst-sum-txt"><span class="nst-sum-eb">${t('sum_title')}</span><b>${esc((NA.pages[0].t && NA.pages[0].t.title) || '')}</b>
-    <span>${t('sum_meta', n, th)}</span><span>${t('sum_spec')}</span><button type="button" class="nst-link" id="nstSumEdit">${t('sum_edit')}</button></div>
+    <span>${t('sum_meta', n, th)}</span><span>${t('sum_spec')}</span><span class="nst-noel" id="nstSumNoel" hidden></span><button type="button" class="nst-link" id="nstSumEdit">${t('sum_edit')}</button></div>
     <div class="nst-sum-price"><b id="nstSumPrice"></b><span id="nstSumPriceSub"></span></div>`;
   box.querySelector('.nst-sum-book').appendChild(NA.book3d({ cover: NA.pages[0], photos: S.photos, theme: NA.theme, spine: sp, size: 132, depth: { 24: 7, 36: 10, 50: 14 }[n] || 10 }));
   $('nstSumEdit').addEventListener('click', () => goTab(3));
@@ -8446,6 +8496,7 @@ function syncPrice() {
   const o = $('nstSumPrice'), s = $('nstSumPriceSub'); if (!o || !NA.curPrice) return;
   const c = NA.curPrice(); if (c.v == null) return;
   o.textContent = c.txt; s.textContent = c.fmt === 'pdf' ? t('sum_pdf') : t('sum_free');
+  const nl = $('nstSumNoel'); if (nl) { nl.textContent = noel(); nl.hidden = c.fmt === 'pdf' || !nl.textContent; }
 }
 NA.syncPrice = syncPrice;
 if (window.MutationObserver && $('payFinalPrice')) new MutationObserver(syncPrice).observe($('payFinalPrice'), { childList: true, characterData: true, subtree: true });
@@ -8621,6 +8672,9 @@ country.addEventListener('change', () => { lastQ = ''; close(); if (line1.value.
   // arrivée directe sur le questionnaire (liens « /#app » des guides, sans startApp) : comptée au premier champ touché
   var p0 = document.getElementById('panel0');
   if (p0) p0.addEventListener('focusin', function () { etape(NOMS[0]); }, { once: true });
+  // prénoms essayés sur la couverture du haut de page
+  var tr = document.getElementById('nstTry');
+  if (tr) tr.addEventListener('input', function () { etape('0-prenoms-accueil'); }, { once: true });
   var oa = window.addPhotos;
   if (typeof oa === 'function') window.addPhotos = function () { etape('2b-photos-ajoutees'); return oa.apply(this, arguments); };
   var op = window.processPayment;

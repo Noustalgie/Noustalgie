@@ -414,19 +414,18 @@ def spread(n, k, tilt, roll=0.0, dist=0.34, elev=58, azim=-32, dx=-0.018, up=0.0
 
 
 SHOTS = [
-    dict(n=2, closed=1, book=(0.0, -0.24, -52), cam=dict(target=(0.0, -0.25, 0), dist=0.30, elev=72, azim=-32, roll=0)),
-    spread(3, 1, -22),
-    spread(4, 2, 16, 2),
-    spread(5, 3, -18, -2),
-    dict(spread(6, 7, 13, 1, dist=0.43, dx=0.03), pages=('pano-g.jpg', 'pano-d.jpg')),   # double page paysage (clé « pano » de mag/vitrine.json), vue entière
-    spread(7, 4, 18),
-    spread(8, 5, -20, -2),
-    spread(9, 6, 15, 2),
-    spread(10, 9, -22),
-    spread(11, 8, 16, 2),
-    spread(12, 10, -18),
-    dict(spread(13, 1, -22), dir='pages-seventies'),                    # la slide 3 en style Années 70 (même cadrage)
-    dict(n=14, closed=1, book=(0.04, -0.28, -14), phone=(-0.14, -0.18, -18), cam=dict(target=(-0.005, -0.27, 0), dist=0.40, elev=72, azim=-30, roll=2)),
+    dict(n=2, closed=1, book=(0.0, -0.25, 30), cam=dict(target=(0.0, -0.25, 0), dist=0.31, elev=70, azim=24, roll=-2)),
+    spread(3, 1, 14, -1, dist=0.41, elev=58, azim=26, dx=0.02),
+    spread(4, 2, -16, 2, elev=62, azim=-24),
+    spread(5, 3, 20, 0, dist=0.38, azim=30, dx=-0.065),
+    dict(spread(6, 7, -12, -1, dist=0.40, dx=0.03, azim=-22), pages=('pano-g.jpg', 'pano-d.jpg')),   # double page paysage (clé « pano » de mag/vitrine.json), vue entière
+    spread(7, 4, -18, 1, dist=0.37, elev=60, azim=-36),
+    spread(8, 5, 20, -2, dist=0.38, azim=28, dx=-0.065),
+    spread(9, 6, -15, 2, dist=0.37, elev=64, azim=-28),
+    spread(10, 8, 20, -1, dist=0.38, azim=30, dx=-0.065),
+    spread(11, 10, -20, 1, dist=0.37, elev=60, azim=-30),
+    dict(spread(12, 1, -20, 1, azim=-30), dir='pages-seventies'),     # la même double page en style Années 70
+    dict(n=13, closed=1, book=(0.04, -0.28, -14), phone=(-0.14, -0.18, -18), cam=dict(target=(-0.005, -0.27, 0), dist=0.40, elev=72, azim=-30, roll=2)),
 ]
 
 
