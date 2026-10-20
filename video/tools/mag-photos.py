@@ -20,11 +20,13 @@ from mathutils import Vector
 from PIL import Image, ImageFilter
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
-PAGES = os.path.join(ROOT, 'out', 'mag', 'pages')
 DECOR = os.path.join(ROOT, 'out', 'mag', 'decor')
 args = sys.argv[1:]
 SITE = '--site' in args
-OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else 'photos')
+LIEU = args[args.index('--decor') + 1] if '--decor' in args else 'table'      # table (bois miel, jute) ou lit (lin, plaid, guirlande)
+PAGES = os.path.join(ROOT, 'out', 'mag', args[args.index('--pages') + 1] if '--pages' in args else 'pages')
+AUTRE = args[args.index('--autre') + 1] if '--autre' in args else 'pages-seventies'   # l'autre style, montré par une slide
+OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
 DRAFT = '--draft' in args
 ONLY = [int(n) if n.isdigit() else n for n in args[args.index('--only') + 1].split(',')] if '--only' in args else None
 W, H = (540, 720) if DRAFT else (1080, 1440)
@@ -349,6 +351,152 @@ def scene_setup():
     hs = nt.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.35
     nt.links.new(env.outputs['Color'], hs.inputs['Color']); nt.links.new(hs.outputs['Color'], bg.inputs['Color'])
     bg.inputs['Strength'].default_value = 0.3
+    if LIEU == 'lit':
+        decor_lit(sc)
+    else:
+        decor_table(sc)
+    cam = bpy.data.cameras.new('tel'); co = bpy.data.objects.new('tel', cam); sc.collection.objects.link(co); sc.camera = co
+    cam.sensor_fit = 'AUTO'; cam.sensor_width = 34.6       # 26 mm équivalent, comme l'objectif principal d'un téléphone
+    cam.dof.use_dof = True
+    return sc, co
+
+
+THROW = (0.56, 0.36, -0.52, 0.12, math.radians(-18))    # plaid du décor lit : largeur, profondeur, centre x, y, rotation
+
+
+def sheet_z(X, Y):
+    """relief du drap froissé (m) ; presque plat là où repose l'album (centre 0, -0,25)"""
+    rng = np.random.default_rng(7)
+    Z = np.zeros_like(X)
+    for _ in range(320):                                  # plis : crêtes allongées, orientées au hasard
+        cx, cy, a = rng.uniform(-1, 1), rng.uniform(-1.25, 0.75), rng.uniform(0, math.pi)
+        L, w, h = rng.uniform(0.05, 0.3), rng.uniform(0.008, 0.035), rng.uniform(0.005, 0.024)
+        u = (X - cx) * math.cos(a) + (Y - cy) * math.sin(a)
+        v = -(X - cx) * math.sin(a) + (Y - cy) * math.cos(a)
+        Z = Z + h * np.exp(-(v / w) ** 2 - (u / L) ** 2)
+    Z = Z + 0.006 * np.sin(X * 7 + 1.3) * np.sin(Y * 5 + 0.4) + 0.003 * np.sin(X * 13 + Y * 9)
+    k = np.clip((np.hypot(X, Y + 0.25) - 0.24) / 0.12, 0, 1)
+    k = k * k * (3 - 2 * k)                              # plat sous l'album, plis dès son bord
+    w, h, cx, cy, th = THROW                             # et sous le plaid
+    U = (X - cx) * math.cos(th) + (Y - cy) * math.sin(th); V = -(X - cx) * math.sin(th) + (Y - cy) * math.cos(th)
+    q = np.clip((np.maximum(np.abs(U) - w / 2, np.abs(V) - h / 2) + 0.01) / 0.08, 0, 1)
+    k = k * q * q * (3 - 2 * q)
+    return Z * k - 0.004 * (1 - k) - 0.001
+
+
+def fabric_material(name, colors, rough, weave, sheen, bump):
+    """tissu : nuances étirées dans le sens du fil (colors : sombre, clair), trame fine (weave : période en m)"""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1, 14, 1)
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
+    nt.links.new(tc.outputs['Object'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
+    ramp = nt.nodes.new('ShaderNodeValToRGB')
+    ramp.color_ramp.elements[0].color = (*colors[0], 1); ramp.color_ramp.elements[1].color = (*colors[1], 1)
+    nt.links.new(nz.outputs['Fac'], ramp.inputs['Fac']); nt.links.new(ramp.outputs['Color'], b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = rough
+    b.inputs['Specular IOR Level'].default_value = 0.25
+    b.inputs['Sheen Weight'].default_value = sheen
+    mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'ADD'
+    for d in ('X', 'Y'):                                  # chaîne et trame : 0,5 + 0,5 sin(20·échelle·x)
+        wv = nt.nodes.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = d
+        wv.inputs['Scale'].default_value = 2 * math.pi / (20 * weave)
+        nt.links.new(tc.outputs['Object'], wv.inputs['Vector'])
+        nt.links.new(wv.outputs['Fac'], mx.inputs[0 if d == 'X' else 1])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = bump; bp.inputs['Distance'].default_value = 0.0004
+    nt.links.new(mx.outputs['Value'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], b.inputs['Normal'])
+    return m
+
+
+def throw_z(U, V, w, h, t=0.03):
+    """plaid plié : épaisseur t, bords arrondis, légère ondulation de la laine (U, V : coordonnées locales en m)"""
+    edge = np.clip(np.minimum.reduce([U + w / 2, w / 2 - U, V + h / 2, h / 2 - V]) / 0.05, 0, 1)
+    return t * np.sin(edge * math.pi / 2) ** 0.9 + 0.0015 * np.sin(U * 31 + 1) * np.sin(V * 23) * edge
+
+
+def tartan_material():
+    """laine écossaise de Noël : fond rouge, bandes vertes et marine, filets crème (motif de 9 cm), sergé fin"""
+    m = bpy.data.materials.new('ecossais'); m.use_nodes = True
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    uv = nt.nodes.new('ShaderNodeTexCoord').outputs['UV']
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(uv, sep.inputs[0])
+    ramps = []
+    for axis in ('X', 'Y'):
+        md = nt.nodes.new('ShaderNodeMath'); md.operation = 'MODULO'; md.inputs[1].default_value = 0.09
+        dv = nt.nodes.new('ShaderNodeMath'); dv.operation = 'DIVIDE'; dv.inputs[1].default_value = 0.09
+        nt.links.new(sep.outputs[axis], md.inputs[0]); nt.links.new(md.outputs[0], dv.inputs[0])
+        rp = nt.nodes.new('ShaderNodeValToRGB'); cr = rp.color_ramp; cr.interpolation = 'CONSTANT'
+        R, G, C, N = (0.32, 0.025, 0.03), (0.035, 0.12, 0.07), (0.78, 0.72, 0.6), (0.02, 0.03, 0.06)
+        cr.elements[0].color = (*R, 1); cr.elements[1].position = 0.34; cr.elements[1].color = (*G, 1)
+        for pos, col in ((0.56, R), (0.62, C), (0.645, R), (0.8, N), (0.86, R)):
+            e = cr.elements.new(pos); e.color = (*col, 1)
+        nt.links.new(dv.outputs[0], rp.inputs['Fac']); ramps.append(rp)
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.inputs[0].default_value = 0.5
+    a_in = [x for x in mx.inputs if x.type == 'RGBA']
+    nt.links.new(ramps[0].outputs['Color'], a_in[0]); nt.links.new(ramps[1].outputs['Color'], a_in[1])
+    nt.links.new([x for x in mx.outputs if x.type == 'RGBA'][0], b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = 0.95; b.inputs['Sheen Weight'].default_value = 1.0; b.inputs['Specular IOR Level'].default_value = 0.2
+    tw = nt.nodes.new('ShaderNodeTexWave'); tw.wave_type = 'BANDS'; tw.bands_direction = 'DIAGONAL'
+    tw.inputs['Scale'].default_value = 2 * math.pi / (10 * 0.0018)
+    nt.links.new(uv, tw.inputs['Vector'])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.35; bp.inputs['Distance'].default_value = 0.0005
+    nt.links.new(tw.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], b.inputs['Normal'])
+    return m
+
+
+def fairy_lights(points, z_of):
+    """guirlande : fil de cuivre posé sur le drap et petites ampoules chaudes tous les 7 cm"""
+    pts = np.array(points, dtype=float)
+    t = np.linspace(0, 1, len(pts)); tt = np.linspace(0, 1, 600)
+    xs, ys = np.interp(tt, t, pts[:, 0]), np.interp(tt, t, pts[:, 1])
+    for _ in range(3):                                    # lissage : courbe souple
+        xs[1:-1] = (xs[:-2] + xs[1:-1] + xs[2:]) / 3; ys[1:-1] = (ys[:-2] + ys[1:-1] + ys[2:]) / 3
+    zs = z_of(xs, ys) + 0.0012
+    cu = bpy.data.curves.new('fil', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0006; cu.bevel_resolution = 2
+    sp = cu.splines.new('POLY'); sp.points.add(len(xs) - 1)
+    for i, (x, y, z) in enumerate(zip(xs, ys, zs)):
+        sp.points[i].co = (x, y, z, 1)
+    fil = bpy.data.objects.new('fil', cu); bpy.context.collection.objects.link(fil)
+    fil.data.materials.append(material('cuivre', color=(0.55, 0.3, 0.16), rough=0.35, metal=1.0))
+    bulb = material('ampoule', color=(1.0, 0.8, 0.55), rough=0.2)
+    nt = bulb.node_tree; b = nt.nodes['Principled BSDF']
+    b.inputs['Emission Color'].default_value = (1.0, 0.62, 0.3, 1); b.inputs['Emission Strength'].default_value = 60
+    seg = np.hypot(np.diff(xs), np.diff(ys)); dist = np.concatenate([[0], np.cumsum(seg)])
+    for d in np.arange(0.03, dist[-1], 0.07):
+        i = int(np.searchsorted(dist, d))
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.0045, segments=16, ring_count=8, location=(xs[i], ys[i], zs[i] + 0.003))
+        o = bpy.context.object; o.name = 'ampoule'; o.data.materials.append(bulb)
+        for p in o.data.polygons:
+            p.use_smooth = True
+
+
+def decor_lit(sc):
+    """lit défait : drap en lin froissé, plaid en grosse maille camel, guirlande lumineuse ; lampe chaude et jour d'hiver"""
+    n = 440
+    X, Y = np.meshgrid(np.linspace(-1.0, 1.0, n), np.linspace(-1.25, 0.75, n), indexing='ij')
+    b = Builder(); b.grid(X, Y, sheet_z(X, Y), X, Y, 0)
+    b.build('drap', [fabric_material('lin', ((0.74, 0.72, 0.67), (0.9, 0.88, 0.84)), 0.9, 0.001, 0.6, 0.2)])
+    # plaid plié, derrière l'album à gauche (haut des photos)
+    w, h, cx, cy, th = THROW
+    U, V = np.meshgrid(np.linspace(-w / 2, w / 2, 300), np.linspace(-h / 2, h / 2, 200), indexing='ij')
+    PX, PY = cx + U * math.cos(th) - V * math.sin(th), cy + U * math.sin(th) + V * math.cos(th)
+    k = Builder(); k.grid(PX, PY, throw_z(U, V, w, h) + sheet_z(PX, PY) + 0.0005, U + w / 2, V + h / 2, 0)
+    k.build('plaid', [tartan_material()])
+    # guirlande autour de l'album (jamais dessous ni sur le plaid), derrière et à droite
+    a = np.radians(np.linspace(95, -160, 16))
+    r = 0.3 + 0.035 * np.sin(np.arange(16) * 1.7)
+    fairy_lights(list(zip(r * np.cos(a), -0.25 + r * np.sin(a))), sheet_z)
+    # lumière : lampe de chevet chaude à droite, jour d'hiver doux par la fenêtre à gauche
+    for name, size, energy, color, loc in (('lampe', 0.35, 100, (1.0, 0.8, 0.6), (0.85, 0.35, 0.75)),
+                                            ('fenetre', 1.4, 200, (0.93, 0.96, 1.0), (-2.0, -0.5, 1.8))):
+        ld = bpy.data.lights.new(name, 'AREA'); ld.size = size; ld.energy = energy; ld.color = color
+        lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
+        lo.rotation_euler = (Vector((0, -0.25, 0)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
+
+
+def decor_table(sc):
+    """table en bois miel, coin de tapis en jute, lumière de fenêtre"""
     # plateau en bois : 0,9 × 1,8 m, 3 cm d'épaisseur, bord arrondi ; dessus à z = 0, bord avant à y = -0,45
     bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0.45, -0.015))
     tb = bpy.context.object; tb.name = 'table'; tb.scale = (0.9, 1.8, 0.03)
@@ -376,10 +524,6 @@ def scene_setup():
     lfo = bpy.data.objects.new('rebond', lf); sc.collection.objects.link(lfo)
     lfo.location = (1.2, -1.8, 1.8)
     lfo.rotation_euler = (Vector((0, -0.2, 0)) - lfo.location).to_track_quat('-Z', 'Y').to_euler()
-    cam = bpy.data.cameras.new('tel'); co = bpy.data.objects.new('tel', cam); sc.collection.objects.link(co); sc.camera = co
-    cam.sensor_fit = 'AUTO'; cam.sensor_width = 34.6       # 26 mm équivalent, comme l'objectif principal d'un téléphone
-    cam.dof.use_dof = True
-    return sc, co
 
 
 def leg_material():
@@ -414,7 +558,8 @@ def spread(n, k, tilt, roll=0.0, dist=0.34, elev=58, azim=-32, dx=-0.018, up=0.0
 
 
 SHOTS = [
-    dict(n=2, closed=1, book=(0.0, -0.25, 30), cam=dict(target=(0.0, -0.25, 0), dist=0.31, elev=70, azim=24, roll=-2)),
+    dict(n=1, closed=1, book=(0.0, -0.25, 30), cam=dict(target=(-0.03, -0.2, 0), dist=0.38, elev=66, azim=24, roll=-2)),   # accroche : album fermé dans son décor
+    dict(n=2, closed=1, book=(0.0, -0.25, -40), cam=dict(target=(0.0, -0.24, 0), dist=0.31, elev=72, azim=-30, roll=1)),
     spread(3, 1, 14, -1, dist=0.41, elev=58, azim=26, dx=0.02),
     spread(4, 2, -16, 2, elev=62, azim=-24),
     spread(5, 3, 20, 0, dist=0.38, azim=30, dx=-0.065),
@@ -424,7 +569,7 @@ SHOTS = [
     spread(9, 6, -15, 2, dist=0.37, elev=64, azim=-28),
     spread(10, 8, 20, -1, dist=0.38, azim=30, dx=-0.065),
     spread(11, 10, -20, 1, dist=0.37, elev=60, azim=-30),
-    dict(spread(12, 1, -20, 1, azim=-30), dir='pages-seventies'),     # la même double page en style Années 70
+    dict(spread(12, 1, -20, 1, azim=-30), dir=AUTRE),                 # la même double page dans l'autre style
     dict(n=13, closed=1, book=(0.04, -0.28, -14), phone=(-0.14, -0.18, -18), cam=dict(target=(-0.005, -0.27, 0), dist=0.40, elev=72, azim=-30, roll=2)),
 ]
 
@@ -432,6 +577,13 @@ SHOTS = [
 def finish(src, dst):
     """rendu → photo de téléphone : légère netteté, grain fin, JPEG (visuels du site : sans grain, JPEG léger)"""
     im = Image.open(src).convert('RGB')
+    if LIEU == 'lit':                                     # halo chaud autour des ampoules de la guirlande
+        a = np.asarray(im).astype(np.float32) / 255
+        m = Image.fromarray((np.clip((a.min(axis=2) - 0.9) / 0.1, 0, 1) * 255).astype(np.uint8))
+        r = W / 1080
+        glow = sum(np.asarray(m.filter(ImageFilter.GaussianBlur(k * r))).astype(np.float32) / 255 * g for k, g in ((5, 0.9), (16, 0.6), (40, 0.35)))
+        a = np.clip(a + glow[..., None] * np.array([1.0, 0.72, 0.42]), 0, 1)
+        im = Image.fromarray((a * 255).astype(np.uint8))
     im = im.filter(ImageFilter.UnsharpMask(radius=1.4, percent=55, threshold=2))
     if SITE:
         im.save(dst, quality=80, optimize=True, progressive=True, subsampling=2)
@@ -491,7 +643,7 @@ def main():
                 tel.location = (px, py, 0); tel.rotation_euler = (0, 0, math.radians(pr))
                 phone(os.path.join(DECOR, 'site-mobile.png'), tel)
         else:
-            k, d = s['spread'], os.path.join(ROOT, 'out', 'mag', s.get('dir', 'pages'))
+            k, d = s['spread'], os.path.join(ROOT, 'out', 'mag', s.get('dir', os.path.basename(PAGES)))
             g, r = s.get('pages', (2 * k + 1, 2 * k + 2))
             open_book(page(g, d) if k > 0 else None, page(r, d), k, piv)
         place_camera(co, **s['cam'])
