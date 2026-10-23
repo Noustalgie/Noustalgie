@@ -918,6 +918,9 @@ SITE_SHOTS = [
     dict(name='og-fond', res=(1200, 630), closed=1, book=(0.0, -0.25, -46),
          cam=dict(target=(0.15 * math.cos(math.radians(-32)), -0.255 + 0.15 * math.sin(math.radians(-32)), 0), dist=0.5, elev=66, azim=-32)),
     site_spread('og-exemple-fond', 1, -10, dist=0.6, elev=60, res=(1200, 630), right=0.17),
+    # image principale du flux Google Shopping (--decor salon) : la couverture remplit l'image, comme les vignettes des concurrents
+    dict(name='shopping-couverture', res=(1200, 1200), closed=1, book=(0.0, -0.21, -6),
+         cam=dict(target=(0.0, -0.212, 0), dist=0.43, elev=80, azim=-8, lens=52)),
 ]
 
 
