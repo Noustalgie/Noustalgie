@@ -89,4 +89,18 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   console.log(`index.html : ${Math.round(r.avant / 1024)} Ko → ${Math.round(r.apres / 1024)} Ko`);
   for (const [nom, t] of r.fichiers) console.log(`  ${nom} (${Math.round(t / 1024)} Ko)`);
   console.log(`dossier : ${path.relative(process.cwd(), dossier) || '.'}`);
+  // En production : signale à IndexNow (Bing, qui sert à ChatGPT Search et Copilot) les pages modifiées ces 2 derniers jours,
+  // d'après les lastmod du sitemap. Ne peut pas faire échouer la construction.
+  if (process.env.VERCEL_ENV === 'production') {
+    const depuis = new Date(Date.now() - 2 * 864e5).toISOString().slice(0, 10);
+    const xml = fs.readFileSync(path.join(dossier, 'sitemap.xml'), 'utf8');
+    const urlList = [...xml.matchAll(/<loc>(.*?)<\/loc>\s*<lastmod>(.*?)<\/lastmod>/g)].filter(m => m[2] >= depuis).map(m => m[1]);
+    if (urlList.length) {
+      const cle = '5598547cefa38c11e1fb92e98263de80';
+      await fetch('https://api.indexnow.org/indexnow', {
+        method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' }, signal: AbortSignal.timeout(8000),
+        body: JSON.stringify({ host: 'noustalgie.fr', key: cle, keyLocation: `https://noustalgie.fr/${cle}.txt`, urlList }),
+      }).then(r => console.log(`IndexNow : ${urlList.length} page(s), réponse ${r.status}`), e => console.log(`IndexNow : échec (${e.message})`));
+    }
+  }
 }

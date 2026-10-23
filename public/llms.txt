@@ -1,54 +1,54 @@
 # Noustalgie
 
-> Noustalgie (noustalgie.fr) crée des albums photo de couple personnalisés : le client importe ses photos et répond à quelques questions sur son histoire, le site compose les pages et rédige les textes, puis le livre est imprimé et livré. Aperçu complet gratuit avant paiement.
+> Noustalgie (noustalgie.fr) crée des albums photo de couple mis en page comme un magazine : le client importe ses photos et répond à quelques questions sur son histoire, le site compose les pages et rédige les textes (tout reste modifiable), puis le livre (21 × 21 cm, couverture rigide, de 39,99 € à 69,99 €, livraison offerte) est imprimé et livré à domicile en 10 à 12 jours environ. Aperçu complet gratuit avant paiement.
 
-## Le produit
+Informations à jour au 23 octobre 2026 :
 
 - Livre carré 21 × 21 cm, couverture rigide, reliure PUR, papier photo professionnel.
-- 24 pages (dès 14 photos) : 39,99 € ; 36 pages (dès 20 photos) : 49,99 € ; 50 pages (dès 31 photos) : 69,99 €. Livraison offerte.
-- Version PDF : 14,99 €, 19,99 € ou 24,99 €, envoyée par email juste après le paiement.
-- Livraison en 10 à 12 jours environ en France métropolitaine, un peu plus dans le reste de l'Europe.
-- Style Magazine par défaut : couverture façon magazine, sommaire, plan de la ville de la rencontre et des villes où le couple se retrouve, chacune dans un cœur, une photo en double page paysage, grandes étapes, playlist, adresses, voyages, interview, quiz, mots mêlés et lettre d'amour. Cinq autres styles : Années 70 (photos en noir et blanc vintage, grain argentique, papier vieilli, textes à la machine à écrire), et Galerie, Argentique, Nuit, Encre, qui changent les couleurs et la police du texte. Textes, photos et ordre des pages modifiables avant la commande.
+- 24 pages (au moins 14 photos) : 39,99 € ; 36 pages (au moins 20 photos) : 49,99 € ; 50 pages (au moins 31 photos) : 69,99 €. Livraison offerte.
+- Version PDF : 14,99 €, 19,99 € ou 24,99 €, envoyée par email juste après le paiement.
+- Livraison à domicile uniquement (pas de point relais), en 10 à 12 jours environ en France métropolitaine, un peu plus ailleurs. Pays livrés : France, Monaco, Belgique, Luxembourg, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie, Irlande.
+- Noël 2026 : commander au plus tard le 6 décembre pour recevoir le livre avant Noël en France métropolitaine. Après cette date, la version PDF reste possible.
+- Style Magazine par défaut : couverture façon magazine, sommaire, plan de la ville de la rencontre et des villes où le couple se retrouve, chacune dans un cœur, une photo en double page paysage, grandes étapes, playlist, adresses, voyages, interview, quiz, mots mêlés et lettre d'amour. Cinq autres styles : Années 70 (photos en noir et blanc vintage, grain argentique, papier vieilli, textes à la machine à écrire), et Galerie, Argentique, Nuit, Encre, qui changent les couleurs et la police du texte. Textes, photos et ordre des pages modifiables avant la commande.
+- Les textes sont rédigés par une IA à partir des réponses du couple, qui les relit et les modifie librement dans l'aperçu. Les photos servent uniquement à l'album et sont supprimées 30 jours après leur envoi.
+- Livre personnalisé : pas de droit de rétractation (article L221-28 du Code de la consommation) ; réimpression ou remboursement en cas de défaut d'impression ou de colis abîmé.
 - Site en français, anglais, allemand, espagnol et portugais.
+- Noustalgie est le nom commercial de Gabin Bacquet, entrepreneur individuel à Lille (France). Contact : contact@noustalgie.fr.
 
-## Pages utiles
+## Produit et guides
 
-- [Accueil et création de l'album](https://noustalgie.fr/)
-- [Exemple d'album complet à feuilleter (24 pages)](https://noustalgie.fr/exemple-album)
-- [Idée cadeau couple](https://noustalgie.fr/idee-cadeau-couple)
-- [Cadeau couple personnalisé : 15 idées](https://noustalgie.fr/cadeau-couple-personnalise)
-- [Magazine personnalisé : créer le magazine de votre couple](https://noustalgie.fr/magazine-personnalise)
-- [Album photo couple](https://noustalgie.fr/album-photo-couple)
-- [Idée cadeau de Noël pour un couple](https://noustalgie.fr/idee-cadeau-noel-couple)
-- [Cadeau d'anniversaire de couple](https://noustalgie.fr/cadeau-anniversaire-couple)
-- [Livre personnalisé de couple](https://noustalgie.fr/livre-personnalise-couple)
-- [Tous les guides](https://noustalgie.fr/guides)
-- [Comment faire un album photo](https://noustalgie.fr/comment-faire-un-album-photo)
-- [Textes pour album photo](https://noustalgie.fr/texte-album-photo)
-- [Mots doux](https://noustalgie.fr/mots-doux)
-- [Cadeau pour son copain](https://noustalgie.fr/cadeau-pour-son-copain)
-- [Cadeau pour sa copine](https://noustalgie.fr/cadeau-pour-sa-copine)
-- [Cadeau de Saint-Valentin personnalisé](https://noustalgie.fr/cadeau-saint-valentin-personnalise)
-- [Cadeau pour 1 an de couple](https://noustalgie.fr/cadeau-1-an-de-couple)
-- [Cadeau pour un couple d'amis](https://noustalgie.fr/cadeau-couple-amis)
-- [Album photo de voyage](https://noustalgie.fr/album-photo-voyage)
-- [Album photo de mariage](https://noustalgie.fr/album-photo-mariage)
-- [Comment choisir un livre photo](https://noustalgie.fr/comment-choisir-un-livre-photo)
-- [Album photo IA : ce que l'IA fait et ne fait pas](https://noustalgie.fr/album-photo-ia)
-- [Cadeau d'anniversaire de mariage](https://noustalgie.fr/cadeau-anniversaire-de-mariage)
-- [Cadeau pour 1 an de mariage](https://noustalgie.fr/cadeau-1-an-de-mariage)
-- [Cadeau pour 10 ans de couple](https://noustalgie.fr/cadeau-10-ans-de-couple)
-- [Cadeau de mariage personnalisé](https://noustalgie.fr/cadeau-mariage-personnalise)
-- [Cadeau de Saint-Valentin pour elle](https://noustalgie.fr/cadeau-saint-valentin-femme)
-- [Cadeau de Saint-Valentin pour lui](https://noustalgie.fr/cadeau-saint-valentin-homme)
-- [Album photo d'anniversaire](https://noustalgie.fr/album-photo-anniversaire)
+- [Accueil et création de l'album](https://noustalgie.fr/): créer l'album : photos, questionnaire, aperçu gratuit page par page, commande
+- [Exemple d'album complet à feuilleter (24 pages)](https://noustalgie.fr/exemple-album): les 24 pages de l'album de Léa et Hugo (couple fictif) au style Magazine, formats et prix
+- [Idée cadeau couple](https://noustalgie.fr/idee-cadeau-couple): Une idée cadeau couple qui a du sens : un livre photo à vos prénoms, avec vos souvenirs racontés. Aperçu gratuit, livré en 10 à 12 jours, dès 39,99 €
+- [Cadeau couple personnalisé : 15 idées](https://noustalgie.fr/cadeau-couple-personnalise): Cadeau couple personnalisé : 15 idées sur mesure par type et par budget, les délais pour Noël et la Saint-Valentin, et un exemple d'album à feuilleter
+- [Magazine personnalisé : créer le magazine de votre couple](https://noustalgie.fr/magazine-personnalise): Magazine personnalisé : que mettre dedans, comment le créer, une couverture façon Vogue, les prix et un exemple complet à feuilleter, composé pour un couple
+- [Album photo couple](https://noustalgie.fr/album-photo-couple): Album photo couple : vos photos mises en page et votre histoire d'amour racontée, en livre à couverture rigide. Aperçu gratuit, dès 39,99 €
+- [Idée cadeau de Noël pour un couple](https://noustalgie.fr/idee-cadeau-noel-couple): Idée cadeau couple pour Noël : l'album de votre histoire, vos photos et vos souvenirs en livre. Commandez au plus tard le 6 décembre pour le recevoir à temps
+- [Cadeau d'anniversaire de couple](https://noustalgie.fr/cadeau-anniversaire-couple): 1 an, 5 ans, noces de coton : offrez l'album de votre histoire. Vos photos et vos souvenirs racontés dans un livre relié. Aperçu gratuit, dès 39,99 €
+- [Livre personnalisé de couple](https://noustalgie.fr/livre-personnalise-couple): Un livre de couple personnalisé, déjà écrit : vos réponses deviennent des chapitres, vos photos illustrent chaque page. Aperçu gratuit, dès 39,99 €
+- [Tous les guides](https://noustalgie.fr/guides): Tous nos guides : idées cadeaux pour un couple, tutos pour faire un album photo, exemples de textes et de mots doux, conseils pour choisir un livre photo
+- [Comment faire un album photo](https://noustalgie.fr/comment-faire-un-album-photo): Comment faire un album photo réussi depuis votre téléphone : choisir les photos, construire l'histoire, écrire les textes et le format. Guide gratuit
+- [Textes pour album photo](https://noustalgie.fr/texte-album-photo): Exemples de textes pour album photo souvenir : dédicaces, légendes, débuts de chapitres et mots de la fin. Des phrases simples à reprendre ou à adapter
+- [Mots doux](https://noustalgie.fr/mots-doux): Des mots doux pour votre amoureux ou votre amoureuse : petits mots du quotidien, phrases romantiques, mots pour le matin, pour la distance, et idées pour les garder
+- [Cadeau pour son copain](https://noustalgie.fr/cadeau-pour-son-copain): Quel cadeau pour son copain ? Un album photo de votre histoire, avec vos souvenirs racontés. Idées selon l'occasion, conseils et aperçu gratuit avant de commander
+- [Cadeau pour sa copine](https://noustalgie.fr/cadeau-pour-sa-copine): Quel cadeau pour sa copine ? Un livre photo de votre couple, avec vos souvenirs racontés et vos mots. Idées selon l'occasion et aperçu gratuit avant de commander
+- [Cadeau de Saint-Valentin personnalisé](https://noustalgie.fr/cadeau-saint-valentin-personnalise): Un cadeau de Saint-Valentin personnalisé : l'album photo de votre histoire d'amour, avec vos photos et vos mots. Dédicaces, conseils et délais pour le 14 février
+- [Cadeau pour 1 an de couple](https://noustalgie.fr/cadeau-1-an-de-couple): Quel cadeau pour 1 an de couple ? L'album de votre première année ensemble : la rencontre, les premières fois, vos photos racontées. Aperçu gratuit
+- [Cadeau pour un couple d'amis](https://noustalgie.fr/cadeau-couple-amis): Cadeau pour un couple d'amis : l'album de leur histoire, avec leurs photos et vos souvenirs communs. Pour un mariage, une crémaillère ou leurs anniversaires
+- [Album photo de voyage](https://noustalgie.fr/album-photo-voyage): Créez l'album photo de vos voyages en couple : choisir les photos, bâtir le récit, écrire les légendes. Livre 21 × 21 cm imprimé, aperçu gratuit
+- [Album photo de mariage](https://noustalgie.fr/album-photo-mariage): Album photo mariage ou livre photo mariage : la rencontre, les fiançailles, le grand jour. Vos photos et vos mots dans un livre relié. Aperçu gratuit
+- [Comment choisir un livre photo](https://noustalgie.fr/comment-choisir-un-livre-photo): Quel livre photo choisir ? Format, nombre de pages, couverture, reliure, papier, délai et prix : les critères qui comptent avant de commander
+- [Album photo IA : ce que l'IA fait et ne fait pas](https://noustalgie.fr/album-photo-ia): ce que l'IA rédige à partir des réponses du couple, ce qu'elle ne fait pas, ce que deviennent les photos
+- [Cadeau d'anniversaire de mariage](https://noustalgie.fr/cadeau-anniversaire-de-mariage): Quel cadeau pour un anniversaire de mariage ? Les noces année par année (coton, bois, étain, porcelaine, or) et l'album de vos années de mariage. Aperçu gratuit
+- [Cadeau pour 1 an de mariage](https://noustalgie.fr/cadeau-1-an-de-mariage): Quel cadeau pour 1 an de mariage ? Pour vos noces de coton, l'album de votre première année de mariés : photos, souvenirs, dédicace. Aperçu gratuit
+- [Cadeau pour 10 ans de couple](https://noustalgie.fr/cadeau-10-ans-de-couple): Quel cadeau pour 10 ans de couple ou 10 ans de mariage (noces d'étain) ? L'album de vos dix années : un chapitre par période, vos photos et vos souvenirs racontés
+- [Cadeau de mariage personnalisé](https://noustalgie.fr/cadeau-mariage-personnalise): Un cadeau de mariage personnalisé et original : l'album de l'histoire des mariés, avec leurs photos et les souvenirs de leurs proches. Idées et délais
+- [Cadeau de Saint-Valentin pour elle](https://noustalgie.fr/cadeau-saint-valentin-femme): Un cadeau de Saint-Valentin pour femme qui la touchera : l'album de votre couple, vos photos et vos mots. Délais pour le 14 février
+- [Cadeau de Saint-Valentin pour lui](https://noustalgie.fr/cadeau-saint-valentin-homme): Un cadeau de Saint-Valentin pour homme qui sort des gadgets : l'album de votre couple, vos photos et vos mots. Délais pour le 14 février
+- [Album photo d'anniversaire](https://noustalgie.fr/album-photo-anniversaire): Un album photo pour l'anniversaire de votre amoureux ou amoureuse : vos photos de l'année, vos souvenirs racontés, une dédicace. Livre 21 × 21 cm, aperçu gratuit
 
-## Informations légales
+## Optional
 
-- [Conditions générales de vente](https://noustalgie.fr/cgv)
-- [Mentions légales](https://noustalgie.fr/mentions-legales)
-- [Politique de confidentialité](https://noustalgie.fr/confidentialite)
-
-## Contact
-
-contact@noustalgie.fr · Noustalgie, Lille, France
+- [Conditions générales de vente](https://noustalgie.fr/cgv): Conditions générales de vente de Noustalgie : prix, commande et aperçu, paiement, livraison, droit de rétractation et garanties légales
+- [Mentions légales](https://noustalgie.fr/mentions-legales): Mentions légales de noustalgie.fr : éditeur du site, hébergement, propriété intellectuelle et contact
+- [Politique de confidentialité](https://noustalgie.fr/confidentialite): Politique de confidentialité de Noustalgie : données collectées, parcours de vos photos, prestataires, durées de conservation et vos droits

@@ -235,8 +235,8 @@ class Audit:
             if not d:
                 self.pb_('E', 106, U, 'Meta description absente')
             else:
-                if len(d) > 165:
-                    self.pb_('R', 0, U, f'Description de {len(d)} car. : coupée dans Google au-delà de ~160')
+                if len(d) > 158:
+                    self.pb_('R', 0, U, f'Description de {len(d)} car. : au-delà de 158 (règle du CLAUDE.md)')
                 if len(d) < 70:
                     self.pb_('R', 0, U, f'Description courte ({len(d)} car.)')
         # titres de page

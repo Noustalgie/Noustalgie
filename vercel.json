@@ -1,6 +1,7 @@
 {
   "buildCommand": "node outils/preparer-production.mjs",
   "outputDirectory": "public",
+  "trailingSlash": false,
   "functions": {
     "api/chat.js": {
       "maxDuration": 60
