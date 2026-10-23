@@ -6,10 +6,11 @@
 <description>Albums photo de couple personnalisés, imprimés et livrés.</description>
 <item>
 <g:id>NOUST-LIVRE-24</g:id>
-<g:title>Album photo couple personnalisé 24 pages, couverture rigide 21 x 21 cm</g:title>
+<g:title>Album photo couple personnalisé, livre photo façon magazine 24 pages, couverture rigide 21 x 21 cm</g:title>
 <g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 24 pages, dès 14 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
 <g:link>https://noustalgie.fr/</g:link>
-<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:image_link>https://noustalgie.fr/img/exemple/shopping-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
@@ -21,6 +22,15 @@
 <g:identifier_exists>no</g:identifier_exists>
 <g:item_group_id>NOUST-LIVRE</g:item_group_id>
 <g:size>24 pages</g:size>
+<g:product_highlight>Aperçu complet gratuit avant de commander</g:product_highlight>
+<g:product_highlight>Mise en page et textes rédigés pour vous, tout reste modifiable</g:product_highlight>
+<g:product_highlight>Plan de la ville de votre rencontre dessiné dans un cœur</g:product_highlight>
+<g:product_highlight>Livraison offerte à domicile en 10 à 12 jours environ</g:product_highlight>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Format</g:attribute_name><g:attribute_value>Carré 21 x 21 cm</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Nombre de pages</g:attribute_name><g:attribute_value>24 pages, dès 14 photos</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Couverture</g:attribute_name><g:attribute_value>Rigide, reliure PUR</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Papier</g:attribute_name><g:attribute_value>Papier photo professionnel</g:attribute_value></g:product_detail>
+<g:custom_label_0>livre imprime</g:custom_label_0>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
 <g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
@@ -37,10 +47,11 @@
 </item>
 <item>
 <g:id>NOUST-LIVRE-36</g:id>
-<g:title>Album photo couple personnalisé 36 pages, couverture rigide 21 x 21 cm</g:title>
+<g:title>Album photo couple personnalisé, livre photo façon magazine 36 pages, couverture rigide 21 x 21 cm</g:title>
 <g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 36 pages, dès 20 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
 <g:link>https://noustalgie.fr/</g:link>
-<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:image_link>https://noustalgie.fr/img/exemple/shopping-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
@@ -52,6 +63,15 @@
 <g:identifier_exists>no</g:identifier_exists>
 <g:item_group_id>NOUST-LIVRE</g:item_group_id>
 <g:size>36 pages</g:size>
+<g:product_highlight>Aperçu complet gratuit avant de commander</g:product_highlight>
+<g:product_highlight>Mise en page et textes rédigés pour vous, tout reste modifiable</g:product_highlight>
+<g:product_highlight>Plan de la ville de votre rencontre dessiné dans un cœur</g:product_highlight>
+<g:product_highlight>Livraison offerte à domicile en 10 à 12 jours environ</g:product_highlight>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Format</g:attribute_name><g:attribute_value>Carré 21 x 21 cm</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Nombre de pages</g:attribute_name><g:attribute_value>36 pages, dès 20 photos</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Couverture</g:attribute_name><g:attribute_value>Rigide, reliure PUR</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Papier</g:attribute_name><g:attribute_value>Papier photo professionnel</g:attribute_value></g:product_detail>
+<g:custom_label_0>livre imprime</g:custom_label_0>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
 <g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
@@ -68,10 +88,11 @@
 </item>
 <item>
 <g:id>NOUST-LIVRE-50</g:id>
-<g:title>Album photo couple personnalisé 50 pages, couverture rigide 21 x 21 cm</g:title>
+<g:title>Album photo couple personnalisé, livre photo façon magazine 50 pages, couverture rigide 21 x 21 cm</g:title>
 <g:description>Livre photo de couple composé à partir de vos photos et de votre histoire : mise en page et textes rédigés pour vous, entièrement modifiables avant impression. 50 pages, dès 31 photos, format carré 21 x 21 cm, couverture rigide, reliure PUR, papier photo professionnel. Aperçu complet gratuit avant de commander. Livraison offerte en 10 à 12 jours environ.</g:description>
 <g:link>https://noustalgie.fr/</g:link>
-<g:image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:image_link>
+<g:image_link>https://noustalgie.fr/img/exemple/shopping-couverture.jpg</g:image_link>
+<g:additional_image_link>https://noustalgie.fr/img/exemple/album-couverture.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-pages.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-double-page.jpg</g:additional_image_link>
 <g:additional_image_link>https://noustalgie.fr/img/exemple/album-souvenirs.jpg</g:additional_image_link>
@@ -83,6 +104,15 @@
 <g:identifier_exists>no</g:identifier_exists>
 <g:item_group_id>NOUST-LIVRE</g:item_group_id>
 <g:size>50 pages</g:size>
+<g:product_highlight>Aperçu complet gratuit avant de commander</g:product_highlight>
+<g:product_highlight>Mise en page et textes rédigés pour vous, tout reste modifiable</g:product_highlight>
+<g:product_highlight>Plan de la ville de votre rencontre dessiné dans un cœur</g:product_highlight>
+<g:product_highlight>Livraison offerte à domicile en 10 à 12 jours environ</g:product_highlight>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Format</g:attribute_name><g:attribute_value>Carré 21 x 21 cm</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Nombre de pages</g:attribute_name><g:attribute_value>50 pages, dès 31 photos</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Couverture</g:attribute_name><g:attribute_value>Rigide, reliure PUR</g:attribute_value></g:product_detail>
+<g:product_detail><g:section_name>Caractéristiques</g:section_name><g:attribute_name>Papier</g:attribute_name><g:attribute_value>Papier photo professionnel</g:attribute_value></g:product_detail>
+<g:custom_label_0>livre imprime</g:custom_label_0>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
 <g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
