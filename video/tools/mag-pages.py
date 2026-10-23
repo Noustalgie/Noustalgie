@@ -2,6 +2,7 @@
 # (NA.renderPage de public/index.html), en 1588 px, pour les slides et le film.
 #   python3 tools/mag-pages.py [--theme magazine]   → out/mag/pages/page-01.jpg … page-24.jpg
 #   python3 tools/mag-pages.py --vitrine mag/vitrine-paris.json --theme seventies   → out/mag/pages-paris-seventies/ (autre album d'exemple)
+#   python3 tools/mag-pages.py --vitrine mag/vitrine-lyon.json   → out/mag/pages-lyon/ (photos de out/mag/album-lyon, hors dépôt)
 #                                                    + pano-g.jpg / pano-d.jpg (double page paysage des slides, clé « pano »)
 import asyncio, json, os, sys
 VIDEO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,9 +16,9 @@ THEME = sys.argv[sys.argv.index('--theme') + 1] if '--theme' in sys.argv else 'm
 VITRINE = sys.argv[sys.argv.index('--vitrine') + 1] if '--vitrine' in sys.argv else os.path.join('mag', 'vitrine.json')
 NOM = os.path.basename(VITRINE)[:-5].replace('vitrine', '').strip('-')          # vitrine-paris.json → « paris »
 OUT = os.path.join(VIDEO, 'out', 'mag', '-'.join(['pages'] + ([NOM] if NOM else []) + ([THEME] if THEME != 'magazine' else [])))
-PH = json.load(open(os.path.join(VIDEO, 'mag', 'photos.json')))
-IDX = {o['n'].replace('.jpg', ''): i for i, o in enumerate(PH)}
 SPEC = json.load(open(os.path.join(VIDEO, VITRINE), encoding='utf-8'))
+PH = json.load(open(os.path.join(VIDEO, SPEC.get('photos', os.path.join('mag', 'photos.json')))))   # clé « photos » : autre jeu de photos
+IDX = {o['n'].replace('.jpg', ''): i for i, o in enumerate(PH)}
 
 
 async def main():
