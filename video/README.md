@@ -97,6 +97,19 @@ python3 tools/mag-pages.py --vitrine mag/vitrine-paris.json                     
 node tools/mag-legendes.js --decor lit   # → out/mag/carrousel-lit/01…13.jpg (+ sans-texte/, 01-copain, 01-copine)
 ```
 
+Troisième décor (carrousel sans texte, 9:16, octobre 2026) : Inès et Théo, rencontrés à Lyon (`mag/vitrine-lyon.json`,
+vrai plan de Lyon de `/api/carte`), album Magazine composé avec 43 photos envoyées par Gabin (captures de 300 px,
+agrandies ×4 par Real-ESRGAN `realesr-general-x4v3` avec `tools/agrandir.py`, sans PyTorch). Ces photos ne sont pas dans le dépôt : elles restent dans
+`out/mag/album-lyon/` (`src/` découpées, `hd/` agrandies, `photos.json` lu par la clé « photos » de la vitrine).
+Décor « salon » : table basse ovale en chêne (`tools/decor.py chene`), tapis à poils longs beige (450 000 fibres,
+objet Curves de Blender), plante retombante dans une coupe sur pied. Images 1080 × 1920, sans légende.
+
+```bash
+python3 tools/decor.py chene                                         # texture du chêne → out/mag/decor/chene-*
+python3 tools/mag-pages.py --vitrine mag/vitrine-lyon.json            # → out/mag/pages-lyon/
+~/blender-venv/bin/python tools/mag-photos.py --decor salon --pages pages-lyon   # → out/mag/photos-salon/01…11.jpg
+```
+
 Slide 6 : la double page paysage (photo recadrée par `cadre` dans `vitrine.json` pour garder le couple hors de la pliure).
 Slide 12 : la double page de la slide 3 en style Années 70 (pages de `out/mag/pages-seventies`).
 Carrousel d'octobre 2026 (13 slides) : nouveaux angles par rapport au précédent (TikTok pénalise les images republiées),

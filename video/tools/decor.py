@@ -5,6 +5,7 @@ Le bois imite celui des photos de référence : planches d'acacia miel, fil serr
                               jute-couleur.jpg, jute-relief.png, apercu.jpg
 """
 import os
+import sys
 
 import numpy as np
 from PIL import Image
@@ -124,12 +125,57 @@ def jute(N=2048, L=1.0, seed=5):
     return np.clip(col, 0, 255).astype(np.uint8), relief
 
 
+# ── chêne de la table basse ovale (décor « salon ») : plateau plaqué d'un seul tenant, fil en cathédrales ──
+CHENE_GAIN = (0.9, 0.93, 1.08)        # gain linéaire par canal, calé sur la photo de référence (bois moyen 163, 122, 89)
+
+
+def chene(W=4096, H=2048, LX=1.3, LY=0.7, seed=11):
+    """plateau de 1,3 × 0,7 m, fil dans la longueur (x) ; 1 px = 0,32 mm. Débit sur dosse : les cernes d'un tronc
+    (axe selon x) coupés par un plan à distance h(x) dessinent des arches emboîtées (cathédrales) ; pores du bois
+    de printemps en traits fins, rayons en courtes mouchetures."""
+    X = np.broadcast_to(np.linspace(0, LX, W, endpoint=False)[None, :], (H, W))
+    Y = np.broadcast_to(np.linspace(0, LY, H, endpoint=False)[:, None], (H, W))
+    u = X / LX
+    yc = LY * 0.42 + 0.05 * np.sin(u * 2.1 + 0.4) + 0.03 * (fbm(u * 3, Y / LY * 0.6, seed, 3, 16) - 0.5)
+    h = 0.06 + 0.11 * u ** 1.25 + 0.018 * np.sin(u * 4.3 + 1.1) + 0.01 * (fbm(u * 2, Y / LY * 2, seed + 1, 3, 16) - 0.5)
+    d = np.sqrt((Y - yc) ** 2 + h ** 2)
+    d = d + 0.006 * (fbm(Y / LY * 5, u * 2, seed + 2, 4, 32) - 0.5)               # cernes irréguliers
+    # largeur des cernes variable d'une année à l'autre : index de cerne = d / 4,5 mm + bruit le long du rayon
+    ring = d / 0.003 + 3.2 * sample(grid((256, 4), seed + 6), d / 0.003 * 0.35, np.zeros_like(d) + 1.5)
+    k = np.floor(ring)
+    f = ring - k
+    hk = np.sin(k * 12.9898) * 43758.5453
+    hk = hk - np.floor(hk)                                                         # contraste propre à chaque cerne
+    late = smooth(0.4, 0.93, f) * (1 - smooth(0.965, 1.0, f)) * (0.75 + 0.3 * hk)
+    pores_g = sample(grid((900, 260), seed + 3), Y / LY * 880, u * 250)            # pores : 0,8 mm × 5 mm
+    pores = smooth(0.62, 0.8, pores_g) * (1 - smooth(0.25, 0.4, f))
+    fleck = smooth(0.7, 0.86, sample(grid((420, 60), seed + 4), Y / LY * 400, u * 55))   # rayons
+    mott = fbm(Y / LY * 4, u * 2.5, seed + 5, 4, 16)
+    light, dark = (200, 154, 112), (128, 86, 52)
+    t = np.clip(0.27 + 0.28 * late + 0.3 * pores + 0.1 * fleck + 0.6 * (mott - 0.5), 0, 1)
+    col = mix(light, dark, t)
+    lin = (np.clip(col, 0, 255) / 255) ** 2.2 * np.array(CHENE_GAIN)
+    col = 255 * np.clip(lin, 0, 1) ** (1 / 2.2)
+    rough = 0.4 + 0.12 * pores + 0.04 * (mott - 0.5)
+    relief = 0.55 - 0.3 * pores + 0.05 * late
+    return np.clip(col, 0, 255).astype(np.uint8), np.clip(rough, 0, 1), np.clip(relief, 0, 1)
+
+
 def save16(a, path):
     Image.fromarray((a * 65535).astype(np.uint16)).save(path)
 
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
+    if 'chene' in sys.argv:                                              # décor « salon » seulement
+        c, ro, re = chene()
+        Image.fromarray(c).save(os.path.join(OUT, 'chene-couleur.jpg'), quality=94)
+        Image.fromarray((ro * 255).astype(np.uint8)).save(os.path.join(OUT, 'chene-rugosite.png'))
+        save16(re, os.path.join(OUT, 'chene-relief.png'))
+        s = Image.new('RGB', (1600, 1610), 'white')
+        s.paste(Image.fromarray(c).resize((1600, 800)), (0, 0)); s.paste(Image.fromarray(c[500:1300, 1200:2800]), (0, 810))
+        s.save(os.path.join(OUT, 'apercu-chene.jpg'), quality=88)
+        sys.exit(print('chêne →', os.path.normpath(OUT)))
     c, ro, re = wood()
     Image.fromarray(c).save(os.path.join(OUT, 'bois-couleur.jpg'), quality=94)
     Image.fromarray((ro * 255).astype(np.uint8)).save(os.path.join(OUT, 'bois-rugosite.png'))
