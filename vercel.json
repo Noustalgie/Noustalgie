@@ -1,6 +1,7 @@
 {
   "buildCommand": "node outils/preparer-production.mjs",
   "outputDirectory": "public",
+  "trailingSlash": false,
   "functions": {
     "api/chat.js": {
       "maxDuration": 60
@@ -25,6 +26,10 @@
     {
       "path": "/api/cleanup",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/indexnow",
+      "schedule": "0 6 * * *"
     }
   ],
   "rewrites": [
@@ -59,6 +64,10 @@
     {
       "source": "/api/track",
       "destination": "/api/tools?fn=track"
+    },
+    {
+      "source": "/api/indexnow",
+      "destination": "/api/tools?fn=indexnow"
     },
     {
       "source": "/api/order-status",

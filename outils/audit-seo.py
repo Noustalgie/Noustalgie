@@ -235,8 +235,8 @@ class Audit:
             if not d:
                 self.pb_('E', 106, U, 'Meta description absente')
             else:
-                if len(d) > 165:
-                    self.pb_('R', 0, U, f'Description de {len(d)} car. : coupée dans Google au-delà de ~160')
+                if len(d) > 158:
+                    self.pb_('R', 0, U, f'Description de {len(d)} car. : au-delà de 158 (règle du CLAUDE.md)')
                 if len(d) < 70:
                     self.pb_('R', 0, U, f'Description courte ({len(d)} car.)')
         # titres de page
@@ -571,6 +571,13 @@ class Audit:
                         self.pb_('A', 17, '/sitemap.xml', f'lastmod dans le futur : {m}')
                 except ValueError:
                     self.pb_('E', 17, '/sitemap.xml', f'lastmod invalide : {m}')
+            # lastmod = dateModified de l'Article : sinon les robots apprennent à ignorer ce champ
+            for loc, lm in re.findall(r'<loc>(.*?)</loc>\s*<lastmod>(.*?)</lastmod>', xml):
+                f = os.path.join(PUBLIC, loc[len(SITE):].strip('/'), 'index.html')
+                if loc.startswith(SITE) and loc[len(SITE):].strip('/') and os.path.isfile(f):
+                    dm = re.search(r'"dateModified":\s*"([^"]*)"', open(f, encoding='utf-8').read())
+                    if dm and dm.group(1)[:10] != lm[:10]:
+                        self.pb_('A', 17, '/sitemap.xml', f'lastmod {lm} ≠ dateModified {dm.group(1)} : {loc}')
             for p in indexables:
                 if SITE + (p.url if p.url != '/' else '/') not in vus:
                     self.pb_('A', 0, p.url, 'Page indexable absente du sitemap')

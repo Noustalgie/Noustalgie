@@ -23,6 +23,17 @@
 <g:size>24 pages</g:size>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+<g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>LU</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>MC</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>CH</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>DE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>AT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>NL</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>ES</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>PT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IE</g:country><g:price>0 EUR</g:price></g:shipping>
 </item>
 <item>
 <g:id>NOUST-LIVRE-36</g:id>
@@ -43,6 +54,17 @@
 <g:size>36 pages</g:size>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+<g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>LU</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>MC</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>CH</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>DE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>AT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>NL</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>ES</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>PT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IE</g:country><g:price>0 EUR</g:price></g:shipping>
 </item>
 <item>
 <g:id>NOUST-LIVRE-50</g:id>
@@ -63,6 +85,17 @@
 <g:size>50 pages</g:size>
 <g:product_type>Albums photo &gt; Album photo de couple personnalisé</g:product_type>
 <g:shipping><g:country>FR</g:country><g:price>0 EUR</g:price><g:min_handling_time>3</g:min_handling_time><g:max_handling_time>4</g:max_handling_time><g:min_transit_time>7</g:min_transit_time><g:max_transit_time>8</g:max_transit_time></g:shipping>
+<g:shipping><g:country>BE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>LU</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>MC</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>CH</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>DE</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>AT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>NL</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>ES</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>PT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IT</g:country><g:price>0 EUR</g:price></g:shipping>
+<g:shipping><g:country>IE</g:country><g:price>0 EUR</g:price></g:shipping>
 </item>
 </channel>
 </rss>
