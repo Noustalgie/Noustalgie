@@ -46,8 +46,8 @@
    "k": "debut",
    "layout": "mdebut",
    "ph": [
-    "a03",
-    "b06"
+    "b06",
+    "b13"
    ],
    "t": {
     "h1": "Là où tout a",
@@ -118,7 +118,7 @@
     "a02",
     "a04",
     "a09",
-    "a11",
+    "a12",
     "c14",
     "b10"
    ],
@@ -210,7 +210,7 @@
    "k": "adresses",
    "layout": "madresses",
    "ph": [
-    "b13",
+    "a11",
     "c10",
     "c11",
     "c15"
@@ -237,7 +237,7 @@
    "k": "voyages",
    "layout": "mvoyages",
    "ph": [
-    "c12",
+    "c02",
     "c07",
     "c06"
    ],
@@ -404,26 +404,26 @@
   {
    "layout": "spreadL",
    "ph": [
-    "c02"
+    "a03"
    ],
    "t": {},
    "cadre": {
     "x": 0,
-    "y": 50,
+    "y": 12,
     "z": 1
    }
   },
   {
    "layout": "spreadR",
    "ph": [
-    "c02"
+    "a03"
    ],
    "t": {
-    "cap": "Santorin, le soleil et nous"
+    "cap": "Fourvière, et nous deux"
    },
    "cadre": {
     "x": 0,
-    "y": 50,
+    "y": 12,
     "z": 1
    }
   }
