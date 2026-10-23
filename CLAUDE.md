@@ -71,6 +71,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Photos de haut de page et données Article : fichiers locaux de `/img/exemple/`, jamais de lien vers Unsplash. Toute nouvelle page : l'ajouter au plan du site, à `llms.txt` et à `/guides`.
 - Guides : quand leur texte change vraiment, changer ensemble `dateModified` (Article), la date visible « Mis à jour le » (`.g-maj`) et le `lastmod` du sitemap (`audit-seo.py` signale un écart). Ne pas dater une simple modification de style.
 - Les mêmes faits (prix, 12 pays livrés, délai, minimum de photos, date limite de Noël, rubriques) figurent dans la FAQ et son JSON-LD (copie mot pour mot de la FAQ affichée), les données Product/Organization, `llms.txt`, `google-shopping.xml`, les CGV et les guides : en changer un, c'est chercher et changer tous les autres (les IA recoupent et se méfient des contradictions).
+- Google Shopping (`google-shopping.xml`, lu par Merchant Center) : chaque fiche mène à `/?pages=24`, `36` ou `50`, que la page présélectionne au chargement (`edPickPrice` : la carte de prix passe en noir, le paiement suit) ; les `url` des offres du JSON-LD `#produit` reprennent ces liens. Google refuse une fiche dont le prix n'est pas celui du format présélectionné (36 pages par défaut) : garder liens, offres et présélection alignés.
 - jsPDF et heic2any se chargent à la demande (`nstLoadLib`, en tête de `index.html`), pas avec la page d'accueil.
 
 ## Direction artistique (choix de Gabin : éditorial noir et blanc, boutons pilule)
