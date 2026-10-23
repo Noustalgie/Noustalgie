@@ -90,6 +90,7 @@ master.to(flash, { opacity: 0, duration: 0.4, ease: 'power2.out' }, END + 0.05);
 /* ── légendes façon TikTok : pastilles blanches ── */
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 function cap(lines, t0, t1, top, o = {}) {
+  if (q.has('notext')) return;                                         // ?notext : aucune légende (ni leur bruit)
   const el = document.createElement('div'); el.className = 'cap' + (o.big ? ' big' : ''); el.style.top = top + 'px';
   el.innerHTML = lines.map(l => `<span class="t">${esc(l)}</span>`).join('<br>') + (o.s ? `<span class="s">${esc(o.s)}</span>` : '') + (o.f ? `<span class="f">${esc(o.f)}</span>` : '');
   ui.appendChild(el);
