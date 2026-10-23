@@ -26,7 +26,7 @@ DECOR = os.path.join(ROOT, 'out', 'mag', 'decor')
 args = sys.argv[1:]
 SITE = '--site' in args
 LIEU = args[args.index('--decor') + 1] if '--decor' in args else 'table'      # table (bois miel, jute), lit (lin, plaid, guirlande), salon (table basse ovale, tapis à poils, plante) ou noel (même table, soir de Noël)
-HAUT = LIEU in ('salon', 'noel')                                              # décors en 9:16, plein écran TikTok
+HAUT = LIEU in ('salon', 'noel') or '--916' in args                           # 9:16, plein écran TikTok (cadrages SHOTS_SALON)
 PAGES = os.path.join(ROOT, 'out', 'mag', args[args.index('--pages') + 1] if '--pages' in args else 'pages')
 AUTRE = args[args.index('--autre') + 1] if '--autre' in args else 'pages-seventies'   # l'autre style, montré par une slide
 OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else args[args.index('--sortie') + 1] if '--sortie' in args else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
