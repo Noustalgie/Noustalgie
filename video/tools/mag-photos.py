@@ -25,13 +25,14 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 DECOR = os.path.join(ROOT, 'out', 'mag', 'decor')
 args = sys.argv[1:]
 SITE = '--site' in args
-LIEU = args[args.index('--decor') + 1] if '--decor' in args else 'table'      # table (bois miel, jute), lit (lin, plaid, guirlande) ou salon (table basse ovale, tapis à poils, plante)
+LIEU = args[args.index('--decor') + 1] if '--decor' in args else 'table'      # table (bois miel, jute), lit (lin, plaid, guirlande), salon (table basse ovale, tapis à poils, plante) ou noel (même table, soir de Noël)
+HAUT = LIEU in ('salon', 'noel')                                              # décors en 9:16, plein écran TikTok
 PAGES = os.path.join(ROOT, 'out', 'mag', args[args.index('--pages') + 1] if '--pages' in args else 'pages')
 AUTRE = args[args.index('--autre') + 1] if '--autre' in args else 'pages-seventies'   # l'autre style, montré par une slide
-OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
+OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else args[args.index('--sortie') + 1] if '--sortie' in args else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
 DRAFT = '--draft' in args
 ONLY = [int(n) if n.isdigit() else n for n in args[args.index('--only') + 1].split(',')] if '--only' in args else None
-W, H = (1080, 1920) if LIEU == 'salon' else (1080, 1440)          # salon : 9:16, plein écran TikTok
+W, H = (1080, 1920) if HAUT else (1080, 1440)
 if DRAFT:
     W, H = W // 2, H // 2
 EXPO = float(args[args.index('--expo') + 1]) if '--expo' in args else -2.5
@@ -340,7 +341,7 @@ def scene_setup():
     sc.render.resolution_x, sc.render.resolution_y = W, H
     sc.render.resolution_percentage = 100
     sc.view_settings.view_transform = 'Khronos PBR Neutral'      # garde la couleur du papier et du bois
-    sc.view_settings.exposure = EXPO + (0.2 if LIEU == 'salon' else 0.0)
+    sc.view_settings.exposure = EXPO + (0.2 if HAUT else 0.0)
     sc.render.image_settings.file_format = 'PNG'
     sc.render.image_settings.color_depth = '16'
     # monde : studio « intérieur » fourni avec Blender (reflets doux)
@@ -359,6 +360,8 @@ def scene_setup():
         decor_lit(sc)
     elif LIEU == 'salon':
         decor_salon(sc)
+    elif LIEU == 'noel':
+        decor_noel(sc)
     else:
         decor_table(sc)
     cam = bpy.data.cameras.new('tel'); co = bpy.data.objects.new('tel', cam); sc.collection.objects.link(co); sc.camera = co
@@ -807,6 +810,87 @@ def decor_salon(sc):
     lfo.rotation_euler = (Vector((0, -0.2, 0)) - lfo.location).to_track_quat('-Z', 'Y').to_euler()
 
 
+def box(name, size, loc, mats, rot=0.0, bevel=0.002):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
+    o = bpy.context.object; o.name = name; o.scale = size; o.rotation_euler = (0, 0, math.radians(rot))
+    bpy.ops.object.transform_apply(scale=True)
+    bv = o.modifiers.new('arrondi', 'BEVEL'); bv.width = bevel; bv.segments = 3; bv.limit_method = 'ANGLE'
+    for m in mats:
+        o.data.materials.append(m)
+    return o
+
+
+def decor_noel(sc):
+    """soir de Noël sur la table basse du salon : guirlande lumineuse autour de l'album, paquet en papier kraft
+    et ruban bordeaux, boules de verre, bougie ; lampe chaude et dernier jour bleuté à la fenêtre"""
+    cx, cy, a, b, n = TABLE
+    oak = oak_material()
+    slab('table', a, b, n, 0.0, -0.024, 0.009, [oak], cx, cy)
+    slab('table-pied', 0.36, 0.13, 4, -0.024, -HT, 0.004, [oak], cx, cy)
+    rug(sc)
+    # paquet cadeau derrière l'album à droite (à la place de la plante)
+    kraft = material('kraft', color=(0.52, 0.36, 0.22), rough=0.8, bump=(260, 0.25))
+    ruban = material('ruban', color=(0.2, 0.01, 0.03), rough=0.6, coat=0.08, coat_rough=0.4)
+    gx, gy, gr = POT[0] - 0.02, POT[1] + 0.03, 14
+    w, d, h = 0.17, 0.13, 0.085
+    box('paquet', (w, d, h), (gx, gy, h / 2), [kraft], gr)
+    ca, sa = math.cos(math.radians(gr)), math.sin(math.radians(gr))
+    box('ruban-1', (0.022, d + 0.003, h + 0.003), (gx, gy, h / 2), [ruban], gr, 0.0008)
+    box('ruban-2', (w + 0.003, 0.022, h + 0.003), (gx, gy, h / 2), [ruban], gr, 0.0008)
+    for ang in (32, 148, -40, -140):                      # nœud : quatre pans aplatis en rosace, posés sur le paquet
+        t = math.radians(gr + ang)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=32, ring_count=16, location=(gx + 0.022 * math.cos(t), gy + 0.022 * math.sin(t), h + 0.006))
+        o = bpy.context.object; o.name = 'noeud'; o.scale = (0.026, 0.011, 0.006); o.rotation_euler = (0, math.radians(-12), t)
+        o.data.materials.append(ruban)
+        for p in o.data.polygons:
+            p.use_smooth = True
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.009, location=(gx, gy, h + 0.007))
+    o = bpy.context.object; o.scale = (1, 1, 0.7); o.data.materials.append(ruban)
+    # petit paquet crème au ruban vert, derrière l'album à gauche
+    creme = material('papier-creme', color=(0.82, 0.78, 0.7), rough=0.7, bump=(300, 0.15))
+    vert = material('ruban-vert', color=(0.02, 0.09, 0.05), rough=0.45, coat=0.3)
+    box('paquet-2', (0.1, 0.1, 0.06), (-0.2, 0.14, 0.03), [creme], -20)
+    box('ruban-3', (0.016, 0.103, 0.063), (-0.2, 0.14, 0.03), [vert], -20, 0.0006)
+    box('ruban-4', (0.103, 0.016, 0.063), (-0.2, 0.14, 0.03), [vert], -20, 0.0006)
+    # boules de Noël en verre laqué, avec leur attache dorée
+    dore = material('dore', color=(0.85, 0.62, 0.3), rough=0.25, metal=1.0)
+    for name, col, r, (x, y) in (('boule-bordeaux', (0.3, 0.02, 0.05), 0.032, (0.22, 0.13)),
+                                 ('boule-or', (0.8, 0.55, 0.22), 0.026, (0.5, -0.1)),
+                                 ('boule-vert', (0.02, 0.1, 0.06), 0.03, (-0.43, -0.02)),
+                                 ('boule-creme', (0.85, 0.8, 0.7), 0.022, (-0.36, 0.08))):
+        mat = material(name, color=col, rough=0.12, coat=1.0, coat_rough=0.05, metal=0.6 if 'or' in name else 0.0)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=r, segments=48, ring_count=24, location=(x, y, r))
+        o = bpy.context.object; o.name = name; o.data.materials.append(mat)
+        for p in o.data.polygons:
+            p.use_smooth = True
+        bpy.ops.mesh.primitive_cylinder_add(radius=r * 0.28, depth=r * 0.3, location=(x - r * 0.75, y + r * 0.2, r * 0.9))
+        o = bpy.context.object; o.rotation_euler = (0, math.radians(-70), math.radians(15)); o.data.materials.append(dore)
+    # bougie crème à gauche, flamme et sa lumière
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.035, depth=0.09, vertices=64, location=(-0.42, -0.24, 0.045))
+    o = bpy.context.object; o.name = 'bougie'; o.data.materials.append(material('cire', color=(0.9, 0.86, 0.76), rough=0.5))
+    for p in o.data.polygons:
+        p.use_smooth = True
+    flamme = material('flamme', color=(1.0, 0.7, 0.3), rough=0.5)
+    fb = flamme.node_tree.nodes['Principled BSDF']
+    fb.inputs['Emission Color'].default_value = (1.0, 0.55, 0.18, 1); fb.inputs['Emission Strength'].default_value = 40
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.006, location=(-0.42, -0.24, 0.103))
+    o = bpy.context.object; o.name = 'flamme'; o.scale = (1, 1, 2.2); o.data.materials.append(flamme)
+    lb = bpy.data.lights.new('bougie', 'POINT'); lb.energy = 4; lb.color = (1.0, 0.6, 0.3); lb.shadow_soft_size = 0.01
+    lbo = bpy.data.objects.new('bougie', lb); sc.collection.objects.link(lbo); lbo.location = (-0.42, -0.24, 0.12)
+    # guirlande posée sur la table autour de l'album (de la gauche du paquet, par l'avant, jusqu'à la droite)
+    an = np.radians(np.linspace(100, 370, 22))
+    rr = 1 + 0.06 * np.sin(np.arange(22) * 1.9)
+    pts = list(zip(0.0 + 0.37 * rr * np.cos(an), -0.21 + 0.235 * rr * np.sin(an)))
+    fairy_lights(pts, lambda x, y: np.zeros_like(x))
+    # lumière : lampe chaude derrière à droite, fenêtre bleutée faible à gauche, rebond chaud
+    for name, size, energy, color, loc in (('lampe', 0.5, 160, (1.0, 0.72, 0.45), (1.1, 0.9, 1.0)),
+                                            ('fenetre', 1.6, 110, (0.72, 0.8, 1.0), (-2.1, 0.4, 1.9)),
+                                            ('rebond', 2.2, 90, (1.0, 0.8, 0.6), (1.4, -1.9, 1.7))):
+        ld = bpy.data.lights.new(name, 'AREA'); ld.size = size; ld.energy = energy; ld.color = color
+        lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
+        lo.rotation_euler = (Vector((0, -0.15, 0)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
+
+
 def leg_material():
     if 'pied' in _mats:
         return _mats['pied']
@@ -881,7 +965,7 @@ SHOTS_SALON = [
 def finish(src, dst):
     """rendu → photo de téléphone : légère netteté, grain fin, JPEG (visuels du site : sans grain, JPEG léger)"""
     im = Image.open(src).convert('RGB')
-    if LIEU == 'lit':                                     # halo chaud autour des ampoules de la guirlande
+    if LIEU in ('lit', 'noel'):                           # halo chaud autour des ampoules de la guirlande
         a = np.asarray(im).astype(np.float32) / 255
         m = Image.fromarray((np.clip((a.min(axis=2) - 0.9) / 0.1, 0, 1) * 255).astype(np.uint8))
         r = W / 1080
@@ -927,12 +1011,12 @@ SITE_SHOTS = [
 def main():
     os.makedirs(os.path.join(OUT, 'brut'), exist_ok=True)
     sc, co = scene_setup()
-    for s in (SITE_SHOTS if SITE else SHOTS_SALON if LIEU == 'salon' else SHOTS):
+    for s in (SITE_SHOTS if SITE else SHOTS_SALON if HAUT else SHOTS):
         name = s.get('name') or '%02d' % s['n']
         if ONLY and s.get('n', name) not in ONLY and name not in ONLY:
             continue
         t0 = time.time()
-        rx, ry = s.get('res', (1080, 1920) if LIEU == 'salon' else (1080, 1440))
+        rx, ry = s.get('res', (W, H) if not DRAFT else (W * 2, H * 2))
         sc.render.resolution_x, sc.render.resolution_y = (rx // 2, ry // 2) if DRAFT else (rx, ry)
         for ob in [o for o in bpy.data.objects if o.name.startswith(('album', 'pivot'))]:
             bpy.data.objects.remove(ob, do_unlink=True)
