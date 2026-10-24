@@ -7945,6 +7945,8 @@ function trackOverlay() {
     <button class="nst-btn nst-btn-dark" type="submit">${t('tr_btn')}</button></form><div id="nstTrOut" aria-live="polite"></div>
     <p class="nst-tr-sub" style="margin-top:14px">${t('tr_pdf')}</p></div>`;
   ov.classList.add('on'); document.body.style.overflow = 'hidden';
+  // ouverte par un lien …/#suivi : on retire d'abord #suivi de l'adresse, sinon « Retour » revient sur #suivi et la rouvre
+  if (location.hash === '#suivi') history.replaceState(null, '', location.pathname + location.search);
   if (!trPushed) try { history.pushState({ nstOv: 'suivi' }, ''); trPushed = true; } catch (e) {}
   setTimeout(() => $('nstTrRef').focus(), 50);
   $('nstTrForm').addEventListener('submit', async e => {

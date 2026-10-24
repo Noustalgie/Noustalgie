@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8629 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8631 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (8629 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 1687-1782 : <script type="application/ld+json"> (6 Ko)
 - lignes 2330-4502 : <script> (186 Ko)
 - lignes 4503-5828 : <script> (122 Ko)
-- lignes 5829-8600 : <script> (236 Ko)
-- lignes 8601-8626 : <script> (2 Ko)
+- lignes 5829-8602 : <script> (236 Ko)
+- lignes 8603-8628 : <script> (2 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -63,12 +63,12 @@ Générée automatiquement (8629 lignes). Ouvrir une zone : Read avec offset = n
  7014  4. Sauvegarde locale (IndexedDB : photos comprises)
  7049  5. Impression : photos en pleine résolution + PDF hébergé
  7226  6. Paiement
- 8131  1. Livre 3D réutilisable
- 8252  2. Aperçu en direct pendant la création (ordinateur)
- 8286  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8388  4. Génération vivante : leurs photos se posent dans un livre
- 8414  5. Récapitulatif de commande avec LEUR couverture
- 8452  6. Finitions : apparition au défilement, page tournée
+ 8133  1. Livre 3D réutilisable
+ 8254  2. Aperçu en direct pendant la création (ordinateur)
+ 8288  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8390  4. Génération vivante : leurs photos se posent dans un livre
+ 8416  5. Récapitulatif de commande avec LEUR couverture
+ 8454  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -396,57 +396,57 @@ Générée automatiquement (8629 lignes). Ouvrir une zone : Read avec offset = n
  7930  trHide
  7932  trackOverlay
  7940  close
- 7977  ouvrir
- 8003  ekLabel
- 8014  drawEbar
- 8039  coach
- 8045  done
- 8051  goTab
- 8060  draw
- 8088  payLabel
- 8099  highlightPal
- 8104  setLang
- 8119  lang
- 8132  spineColors
- 8159  sampleCover
- 8178  auto
- 8179  build
- 8186  name
- 8202  words
- 8209  apply
- 8236  build
- 8245  nst70
- 8265  names
- 8266  renderLive
- 8279  flowMode
- 8288  exifDate
- 8298  readAscii
- 8299  scan
- 8316  addPhotos
- 8325  remap
- 8326  applyOrder
- 8339  movePhoto
- 8342  sortByDate
- 8351  renderPhotosPlus
- 8390  startGenAnim
- 8402  tick
- 8410  stopGenAnim
- 8412  runGeneration
- 8417  noel
- 8421  fill
- 8424  renderSummary
- 8437  syncPrice
- 8448  goTab
- 8470  setLang
- 8487  lang
- 8518  applyText
- 8527  fromFrance
- 8535  fromOSM
- 8554  close
- 8555  render
- 8563  pick
- 8571  search
- 8607  etape
+ 7979  ouvrir
+ 8005  ekLabel
+ 8016  drawEbar
+ 8041  coach
+ 8047  done
+ 8053  goTab
+ 8062  draw
+ 8090  payLabel
+ 8101  highlightPal
+ 8106  setLang
+ 8121  lang
+ 8134  spineColors
+ 8161  sampleCover
+ 8180  auto
+ 8181  build
+ 8188  name
+ 8204  words
+ 8211  apply
+ 8238  build
+ 8247  nst70
+ 8267  names
+ 8268  renderLive
+ 8281  flowMode
+ 8290  exifDate
+ 8300  readAscii
+ 8301  scan
+ 8318  addPhotos
+ 8327  remap
+ 8328  applyOrder
+ 8341  movePhoto
+ 8344  sortByDate
+ 8353  renderPhotosPlus
+ 8392  startGenAnim
+ 8404  tick
+ 8412  stopGenAnim
+ 8414  runGeneration
+ 8419  noel
+ 8423  fill
+ 8426  renderSummary
+ 8439  syncPrice
+ 8450  goTab
+ 8472  setLang
+ 8489  lang
+ 8520  applyText
+ 8529  fromFrance
+ 8537  fromOSM
+ 8556  close
+ 8557  render
+ 8565  pick
+ 8573  search
+ 8609  etape
 
 ## api/
 
