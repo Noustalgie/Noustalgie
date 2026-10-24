@@ -64,7 +64,10 @@ master.set(S, { cover: 0 }, END);                                       // carte
 master.set(S.flip, Object.fromEntries([...Array(N).keys()].map(i => [i, 0])), END);
 
 /* ── avant : la pellicule du téléphone, qui défile sur les temps ── */
-const PHOTOS = ['allee', 'arche', 'assis', 'bouquet', 'invites', 'montagne', 'sortie'].map(n => `/site/img/exemple/photos/${n}.jpg`)
+// autre album : ?pages=pages-lyon-seventies&spine=INÈS%20%26%20THÉO%20·%202026&roll=album-lyon (pellicule tirée de out/mag/album-lyon/hd)
+const ROLL = q.get('roll');
+const PHOTOS = ROLL ? (await (await fetch(`/out/mag/${ROLL}/photos.json`)).json()).map(p => p.f.replace(/^\/video/, ''))
+  : ['allee', 'arche', 'assis', 'bouquet', 'invites', 'montagne', 'sortie'].map(n => `/site/img/exemple/photos/${n}.jpg`)
   .concat(['bouquet', 'champ', 'lumieres', 'mains', 'montagne', 'portee'].map(n => `/site/img/exemple/photo-${n}.jpg`));
 const grid = document.getElementById('grid'), phone = document.getElementById('phone');
 let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -87,6 +90,7 @@ master.to(flash, { opacity: 0, duration: 0.4, ease: 'power2.out' }, END + 0.05);
 /* ── légendes façon TikTok : pastilles blanches ── */
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 function cap(lines, t0, t1, top, o = {}) {
+  if (q.has('notext')) return;                                         // ?notext : aucune légende (ni leur bruit)
   const el = document.createElement('div'); el.className = 'cap' + (o.big ? ' big' : ''); el.style.top = top + 'px';
   el.innerHTML = lines.map(l => `<span class="t">${esc(l)}</span>`).join('<br>') + (o.s ? `<span class="s">${esc(o.s)}</span>` : '') + (o.f ? `<span class="f">${esc(o.f)}</span>` : '');
   ui.appendChild(el);
@@ -104,7 +108,9 @@ cap(['Votre playlist'], 11.6, 12.5, 250);
 cap(['Une interview exclusive'], 13.1, 14.0, 250);
 cap(['Des jeux à deux'], 14.6, 16.0, 250);
 cap(['Une lettre d’amour'], 16.6, END, 250);
-cap(['Créez le vôtre', 'sur noustalgie.fr'], END + 0.15, DURATION, 230, { s: 'Aperçu gratuit · livré en 10 à 12 jours', f: 'Album d’exemple : couple imaginaire, photos Unsplash.' });
+cap(['Créez le vôtre', 'sur noustalgie.fr'], END + 0.15, DURATION, 230, q.has('noel')       // ?noel : version cadeau de Noël (date limite : NOEL de public/index.html)
+  ? { s: 'Aperçu gratuit · commandez avant le 6 décembre pour Noël', f: 'Album d’exemple.' }
+  : { s: 'Aperçu gratuit · livré en 10 à 12 jours', f: 'Album d’exemple : couple imaginaire, photos Unsplash.' });
 cue('end', END);
 master.set({}, {}, DURATION);
 
@@ -113,7 +119,7 @@ await document.fonts.ready;
 await Promise.all([document.fonts.load('600 62px "TikTok Sans"'), document.fonts.load('700 96px "TikTok Sans"'), document.fonts.load('500 34px "Hanken Grotesk"')]);
 await Promise.all(PHOTOS.map(src => new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = src; })));
 const B = await createBook3D(canvas, { width: W, height: H, samples: +(q.get('samples') || 4), shadowSize: +(q.get('shadow') || 2048),
-  base: '/out/mag/pages/', spine: { text: 'LÉA & HUGO · 2026', bg: '#161412', fg: '#FBF9F6' } });
+  base: `/out/mag/${q.get('pages') || 'pages'}/`, spine: { text: q.get('spine') || 'LÉA & HUGO · 2026', bg: '#161412', fg: '#FBF9F6' } });
 window.__duration = DURATION;
 const clampT = t => Math.min(Math.max(t, 1e-4), DURATION - 1e-4);
 const acc = document.createElement('canvas'); acc.width = W; acc.height = H;
