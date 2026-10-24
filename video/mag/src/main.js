@@ -90,7 +90,7 @@ master.to(flash, { opacity: 0, duration: 0.4, ease: 'power2.out' }, END + 0.05);
 /* ── légendes façon TikTok : pastilles blanches ── */
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 function cap(lines, t0, t1, top, o = {}) {
-  if (q.has('notext')) return;                                         // ?notext : aucune légende (ni leur bruit)
+  if (q.has('notext') && !o.force) return;                             // ?notext : aucune légende (ni leur bruit), sauf l'accroche
   const el = document.createElement('div'); el.className = 'cap' + (o.big ? ' big' : ''); el.style.top = top + 'px';
   el.innerHTML = lines.map(l => `<span class="t">${esc(l)}</span>`).join('<br>') + (o.s ? `<span class="s">${esc(o.s)}</span>` : '') + (o.f ? `<span class="f">${esc(o.f)}</span>` : '');
   ui.appendChild(el);
@@ -98,6 +98,10 @@ function cap(lines, t0, t1, top, o = {}) {
   if (t1 < DURATION) master.to(el, { opacity: 0, duration: 0.12, ease: 'power1.in' }, t1 - 0.12);
   cue('pop', t0);
 }
+// ?accroche=ligne 1|ligne 2 (avec ?notext) : une seule accroche du début à la fin, façon « POV : … »
+if (q.get('accroche')) cap(q.get('accroche').split('|'), +(q.get('de') || 0) + 0.15, DURATION, 200, { force: true });
+// ?avantapres (avec ?notext) : seulement « Avant » puis « Après »
+if (q.has('avantapres')) { cap(['Avant'], 0.15, DROP - 0.1, 200, { big: true, force: true }); cap(['Après'], DROP + 0.12, END, 200, { big: true, force: true }); }
 cap(['Avant'], 0.15, DROP - 0.1, 200, { big: true, s: 'vos photos dorment dans le téléphone' });
 cap(['Après'], DROP + 0.12, 5.5, 200, { big: true, s: 'votre histoire, imprimée en magazine' });
 cap(['Votre dédicace'], 6.45, 7.0, 250);
@@ -118,7 +122,13 @@ master.set({}, {}, DURATION);
 await document.fonts.ready;
 await Promise.all([document.fonts.load('600 62px "TikTok Sans"'), document.fonts.load('700 96px "TikTok Sans"'), document.fonts.load('500 34px "Hanken Grotesk"')]);
 await Promise.all(PHOTOS.map(src => new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = src; })));
+// ?fond=chene|lin|creme|jute : surface claire photographiée, lumière de jour, sans poussière ni lumières floues
+const FONDS = { chene: { map: '/out/mag/decor/chene-couleur.jpg', rep: 1, bg: 0xcfc4b4 }, jute: { map: '/out/mag/decor/jute-couleur.jpg', rep: 7, bg: 0xcbbfa9 },
+  lin: { map: '/out/mag/decor/lin.jpg', rep: 2, bg: 0xd9d3c8 }, creme: { map: null, rep: 1, bg: 0xe6dfd3 } };
+const FOND = FONDS[q.get('fond')];
+if (FOND) Object.assign(S, { studio: 1, bgColor: FOND.bg, key: 1.0, top: 0.5, fill: 0.4, bloom: 0.04, dust: 0, bokeh: 0, exposure: 0.95, vignette: 0.12, warm: 0.006 });
 const B = await createBook3D(canvas, { width: W, height: H, samples: +(q.get('samples') || 4), shadowSize: +(q.get('shadow') || 2048),
+  floorMap: FOND && FOND.map, floorRepeat: FOND ? FOND.rep : 1,
   base: `/out/mag/${q.get('pages') || 'pages'}/`, spine: { text: q.get('spine') || 'LÉA & HUGO · 2026', bg: '#161412', fg: '#FBF9F6' } });
 window.__duration = DURATION;
 const clampT = t => Math.min(Math.max(t, 1e-4), DURATION - 1e-4);
