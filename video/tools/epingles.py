@@ -11,12 +11,12 @@ F = os.path.join(VIDEO, 'assets', 'fonts')
 
 # (fichier de sortie, photo, décalage vertical du recadrage (0 haut, 1 bas), titre, sous-titre)
 EPINGLES = [
-    ('01-noel', 'tiktok-1-noel-lyon70/01.jpg', 0.55, 'Le cadeau de Noël<br><em>qui raconte votre histoire</em>', 'Votre album photo de couple, façon magazine'),
-    ('02-magazine', 'tiktok-2-salon-paris/03.jpg', 0.5, 'Votre histoire d’amour<br><em>en magazine</em>', 'Vos photos, vos souvenirs, un vrai livre relié'),
-    ('03-plan', 'tiktok-1-noel-lyon70/02.jpg', 0.5, 'Le plan de votre rencontre<br><em>dans un cœur</em>', 'Idée cadeau couple personnalisée'),
-    ('04-copine', 'tiktok-3-noel-nuit/11.jpg', 0.5, 'Idée cadeau<br><em>pour sa copine</em>', 'Un album photo de votre couple, écrit pour vous'),
-    ('05-copain', 'tiktok-3-noel-nuit/06.jpg', 0.5, 'Idée cadeau<br><em>pour son copain</em>', 'Votre playlist, vos voyages, votre histoire'),
-    ('06-album', 'tiktok-2-salon-paris/05.jpg', 0.5, 'Album photo couple<br><em>façon magazine</em>', 'Aperçu gratuit avant de commander'),
+    ('01-noel', 'tiktok-1-pages-lyon-seventies/01.jpg', 0.55, 'Le cadeau de Noël<br><em>qui raconte votre histoire</em>', 'Votre album photo de couple, façon magazine'),
+    ('02-magazine', 'tiktok-2-pages-paris-argentique/03.jpg', 0.5, 'Votre histoire d’amour<br><em>en magazine</em>', 'Vos photos, vos souvenirs, un vrai livre relié'),
+    ('03-plan', 'tiktok-5-pages-paris/02.jpg', 0.5, 'Le plan de votre rencontre<br><em>dans un cœur</em>', 'Idée cadeau couple personnalisée'),
+    ('04-copine', 'tiktok-3-pages-nuit/01.jpg', 0.5, 'Idée cadeau<br><em>pour sa copine</em>', 'Un album photo de votre couple, écrit pour vous'),
+    ('05-copain', 'tiktok-3-pages-nuit/06.jpg', 0.5, 'Idée cadeau<br><em>pour son copain</em>', 'Votre playlist, vos voyages, votre histoire'),
+    ('06-album', 'tiktok-2-pages-paris-argentique/05.jpg', 0.5, 'Album photo couple<br><em>façon magazine</em>', 'Aperçu gratuit avant de commander'),
 ]
 
 def b64(p):
