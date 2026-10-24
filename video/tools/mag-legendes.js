@@ -8,12 +8,14 @@ const { chromium } = require('playwright');
 const { serve } = require('./serve');
 
 const ROOT = path.join(__dirname, '..');
-const W = 1080, H = 1440;
+// --jeu jute-lyon|jute-lea : carrousels 9:16 du décor jute, seule la 1re image porte une accroche (façon Mimosa)
+const JEU = process.argv.includes('--jeu') ? process.argv[process.argv.indexOf('--jeu') + 1] : null;
+const W = 1080, H = JEU ? 1920 : 1440;
 // --decor lit : carrousel du lit (album années 70 de Jade et Malo, tools/mag-photos.py --decor lit) ; sinon la table
 const LIEU = process.argv.includes('--decor') ? process.argv[process.argv.indexOf('--decor') + 1] : 'table';
-const PHOTOS = LIEU === 'table' ? 'photos' : 'photos-' + LIEU;
-const OUT = path.join(ROOT, 'out', 'mag', LIEU === 'table' ? 'carrousel' : 'carrousel-' + LIEU);
-const ACCROCHE = '/site/img/exemple/photo-portee.jpg';     // le couple de la couverture (slide 2)
+const PHOTOS = JEU || (LIEU === 'table' ? 'photos' : 'photos-' + LIEU);
+const OUT = path.join(ROOT, 'out', 'mag', JEU ? 'carrousel-' + JEU : LIEU === 'table' ? 'carrousel' : 'carrousel-' + LIEU);
+const ACCROCHE = JEU === 'jute-lyon' ? '/out/mag/album-lyon/hd/a01.jpg' : '/site/img/exemple/photo-portee.jpg';     // le couple de la couverture (slide 2)
 
 // haut / bas : légende (une ligne par élément) ; petit : ligne plus petite sous la légende du bas ;
 // y : hauteur de la légende du bas (fraction de l'image) quand l'album occupe sa place habituelle
@@ -54,7 +56,11 @@ const LIT = [
   { n: 1, f: '01-copain', grand: true, haut: ['Idée cadeau', 'pour ton copain 🎄'] },
   { n: 1, f: '01-copine', grand: true, haut: ['Idée cadeau', 'pour ta copine 🎄'] },
 ];
-const SLIDES = LIEU === 'table' ? TABLE : LIT;
+const JEUX = {
+  'jute-lyon': [{ n: 1, accroche: { note: 'Pour Noël 🎄', a: 'Idée cadeau', b: 'Couple' } }],
+  'jute-lea': [{ n: 1, grand: true, haut: ['POV : vous voulez lui offrir', 'quelque chose de', 'vraiment spécial'] }],
+};
+const SLIDES = JEU ? JEUX[JEU] : LIEU === 'table' ? TABLE : LIT;
 
 const CSS = `
 *{margin:0;padding:0;box-sizing:border-box}
@@ -96,13 +102,13 @@ const ETOILE = (x, y, s, fill, stroke) => `<svg width="${s}" height="${s}" viewB
 function html(sl) {
   if (sl.accroche) {
     const A = sl.accroche, long = A.b.length > 8;                 // « pour ton copain » : titre plus petit
-    return `<div id="s"><img class="fond" src="${ACCROCHE}" style="object-position:20% 40%">`
+    return `<div id="s"><img class="fond" src="${ACCROCHE}" style="object-position:${JEU ? '50% 50%' : '20% 40%'}">`
       + `<div class="note"><i class="scotch"></i><b>${emo(A.note)}</b></div>`
-      + `<div class="titre" style="top:${long ? 940 : 930}px"><span class="a">${esc(A.a)}</span><span class="b"${long ? ' style="font-size:100px"' : ''}>${COEUR}${esc(A.b)}`
+      + `<div class="titre" style="top:${(long ? 940 : 930) + (JEU ? 380 : 0)}px"><span class="a">${esc(A.a)}</span><span class="b"${long ? ' style="font-size:100px"' : ''}>${COEUR}${esc(A.b)}`
       + `${ETOILE(4, -14, 70, 'rgba(255,255,255,.15)', '#fbd3e2')}${ETOILE(-8, 62, 36, '#f78fb8', '#f78fb8')}</span></div></div>`;
   }
   const f = String(sl.n).padStart(2, '0');
-  return `<div id="s"${LIEU === 'table' ? '' : ' class="boite"'}><img class="fond" src="/out/mag/${PHOTOS}/${f}.jpg">${sl.haut ? cap(sl.haut, sl.grand ? 'haut grand' : 'haut') : ''}${sl.bas ? cap(sl.bas, 'bas', sl.petit, sl.y) : ''}</div>`;
+  return `<div id="s"${LIEU === 'table' && !JEU ? '' : ' class="boite"'}><img class="fond" src="/out/mag/${PHOTOS}/${f}.jpg">${sl.haut ? cap(sl.haut, sl.grand ? 'haut grand' : 'haut') : ''}${sl.bas ? cap(sl.bas, 'bas', sl.petit, sl.y) : ''}</div>`;
 }
 
 (async () => {
