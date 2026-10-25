@@ -30,6 +30,40 @@ module.exports = async (req, res) => {
     const t = await pa('POST', '/v2/oauth', `grant_type=client_credentials&client_id=${encodeURIComponent(process.env.PRINTAPI_CLIENT_ID)}&client_secret=${encodeURIComponent(process.env.PRINTAPI_SECRET)}`, null, true);
     const token = t.body && t.body.access_token;
     if (!token) return res.status(200).json({ etape: 'oauth', t });
+    if (req.query.doc) {                                               // &doc=1 : pages de documentation Print API (texte)
+      const get = u => new Promise(resolve => {
+        const r2 = https.get(u, { timeout: 20000, headers: { 'User-Agent': 'Mozilla/5.0', Accept: 'text/html,application/json' } }, r => {
+          let d = ''; r.on('data', c => d += c); r.on('end', () => resolve({ status: r.statusCode, loc: r.headers.location, texte: d.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 30000) }));
+        });
+        r2.on('timeout', () => { r2.destroy(); resolve({ status: 0 }); }); r2.on('error', e => resolve({ status: 0, err: e.message }));
+      });
+      for (const u of String(req.query.doc).split(',')) out[u] = await get(u);
+      return res.status(200).json(out);
+    }
+    if (req.query.cherche) {                                           // &cherche=regex : produits dont l'id ou le nom correspond
+      const tous = [];
+      for (let off = 0; off < 700; off += 50) {
+        const pg = await pa('GET', `/v2/products?offset=${off}&limit=50`, null, token);
+        const r = pg.body && pg.body.results; if (!r || !r.length) break; tous.push(...r);
+      }
+      const re = new RegExp(req.query.cherche, 'i');
+      out.trouve = tous.filter(x => re.test(x.id + ' ' + x.name)).map(x => x.id + ' | ' + x.name);
+      if (req.query.brut) out.exemple = tous[0];
+      return res.status(200).json(out);
+    }
+    if (req.query.ids) {                                               // &ids=a,b : détail et devis France d'objets sans pages
+      out.objets = [];
+      for (const pid of String(req.query.ids).split(',')) {
+        const d = await pa('GET', `/v2/products/${pid}`, null, token);
+        const q = await pa('POST', '/v2/shipping/quote', { country: 'FR', items: [{ productId: pid, quantity: 1 }] }, token);
+        out.objets.push({ id: pid, produit: d.body, devis: q.body });
+      }
+      return res.status(200).json(out);
+    }
+    if (req.query.panier) {                                            // &panier=json : devis d'un panier complet (livre + objets)
+      out.devis = await pa('POST', '/v2/shipping/quote', JSON.parse(req.query.panier), token);
+      return res.status(200).json(out);
+    }
     const id = req.query.id;
     if (!id) {
       const tous = [];
