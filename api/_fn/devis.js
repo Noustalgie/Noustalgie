@@ -18,12 +18,17 @@ module.exports = async (req, res) => {
   if (process.env.VERCEL_ENV === 'production') return res.status(404).json({ error: 'Not found' });
   const out = {};
   if (req.query && req.query.commande) {                               // ?commande=1 : vraie commande de test Print API, code du webhook
-    const { uploadRemote } = require('../_lib/cloudinary');
-    const PA = require('../_lib/printapi'), E = require('./essai-pdf'), W = require('../webhook');
+    out.etapes = [];
+    process.on('uncaughtException', e => { try { res.status(200).json({ crash: String(e && e.stack || e), etapes: out.etapes }); } catch (x) {} });
+    try {
+    const { uploadRemote } = require('../_lib/cloudinary'); out.etapes.push('cloudinary');
+    const PA = require('../_lib/printapi'); out.etapes.push('printapi');
+    const E = require('./essai-pdf'); out.etapes.push('pdf ' + Object.keys(E).join(','));
+    const W = require('../webhook'); out.etapes.push('webhook ' + typeof W.createPrintApiOrder);
     const urls = {};
     for (const k of ['cover', 'inner', 'affiche', 'cadre']) {
       const r = await uploadRemote({ url: 'data:application/pdf;base64,' + E[k], folder: 'noustalgie/essai', publicId: `essai-${k}-${Date.now()}.pdf` });
-      urls[k] = r && r.secure_url;
+      urls[k] = r && r.secure_url; out.etapes.push('envoi ' + k + ' ' + !!urls[k]);
     }
     const id = 'NOUST-261025-' + Math.random().toString(36).slice(2, 7).toUpperCase().padEnd(5, 'X');
     const m = { options: String(req.query.options || 'coffret,express,affiche,cadre'), pa_cover: urls.cover, pa_inner: urls.inner, affiche_url: urls.affiche, cadre_url: urls.cadre,
@@ -33,6 +38,7 @@ module.exports = async (req, res) => {
     out.second = await W.createPrintApiOrder(args);                    // même numéro : ne doit pas créer de doublon
     out.erreur = global.__lastPrinterError || '';
     out.commande = await PA.getOrder(id);
+    } catch (e) { out.exception = String(e && e.stack || e); }
     return res.status(200).json(out);
   }
   if (req.query && req.query.lire) {                                   // ?lire=NOUST-… : relit une commande de test
