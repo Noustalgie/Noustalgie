@@ -17,6 +17,30 @@ function call(method, path, body) {
 module.exports = async (req, res) => {
   if (process.env.VERCEL_ENV === 'production') return res.status(404).json({ error: 'Not found' });
   const out = {};
+  if (req.query && req.query.commande) {                               // ?commande=1 : vraie commande de test Print API, code du webhook
+    const { uploadRemote } = require('../_lib/cloudinary');
+    const PA = require('../_lib/printapi'), E = require('./essai-pdf'), W = require('../webhook');
+    const urls = {};
+    for (const k of ['cover', 'inner', 'affiche', 'cadre']) {
+      const r = await uploadRemote({ url: 'data:application/pdf;base64,' + E[k], folder: 'noustalgie/essai', publicId: `essai-${k}-${Date.now()}.pdf` });
+      urls[k] = r && r.secure_url;
+    }
+    const id = 'NOUST-261025-' + Math.random().toString(36).slice(2, 7).toUpperCase().padEnd(5, 'X');
+    const m = { options: String(req.query.options || 'coffret,express,affiche,cadre'), pa_cover: urls.cover, pa_inner: urls.inner, affiche_url: urls.affiche, cadre_url: urls.cadre,
+      addr_line1: '10 rue de Rivoli', addr_line2: 'Bâtiment B', addr_postal: '75001', addr_city: 'Paris', addr_country: 'FR' };
+    const args = { m, name: 'Jeanne Essai', phone: '+33612345678', email: 'essai@noustalgie.fr', first: 'Jeanne', names: 'Emma & Hugo', orderNumber: id, pages: '24' };
+    out.urls = urls; out.premier = await W.createPrintApiOrder(args);
+    out.second = await W.createPrintApiOrder(args);                    // même numéro : ne doit pas créer de doublon
+    out.erreur = global.__lastPrinterError || '';
+    out.commande = await PA.getOrder(id);
+    return res.status(200).json(out);
+  }
+  if (req.query && req.query.lire) {                                   // ?lire=NOUST-… : relit une commande de test
+    out.commande = await require('../_lib/printapi').getOrder(String(req.query.lire));
+    out.suivi = await new Promise(resolve => require('./track')({ method: 'POST', headers: { origin: 'https://noustalgie.fr' }, body: { ref: req.query.lire, email: req.query.email || 'essai@noustalgie.fr' }, socket: {} },
+      { setHeader() {}, status(c) { this.c = c; return this; }, json(j) { resolve({ code: this.c || 200, j }); }, end() { resolve({ code: this.c }); } }));
+    return res.status(200).json(out);
+  }
   if (req.query && req.query.printapi) {                               // ?printapi=1 : prix Print API (compte de test)
     const pa = (method, path, body, token, form) => new Promise(resolve => {
       const buf = body ? Buffer.from(form ? body : JSON.stringify(body)) : null;
