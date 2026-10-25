@@ -30,11 +30,18 @@ module.exports = async (req, res) => {
     const t = await pa('POST', '/v2/oauth', `grant_type=client_credentials&client_id=${encodeURIComponent(process.env.PRINTAPI_CLIENT_ID)}&client_secret=${encodeURIComponent(process.env.PRINTAPI_SECRET)}`, null, true);
     const token = t.body && t.body.access_token;
     if (!token) return res.status(200).json({ etape: 'oauth', t });
-    const prods = await pa('GET', '/v2/products', null, token);
-    const liste = Array.isArray(prods.body) ? prods.body : (prods.body && (prods.body.items || prods.body.products)) || prods.body;
-    out.produits = Array.isArray(liste) ? liste.filter(x => /hard|soft|book|boek|magaz|21/i.test(JSON.stringify(x).slice(0, 400))).slice(0, 40) : liste;
     const id = req.query.id;
+    if (!id) {
+      const tous = [];
+      for (let off = 0; off < 700; off += 50) {
+        const pg = await pa('GET', `/v2/products?offset=${off}&limit=50`, null, token);
+        const r = pg.body && pg.body.results; if (!r || !r.length) break; tous.push(...r);
+      }
+      out.livres = tous.filter(x => /boek|book|magazine|tijdschrift/i.test(x.name) && !/agenda|kartonnen/i.test(x.name)).map(x => x.id + ' | ' + x.name);
+    }
     if (id) {
+      const d = await pa('GET', `/v2/products/${id}`, null, token);
+      out.produit = d.body;
       out.devis = [];
       for (const pages of [24, 36, 50]) for (const pays of ['FR', 'BE']) {
         const q = await pa('POST', '/v2/shipping/quote', { country: pays, items: [{ productId: id, quantity: 1, pageCount: pages }] }, token);
