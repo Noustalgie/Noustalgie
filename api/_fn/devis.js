@@ -31,9 +31,11 @@ module.exports = async (req, res) => {
     const token = t.body && t.body.access_token;
     if (!token) return res.status(200).json({ etape: 'oauth', t });
     if (req.query.doc) {                                               // &doc=1 : pages de documentation Print API (texte)
-      const get = u => new Promise(resolve => {
+      const de = +req.query.de || 0;
+      const get = (u, n = 0) => new Promise(resolve => {
         const r2 = https.get(u, { timeout: 20000, headers: { 'User-Agent': 'Mozilla/5.0', Accept: 'text/html,application/json' } }, r => {
-          let d = ''; r.on('data', c => d += c); r.on('end', () => resolve({ status: r.statusCode, loc: r.headers.location, texte: d.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 30000) }));
+          if (r.statusCode >= 300 && r.statusCode < 400 && r.headers.location && n < 5) { r.resume(); return resolve(get(new URL(r.headers.location, u).href, n + 1)); }
+          let d = ''; r.on('data', c => d += c); r.on('end', () => resolve({ status: r.statusCode, url: u, texte: d.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(de, de + 40000) }));
         });
         r2.on('timeout', () => { r2.destroy(); resolve({ status: 0 }); }); r2.on('error', e => resolve({ status: 0, err: e.message }));
       });
@@ -58,6 +60,10 @@ module.exports = async (req, res) => {
         const q = await pa('POST', '/v2/shipping/quote', { country: 'FR', items: [{ productId: pid, quantity: 1 }] }, token);
         out.objets.push({ id: pid, produit: d.body, devis: q.body });
       }
+      return res.status(200).json(out);
+    }
+    if (req.query.appel) {                                             // &appel=GET|POST&chemin=/v2/...&corps=json : appel libre (environnement de test)
+      out.reponse = await pa(req.query.appel, req.query.chemin, req.query.corps ? JSON.parse(req.query.corps) : null, token);
       return res.status(200).json(out);
     }
     if (req.query.panier) {                                            // &panier=json : devis d'un panier complet (livre + objets)
