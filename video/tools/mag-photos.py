@@ -31,6 +31,7 @@ PAGES = os.path.join(ROOT, 'out', 'mag', args[args.index('--pages') + 1] if '--p
 AUTRE = args[args.index('--autre') + 1] if '--autre' in args else 'pages-seventies'   # l'autre style, montré par une slide
 OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else args[args.index('--sortie') + 1] if '--sortie' in args else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
 DRAFT = '--draft' in args
+MAC = '--mac' in args            # film « ordinateur » : MacBook sur la table du salon, écran rendu en deux passes (noir, blanc)
 ONLY = [int(n) if n.isdigit() else n for n in args[args.index('--only') + 1].split(',')] if '--only' in args else None
 W, H = (1080, 1920) if HAUT else (1080, 1440)
 if DRAFT:
@@ -325,6 +326,85 @@ def phone(screen, parent):
     o = rounded_rect(0.0125, 0.0037, 0.00185)
     scr.quad([(x, y + sh / 2 - 0.0105, t + 0.00009) for x, y in o], [(0, 0)] * len(o), 3)
     scr.build('album-ecran', mats, parent)
+
+
+# ── ordinateur portable (MacBook Air argent, 13 pouces) ──
+MAC_W, MAC_D, MAC_T = 0.304, 0.215, 0.011        # base : largeur, profondeur, épaisseur
+LID_H, LID_T, LID_TILT = 0.212, 0.0045, 24          # écran : hauteur, épaisseur, inclinaison vers l'arrière (°)
+SCR_W, SCR_H, SCR_B = 0.286, 0.179, 0.024           # dalle 16:10 et bordure du bas
+
+
+def deck_texture(path):
+    """dessus de la base : aluminium argent, clavier noir, pavé tactile"""
+    from PIL import ImageDraw
+    w, h = 2432, 1720
+    im = Image.new('RGB', (w, h), (201, 203, 206)); dr = ImageDraw.Draw(im)
+    kx0, kx1, ky0, ky1 = 0.085 * w, 0.915 * w, 0.06 * h, 0.52 * h          # zone du clavier (haut de l'image = charnière)
+    rows = [14, 14, 14, 13, 12, 9]
+    kh = (ky1 - ky0) / 6.4
+    for r, n in enumerate(rows):
+        y0 = ky0 + r * (ky1 - ky0) / 6
+        if r == 0:
+            y1 = y0 + kh * 0.55
+        else:
+            y1 = y0 + kh
+        x = kx0; kw = (kx1 - kx0 - (n - 1) * 0.012 * w) / n
+        for i in range(n):
+            ww = kw * (1.6 if (r == 5 and i == 4) else 1.0) if r == 5 else kw
+            if r == 5 and i == 4:
+                ww = (kx1 - kx0) - 8 * kw - 8 * 0.012 * w
+            dr.rounded_rectangle([x, y0, x + ww, y1], radius=10, fill=(24, 24, 26))
+            x += ww + 0.012 * w
+            if x > kx1:
+                break
+    tx0, tx1, ty0, ty1 = 0.31 * w, 0.69 * w, 0.58 * h, 0.95 * h            # pavé tactile
+    dr.rounded_rectangle([tx0, ty0, tx1, ty1], radius=24, fill=(196, 198, 201), outline=(176, 178, 181), width=4)
+    im.save(path)
+
+
+def macbook(parent, glow):
+    """base posée à z = 0, charnière au fond (+y) ; glow : luminosité de la dalle (0 = écran noir, passe « noir »)"""
+    deck = os.path.join(DECOR, 'macbook-dessus.png')
+    if not os.path.exists(deck):
+        deck_texture(deck)
+    alu = material('alu', color=(0.80, 0.81, 0.82), rough=0.3, metal=1.0)
+    dessus = material('alu-dessus', image=deck, rough=0.32, metal=0.55)
+    verre = material('cadre-noir', color=(0.004, 0.004, 0.005), rough=0.05, coat=1.0, coat_rough=0.02)
+    m = bpy.data.materials.new('dalle-%g' % glow); m.use_nodes = True
+    b = m.node_tree.nodes['Principled BSDF']
+    b.inputs['Base Color'].default_value = (0, 0, 0, 1); b.inputs['Roughness'].default_value = 0.05
+    b.inputs['Coat Weight'].default_value = 1.0; b.inputs['Coat Roughness'].default_value = 0.02
+    b.inputs['Emission Color'].default_value = (1, 1, 1, 1); b.inputs['Emission Strength'].default_value = glow
+    mats = [alu, dessus, verre, m]
+    # base : rectangle arrondi extrudé, dessus texturé
+    bld = Builder()
+    o = rounded_rect(MAC_W, MAC_D, 0.012)
+    bld.quad([(x, y, MAC_T) for x, y in o], [((x + MAC_W / 2) / MAC_W, (y + MAC_D / 2) / MAC_D) for x, y in o], 1)
+    bld.quad([(x, y, 0.0005) for x, y in o[::-1]], [(0, 0)] * len(o), 0)
+    for i in range(len(o)):
+        (x0, y0), (x1, y1) = o[i], o[(i + 1) % len(o)]
+        bld.quad([(x0, y0, 0.0005), (x1, y1, 0.0005), (x1, y1, MAC_T), (x0, y0, MAC_T)], [(0, 0), (1, 0), (1, 1), (0, 1)], 0)
+    base = bld.build('album-mac-base', mats, parent)
+    bv = base.modifiers.new('arrondi', 'BEVEL'); bv.width = 0.0018; bv.segments = 4; bv.limit_method = 'ANGLE'; bv.angle_limit = math.radians(40)
+    # écran : repère (x, v le long de l'écran, s vers l'utilisateur) depuis la charnière
+    t = math.radians(LID_TILT)
+    hinge = Vector((0, MAC_D / 2 - 0.006, MAC_T + 0.001))
+    up = Vector((0, math.sin(t), math.cos(t))); nrm = Vector((0, -math.cos(t), math.sin(t)))
+    P3 = lambda x, v, s: tuple(hinge + Vector((x, 0, 0)) + up * v + nrm * s)
+    lid = Builder()
+    o = rounded_rect(MAC_W, LID_H, 0.01)
+    lid.quad([P3(x, y + LID_H / 2, 0) for x, y in o], [(0.5, 0.5)] * len(o), 2)                    # face avant (bordure noire)
+    lid.quad([P3(x, y + LID_H / 2, -LID_T) for x, y in o[::-1]], [(0, 0)] * len(o), 0)          # dos en aluminium
+    for i in range(len(o)):
+        (x0, y0), (x1, y1) = o[i], o[(i + 1) % len(o)]
+        lid.quad([P3(x0, y0 + LID_H / 2, -LID_T), P3(x1, y1 + LID_H / 2, -LID_T), P3(x1, y1 + LID_H / 2, 0), P3(x0, y0 + LID_H / 2, 0)], [(0, 0), (1, 0), (1, 1), (0, 1)], 0)
+    lo = lid.build('album-mac-ecran', mats, parent)
+    bv = lo.modifiers.new('arrondi', 'BEVEL'); bv.width = 0.0012; bv.segments = 3; bv.limit_method = 'ANGLE'; bv.angle_limit = math.radians(40)
+    scr = Builder()
+    c = [(-SCR_W / 2, SCR_B), (SCR_W / 2, SCR_B), (SCR_W / 2, SCR_B + SCR_H), (-SCR_W / 2, SCR_B + SCR_H)]
+    scr.quad([P3(x, v, 0.0002) for x, v in c], [(0, 0), (1, 0), (1, 1), (0, 1)], 3)
+    scr.build('album-mac-dalle', mats, parent)
+    return [P3(x, v, 0.0002) for x, v in c]          # coins de la dalle (bas gauche, bas droit, haut droit, haut gauche)
 
 
 # ── scène ──
@@ -1022,7 +1102,54 @@ SITE_SHOTS = [
 ]
 
 
+# film « ordinateur » (--decor salon --mac) : rendus en 1,5 × 1080 × 1920 pour pouvoir zoomer au montage
+# mac : position (x, y) et rotation (°) de l'ordinateur ; book : album fermé posé à côté (centre, rotation)
+SHOTS_MAC = [
+    dict(name='bureau', mac=(0.05, -0.2, -8), cam=dict(target=(0.04, -0.13, 0.08), dist=0.66, elev=46, azim=-18, roll=0)),
+    dict(name='fin', mac=(-0.06, -0.12, 6), book=(0.22, -0.34, -16), cam=dict(target=(0.04, -0.17, 0.05), dist=0.84, elev=54, azim=-12, roll=1)),
+]
+GLOW_MAC = 2.4
+
+
+def main_mac():
+    import json
+    from bpy_extras.object_utils import world_to_camera_view
+    os.makedirs(os.path.join(OUT, 'brut'), exist_ok=True)
+    sc, co = scene_setup()
+    bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, -HT - 0.002)); bpy.context.object.data.materials.append(material('sol', color=(0.42, 0.33, 0.24), rough=0.6))
+    rx, ry = (W * 3 // 2, H * 3 // 2) if not DRAFT else (W, H)
+    sc.render.resolution_x, sc.render.resolution_y = rx, ry
+    for s in SHOTS_MAC:
+        if ONLY and s['name'] not in ONLY:
+            continue
+        for glow, passe in ((0.0, 'noir'), (GLOW_MAC, 'blanc')):
+            t0 = time.time()
+            for ob in [o for o in bpy.data.objects if o.name.startswith(('album', 'pivot'))]:
+                bpy.data.objects.remove(ob, do_unlink=True)
+            piv = bpy.data.objects.new('pivot-mac', None); sc.collection.objects.link(piv)
+            mx, my, mr = s['mac']
+            piv.location = (mx, my, 0); piv.rotation_euler = (0, 0, math.radians(mr))
+            coins = macbook(piv, glow)
+            if s.get('book'):
+                bx, by, rot = s['book']
+                a = math.radians(rot)
+                pb = bpy.data.objects.new('pivot-livre', None); sc.collection.objects.link(pb)
+                pb.location = (bx - 0.109 * math.cos(a), by - 0.109 * math.sin(a), 0); pb.rotation_euler = (0, 0, a)
+                closed_book(page(1), pb)
+            place_camera(co, **s['cam'])
+            bpy.context.view_layer.update()
+            M = piv.matrix_world
+            px = [world_to_camera_view(sc, co, M @ Vector(c)) for c in coins]
+            with open(os.path.join(OUT, 'brut', s['name'] + '.json'), 'w') as f:
+                json.dump({'w': rx, 'h': ry, 'ecran': [[p.x * rx, (1 - p.y) * ry] for p in px]}, f)
+            sc.render.filepath = os.path.join(OUT, 'brut', '%s-%s.png' % (s['name'], passe))
+            bpy.ops.render.render(write_still=True)
+            print('ordinateur', s['name'], passe, round(time.time() - t0), 's', flush=True)
+
+
 def main():
+    if MAC:
+        return main_mac()
     os.makedirs(os.path.join(OUT, 'brut'), exist_ok=True)
     sc, co = scene_setup()
     for s in (SITE_SHOTS if SITE else SHOTS_SALON if HAUT else SHOTS):

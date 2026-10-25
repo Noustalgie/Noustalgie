@@ -110,6 +110,26 @@ python3 tools/mag-pages.py --vitrine mag/vitrine-lyon.json            # → out/
 ~/blender-venv/bin/python tools/mag-photos.py --decor salon --pages pages-lyon   # → out/mag/photos-salon/01…11.jpg
 ```
 
+### Film « ordinateur » (Inès et Théo, 22 s, sans texte)
+
+Le MacBook argent posé sur la table du salon, la plante derrière. L'écran montre le vrai site : les prénoms tapés dans
+« Essayez avec vos deux prénoms », les photos ajoutées, puis l'album Années 70 dans l'éditeur. Au drop (4 s), la caméra
+plonge dans l'écran et ressort sur le magazine imprimé ; ensuite une double page par temps fort (120 BPM), avec des glissés
+à flou de mouvement ; fin sur l'ordinateur et le livre côte à côte. Musique : celle du film d'origine.
+
+```bash
+~/blender-venv/bin/python tools/mag-photos.py --decor salon --pages pages-lyon-seventies --mac --spp 64 --sortie mac
+        # 2 plans × 2 passes (écran noir, écran blanc) en 1620 × 2880 + coins de l'écran → out/mag/mac/brut/
+~/blender-venv/bin/python tools/mag-photos.py --decor salon --pages pages-lyon-seventies --sortie tiktok-1-pages-lyon-seventies
+        # photos de l'album 01…11
+python3 tools/mac-ecran.py           # écrans du site (1440 × 900, polices réelles) → out/mag/mac/ecran/
+python3 tools/mac-film.py --audio musique.wav [--brouillon] [--plans mac-essai]   # → out/mag/mac/film.mp4
+```
+
+L'écran est recomposé à chaque image : passe noire + contenu × (passe blanche − passe noire). Les reflets de la dalle et
+la lueur sur le clavier restent justes, et le contenu est incrusté à la résolution de sortie, net même quand la caméra
+plonge dedans. `--brouillon` : rendu rapide (sans flou de mouvement), avec les plans de brouillon de `--mac --draft`.
+
 Slide 6 : la double page paysage (photo recadrée par `cadre` dans `vitrine.json` pour garder le couple hors de la pliure).
 Slide 12 : la double page de la slide 3 en style Années 70 (pages de `out/mag/pages-seventies`).
 Carrousel d'octobre 2026 (13 slides) : nouveaux angles par rapport au précédent (TikTok pénalise les images republiées),
