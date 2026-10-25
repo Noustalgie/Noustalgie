@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
       const get = (u, n = 0) => new Promise(resolve => {
         const r2 = https.get(u, { timeout: 20000, headers: { 'User-Agent': 'Mozilla/5.0', Accept: 'text/html,application/json' } }, r => {
           if (r.statusCode >= 300 && r.statusCode < 400 && r.headers.location && n < 5) { r.resume(); return resolve(get(new URL(r.headers.location, u).href, n + 1)); }
-          let d = ''; r.on('data', c => d += c); r.on('end', () => resolve({ status: r.statusCode, url: u, texte: d.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(de, de + 40000) }));
+          let d = ''; r.on('data', c => d += c); r.on('end', () => resolve({ status: r.statusCode, url: u, liens: req.query.liens ? [...new Set((d.match(/href="[^"]+"/g) || []))].join(' ') : undefined, texte: d.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(de, de + 40000) }));
         });
         r2.on('timeout', () => { r2.destroy(); resolve({ status: 0 }); }); r2.on('error', e => resolve({ status: 0, err: e.message }));
       });
