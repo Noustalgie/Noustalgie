@@ -36,7 +36,7 @@ function call(method, path, body, token, form) {
 let tok = null;
 async function token() {
   if (tok && tok.exp > Date.now()) return tok.v;
-  const r = await call('POST', '/v2/oauth', `grant_type=client_credentials&client_id=${encodeURIComponent(process.env.PRINTAPI_CLIENT_ID)}&client_secret=${encodeURIComponent(process.env.PRINTAPI_SECRET)}`, null, null, true);
+  const r = await call('POST', '/v2/oauth', `grant_type=client_credentials&client_id=${encodeURIComponent(process.env.PRINTAPI_CLIENT_ID)}&client_secret=${encodeURIComponent(process.env.PRINTAPI_SECRET)}`, null, true);
   const v = r.body && r.body.access_token;
   if (!v) throw new Error(`OAuth Print API refusé (HTTP ${r.status}) ${String(r.raw).slice(0, 200)}`);
   tok = { v, exp: Date.now() + Math.max(60, (r.body.expires_in || 3600) - 300) * 1000 };
