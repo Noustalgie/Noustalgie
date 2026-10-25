@@ -159,7 +159,7 @@ export const DEFAULTS = () => ({
   studio: 0, bgColor: 0xd0c9bd, keyColor: 0xfff0dc, top: 0, shadowRadius: 12, fogNear: 220, fogFar: 520,
 });
 
-export async function createBook3D(canvas, { width = 1080, height = 1920, base = '/site/img/exemple/album/', samples = 4, shadowSize = 2048, spine: spineOpt = {} } = {}) {
+export async function createBook3D(canvas, { width = 1080, height = 1920, base = '/site/img/exemple/album/', samples = 4, shadowSize = 2048, spine: spineOpt = {}, floorMap = null, floorRepeat = 1 } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(1); renderer.setSize(width, height, false);
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -189,6 +189,11 @@ export async function createBook3D(canvas, { width = 1080, height = 1920, base =
   /* ── studio : surface claire + lumière zénithale très douce (ombre de contact), utilisés pour les visuels du site ── */
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshStandardMaterial({ color: 0xdad3c7, roughness: 0.96, metalness: 0 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; floor.visible = false; scene.add(floor);
+  if (floorMap) {                                                     // surface photographiée (chêne, lin, marbre…) au lieu d'un aplat
+    const ft = await new THREE.TextureLoader().loadAsync(floorMap); ft.colorSpace = THREE.SRGBColorSpace;
+    ft.wrapS = ft.wrapT = THREE.RepeatWrapping; ft.repeat.set(floorRepeat, floorRepeat); ft.anisotropy = 8;
+    floor.material.map = ft; floor.material.color.setHex(0xffffff); floor.material.roughness = 0.8; floor.material.needsUpdate = true;
+  }
   const top = new THREE.DirectionalLight(0xffffff, 0); top.position.set(0, 120, 0); top.castShadow = true;
   top.shadow.mapSize.set(1024, 1024); top.shadow.bias = -0.0004; top.shadow.normalBias = 0.05; top.shadow.radius = 18;
   Object.assign(top.shadow.camera, { left: -48, right: 48, top: 48, bottom: -48, near: 10, far: 300 }); top.shadow.camera.updateProjectionMatrix();

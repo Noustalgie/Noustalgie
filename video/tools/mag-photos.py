@@ -26,7 +26,7 @@ DECOR = os.path.join(ROOT, 'out', 'mag', 'decor')
 args = sys.argv[1:]
 SITE = '--site' in args
 LIEU = args[args.index('--decor') + 1] if '--decor' in args else 'table'      # table (bois miel, jute), lit (lin, plaid, guirlande), salon (table basse ovale, tapis à poils, plante) ou noel (même table, soir de Noël)
-HAUT = LIEU in ('salon', 'noel') or '--916' in args                           # 9:16, plein écran TikTok (cadrages SHOTS_SALON)
+HAUT = LIEU in ('salon', 'noel', 'jute') or '--916' in args                           # 9:16, plein écran TikTok (cadrages SHOTS_SALON)
 PAGES = os.path.join(ROOT, 'out', 'mag', args[args.index('--pages') + 1] if '--pages' in args else 'pages')
 AUTRE = args[args.index('--autre') + 1] if '--autre' in args else 'pages-seventies'   # l'autre style, montré par une slide
 OUT = os.path.join(ROOT, 'out', 'mag', 'site' if SITE else args[args.index('--sortie') + 1] if '--sortie' in args else 'photos' if LIEU == 'table' else 'photos-' + LIEU)
@@ -114,11 +114,12 @@ def wood_material():
     return m
 
 
-def jute_material():
+def jute_material(scale=1.0):
     m = bpy.data.materials.new('jute'); m.use_nodes = True
     nt = m.node_tree; b = nt.nodes['Principled BSDF']
     tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping')
-    nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])                                       # 1 m par répétition
+    nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])                                       # 1 m par répétition (÷ scale)
+    mp.inputs['Scale'].default_value = (scale, scale, scale)
     c = tex(nt, os.path.join(DECOR, 'jute-couleur.jpg')); h = tex(nt, os.path.join(DECOR, 'jute-relief.png'), True)
     for t in (c, h):
         nt.links.new(mp.outputs['Vector'], t.inputs['Vector'])
@@ -362,6 +363,8 @@ def scene_setup():
         decor_salon(sc)
     elif LIEU == 'noel':
         decor_noel(sc)
+    elif LIEU == 'jute':
+        decor_jute(sc)
     else:
         decor_table(sc)
     cam = bpy.data.cameras.new('tel'); co = bpy.data.objects.new('tel', cam); sc.collection.objects.link(co); sc.camera = co
@@ -886,6 +889,17 @@ def decor_noel(sc):
     for name, size, energy, color, loc in (('lampe', 0.5, 160, (1.0, 0.72, 0.45), (1.1, 0.9, 1.0)),
                                             ('fenetre', 1.6, 110, (0.72, 0.8, 1.0), (-2.1, 0.4, 1.9)),
                                             ('rebond', 2.2, 90, (1.0, 0.8, 0.6), (1.4, -1.9, 1.7))):
+        ld = bpy.data.lights.new(name, 'AREA'); ld.size = size; ld.energy = energy; ld.color = color
+        lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
+        lo.rotation_euler = (Vector((0, -0.15, 0)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
+
+
+def decor_jute(sc):
+    """album posé à même un tapis de jute tressé (comme les vidéos claires), lumière douce de fenêtre"""
+    bpy.ops.mesh.primitive_plane_add(size=4, location=(0, 0, -0.0005))
+    o = bpy.context.object; o.name = 'tapis-jute'; o.data.materials.append(jute_material(1.3))
+    for name, size, energy, color, loc in (('fenetre', 1.6, 620, (1.0, 0.97, 0.93), (-2.1, 0.4, 1.9)),
+                                            ('rebond', 2.2, 380, (1.0, 0.93, 0.86), (1.4, -1.9, 1.7))):
         ld = bpy.data.lights.new(name, 'AREA'); ld.size = size; ld.energy = energy; ld.color = color
         lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
         lo.rotation_euler = (Vector((0, -0.15, 0)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
