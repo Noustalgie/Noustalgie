@@ -66,6 +66,10 @@
       "destination": "/api/tools?fn=track"
     },
     {
+      "source": "/api/printapi-webhook",
+      "destination": "/api/tools?fn=printapi-hook"
+    },
+    {
       "source": "/api/indexnow",
       "destination": "/api/tools?fn=indexnow"
     },
