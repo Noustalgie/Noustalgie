@@ -58,7 +58,7 @@ const LIT = [
 ];
 const JEUX = {
   'jute-lyon': [{ n: 1, accroche: { note: 'Pour Noël 🎄', a: 'Idée cadeau', b: 'Couple' } }],
-  'jute-lea': [{ n: 1, grand: true, haut: ['POV : vous voulez lui offrir', 'quelque chose de', 'vraiment spécial'] }],
+  'jute-lea': [{ n: 1, grand: true, haut: ['POV : vous voulez', 'lui offrir quelque chose', 'de vraiment spécial'] }],
 };
 const SLIDES = JEU ? JEUX[JEU] : LIEU === 'table' ? TABLE : LIT;
 
