@@ -17,6 +17,32 @@ function call(method, path, body) {
 module.exports = async (req, res) => {
   if (process.env.VERCEL_ENV === 'production') return res.status(404).json({ error: 'Not found' });
   const out = {};
+  if (req.query && req.query.printapi) {                               // ?printapi=1 : prix Print API (compte de test)
+    const pa = (method, path, body, token, form) => new Promise(resolve => {
+      const buf = body ? Buffer.from(form ? body : JSON.stringify(body)) : null;
+      const r2 = https.request({ hostname: 'test.printapi.nl', path, method, timeout: 20000, headers: Object.assign({ Accept: 'application/json' },
+        token ? { Authorization: 'Bearer ' + token } : {}, buf ? { 'Content-Type': form ? 'application/x-www-form-urlencoded' : 'application/json', 'Content-Length': buf.length } : {}) }, r => {
+        let d = ''; r.on('data', c => d += c); r.on('end', () => { let j = null; try { j = JSON.parse(d); } catch (e) {} resolve({ status: r.statusCode, body: j || d.slice(0, 600) }); });
+      });
+      r2.on('timeout', () => { r2.destroy(); resolve({ status: 0, body: 'timeout' }); }); r2.on('error', e => resolve({ status: 0, body: e.message }));
+      if (buf) r2.write(buf); r2.end();
+    });
+    const t = await pa('POST', '/v2/oauth', `grant_type=client_credentials&client_id=${encodeURIComponent(process.env.PRINTAPI_CLIENT_ID)}&client_secret=${encodeURIComponent(process.env.PRINTAPI_SECRET)}`, null, true);
+    const token = t.body && t.body.access_token;
+    if (!token) return res.status(200).json({ etape: 'oauth', t });
+    const prods = await pa('GET', '/v2/products', null, token);
+    const liste = Array.isArray(prods.body) ? prods.body : (prods.body && (prods.body.items || prods.body.products)) || prods.body;
+    out.produits = Array.isArray(liste) ? liste.filter(x => /hard|soft|book|boek|magaz|21/i.test(JSON.stringify(x).slice(0, 400))).slice(0, 40) : liste;
+    const id = req.query.id;
+    if (id) {
+      out.devis = [];
+      for (const pages of [24, 36, 50]) for (const pays of ['FR', 'BE']) {
+        const q = await pa('POST', '/v2/shipping/quote', { country: pays, items: [{ productId: id, quantity: 1, pageCount: pages }] }, token);
+        out.devis.push({ pays, pages, status: q.status, reponse: q.body });
+      }
+    }
+    return res.status(200).json(out);
+  }
   if (req.query && req.query.sonde) {                                  // ?sonde=1 : quels autres livres Prodigi existent, et leur prix livré en France
     const cands = ['BOOK-FE-8_3-SQ-SOFT-G', 'BOOK-FE-8_3-SQ-SOFT-M', 'BOOK-FE-8_3-SQ-HARD-M', 'BOOK-FE-A4-P-HARD-G', 'BOOK-FE-A4-P-SOFT-G', 'BOOK-FE-A4-L-HARD-G',
       'BOOK-FE-A5-P-SOFT-G', 'BOOK-FE-11_7-SQ-HARD-G', 'BOOK-FE-11_8-SQ-HARD-G', 'BOOK-LF-8_3-SQ-HARD', 'BOOK-LF-8_3-SQ-HARD-M', 'BOOK-LF-8-SQ-HARD',
