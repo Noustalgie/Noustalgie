@@ -2,7 +2,7 @@
   python3 tools/mac-ecran.py   → out/mag/mac/ecran/
     accueil-00…NN.png  prénoms tapés lettre par lettre dans « Essayez avec vos deux prénoms »
     photos-00…NN.png   leurs photos ajoutées par petits paquets (out/mag/album-lyon/hd, hors dépôt)
-    album-00…NN.png    l'album composé (vitrine-lyon, style Années 70), page après page dans l'éditeur
+    album-00…NN.png    l'album composé (vitrine-lyon, style Magazine en couleur), page après page dans l'éditeur
 Polices réelles et photos du haut de page servies localement (outils/rendu.py)."""
 import asyncio, json, os, sys
 VIDEO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -70,7 +70,7 @@ async def main():
                   'slots': [{'p': IDX[n], 'f': 'none', 'z': 1, **q.get('cadre', {})} for n in q.get('ph', [])]} for q in SPEC['pages']]
         photos = [{'data': o['f'], 'w': o['w'], 'h': o['h'], 'ratio': o['w'] / o['h'],
                    'orient': 'portrait' if o['w'] / o['h'] < 0.8 else 'paysage' if o['w'] / o['h'] > 1.25 else 'carre'} for o in PH]
-        await pg.evaluate("""(a) => { S.photos = a.photos; NA.pages = a.pages; NA.theme = 'seventies';
+        await pg.evaluate("""(a) => { S.photos = a.photos; NA.pages = a.pages; NA.theme = 'magazine';
           NA.info = { carte: a.carte, names: a.names, n1: a.n1, n2: a.n2 }; S.story = S.story || { captions: [], mag: {} };
           NA.cur = 0; S.done.add(0); S.done.add(1); S.done.add(2); goTab(3);
           document.getElementById('panel3').scrollIntoView({ block: 'start' }); window.scrollBy(0, -70); }""",

@@ -1,7 +1,7 @@
 """Film « ordinateur » (22 s, 1080 × 1920, 30 i/s) : le MacBook sur la table du salon, le site à l'écran, puis l'album imprimé.
   python3 tools/mac-film.py --audio musique.wav [--brouillon]   → out/mag/mac/film.mp4
 Entrées : plans de l'ordinateur (mag-photos.py --decor salon --mac --sortie mac : passes « noir » et « blanc » + coins de l'écran),
-écrans du site (mac-ecran.py), photos de l'album (mag-photos.py --decor salon --pages pages-lyon-seventies --sortie tiktok-1-pages-lyon-seventies).
+écrans du site (mac-ecran.py), photos de l'album en couleur (mag-photos.py --decor salon --pages pages-lyon --sortie salon-lyon).
 L'écran est recomposé à chaque image : noir + contenu × (blanc − noir), reflets et lumière sur le clavier compris.
 Pas de texte ajouté. Transitions : plongée dans l'écran au drop (4 s), puis glissés avec flou de mouvement, calés sur les temps (120 BPM)."""
 import json, math, os, subprocess, sys
@@ -11,14 +11,14 @@ from PIL import Image
 VIDEO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAG = os.path.join(VIDEO, 'out', 'mag')
 MAC = os.path.join(MAG, 'mac')
-ALBUM = os.path.join(MAG, 'tiktok-1-pages-lyon-seventies')
+ALBUM = os.path.join(MAG, 'salon-lyon')
 args = sys.argv[1:]
 AUDIO = args[args.index('--audio') + 1] if '--audio' in args else None
 BROUILLON = '--brouillon' in args
 PLANS = os.path.join(MAG, args[args.index('--plans') + 1]) if '--plans' in args else MAC     # --plans mac-essai : rendus de brouillon
 OUT = args[args.index('--out') + 1] if '--out' in args else os.path.join(MAC, 'film.mp4')
 W, H, FPS, DUREE = 1080, 1920, 30, 22.0
-SUB = 1 if BROUILLON else 5                     # sous-images moyennées pendant les mouvements rapides (flou de mouvement)
+SUB = 1 if BROUILLON else 20                    # sous-images moyennées pendant la plongée dans l'écran (flou de zoom)
 
 ease = lambda t: t * t * (3 - 2 * t)
 ease_in = lambda t: t ** 3
@@ -103,7 +103,7 @@ ALBUM_PLANS = [(1, 1.0, 1.10, 1.02, (0.0, 0.0)), (2, 1.5, 1.0, 1.06, (0.01, -0.0
                (7, 1.0, 1.05, 1.0, (0.0, 0.01)), (8, 1.0, 1.0, 1.05, (0.01, 0.0)), (9, 1.5, 1.06, 1.0, (-0.01, 0.0)),
                (10, 1.5, 1.0, 1.06, (0.0, -0.01)), (11, 1.5, 1.06, 1.0, (0.0, 0.0))]
 T_ALBUM, T_FIN = 4.0, 18.0
-GLISSE = 0.2                                     # durée d'un glissé (s), à cheval sur la coupe
+GLISSE = 0.27                                    # durée d'un glissé (s), à cheval sur la coupe
 
 
 def cadre_album(i, t):
@@ -113,6 +113,17 @@ def cadre_album(i, t):
     z = z0 + (z1 - z0) * u
     img = photo(n)
     return vue(img, W / 2 + dx * W * u, H / 2 + dy * H * u, z)
+
+
+def flou(f, L, axe):
+    """flou de mouvement d'une translation : moyenne glissante de L pixels le long de l'axe (somme cumulée)"""
+    if L < 2:
+        return f
+    pad = [(0, 0)] * 3; pad[axe] = (L // 2, L - 1 - L // 2)
+    c = np.cumsum(np.pad(f, pad, mode='edge'), axis=axe, dtype=np.float64)
+    c = np.concatenate([np.zeros_like(np.take(c, [0], axis=axe)), c], axis=axe)
+    n = f.shape[axe]
+    return ((np.take(c, np.arange(L, L + n), axis=axe) - np.take(c, np.arange(n), axis=axe)) / L).astype(np.float32)
 
 
 def glisse(a, b, u, sens):
@@ -142,17 +153,17 @@ def ecran_debut(t):
 
 
 def debut(P, t):
-    cx0, cy0 = P.w / 2, P.h * 0.5
+    cx0, cy0 = P.w / 2, P.h * 0.56                 # un peu plus bas : le fond de la pièce reste hors de l'image
     sx, sy = P.centre
     if t < 3.4:                                   # lente poussée vers l'écran
         u = ease(t / 3.4)
-        z = 1.0 + 0.32 * u
+        z = 1.15 + 0.27 * u
         cx, cy = cx0 + (sx - cx0) * u * 0.8, cy0 + (sy - cy0) * u * 0.8
     else:                                         # plongée : l'écran remplit l'image
         u = ease_in((t - 3.4) / 0.6)
         zf = P.w / (P.haut * 0.8 * W / H)                         # à la fin, l'écran déborde de l'image
 
-        z = 1.32 + (zf - 1.32) * u
+        z = 1.42 + (zf - 1.42) * u
         cx = cx0 + (sx - cx0) * (0.8 + 0.2 * u); cy = cy0 + (sy - cy0) * (0.8 + 0.2 * u)
     return P.vue(ecran_debut(t), cx, cy, z)
 
@@ -161,7 +172,7 @@ def fin(P, t):
     """18–22 s : l'ordinateur et le livre imprimé, la caméra recule doucement"""
     u = ease(min(t / 4.0, 1))
     z = 1.16 - 0.16 * u
-    return P.vue('accueil-11', P.w / 2, P.h * 0.5, z)
+    return P.vue('accueil-11', P.w / 2, P.h * 0.44, z)          # un peu plus haut : moins de tapis sous la table
 
 
 def cadre(t, Pd, Pf):
@@ -194,17 +205,18 @@ def image(t, Pd, Pf, rng):
     for k, c in enumerate(cs):
         if abs(t - c) < GLISSE / 2:
             sens = SENS[k % 4]
-            acc = np.zeros((H, W, 3), np.float32)
-            for j in range(SUB):
-                tt = t + (j / SUB - 0.5) / FPS
-                u = min(max((tt - (c - GLISSE / 2)) / GLISSE, 0), 1)
-                acc += glisse(cadre(c - 1e-3, Pd, Pf), cadre(c + 1e-3, Pd, Pf), u, sens)
-            return finition(acc / SUB, rng)
+            u = min(max((t - (c - GLISSE / 2)) / GLISSE, 0), 1)
+            f = glisse(cadre(c - 1e-3, Pd, Pf), cadre(c + 1e-3, Pd, Pf), u, sens)
+            if not BROUILLON:                     # flou continu : la distance parcourue pendant l'image
+                du = 1 / FPS / GLISSE
+                d = abs(ease(min(u + du / 2, 1)) - ease(max(u - du / 2, 0))) * (W if sens[0] else H) * 0.5   # obturateur à 180°
+                f = flou(f, int(d), 1 if sens[0] else 0)
+            return finition(f, rng)
     # plongée dans l'écran (3,6–4 s) : flou de zoom ; drop : le livre arrive en reculant
     if 3.6 <= t < T_ALBUM or T_ALBUM <= t < T_ALBUM + 0.12:
         acc = np.zeros((H, W, 3), np.float32)
         for j in range(SUB):
-            acc += cadre(t + (j / SUB - 0.5) / FPS, Pd, Pf)
+            acc += cadre(t + (j / SUB - 0.5) * 0.75 / FPS, Pd, Pf)          # obturateur à 270° : le zoom reste lisible
         f = acc / SUB
         if T_ALBUM <= t < T_ALBUM + 0.2:          # petit éclat lumineux sur le drop
             f = f * (1 + 0.25 * (1 - (t - T_ALBUM) / 0.2))
@@ -228,7 +240,7 @@ def main():
     cmd = ['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-']
     if AUDIO:
         cmd += ['-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-b:a', '192k', '-shortest']
-    cmd += ['-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', OUT]
+    cmd += ['-c:v', 'libx264', '-preset', 'slow', '-crf', '19', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', OUT]
     ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     rng = np.random.default_rng(7)
     n = int(DUREE * FPS)

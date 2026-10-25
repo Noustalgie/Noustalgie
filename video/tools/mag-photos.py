@@ -1106,7 +1106,7 @@ SITE_SHOTS = [
 # mac : position (x, y) et rotation (°) de l'ordinateur ; book : album fermé posé à côté (centre, rotation)
 SHOTS_MAC = [
     dict(name='bureau', mac=(0.05, -0.2, -8), cam=dict(target=(0.04, -0.13, 0.08), dist=0.66, elev=46, azim=-18, roll=0)),
-    dict(name='fin', mac=(-0.06, -0.12, 6), book=(0.22, -0.34, -16), cam=dict(target=(0.04, -0.17, 0.05), dist=0.84, elev=54, azim=-12, roll=1)),
+    dict(name='fin', mac=(-0.03, -0.08, 8), book=(0.17, -0.33, -14), cam=dict(target=(0.045, -0.2, 0.04), dist=0.95, elev=56, azim=-10, roll=1)),
 ]
 GLOW_MAC = 2.4
 
