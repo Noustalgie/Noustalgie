@@ -50,6 +50,9 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
   fetch('/api/order-summary?session_id=' + encodeURIComponent(id), { signal: ctl ? ctl.signal : undefined }).then(function (r) { return r.json(); }).then(function (o) {
     if (!o || !o.paid) return;
     clearAlbum();
+    // pixel Meta : l'achat et son montant, une fois par commande (rien sans « Accepter », cf. consentement.js)
+    try { if (!sessionStorage.getItem('nstAchat' + id)) { sessionStorage.setItem('nstAchat' + id, '1'); var v = parseFloat(String(o.price || '').replace(',', '.'));
+      var go = function () { if (window.nstPixel) window.nstPixel('Purchase', v > 0 ? { value: v, currency: 'EUR' } : {}); }; if (window.nstPixel) go(); else window.addEventListener('load', go); } } catch (e) {}
     var pdf = o.format === 'pdf';
     document.getElementById('t').innerHTML = 'Merci' + (o.firstName ? ' ' + esc(o.firstName) : '') + ', <em>c’est commandé</em>';
     document.getElementById('sub').innerHTML = 'Un email de confirmation vient de partir' + (o.email ? ' à <b>' + esc(o.email) + '</b>' : '') + '. Gardez-le : il contient votre numéro de commande.';
@@ -71,4 +74,5 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/consentement.js?v=1"></script>
 </body></html>

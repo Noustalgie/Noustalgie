@@ -1827,6 +1827,7 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
 }
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/consentement.js?v=1"></script>
 </head>
 <body>
 <a class="nst-skip" href="#main" data-i18n="skip_main">Aller au contenu</a>
@@ -7704,10 +7705,10 @@ confidentialite: { tab: 'Confidentialité', html: `
 <h2>Suggestions d'adresse</h2>
 <p>Lorsque vous saisissez votre adresse de livraison, les caractères tapés sont transmis, pour vous proposer des adresses existantes, à la Géoplateforme de l'IGN (Base Adresse Nationale, pour la France) ou au service Photon, fondé sur OpenStreetMap (pour les autres pays). Aucune autre donnée n'est transmise, et vous pouvez toujours remplir les champs vous-même.</p>
 <h2>Nos prestataires</h2>
-<p>Stripe (paiement), OpenAI (rédaction des textes et légendes), Cloudinary (stockage temporaire des photos et fichiers), PDFShift (création du fichier d'impression), Print API, aux Pays-Bas, et Prodigi, au Royaume-Uni (impression et expédition), Resend (emails de commande), Vercel (hébergement et mesure d'audience anonyme). Chacun n'accède qu'aux données nécessaires à sa mission.</p>
+<p>Stripe (paiement), OpenAI (rédaction des textes et légendes), Cloudinary (stockage temporaire des photos et fichiers), PDFShift (création du fichier d'impression), Print API, aux Pays-Bas, et Prodigi, au Royaume-Uni (impression et expédition), Resend (emails de commande), Meta (mesure des publicités, seulement avec votre accord), Vercel (hébergement et mesure d'audience anonyme). Chacun n'accède qu'aux données nécessaires à sa mission.</p>
 <p>Certains de ces prestataires sont situés hors de l'Union européenne, notamment aux États-Unis. Ces transferts sont encadrés par des garanties reconnues par la Commission européenne (décision d'adéquation, dont le Data Privacy Framework, ou clauses contractuelles types).</p>
 <h2>Cookies et mesure d'audience</h2>
-<p>Le site n'utilise aucun cookie publicitaire ni de traçage. La mesure d'audience fonctionne sans cookie et ne permet pas de vous identifier. Des cookies techniques peuvent être déposés par Stripe sur la page de paiement, uniquement pour sécuriser la transaction.</p>
+<p>La mesure d'audience du site fonctionne sans cookie et ne permet pas de vous identifier. Avec votre accord seulement, donné dans le bandeau affiché à votre première visite, le pixel Meta (Meta Platforms Ireland) mesure l'efficacité de nos publicités sur Facebook et Instagram : pages vues, aperçu de l'album, début de commande et achat, avec son montant. Sans accord, il n'est pas chargé. Vous pouvez changer d'avis à tout moment avec le lien « Cookies » en bas de page. Des cookies techniques peuvent être déposés par Stripe sur la page de paiement, uniquement pour sécuriser la transaction.</p>
 <h2>Vos droits</h2>
 <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données. Écrivez à ${mail('Exercice de mes droits RGPD', E)} : nous répondons sous un mois. Vous pouvez aussi introduire une réclamation auprès de la CNIL (cnil.fr).</p>
 <h2>Sécurité</h2>
@@ -8835,6 +8836,9 @@ country.addEventListener('change', () => { lastQ = ''; close(); if (line1.value.
   function etape(nom) {
     if (vu[nom]) return; vu[nom] = 1;
     try { window.va('pageview', { route: '/_etape/' + nom, path: '/_etape/' + nom }); } catch (e) {}
+    // pixel Meta (seulement après « Accepter », cf. consentement.js) : album vu, clic sur « Commander » avec le montant
+    var META = { '4-apercu': 'ViewContent', '6-clic-payer': 'InitiateCheckout' };
+    if (META[nom] && window.nstPixel) try { var c = window.NA && NA.curPrice ? NA.curPrice() : null; window.nstPixel(META[nom], c && c.v ? { value: c.v, currency: 'EUR' } : {}); } catch (e) {}
   }
   var NOMS = ['1-couple', '2-photos', '3-composition', '4-apercu', '5-commande'];
   var og = window.goTab;
