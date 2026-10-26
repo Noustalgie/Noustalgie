@@ -5,6 +5,15 @@ const https = require('https');
 const crypto = require('crypto');
 const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/security');
 const { uploadRemote, pdfProof } = require('./_lib/cloudinary');
+const PA = require('./_lib/printapi');
+
+// Fichiers Print API (fond perdu compris) : pages intérieures, couverture d'un seul tenant, affiche 30 × 40, cadre 15 × 15
+const PA_KINDS = {
+  'pa-inner': album => ({ pages: PA.innerCount(album), format: '216mmx216mm' }),
+  'pa-cover': album => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album))}mmx254mm` }),
+  affiche: () => ({ pages: 1, format: '300mmx400mm' }),
+  cadre: () => ({ pages: 1, format: '156mmx156mm' }),
+};
 
 const MAX_HTML = 4 * 1024 * 1024;
 
@@ -44,11 +53,17 @@ module.exports = async (req, res) => {
 
     if (mode === 'url') {
       const pages = (html.match(/class="page"/g) || []).length;
-      // kind : 'full' (livre complet, format historique) · 'cover' (dos + tranche + face) · 'inner' (pages intérieures)
-      const K = kind === 'cover' || kind === 'inner' ? kind : 'full';
+      // kind : 'full' (livre complet, format historique) · 'cover' (dos + tranche + face) · 'inner' (pages intérieures) · fichiers Print API (PA_KINDS)
+      const pa = Object.prototype.hasOwnProperty.call(PA_KINDS, kind);
+      const K = kind === 'cover' || kind === 'inner' || pa ? kind : 'full';
       const album = parseInt(albumPages, 10);
       let format = base.format, tag = pages;
-      if (K === 'full') {
+      if (pa) {
+        if (![24, 36, 50].includes(album)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
+        const want = PA_KINDS[K](album);
+        if (pages !== want.pages) return res.status(400).json({ error: 'Fichier d’impression invalide.' });
+        format = want.format; tag = `${K}:${album}`;
+      } else if (K === 'full') {
         if (![24, 36, 50].includes(pages)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
       } else {
         if (![24, 36, 50].includes(album)) return res.status(400).json({ error: 'Nombre de pages invalide.' });

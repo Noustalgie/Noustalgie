@@ -12,6 +12,9 @@ const H = {
   carte: require('./_fn/carte'),
   indexnow: require('./_fn/indexnow'),
   devis: require('./_fn/devis'),
+  'printapi-hook': require('./_fn/printapi-hook'),
+  sante: require('./_fn/sante'),
+  e2e: require('./_fn/e2e'),
 };
 const ALIAS = { 'order-status': 'track' };
 

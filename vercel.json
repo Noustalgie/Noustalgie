@@ -19,7 +19,7 @@
       "maxDuration": 60
     },
     "api/tools.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
   "crons": [
@@ -64,6 +64,10 @@
     {
       "source": "/api/track",
       "destination": "/api/tools?fn=track"
+    },
+    {
+      "source": "/api/printapi-webhook",
+      "destination": "/api/tools?fn=printapi-hook"
     },
     {
       "source": "/api/indexnow",
