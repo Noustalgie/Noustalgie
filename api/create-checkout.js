@@ -37,7 +37,7 @@ const PRICES = {
 // Options du livre imprimé (Print API), mêmes prix que sur le site. L'affiche, le cadre et l'aimant ont chacun leur fichier d'impression.
 const OPTIONS = {
   coffret: { price: 9.99, name: 'Coffret cadeau', desc: 'Le livre livré dans une boîte cadeau rigide' },
-  express: { price: 4.99, name: 'Fabrication express', desc: 'Fabriqué en priorité, expédié un jour ouvré plus tôt' },
+  express: { price: 4.99, name: 'Fabrication express', desc: 'Fabriqué en priorité, expédié un à deux jours ouvrés plus tôt' },
   affiche: { price: 14.99, name: 'Affiche 30 × 40 cm', desc: 'La couverture de votre album en affiche, dans le même colis', file: true },
   cadre: { price: 19.99, name: 'Petit cadre photo 15 × 15 cm', desc: 'Votre photo de couverture sur céramique, support en bois, dans le même colis', file: true },
   aimant: { price: 12.99, name: 'Aimant photo 5 × 5 cm', desc: 'Votre photo de couverture sur un petit carreau en céramique aimanté, dans le même colis', file: true },
