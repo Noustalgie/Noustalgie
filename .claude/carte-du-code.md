@@ -465,6 +465,7 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
 - api/_fn/order.js (35 lignes) Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
 - api/_fn/printapi-hook.js (53 lignes) api/printapi-hook.js — Print API prévient d'un changement de statut (corps : orderId=…).
 - api/_fn/promo.js (19 lignes) api/promo.js — vérifie un code promo (codes dans la variable Vercel PROMO_CODES)
+- api/_fn/sante.js (30 lignes) /api/sante?jeton=…&pays=FR,BE : contrôle de l'imprimeur sans rien commander (clés Print API, prix d'achat, liv
 - api/_fn/sign-upload.js (22 lignes) api/sign-upload.js — autorise le navigateur à envoyer UNE photo en pleine résolution
 - api/_fn/spine.js (38 lignes) api/spine.js — largeur de tranche du livre, fournie par Prodigi (dépend du nombre de pages et de l'atelier)
 - api/_fn/track.js (54 lignes) api/track.js — « Suivre ma commande » : numéro NOUST-… + email de la commande
@@ -477,5 +478,5 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
 - api/create-checkout.js (172 lignes) api/create-checkout.js — création de la session Stripe
 - api/generate-pdf.js (100 lignes) api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
 - api/prodigi-webhook.js (87 lignes) api/prodigi-webhook.js — callbacks Prodigi (expédition → email de suivi au client)
-- api/tools.js (26 lignes) api/tools.js — petites routes regroupées en une seule fonction
-- api/webhook.js (286 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,
+- api/tools.js (27 lignes) api/tools.js — petites routes regroupées en une seule fonction
+- api/webhook.js (291 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,

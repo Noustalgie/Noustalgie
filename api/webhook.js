@@ -234,8 +234,10 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Print API dès que ses clés sont en place et que la page a fourni ses fichiers ; sinon Prodigi, comme avant
-    const viaPA = format === 'print' && PA.configured() && m.pa_cover && m.pa_inner && m.addr_line1 && m.addr_postal && m.addr_city && m.addr_country;
+    // Print API dès que ses clés sont en place et que la page a fourni ses fichiers ; sinon Prodigi, comme avant.
+    // Suisse, Luxembourg, Monaco : la livraison Print API y coûte 22 à 32 € (Prodigi : 8 à 15 €), Prodigi imprime donc le livre sans option.
+    const cherPA = ['CH', 'LU', 'MC'].includes(m.addr_country) && !String(m.options || '').trim();
+    const viaPA = format === 'print' && PA.configured() && !cherPA && m.pa_cover && m.pa_inner && m.addr_line1 && m.addr_postal && m.addr_city && m.addr_country;
     if (viaPA) {
       printer = 'Print API';
       prodigi = await createPrintApiOrder({ m, name, phone, email, first, names, orderNumber, pages });
@@ -250,8 +252,11 @@ module.exports = async (req, res) => {
 
     const NOTIFY = process.env.NOTIFY_EMAIL;
     if (NOTIFY) {
+      // Fichiers Print API dans l'alerte : de quoi passer la commande à la main dans le portail
+      const paFiles = [['Couverture', m.pa_cover], ['Pages intérieures', m.pa_inner], ['Affiche', m.affiche_url], ['Cadre', m.cadre_url]]
+        .filter(f => f[1]).map(([n, u]) => `<a href="${h(u)}">${n}</a>`).join(' · ');
       const warn = (format === 'print' && !prodigiOrderId)
-        ? `<p style="color:#e07070"><b>⚠️ Commande ${printer} NON créée — à traiter manuellement !</b><br><small>${h((printer === 'Prodigi' ? global.__lastProdigiError : global.__lastPrinterError) || 'aucune erreur capturée')}</small></p>` : '';
+        ? `<p style="color:#e07070"><b>⚠️ Commande ${printer} NON créée — à traiter manuellement !</b><br><small>${h((printer === 'Prodigi' ? global.__lastProdigiError : global.__lastPrinterError) || 'aucune erreur capturée')}</small>${printer === 'Print API' && paFiles ? `<br><small>Fichiers Print API : ${paFiles}</small>` : ''}</p>` : '';
       await sendEmail({
         to: NOTIFY,
         subject: `🎉 ${orderNumber} — ${first} — ${price}€${prodigiOrderId ? ` ✅ ${printer}` : format === 'print' ? ' ⚠️ À TRAITER' : ''}`,
