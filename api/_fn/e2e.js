@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
   if (q.e2e === 'checkout') {                               // ?e2e=checkout&r={"full":{url,proof},"pa-cover":…}
     const R = JSON.parse(q.r);
     const body = Object.assign({}, CAP.checkout, { pdfUrl: R.full.url, pdfProof: R.full.proof, files: {} });
-    for (const k of ['pa-cover', 'pa-inner', 'affiche', 'cadre']) if (R[k]) body.files[k] = R[k];
+    for (const k of ['pa-cover', 'pa-inner', 'affiche', 'cadre', 'aimant']) if (R[k]) body.files[k] = R[k];
     const r = await run(require('../create-checkout'), { method: 'POST', headers: headers(), body });
     const sid = r.j && r.j.url && (/(cs_(?:live|test)_[A-Za-z0-9]+)/.exec(r.j.url) || [])[1];
     return res.status(200).json({ ...r, sid });
