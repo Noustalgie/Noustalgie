@@ -1620,6 +1620,19 @@ html body .nst-opt input{width:17px;height:17px;margin:2px 0 0;accent-color:#1c1
 html body .nst-opt-t b{display:block;font:600 14px/1.35 'Hanken Grotesk',system-ui,sans-serif;color:#1c1a18;}
 html body .nst-opt-t span{display:block;margin-top:3px;font:400 12.5px/1.45 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;}
 html body .nst-opt-p{font:600 13.5px/1.35 'Hanken Grotesk',system-ui,sans-serif;color:#1c1a18;white-space:nowrap;}
+/* Vignettes des options : photo 3D de l'objet (public/img/options, video/tools/options-vignettes.py), zone imprimée blanche ;
+   la couverture du client est posée dans la zone, la photo par-dessus en « multiplier » (ombres et lumière de la scène sur sa photo) */
+html body .nst-opt{grid-template-columns:auto 76px 1fr;grid-template-areas:"c i t" "c i p";row-gap:4px;}
+html body .nst-opt input{grid-area:c;} html body .nst-opt-t{grid-area:t;} html body .nst-opt-p{grid-area:p;}
+html body .nst-opt-img{grid-area:i;position:relative;width:76px;height:76px;overflow:hidden;border-radius:10px;background:#fff;isolation:isolate;}
+html body .nst-opt-img>img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply;pointer-events:none;}
+html body .nst-opt-z{position:absolute;overflow:hidden;}
+html body .nst-opt-z .nst-canvas{position:absolute;left:0;top:0;}
+html body .nst-opt-af{position:absolute;inset:0;container-type:inline-size;}
+html body .nst-opt-af .nst-opt-c{position:absolute;left:6.7%;top:6%;width:86.6%;aspect-ratio:1;overflow:hidden;}
+html body .nst-opt-af b{position:absolute;left:0;right:0;top:75%;text-align:center;font:italic 400 5cqw/1.1 'Playfair Display',serif;white-space:nowrap;}
+html body .nst-opt-ico{display:grid;place-items:center;background:#f1ede6;}
+@media (max-width:520px){ html body .nst-opt{grid-template-columns:auto 64px 1fr;} html body .nst-opt-img{width:64px;height:64px;} }
 /* 36 pages mis en avant : pastille « Recommandé » et prix à la page (le 36 pages est le moins cher à la page) */
 html body .ed-price-card,html body #pal36{position:relative;}
 html body .nst-reco{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:#fff;color:#1c1a18;border:1px solid #1c1a18;font:600 12px/1 'Hanken Grotesk',system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;}
@@ -1801,7 +1814,7 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
    "name": "Peut-on offrir l'album dans un coffret ?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un jour ouvré plus tôt."
+    "text": "Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt."
    }
   } ]
 }
@@ -2288,7 +2301,7 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q12">Peut-on offrir l'album dans un coffret ?</span><span class="ed-faq-sign">+</span></button>
-      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a12">Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un jour ouvré plus tôt.</div></div>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a12">Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.</div></div>
     </div>
   </div>
 </section>
@@ -2388,7 +2401,7 @@ const LANGS = {
     faq_q7:'Mes photos sont-elles en sécurité ?', faq_a7:'La confidentialité de vos souvenirs est une priorité absolue. Vos photos servent uniquement à créer votre album et ne sont jamais vendues ni partagées à des fins commerciales. Elles sont automatiquement supprimées de nos serveurs 30 jours après leur envoi. Vous pouvez consulter notre politique de confidentialité pour connaître le détail de nos engagements en matière de protection des données.',
     faq_q8:'Que se passe-t-il si mon livre arrive abîmé ?', faq_a8:"En cas de défaut d'impression ou de colis endommagé, écrivez-nous dès que possible à contact@noustalgie.fr avec votre numéro de commande et quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais pour vous. Vos garanties légales restent bien sûr acquises.",
     faq_q9:'Puis-je modifier ma commande après le paiement ?', faq_a9:'Une fois le paiement validé, votre album part très rapidement en impression, ce qui rend les modifications difficiles. Nous vous invitons donc à bien vérifier votre aperçu avant de payer. Si vous vous rendez compte d\'une erreur juste après votre commande, écrivez-nous au plus vite à contact@noustalgie.fr : si l\'impression n\'a pas encore démarré, nous ferons notre possible pour vous aider.',
-    faq_q12:"Peut-on offrir l'album dans un coffret ?", faq_a12:"Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un jour ouvré plus tôt.", faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:'Oui, dans 12 pays d\'Europe : France, Belgique, Luxembourg, Monaco, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie et Irlande. Il vous suffit d\'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l\'expédition de votre album.',
+    faq_q12:"Peut-on offrir l'album dans un coffret ?", faq_a12:"Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.", faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:'Oui, dans 12 pays d\'Europe : France, Belgique, Luxembourg, Monaco, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie et Irlande. Il vous suffit d\'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l\'expédition de votre album.',
     nav_how:'Comment ça marche', nav_pricing:'Tarifs', nav_ideas:'Idées cadeaux', nav_create:'Créer notre album', nav_cta:'Composer mon album',
     hero_badge:'Album photo couple · Impression premium',
     hero_h1_1:'L\'album photo de couple', hero_h1_2:'qui raconte', hero_h1_sub:'votre histoire',
@@ -2476,7 +2489,7 @@ const LANGS = {
     faq_q7:'Are my photos safe?', faq_a7:'The privacy of your memories is a priority. Your photos are used only to create your album, never sold or shared, and are automatically deleted 30 days after upload.',
     faq_q8:'What if my book arrives damaged?', faq_a8:"If your album has a printing defect or arrives damaged, email us as soon as possible at contact@noustalgie.fr with your order number and a few photos. We'll reprint or refund, free of charge. Your statutory rights remain unaffected.",
     faq_q9:'Can I change my order after paying?', faq_a9:"Once payment is confirmed, your album goes to print quickly. Please check your preview carefully before paying. If there's a mistake, email us fast: if printing hasn't started, we'll do our best to help.",
-    faq_q12:"Can the album come in a gift box?", faq_a12:"Yes. When you order the printed book, you can add a rigid gift box (€9.99), a 30 × 40 cm poster of the cover with your names (€14.99), a small 15 × 15 cm photo frame, your cover photo on ceramic with a wooden stand (€19.99), and a 5 × 5 cm ceramic photo magnet with the same photo (€12.99). Everything arrives in the same parcel. Express production (€4.99) ships your book one working day earlier.", faq_q10:'Do you ship outside France?', faq_a10:"Yes, to 12 European countries: France, Belgium, Luxembourg, Monaco, Switzerland, Germany, Austria, the Netherlands, Spain, Portugal, Italy and Ireland. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
+    faq_q12:"Can the album come in a gift box?", faq_a12:"Yes. When you order the printed book, you can add a rigid gift box (€9.99), a 30 × 40 cm poster of the cover with your names (€14.99), a small 15 × 15 cm photo frame, your cover photo on ceramic with a wooden stand (€19.99), and a 5 × 5 cm ceramic photo magnet with the same photo (€12.99). Everything arrives in the same parcel. Express production (€4.99) ships your book one to two working days earlier.", faq_q10:'Do you ship outside France?', faq_a10:"Yes, to 12 European countries: France, Belgium, Luxembourg, Monaco, Switzerland, Germany, Austria, the Netherlands, Spain, Portugal, Italy and Ireland. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
     nav_how:'How it works', nav_pricing:'Pricing', nav_ideas:'Gift ideas', nav_create:'Create our album', nav_cta:'Create my album',
     hero_badge:'Couple photo album · Premium printing',
     hero_h1_1:'The couple photo album', hero_h1_2:'that tells', hero_h1_sub:'your story',
@@ -2564,7 +2577,7 @@ const LANGS = {
     faq_q7:'Sind meine Fotos sicher?', faq_a7:'Der Schutz Ihrer Erinnerungen hat Priorität. Ihre Fotos dienen nur der Erstellung Ihres Albums, werden nie verkauft oder geteilt und 30 Tage nach dem Hochladen automatisch gelöscht.',
     faq_q8:'Was, wenn mein Buch beschädigt ankommt?', faq_a8:"Bei einem Druckfehler oder beschädigtem Paket schreibt uns bitte so bald wie möglich an contact@noustalgie.fr mit eurer Bestellnummer und einigen Fotos. Wir drucken kostenlos neu oder erstatten den Betrag. Eure gesetzlichen Rechte bleiben unberührt.",
     faq_q9:'Kann ich meine Bestellung nach der Zahlung ändern?', faq_a9:'Nach bestätigter Zahlung geht Ihr Album schnell in den Druck. Bitte prüfen Sie Ihre Vorschau vor dem Bezahlen. Bei einem Fehler schreiben Sie uns schnell: Ist der Druck noch nicht gestartet, helfen wir gerne.',
-    faq_q12:"Kann man das Album in einer Geschenkbox verschenken?", faq_a12:"Ja. Bei der Bestellung des gedruckten Buchs können Sie eine feste Geschenkbox (9,99 €), ein Poster 30 × 40 cm mit dem Cover und Ihren Namen (14,99 €), einen kleinen Fotorahmen 15 × 15 cm mit Ihrem Coverfoto auf Keramik und Holzständer (19,99 €) und einen Fotomagneten 5 × 5 cm aus Keramik mit demselben Foto (12,99 €) hinzufügen. Alles kommt im selben Paket. Mit der Express-Herstellung (4,99 €) wird Ihr Buch einen Werktag früher verschickt.", faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, in 12 europäische Länder: Frankreich, Belgien, Luxemburg, Monaco, Schweiz, Deutschland, Österreich, Niederlande, Spanien, Portugal, Italien und Irland. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
+    faq_q12:"Kann man das Album in einer Geschenkbox verschenken?", faq_a12:"Ja. Bei der Bestellung des gedruckten Buchs können Sie eine feste Geschenkbox (9,99 €), ein Poster 30 × 40 cm mit dem Cover und Ihren Namen (14,99 €), einen kleinen Fotorahmen 15 × 15 cm mit Ihrem Coverfoto auf Keramik und Holzständer (19,99 €) und einen Fotomagneten 5 × 5 cm aus Keramik mit demselben Foto (12,99 €) hinzufügen. Alles kommt im selben Paket. Mit der Express-Herstellung (4,99 €) wird Ihr Buch ein bis zwei Werktage früher verschickt.", faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, in 12 europäische Länder: Frankreich, Belgien, Luxemburg, Monaco, Schweiz, Deutschland, Österreich, Niederlande, Spanien, Portugal, Italien und Irland. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
     nav_how:'So funktioniert\'s', nav_pricing:'Preise', nav_ideas:'Geschenkideen', nav_create:'Unser Album erstellen', nav_cta:'Mein Album gestalten',
     hero_badge:'Pärchen-Fotoalbum · Premium-Druck',
     hero_h1_1:'Das Fotoalbum für Paare,', hero_h1_2:'das eure Geschichte', hero_h1_sub:'erzählt',
@@ -2652,7 +2665,7 @@ const LANGS = {
     faq_q7:'¿Están seguras mis fotos?', faq_a7:'La privacidad de tus recuerdos es una prioridad. Tus fotos solo sirven para crear tu álbum, nunca se venden ni se comparten, y se eliminan automáticamente 30 días después de subirlas.',
     faq_q8:'¿Qué pasa si mi libro llega dañado?', faq_a8:"Si tu álbum tiene un defecto de impresión o llega dañado, escríbenos cuanto antes a contact@noustalgie.fr con tu número de pedido y algunas fotos. Reimprimimos o reembolsamos, sin coste alguno. Tus garantías legales se mantienen.",
     faq_q9:'¿Puedo modificar mi pedido tras pagar?', faq_a9:'Una vez confirmado el pago, tu álbum entra rápido en impresión. Revisa bien tu vista previa antes de pagar. Si hay un error, escríbenos rápido: si la impresión no ha empezado, haremos lo posible.',
-    faq_q12:"¿Se puede regalar el álbum en una caja?", faq_a12:"Sí. Al pedir el libro impreso, podéis añadir una caja regalo rígida (9,99 €), un póster de 30 × 40 cm con la portada y vuestros nombres (14,99 €), un pequeño marco de fotos de 15 × 15 cm con vuestra foto de portada sobre cerámica y soporte de madera (19,99 €) y un imán de cerámica de 5 × 5 cm con la misma foto (12,99 €). Todo llega en el mismo paquete. La fabricación exprés (4,99 €) envía vuestro libro un día laborable antes.", faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, a 12 países de Europa: Francia, Bélgica, Luxemburgo, Mónaco, Suiza, Alemania, Austria, Países Bajos, España, Portugal, Italia e Irlanda. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
+    faq_q12:"¿Se puede regalar el álbum en una caja?", faq_a12:"Sí. Al pedir el libro impreso, podéis añadir una caja regalo rígida (9,99 €), un póster de 30 × 40 cm con la portada y vuestros nombres (14,99 €), un pequeño marco de fotos de 15 × 15 cm con vuestra foto de portada sobre cerámica y soporte de madera (19,99 €) y un imán de cerámica de 5 × 5 cm con la misma foto (12,99 €). Todo llega en el mismo paquete. La fabricación exprés (4,99 €) envía vuestro libro uno o dos días laborables antes.", faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, a 12 países de Europa: Francia, Bélgica, Luxemburgo, Mónaco, Suiza, Alemania, Austria, Países Bajos, España, Portugal, Italia e Irlanda. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
     nav_how:'Cómo funciona', nav_pricing:'Precios', nav_ideas:'Ideas de regalo', nav_create:'Crear nuestro álbum', nav_cta:'Crear mi álbum',
     hero_badge:'Álbum foto pareja · Impresión premium',
     hero_h1_1:'El álbum de fotos de pareja', hero_h1_2:'que cuenta', hero_h1_sub:'vuestra historia',
@@ -2740,7 +2753,7 @@ const LANGS = {
     faq_q7:'As minhas fotos estão seguras?', faq_a7:'A privacidade das suas memórias é uma prioridade. As suas fotos servem apenas para criar o álbum, nunca são vendidas nem partilhadas, e são automaticamente eliminadas 30 dias após o envio.',
     faq_q8:'E se o meu livro chegar danificado?', faq_a8:"Em caso de defeito de impressão ou embalagem danificada, escreva-nos o quanto antes para contact@noustalgie.fr com o número da encomenda e algumas fotos. Reimprimimos ou reembolsamos, sem custos. As suas garantias legais mantêm-se.",
     faq_q9:'Posso alterar a encomenda após pagar?', faq_a9:'Após confirmado o pagamento, o álbum segue rapidamente para impressão. Verifique bem a pré-visualização antes de pagar. Se houver um erro, escreva-nos depressa: se a impressão não começou, faremos o possível.',
-    faq_q12:"Posso oferecer o álbum numa caixa?", faq_a12:"Sim. Ao encomendar o livro impresso, podem acrescentar uma caixa de oferta rígida (9,99 €), um póster de 30 × 40 cm com a capa e os vossos nomes (14,99 €), uma pequena moldura de 15 × 15 cm com a vossa foto de capa em cerâmica e suporte de madeira (19,99 €) e um íman de cerâmica de 5 × 5 cm com a mesma foto (12,99 €). Tudo chega na mesma encomenda. A produção expresso (4,99 €) envia o vosso livro um dia útil mais cedo.", faq_q10:'Entregam fora de França?', faq_a10:'Sim, para 12 países da Europa: França, Bélgica, Luxemburgo, Mónaco, Suíça, Alemanha, Áustria, Países Baixos, Espanha, Portugal, Itália e Irlanda. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
+    faq_q12:"Posso oferecer o álbum numa caixa?", faq_a12:"Sim. Ao encomendar o livro impresso, podem acrescentar uma caixa de oferta rígida (9,99 €), um póster de 30 × 40 cm com a capa e os vossos nomes (14,99 €), uma pequena moldura de 15 × 15 cm com a vossa foto de capa em cerâmica e suporte de madeira (19,99 €) e um íman de cerâmica de 5 × 5 cm com a mesma foto (12,99 €). Tudo chega na mesma encomenda. A produção expresso (4,99 €) envia o vosso livro um a dois dias úteis mais cedo.", faq_q10:'Entregam fora de França?', faq_a10:'Sim, para 12 países da Europa: França, Bélgica, Luxemburgo, Mónaco, Suíça, Alemanha, Áustria, Países Baixos, Espanha, Portugal, Itália e Irlanda. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
     nav_how:'Como funciona', nav_pricing:'Preços', nav_ideas:'Ideias de presente', nav_create:'Criar o nosso álbum', nav_cta:'Criar o meu álbum',
     hero_badge:'Álbum de casal · Impressão premium',
     hero_h1_1:'O álbum de fotos de casal', hero_h1_2:'que conta', hero_h1_sub:'a vossa história',
@@ -5897,7 +5910,7 @@ fr: {
   format_lbl: 'Format', format_opt: '{0} pages', format_min: 'Il faut au moins {0} photos pour {1} pages.', format_adding: 'Écriture des pages supplémentaires…', drag_hint: 'Glissez les miniatures pour réordonner les pages.', photos_lbl: 'Photos',
   tr_title: 'Suivre ma commande', tr_sub: 'Entrez le numéro reçu par email (NOUST-…) et l’adresse email utilisée pour la commande.', tr_ref: 'Numéro de commande', tr_email: 'Email', tr_btn: 'Voir le suivi',
   tr_s1: 'Commande reçue', tr_s2: 'En fabrication', tr_s3: 'Expédiée', tr_track: 'Suivre le colis', tr_num: 'N° de suivi', tr_cancel: 'Cette commande a été annulée. Écrivez-nous si vous avez une question.',
-  tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 6 à 8 jours ouvrés après la commande.', tr_busy: 'Recherche…',
+  tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 5 à 7 jours ouvrés après la commande.', tr_busy: 'Recherche…',
 },
 en: {
   ph_prep: 'Preparing your photos…', ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your iPhone could not prepare the photos you chose: this mostly happens when it is short on storage, or when the photos are in iCloud (“Optimize Storage”) and it cannot download them.', ph_help_n: '{0} of {1} photo(s) could not be sent.', ph_help_0: 'No photo arrived from your iPhone.', ph_help_4: 'Add them in several goes, 5 to 10 at a time: your iPhone needs far less space.', ph_help_1: 'Free up space: Photos › Albums › Recently Deleted › Delete All, or Settings › General › iPhone Storage.', ph_retry_few: 'Try again with fewer photos', ph_mail: 'Email me the link for my computer', ph_mail_s: 'My Noustalgie album', ph_mail_b: 'To continue my album on a computer: https://noustalgie.fr/#app', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
@@ -5925,7 +5938,7 @@ en: {
   format_lbl: 'Format', format_opt: '{0} pages', format_min: 'You need at least {0} photos for {1} pages.', format_adding: 'Writing the extra pages…', drag_hint: 'Drag the thumbnails to reorder pages.', photos_lbl: 'Photos',
   tr_title: 'Track my order', tr_sub: 'Enter the number from your email (NOUST-…) and the email address used for the order.', tr_ref: 'Order number', tr_email: 'Email', tr_btn: 'Track',
   tr_s1: 'Order received', tr_s2: 'In production', tr_s3: 'Shipped', tr_track: 'Track the parcel', tr_num: 'Tracking no.', tr_cancel: 'This order was cancelled. Email us if you have any question.',
-  tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 6 to 8 working days after ordering.', tr_busy: 'Searching…',
+  tr_pdf: 'For a digital album, the download link is in your confirmation email.', tr_eta: 'Estimated delivery: about 5 to 7 working days after ordering.', tr_busy: 'Searching…',
 },
 de: {
   ph_prep: 'Eure Fotos werden vorbereitet…', ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer iPhone konnte die ausgewählten Fotos nicht vorbereiten: Das passiert vor allem, wenn der Speicher knapp ist, oder wenn die Fotos in iCloud liegen („Speicher optimieren“) und es sie nicht laden kann.', ph_help_n: '{0} von {1} Foto(s) konnten nicht übertragen werden.', ph_help_0: 'Von eurem iPhone ist kein Foto angekommen.', ph_help_4: 'Fügt sie in mehreren Durchgängen hinzu, 5 bis 10 auf einmal: Das iPhone braucht dann viel weniger Platz.', ph_help_1: 'Speicher freigeben: Fotos › Alben › Zuletzt gelöscht › Alle löschen, oder Einstellungen › Allgemein › iPhone-Speicher.', ph_retry_few: 'Mit weniger Fotos erneut versuchen', ph_mail: 'Link für den Computer per E-Mail senden', ph_mail_s: 'Unser Noustalgie-Album', ph_mail_b: 'Um unser Album am Computer fortzusetzen: https://noustalgie.fr/#app', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
@@ -5953,7 +5966,7 @@ de: {
   format_lbl: 'Format', format_opt: '{0} Seiten', format_min: 'Für {1} Seiten braucht ihr mindestens {0} Fotos.', format_adding: 'Zusätzliche Seiten werden geschrieben…', drag_hint: 'Miniaturen ziehen, um Seiten umzusortieren.', photos_lbl: 'Fotos',
   tr_title: 'Bestellung verfolgen', tr_sub: 'Gebt die Nummer aus der E-Mail (NOUST-…) und die bei der Bestellung verwendete E-Mail an.', tr_ref: 'Bestellnummer', tr_email: 'E-Mail', tr_btn: 'Anzeigen',
   tr_s1: 'Bestellung erhalten', tr_s2: 'In Produktion', tr_s3: 'Versendet', tr_track: 'Paket verfolgen', tr_num: 'Sendungsnr.', tr_cancel: 'Diese Bestellung wurde storniert. Schreibt uns bei Fragen.',
-  tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 6 bis 8 Werktage nach der Bestellung.', tr_busy: 'Suche…',
+  tr_pdf: 'Bei einem digitalen Album steht der Download-Link in der Bestätigungs-E-Mail.', tr_eta: 'Voraussichtliche Lieferung: etwa 5 bis 7 Werktage nach der Bestellung.', tr_busy: 'Suche…',
 },
 es: {
   ph_prep: 'Preparando tus fotos…', ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu iPhone no pudo preparar las fotos elegidas: pasa sobre todo cuando le falta espacio de almacenamiento, o cuando las fotos están en iCloud («Optimizar almacenamiento») y no puede descargarlas.', ph_help_n: 'No se pudieron enviar {0} de {1} foto(s).', ph_help_0: 'No ha llegado ninguna foto de tu iPhone.', ph_help_4: 'Añádelas en varias veces, de 5 a 10 cada vez: el iPhone necesita mucho menos espacio.', ph_help_1: 'Libera espacio: Fotos › Álbumes › Eliminado › Eliminar todo, o Ajustes › General › Almacenamiento del iPhone.', ph_retry_few: 'Reintentar con menos fotos', ph_mail: 'Enviarme el enlace para el ordenador', ph_mail_s: 'Mi álbum Noustalgie', ph_mail_b: 'Para continuar mi álbum en el ordenador: https://noustalgie.fr/#app', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
@@ -5981,7 +5994,7 @@ es: {
   format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Necesitas al menos {0} fotos para {1} páginas.', format_adding: 'Escribiendo las páginas adicionales…', drag_hint: 'Arrastra las miniaturas para reordenar las páginas.', photos_lbl: 'Fotos',
   tr_title: 'Seguir mi pedido', tr_sub: 'Introduce el número recibido por email (NOUST-…) y el email usado en el pedido.', tr_ref: 'Número de pedido', tr_email: 'Email', tr_btn: 'Ver el seguimiento',
   tr_s1: 'Pedido recibido', tr_s2: 'En fabricación', tr_s3: 'Enviado', tr_track: 'Seguir el paquete', tr_num: 'N.º de seguimiento', tr_cancel: 'Este pedido fue cancelado. Escríbenos si tienes alguna pregunta.',
-  tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 6 a 8 días hábiles tras el pedido.', tr_busy: 'Buscando…',
+  tr_pdf: 'Para un álbum digital, el enlace de descarga está en tu email de confirmación.', tr_eta: 'Entrega estimada: unos 5 a 7 días hábiles tras el pedido.', tr_busy: 'Buscando…',
 },
 pt: {
   ph_prep: 'A preparar as tuas fotos…', ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu iPhone não conseguiu preparar as fotos escolhidas: acontece sobretudo quando falta espaço de armazenamento, ou quando as fotos estão no iCloud («Otimizar armazenamento») e não as consegue descarregar.', ph_help_n: 'Não foi possível enviar {0} de {1} foto(s).', ph_help_0: 'Não chegou nenhuma foto do teu iPhone.', ph_help_4: 'Adiciona-as em várias vezes, 5 a 10 de cada vez: o iPhone precisa de muito menos espaço.', ph_help_1: 'Liberta espaço: Fotografias › Álbuns › Apagados › Apagar tudo, ou Definições › Geral › Armazenamento do iPhone.', ph_retry_few: 'Tentar de novo com menos fotos', ph_mail: 'Enviar-me a ligação para o computador', ph_mail_s: 'O meu álbum Noustalgie', ph_mail_b: 'Para continuar o meu álbum no computador: https://noustalgie.fr/#app', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
@@ -6009,7 +6022,7 @@ pt: {
   format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Precisas de pelo menos {0} fotos para {1} páginas.', format_adding: 'A escrever as páginas adicionais…', drag_hint: 'Arrasta as miniaturas para reordenar as páginas.', photos_lbl: 'Fotos',
   tr_title: 'Seguir a minha encomenda', tr_sub: 'Introduz o número recebido por email (NOUST-…) e o email usado na encomenda.', tr_ref: 'Número da encomenda', tr_email: 'Email', tr_btn: 'Ver o seguimento',
   tr_s1: 'Encomenda recebida', tr_s2: 'Em produção', tr_s3: 'Enviada', tr_track: 'Seguir a encomenda', tr_num: 'N.º de seguimento', tr_cancel: 'Esta encomenda foi cancelada. Escreve-nos se tiveres alguma questão.',
-  tr_pdf: 'Para um álbum digital, o link de download está no email de confirmação.', tr_eta: 'Entrega estimada: cerca de 6 a 8 dias úteis após a encomenda.', tr_busy: 'A procurar…',
+  tr_pdf: 'Para um álbum digital, o link de download está no email de confirmação.', tr_eta: 'Entrega estimada: cerca de 5 a 7 dias úteis após a encomenda.', tr_busy: 'A procurar…',
 },
 };
 function t(key) {
@@ -7629,7 +7642,7 @@ cgv: { tab: 'CGV', toc: true, html: `
 <h2 id="cgv-6">6. Fabrication et livraison</h2>
 <p><b>Album numérique</b> : un lien de téléchargement est envoyé par email après le paiement. Pensez à enregistrer votre fichier : le lien reste actif au moins 14 jours.</p>
 <p><b>Livre imprimé</b> : il est fabriqué à la commande par notre imprimeur partenaire, puis livré à domicile (pas de livraison en point relais) à l'adresse indiquée, dans les pays suivants : France métropolitaine, Belgique, Luxembourg, Monaco, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie et Irlande. La livraison est offerte. Comptez 6 à 8 jours ouvrés environ en France métropolitaine, un peu plus dans les autres pays. Ces délais sont indicatifs et peuvent varier selon la destination et le transporteur ; un numéro de suivi est envoyé par email à l'expédition. Le client veille à l'exactitude de l'adresse saisie.</p>
-<p><b>Fabrication express</b> : le livre est fabriqué en priorité et expédié un jour ouvré plus tôt qu'en fabrication normale ; le délai de transport, lui, ne change pas.</p>
+<p><b>Fabrication express</b> : le livre est fabriqué en priorité et expédié un à deux jours ouvrés plus tôt qu'en fabrication normale ; le délai de transport, lui, ne change pas.</p>
 <p>En cas de retard important, de colis perdu ou endommagé, contactez-nous : nous réglons la situation avec le transporteur et, si nécessaire, procédons à une réimpression ou à un remboursement.</p>
 <h2 id="cgv-7">7. Droit de rétractation</h2>
 <p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux biens confectionnés selon les spécifications du consommateur ou nettement personnalisés (3°), ni aux contenus numériques fournis sans support matériel dont l'exécution a commencé avec l'accord du consommateur (13°). Chaque album étant unique (photos, prénoms et textes propres au client), il n'est pas soumis au droit de rétractation ; le client le reconnaît expressément en passant commande. Cette exclusion ne limite en rien les garanties légales ci-dessous.</p>
@@ -8194,27 +8207,27 @@ NA.payLabel = payLabel;
 const OPTS = { coffret: 9.99, express: 4.99, affiche: 14.99, cadre: 19.99, aimant: 12.99 };
 Object.entries({
   fr: { opt_lbl: 'Options', opt_coffret: 'Coffret cadeau', opt_coffret_d: 'Le livre arrive dans une boîte cadeau rigide, prêt à offrir.',
-        opt_express: 'Fabrication express', opt_express_d: 'Votre livre est fabriqué en priorité et expédié un jour ouvré plus tôt.',
+        opt_express: 'Fabrication express', opt_express_d: 'Votre livre est fabriqué en priorité et expédié un à deux jours ouvrés plus tôt.',
         opt_affiche: 'Affiche 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'La couverture de votre album en affiche, avec vos prénoms. Dans le même colis.',
         opt_cadre: 'Petit cadre photo 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Votre photo de couverture sur céramique, avec son support en bois. Dans le même colis.',
         opt_aimant: 'Aimant photo 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Votre photo de couverture sur un petit carreau en céramique aimanté. Dans le même colis.' },
   en: { opt_lbl: 'Extras', opt_coffret: 'Gift box', opt_coffret_d: 'The book arrives in a rigid gift box, ready to give.',
-        opt_express: 'Express production', opt_express_d: 'Your book is made first and ships one working day earlier.',
+        opt_express: 'Express production', opt_express_d: 'Your book is made first and ships one to two working days earlier.',
         opt_affiche: '30\u00a0×\u00a040\u00a0cm poster', opt_affiche_d: 'Your album cover as a poster, with your names. In the same parcel.',
         opt_cadre: 'Small 15\u00a0×\u00a015\u00a0cm photo frame', opt_cadre_d: 'Your cover photo on a ceramic tile with a wooden stand. In the same parcel.',
         opt_aimant: '5\u00a0×\u00a05\u00a0cm photo magnet', opt_aimant_d: 'Your cover photo on a small magnetic ceramic tile. In the same parcel.' },
   de: { opt_lbl: 'Extras', opt_coffret: 'Geschenkbox', opt_coffret_d: 'Das Buch kommt in einer festen Geschenkbox, bereit zum Verschenken.',
-        opt_express: 'Express-Herstellung', opt_express_d: 'Euer Buch wird bevorzugt hergestellt und einen Werktag früher verschickt.',
+        opt_express: 'Express-Herstellung', opt_express_d: 'Euer Buch wird bevorzugt hergestellt und ein bis zwei Werktage früher verschickt.',
         opt_affiche: 'Poster 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'Das Cover eures Albums als Poster, mit euren Namen. Im selben Paket.',
         opt_cadre: 'Kleiner Fotorahmen 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Euer Coverfoto auf einer Keramikfliese mit Holzständer. Im selben Paket.',
         opt_aimant: 'Fotomagnet 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Euer Coverfoto auf einer kleinen magnetischen Keramikfliese. Im selben Paket.' },
   es: { opt_lbl: 'Extras', opt_coffret: 'Caja regalo', opt_coffret_d: 'El libro llega en una caja regalo rígida, listo para regalar.',
-        opt_express: 'Fabricación exprés', opt_express_d: 'Vuestro libro se fabrica con prioridad y sale un día laborable antes.',
+        opt_express: 'Fabricación exprés', opt_express_d: 'Vuestro libro se fabrica con prioridad y sale uno o dos días laborables antes.',
         opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'La portada de vuestro álbum en póster, con vuestros nombres. En el mismo paquete.',
         opt_cadre: 'Marco de fotos de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Vuestra foto de portada sobre cerámica, con soporte de madera. En el mismo paquete.',
         opt_aimant: 'Imán de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Vuestra foto de portada sobre una pequeña baldosa de cerámica con imán. En el mismo paquete.' },
   pt: { opt_lbl: 'Extras', opt_coffret: 'Caixa de oferta', opt_coffret_d: 'O livro chega numa caixa de oferta rígida, pronto a oferecer.',
-        opt_express: 'Produção expresso', opt_express_d: 'O vosso livro é produzido com prioridade e enviado um dia útil mais cedo.',
+        opt_express: 'Produção expresso', opt_express_d: 'O vosso livro é produzido com prioridade e enviado um a dois dias úteis mais cedo.',
         opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'A capa do vosso álbum em póster, com os vossos nomes. Na mesma encomenda.',
         opt_cadre: 'Moldura de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'A vossa foto de capa em cerâmica, com suporte de madeira. Na mesma encomenda.',
         opt_aimant: 'Íman de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'A vossa foto de capa num pequeno azulejo de cerâmica com íman. Na mesma encomenda.' },
@@ -8237,8 +8250,25 @@ function drawOpts() {
   }
   box.hidden = ((($('payFormat') || {}).value) || 'print') !== 'print';
   box.innerHTML = `<div class="fl">${esc(t('opt_lbl'))}</div>` + Object.keys(OPTS).map(k => `<label class="nst-opt${NA.opts.has(k) ? ' on' : ''}">`
-    + `<input type="checkbox" data-opt="${k}"${NA.opts.has(k) ? ' checked' : ''}/><span class="nst-opt-t"><b>${esc(t('opt_' + k))}</b><span>${esc(t('opt_' + k + '_d'))}</span></span>`
+    + `<input type="checkbox" data-opt="${k}"${NA.opts.has(k) ? ' checked' : ''}/>${optImg(k)}<span class="nst-opt-t"><b>${esc(t('opt_' + k))}</b><span>${esc(t('opt_' + k + '_d'))}</span></span>`
     + `<span class="nst-opt-p">+ ${money(OPTS[k])}</span></label>`).join('');
+  fillOptImgs(box);
+}
+// Vignettes : zone imprimée de chaque photo (x, y, largeur, hauteur en % ; video/out/options/zones.json), où l'on pose la couverture du client
+const OPT_IMG = { coffret: { x: 14.33, y: 14.33, w: 71.33, h: 71.33 }, affiche: { x: 24.1, y: 5.44, w: 51.81, h: 69.08 }, cadre: { x: 20.95, y: 11.95, w: 58.1, h: 58.1 }, aimant: { x: 22.13, y: 28.89, w: 42.23, h: 42.23 } };
+const optImg = k => { const z = OPT_IMG[k];
+  return z ? `<span class="nst-opt-img"><span class="nst-opt-z" data-k="${k}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%"></span><img src="/img/options/${k}.jpg" alt="" loading="lazy" decoding="async"/></span>`
+    : `<span class="nst-opt-img nst-opt-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1c1a18" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2M10 2.8h4M12 2.8V6M18.2 6.6l1.3-1.3"/></svg></span>`; };
+function fillOptImgs(box) {
+  const c = NA.pages && NA.pages[0]; if (!c) return;
+  const s0 = c.slots && c.slots[0], photo = s0 ? { layout: 'full', slots: [Object.assign({}, s0)], t: {} } : c;   // cadre et aimant : la photo de couverture, comme cadreHtml
+  const T = NA.THEMES[NA.theme] || NA.THEMES.galerie, i = NA.info || {};
+  box.querySelectorAll('.nst-opt-z').forEach(z => {
+    if (z.dataset.k === 'affiche') {                                                  // affiche : couverture et prénoms sur le papier de l'album, comme afficheHtml
+      z.innerHTML = `<span class="nst-opt-af" style="background:${T.paper};color:${T.ink}"><span class="nst-opt-c">${NA.renderPage(c, { thumb: true })}</span><b>${esc(i.names || '')}</b></span>`;
+      NA.scaleHost(z.querySelector('.nst-opt-c'));
+    } else { z.innerHTML = NA.renderPage(z.dataset.k === 'coffret' ? c : photo, { thumb: true }); NA.scaleHost(z); }
+  });
 }
 NA.drawOpts = drawOpts;
 if (typeof window.selectFormat === 'function') {
@@ -8601,7 +8631,7 @@ if (window.MutationObserver && $('payFinalPrice')) new MutationObserver(syncPric
 
 /* ── Navigation : aperçu en direct, récapitulatif ── */
 const og = window.goTab;
-window.goTab = function (n) { const r = og.apply(this, arguments); try { flowMode(n); if (n === 4) renderSummary(); } catch (e) {} return r; };
+window.goTab = function (n) { const r = og.apply(this, arguments); try { flowMode(n); if (n === 4) { renderSummary(); if (NA.drawOpts) NA.drawOpts(); } } catch (e) {} return r; };   // vignettes des options : couverture du moment
 window.addEventListener('resize', () => { const a = document.querySelector('.panel.active'); if (a) flowMode(+a.id.replace('panel', '')); });
 ['pal24', 'pal36', 'pal50'].forEach(id => { const x = $(id); if (x) x.addEventListener('click', liveSoon); });
 
