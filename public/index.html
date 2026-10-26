@@ -7324,6 +7324,8 @@ window.generateAlbumPDF = async function (onStep, opts) {
   const kinds = ['full'].concat(opts.print ? ['pa-cover', 'pa-inner'] : [], (opts.extras || []).filter(objet));
   const res = await Promise.all(kinds.map(k => k === 'full' ? tries(printHtml) : tries(make[k], { kind: k, albumPages: n }, objet(k) ? 1 : 0)));
   const R = {}; kinds.forEach((k, i) => { R[k] = res[i]; });
+  // Fichiers Print API manquants (réseau, PDFShift) : un second essai, sinon le livre part chez Prodigi, plus cher
+  for (const k of ['pa-cover', 'pa-inner']) if (opts.print && !(R[k] && R[k].url && R[k].proof)) R[k] = await tries(make[k], { kind: k, albumPages: n });
   if (!R.full || !R.full.url || !R.full.proof) throw new Error((R.full && R.full.error) || 'PDF');
   const files = {};
   kinds.slice(1).forEach(k => { if (R[k] && R[k].url && R[k].proof) files[k] = { url: R[k].url, proof: R[k].proof }; });
