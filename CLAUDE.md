@@ -1,6 +1,6 @@
 # Noustalgie : mémoire du projet
 
-Site noustalgie.fr : albums photo de couple, composés en ligne puis imprimés et livrés par Print API (Pays-Bas ; Prodigi en secours tant que les clés live Print API manquent).
+Site noustalgie.fr : albums photo de couple, composés en ligne puis imprimés et livrés par Print API (Pays-Bas ; Prodigi pour les livres sans option livrés en Suisse, au Luxembourg ou à Monaco, et en secours).
 Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, ton direct.
 
 ## Façon de travailler
@@ -42,7 +42,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Éditeur sur téléphone : une barre flex en colonne garde `flex-wrap: nowrap`. En colonne avec `wrap`, la ligne prend la largeur de l'élément le plus large (la rangée des styles) : la page déborde et Safari dézoome tout l'éditeur. `outils/verifier-site.py` ne teste le débordement mobile que sur l'accueil : vérifier l'éditeur à 390 px après une génération (`document.documentElement.scrollWidth`).
 - Les réponses du questionnaire sont reprises 7 jours (`noustalgie_draft`, `noustalgie_mag`). Une réponse reprise doit rester visible (rubrique ouverte), sinon une saisie d'un ancien essai finit dans l'album sans qu'on la voie (ex. « Plymouth » sur la page des villes).
 - Ni Prodigi ni Print API ne livrent en point relais : livraison à domicile uniquement. Le nom de famille et le téléphone sont obligatoires sur l'étiquette.
-- Délai réel de livraison : 10 à 12 jours. Ne jamais écrire 3-5 ou 5-7 jours.
+- Délai annoncé : 6 à 8 jours ouvrés en France, un peu plus ailleurs (Print API : fabrication en 3 jours ouvrés pour une commande passée avant 11 h, puis 3 à 4 jours de transport vers la France, d'après Marko, ticket #463372). Les livres imprimés par Prodigi (Suisse, Luxembourg, Monaco sans option) prennent 10 à 12 jours : l'email de confirmation le dit. Ne jamais écrire 3-5 jours.
 - Les chaînes `testi*` du dictionnaire sont des témoignages inventés : ne jamais les afficher.
 - Vouvoiement partout côté client. Espace insécable avant `? ! : ;` en français.
 - `.vercelignore` suit la syntaxe de `.gitignore` : un motif sans `/` au début vaut à tous les niveaux. `video` excluait aussi `public/video/` (le film de /exemple-album) ; écrire `/video`.
@@ -62,7 +62,7 @@ Gabin parle français, préfère que le travail soit fait plutôt qu'expliqué, 
 - Le menu `nav.ed-nav` hérite de la vieille règle `nav{position:fixed;top:32px}` (ancien bandeau) : sans `top:0` dans la couche v6, il descend de 32 px et laisse une bande vide au-dessus du menu.
 - Accueil, vitesse sur téléphone : l'élément le plus lent (LCP) est la photo de la 1re couverture du livre 3D (`SAMPLE_PHOTO[0]`, `photo-portee.jpg`), créée par script vers 2 s. La photo de repli du haut de page (`<img fetchpriority="high">` de `.ed-hero-img`) doit être ce même fichier : avec une autre photo, le navigateur téléchargeait une image aussitôt cachée et le LCP passait de 2,25 à 3,3 s (4G lente). Mesurer sur la version construite, servie compressée.
 - Haut de page : le champ « Essayez avec vos deux prénoms » (`#nstTry`, script v4) met leurs prénoms sur les couvertures du livre 3D et réécrit `name1`/`name2` du questionnaire (brouillon compris) ; au retour sur le site, les prénoms repris y reviennent. Sur téléphone, le livre et ce champ doivent tenir dans le premier écran (390 × 844) : « Comment ça marche » y est masqué.
-- Noël : la date limite de commande (`NOEL`, script v4, juste avant `renderSummary`) s'affiche sous les tarifs et dans le récapitulatif du livre imprimé, puis disparaît seule. À revoir chaque année avec le calendrier de fin d'année de Prodigi (site injoignable depuis une session web).
+- Noël : la date limite de commande (`NOEL`, script v4, juste avant `renderSummary`) s'affiche sous les tarifs et dans le récapitulatif du livre imprimé, puis disparaît seule. À revoir chaque année avec les délais de Print API (2026 : jeudi 10 décembre, calcul en commentaire à côté de `NOEL`) ; la date est aussi écrite dans les guides et `llms.txt`.
 - Cloudinary (`api.cloudinary.com`, `res.cloudinary.com`) est bloqué depuis une session web : pas de retouche IA ni d'envoi d'images locales par le connecteur.
 - Fond fixe en `z-index:-1` (pseudo-élément de `body`) : il disparaît si `body` a un fond, qui se peint par-dessus. La couleur va sur `html`, `body` reste transparent. Pour juger un fond fixe, capturer écran par écran : une capture `full_page` étire l'élément `position:fixed` sur toute la hauteur de la page et ne montre plus la photo.
 

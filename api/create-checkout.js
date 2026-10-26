@@ -34,12 +34,13 @@ const PRICES = {
   36: { pdf: 19.99, print: 49.99 },
   50: { pdf: 24.99, print: 69.99 },
 };
-// Options du livre imprimé (Print API), mêmes prix que sur le site. L'affiche et le cadre ont chacun leur fichier d'impression.
+// Options du livre imprimé (Print API), mêmes prix que sur le site. L'affiche, le cadre et l'aimant ont chacun leur fichier d'impression.
 const OPTIONS = {
   coffret: { price: 9.99, name: 'Coffret cadeau', desc: 'Le livre livré dans une boîte cadeau rigide' },
   express: { price: 4.99, name: 'Fabrication express', desc: 'Fabriqué en priorité, expédié un jour ouvré plus tôt' },
   affiche: { price: 14.99, name: 'Affiche 30 × 40 cm', desc: 'La couverture de votre album en affiche, dans le même colis', file: true },
   cadre: { price: 19.99, name: 'Petit cadre photo 15 × 15 cm', desc: 'Votre photo de couverture sur céramique, support en bois, dans le même colis', file: true },
+  aimant: { price: 12.99, name: 'Aimant photo 5 × 5 cm', desc: 'Votre photo de couverture sur un petit carreau en céramique aimanté, dans le même colis', file: true },
 };
 // Anciens paliers (compatibilité si une vieille page est encore en cache chez un client)
 const LEGACY = { 20: 24, 30: 36 };
@@ -129,7 +130,7 @@ module.exports = async (req, res) => {
     cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
     names: cut(names, 200), style: cut(style, 100), pdf_url: cut(pdfUrl, 480), format: fmt, price: priceStr, promo: appliedPromo,
-    options: opts.join(','), pa_cover: cut(paCover, 480), pa_inner: cut(paInner, 480), affiche_url: cut(optFile.affiche || '', 480), cadre_url: cut(optFile.cadre || '', 480),
+    options: opts.join(','), pa_cover: cut(paCover, 480), pa_inner: cut(paInner, 480), affiche_url: cut(optFile.affiche || '', 480), cadre_url: cut(optFile.cadre || '', 480), aimant_url: cut(optFile.aimant || '', 480),
   };
   // Moyens de paiement : ceux activés dans le tableau de bord Stripe (carte, Apple Pay, Google Pay, PayPal, paiement en plusieurs
   // fois Klarna…), que Stripe filtre selon le montant et le pays. Un paiement confirmé plus tard passe par async_payment_succeeded (webhook).
