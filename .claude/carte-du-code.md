@@ -13,7 +13,7 @@ Générée automatiquement (8863 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 1725-1828 : <script type="application/ld+json"> (6 Ko)
 - lignes 2389-4561 : <script> (189 Ko)
 - lignes 4562-5887 : <script> (122 Ko)
-- lignes 5888-8831 : <script> (253 Ko)
+- lignes 5888-8831 : <script> (254 Ko)
 - lignes 8832-8860 : <script> (2 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
@@ -466,7 +466,7 @@ Générée automatiquement (8863 lignes). Ouvrir une zone : Read avec offset = n
 - api/_fn/cancel.js (28 lignes) 
 - api/_fn/carte.js (239 lignes) /api/carte?q=Lille : plan du lieu de rencontre pour la page « Là où tout a commencé ».
 - api/_fn/indexnow.js (24 lignes) /api/indexnow (cron Vercel quotidien, cf. vercel.json) : signale à IndexNow (Bing, qui sert à ChatGPT Search e
-- api/_fn/order.js (35 lignes) Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
+- api/_fn/order.js (46 lignes) Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
 - api/_fn/printapi-hook.js (53 lignes) api/printapi-hook.js — Print API prévient d'un changement de statut (corps : orderId=…).
 - api/_fn/promo.js (19 lignes) api/promo.js — vérifie un code promo (codes dans la variable Vercel PROMO_CODES)
 - api/_fn/sante.js (30 lignes) /api/sante?jeton=…&pays=FR,BE : contrôle de l'imprimeur sans rien commander (clés Print API, prix d'achat, liv

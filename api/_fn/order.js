@@ -1,5 +1,6 @@
 // Détails d'une commande pour la page de confirmation (lecture seule, délai maximum 6 s)
 const https = require('https');
+const crypto = require('crypto');
 const { rateLimit } = require('../_lib/security');
 
 function getSession(id) {
@@ -23,6 +24,13 @@ module.exports = async (req, res) => {
   const s = await getSession(id);
   if (!s || !s.id) return res.status(404).json({ paid: false });
   const m = s.metadata || {};
+  // Google Avis clients : même numéro que l'email de confirmation (webhook.js), date au plus tard du délai annoncé
+  const d = new Date((s.created || Date.now() / 1000) * 1000);
+  const ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+  const prodigi = ['CH', 'LU', 'MC'].includes(m.addr_country) && !String(m.options || '').trim() || !m.pa_cover;
+  let jours = prodigi ? 12 : m.addr_country === 'FR' ? 8 : 10;        // jours ouvrés : 6 à 8 en France, un peu plus ailleurs, 10 à 12 chez Prodigi
+  const liv = new Date(d);
+  while (jours > 0) { liv.setDate(liv.getDate() + 1); if (liv.getDay() % 6) jours--; }
   return res.json({
     paid: s.payment_status === 'paid',
     firstName: String(m.first_name || String(m.name || '').trim().split(' ')[0]).slice(0, 40),
@@ -30,5 +38,8 @@ module.exports = async (req, res) => {
     price: typeof s.amount_total === 'number' ? (s.amount_total / 100).toFixed(2).replace('.', ',') : '',
     format: m.format === 'pdf' ? 'pdf' : 'print',
     email: String((s.customer_details && s.customer_details.email) || s.customer_email || '').slice(0, 120),
+    order: `NOUST-${ymd}-${crypto.createHash('sha1').update(s.id).digest('hex').slice(0, 5).toUpperCase()}`,
+    country: /^[A-Z]{2}$/.test(m.addr_country || '') ? m.addr_country : '',
+    delivery: liv.toISOString().slice(0, 10),
   });
 };

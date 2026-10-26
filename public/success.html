@@ -54,6 +54,12 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
     try { if (!sessionStorage.getItem('nstAchat' + id)) { sessionStorage.setItem('nstAchat' + id, '1'); var v = parseFloat(String(o.price || '').replace(',', '.'));
       var go = function () { if (window.nstPixel) window.nstPixel('Purchase', v > 0 ? { value: v, currency: 'EUR' } : {}); }; if (window.nstPixel) go(); else window.addEventListener('load', go); } } catch (e) {}
     var pdf = o.format === 'pdf';
+    // Google Avis clients : Google propose au client (qui accepte ou non) une enquête après la livraison
+    if (!pdf && o.order && o.email && o.country) {
+      window.renderOptIn = function () { window.gapi.load('surveyoptin', function () { window.gapi.surveyoptin.render({
+        merchant_id: 5882331380, order_id: o.order, email: o.email, delivery_country: o.country, estimated_delivery_date: o.delivery, opt_in_style: 'BOTTOM_LEFT_DIALOG' }); }); };
+      var g = document.createElement('script'); g.src = 'https://apis.google.com/js/platform.js?onload=renderOptIn'; g.async = true; g.defer = true; document.head.appendChild(g);
+    }
     document.getElementById('t').innerHTML = 'Merci' + (o.firstName ? ' ' + esc(o.firstName) : '') + ', <em>c’est commandé</em>';
     document.getElementById('sub').innerHTML = 'Un email de confirmation vient de partir' + (o.email ? ' à <b>' + esc(o.email) + '</b>' : '') + '. Gardez-le : il contient votre numéro de commande.';
     var rows = [['Produit', pdf ? 'Album numérique (PDF)' : 'Livre imprimé 21 × 21 cm, couverture rigide'], ['Pages', o.pages ? esc(o.pages) + ' pages' : ''], ['Montant payé', o.price ? esc(o.price) + ' €' : ''], [pdf ? 'Envoi' : 'Livraison estimée', pdf ? 'Par email, dans quelques minutes' : 'Environ 6 à 8 jours ouvrés']];
