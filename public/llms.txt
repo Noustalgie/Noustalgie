@@ -1,15 +1,15 @@
 # Noustalgie
 
-> Noustalgie (noustalgie.fr) crée des albums photo de couple mis en page comme un magazine : le client importe ses photos et répond à quelques questions sur son histoire, le site compose les pages et rédige les textes (tout reste modifiable), puis le livre (21 × 21 cm, couverture rigide, de 39,99 € à 69,99 €, livraison offerte) est imprimé et livré à domicile en 10 à 12 jours environ. Aperçu complet gratuit avant paiement.
+> Noustalgie (noustalgie.fr) crée des albums photo de couple mis en page comme un magazine : le client importe ses photos et répond à quelques questions sur son histoire, le site compose les pages et rédige les textes (tout reste modifiable), puis le livre (21 × 21 cm, couverture rigide, de 39,99 € à 69,99 €, livraison offerte) est imprimé et livré à domicile en 6 à 8 jours ouvrés environ. Aperçu complet gratuit avant paiement.
 
-Informations à jour au 23 octobre 2026 :
+Informations à jour au 26 octobre 2026 :
 
 - Livre carré 21 × 21 cm, couverture rigide, reliure solide, papier premium.
 - 24 pages (au moins 14 photos) : 39,99 € ; 36 pages (au moins 20 photos) : 49,99 € ; 50 pages (au moins 31 photos) : 69,99 €. Livraison offerte.
 - Version PDF : 14,99 €, 19,99 € ou 24,99 €, envoyée par email juste après le paiement.
-- Options du livre imprimé : coffret cadeau rigide (9,99 €), affiche 30 × 40 cm de la couverture avec les prénoms (14,99 €), petit cadre photo 15 × 15 cm, photo de couverture sur céramique avec support en bois (19,99 €), livrés dans le même colis ; fabrication express (4,99 €) : livre expédié un jour ouvré plus tôt.
-- Livraison à domicile uniquement (pas de point relais), en 10 à 12 jours environ en France métropolitaine, un peu plus ailleurs. Pays livrés : France, Monaco, Belgique, Luxembourg, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie, Irlande.
-- Noël 2026 : commander au plus tard le 6 décembre pour recevoir le livre avant Noël en France métropolitaine. Après cette date, la version PDF reste possible.
+- Options du livre imprimé : coffret cadeau rigide (9,99 €), affiche 30 × 40 cm de la couverture avec les prénoms (14,99 €), petit cadre photo 15 × 15 cm, photo de couverture sur céramique avec support en bois (19,99 €), aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €), livrés dans le même colis ; fabrication express (4,99 €) : livre expédié un jour ouvré plus tôt.
+- Livraison à domicile uniquement (pas de point relais), en 6 à 8 jours ouvrés environ en France métropolitaine, un peu plus ailleurs. Pays livrés : France, Monaco, Belgique, Luxembourg, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie, Irlande.
+- Noël 2026 : commander au plus tard le 10 décembre pour recevoir le livre avant Noël en France métropolitaine. Après cette date, la version PDF reste possible.
 - Style Magazine par défaut : couverture façon magazine aux prénoms du couple, sommaire, récit de la rencontre, interview, 5 raisons de s'aimer, quiz, mots mêlés, bucket list à deux et lettre d'amour ; selon les réponses du couple, plan de la ville de la rencontre et des villes où il se retrouve (chacune dans un cœur), photo en double page paysage, grandes étapes, playlist, adresses et voyages. Les rubriques retenues dépendent aussi du nombre de pages. Cinq autres styles : Années 70 (photos en noir et blanc vintage, grain argentique, papier vieilli, textes à la machine à écrire), et Galerie, Argentique, Nuit, Encre, qui changent les couleurs et la police du texte. Textes, photos et ordre des pages modifiables avant la commande.
 - Les textes sont rédigés par une IA à partir des réponses du couple, qui les relit et les modifie librement dans l'aperçu. Les photos servent uniquement à l'album et sont supprimées 30 jours après leur envoi.
 - Livre personnalisé : pas de droit de rétractation (article L221-28 du Code de la consommation) ; réimpression ou remboursement en cas de défaut d'impression ou de colis abîmé.
@@ -20,11 +20,11 @@ Informations à jour au 23 octobre 2026 :
 
 - [Accueil et création de l'album](https://noustalgie.fr/): créer l'album : photos, questionnaire, aperçu gratuit page par page, commande
 - [Exemple d'album complet à feuilleter (24 pages)](https://noustalgie.fr/exemple-album): les 24 pages de l'album de Léa et Hugo (couple fictif) au style Magazine, formats et prix
-- [Idée cadeau couple](https://noustalgie.fr/idee-cadeau-couple): Une idée cadeau couple qui a du sens : un livre photo à vos prénoms, avec vos souvenirs racontés. Aperçu gratuit, livré en 10 à 12 jours, dès 39,99 €
+- [Idée cadeau couple](https://noustalgie.fr/idee-cadeau-couple): Une idée cadeau couple qui a du sens : un livre photo à vos prénoms, avec vos souvenirs racontés. Aperçu gratuit, livré en 6 à 8 jours ouvrés, dès 39,99 €
 - [Cadeau couple personnalisé : 15 idées](https://noustalgie.fr/cadeau-couple-personnalise): Cadeau couple personnalisé : 15 idées sur mesure par type et par budget, les délais pour Noël et la Saint-Valentin, et un exemple d'album à feuilleter
 - [Magazine personnalisé : créer le magazine de votre couple](https://noustalgie.fr/magazine-personnalise): Magazine personnalisé : que mettre dedans, comment le créer, une couverture façon Vogue, les prix et un exemple complet à feuilleter, composé pour un couple
 - [Album photo couple](https://noustalgie.fr/album-photo-couple): Album photo couple : vos photos mises en page et votre histoire d'amour racontée, en livre à couverture rigide. Aperçu gratuit, dès 39,99 €
-- [Idée cadeau de Noël pour un couple](https://noustalgie.fr/idee-cadeau-noel-couple): Idée cadeau couple pour Noël : l'album de votre histoire, vos photos et vos souvenirs en livre. Commandez au plus tard le 6 décembre pour le recevoir à temps
+- [Idée cadeau de Noël pour un couple](https://noustalgie.fr/idee-cadeau-noel-couple): Idée cadeau couple pour Noël : l'album de votre histoire, vos photos et souvenirs en livre. Commandez au plus tard le 10 décembre pour le recevoir à temps
 - [Cadeau d'anniversaire de couple](https://noustalgie.fr/cadeau-anniversaire-couple): 1 an, 5 ans, noces de coton : offrez l'album de votre histoire. Vos photos et vos souvenirs racontés dans un livre relié. Aperçu gratuit, dès 39,99 €
 - [Livre personnalisé de couple](https://noustalgie.fr/livre-personnalise-couple): Un livre de couple personnalisé, déjà écrit : vos réponses deviennent des chapitres, vos photos illustrent chaque page. Aperçu gratuit, dès 39,99 €
 - [Tous les guides](https://noustalgie.fr/guides): Tous nos guides : idées cadeaux pour un couple, tutos pour faire un album photo, exemples de textes et de mots doux, conseils pour choisir un livre photo

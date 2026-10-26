@@ -7,12 +7,13 @@ const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('./_lib/sec
 const { uploadRemote, pdfProof } = require('./_lib/cloudinary');
 const PA = require('./_lib/printapi');
 
-// Fichiers Print API (fond perdu compris) : pages intérieures, couverture d'un seul tenant, affiche 30 × 40, cadre 15 × 15
+// Fichiers Print API (fond perdu compris) : pages intérieures, couverture d'un seul tenant, affiche 30 × 40, cadre 15 × 15, aimant 5 × 5
 const PA_KINDS = {
   'pa-inner': album => ({ pages: PA.innerCount(album), format: '216mmx216mm' }),
   'pa-cover': album => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album))}mmx254mm` }),
   affiche: () => ({ pages: 1, format: '300mmx400mm' }),
   cadre: () => ({ pages: 1, format: '156mmx156mm' }),
+  aimant: () => ({ pages: 1, format: '56mmx56mm' }),
 };
 
 const MAX_HTML = 4 * 1024 * 1024;

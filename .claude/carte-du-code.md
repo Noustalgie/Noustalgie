@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8785 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -11,10 +11,10 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 54-1631 : <style> (135 Ko)
 - lignes 1632-1704 : <script type="application/ld+json"> (2 Ko)
 - lignes 1705-1808 : <script type="application/ld+json"> (6 Ko)
-- lignes 2368-4540 : <script> (188 Ko)
+- lignes 2368-4540 : <script> (189 Ko)
 - lignes 4541-5866 : <script> (122 Ko)
-- lignes 5867-8748 : <script> (246 Ko)
-- lignes 8749-8774 : <script> (2 Ko)
+- lignes 5867-8756 : <script> (247 Ko)
+- lignes 8757-8782 : <script> (2 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -62,13 +62,13 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
  6644  3. Éditeur
  7052  4. Sauvegarde locale (IndexedDB : photos comprises)
  7087  5. Impression : photos en pleine résolution + PDF hébergé
- 7311  6. Paiement
- 8279  1. Livre 3D réutilisable
- 8400  2. Aperçu en direct pendant la création (ordinateur)
- 8434  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8536  4. Génération vivante : leurs photos se posent dans un livre
- 8562  5. Récapitulatif de commande avec LEUR couverture
- 8600  6. Finitions : apparition au défilement, page tournée
+ 7314  6. Paiement
+ 8287  1. Livre 3D réutilisable
+ 8408  2. Aperçu en direct pendant la création (ordinateur)
+ 8442  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8544  4. Génération vivante : leurs photos se posent dans un livre
+ 8570  5. Récapitulatif de commande avec LEUR couverture
+ 8608  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -362,99 +362,100 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
  7247  paCoverHtml
  7257  afficheHtml
  7264  cadreHtml
- 7269  generateAlbumPDF
- 7275  gen
- 7282  doc
- 7283  tries
- 7321  processPayment
- 7362  goTab
- 7389  lang
- 7399  img
- 7424  stop
- 7455  upd
- 7481  apply
- 7500  T
- 7501  nm
- 7502  renderQuiz
- 7508  mark
- 7514  save
- 7561  mail
- 7716  backLbl
- 7721  toc
- 7728  show
- 7735  openLegal
- 7743  hideLegal
- 7744  closeLegal
- 7772  cur
- 7781  paint
- 7806  lang
- 7811  applyUI
- 7818  setLang
- 7838  syncStory
- 7872  ensureStoryFor
- 7888  recompose
- 7902  addInput
- 7921  removePhoto
- 7974  saveLink
- 7996  openFromLink
- 8006  set
- 8024  trHide
- 8026  trackOverlay
- 8034  close
- 8073  ouvrir
- 8099  ekLabel
- 8110  drawEbar
- 8135  coach
- 8141  done
- 8147  goTab
- 8156  draw
- 8184  payLabel
- 8215  optTotal
- 8217  drawOpts
- 8238  selectFormat
- 8247  highlightPal
- 8252  setLang
- 8267  lang
- 8280  spineColors
- 8307  sampleCover
- 8326  auto
- 8327  build
- 8334  name
- 8350  words
- 8357  apply
- 8384  build
- 8393  nst70
- 8413  names
- 8414  renderLive
- 8427  flowMode
- 8436  exifDate
- 8446  readAscii
- 8447  scan
- 8464  addPhotos
- 8473  remap
- 8474  applyOrder
- 8487  movePhoto
- 8490  sortByDate
- 8499  renderPhotosPlus
- 8538  startGenAnim
- 8550  tick
- 8558  stopGenAnim
- 8560  runGeneration
- 8565  noel
- 8569  fill
- 8572  renderSummary
- 8585  syncPrice
- 8596  goTab
- 8618  setLang
- 8635  lang
- 8666  applyText
- 8675  fromFrance
- 8683  fromOSM
- 8702  close
- 8703  render
- 8711  pick
- 8719  search
- 8755  etape
+ 7270  aimantHtml
+ 7271  generateAlbumPDF
+ 7277  gen
+ 7284  doc
+ 7285  tries
+ 7324  processPayment
+ 7365  goTab
+ 7392  lang
+ 7402  img
+ 7427  stop
+ 7458  upd
+ 7484  apply
+ 7503  T
+ 7504  nm
+ 7505  renderQuiz
+ 7511  mark
+ 7517  save
+ 7564  mail
+ 7719  backLbl
+ 7724  toc
+ 7731  show
+ 7738  openLegal
+ 7746  hideLegal
+ 7747  closeLegal
+ 7775  cur
+ 7784  paint
+ 7809  lang
+ 7814  applyUI
+ 7821  setLang
+ 7841  syncStory
+ 7875  ensureStoryFor
+ 7891  recompose
+ 7905  addInput
+ 7924  removePhoto
+ 7977  saveLink
+ 7999  openFromLink
+ 8009  set
+ 8027  trHide
+ 8029  trackOverlay
+ 8037  close
+ 8076  ouvrir
+ 8102  ekLabel
+ 8113  drawEbar
+ 8138  coach
+ 8144  done
+ 8150  goTab
+ 8159  draw
+ 8187  payLabel
+ 8223  optTotal
+ 8225  drawOpts
+ 8246  selectFormat
+ 8255  highlightPal
+ 8260  setLang
+ 8275  lang
+ 8288  spineColors
+ 8315  sampleCover
+ 8334  auto
+ 8335  build
+ 8342  name
+ 8358  words
+ 8365  apply
+ 8392  build
+ 8401  nst70
+ 8421  names
+ 8422  renderLive
+ 8435  flowMode
+ 8444  exifDate
+ 8454  readAscii
+ 8455  scan
+ 8472  addPhotos
+ 8481  remap
+ 8482  applyOrder
+ 8495  movePhoto
+ 8498  sortByDate
+ 8507  renderPhotosPlus
+ 8546  startGenAnim
+ 8558  tick
+ 8566  stopGenAnim
+ 8568  runGeneration
+ 8573  noel
+ 8577  fill
+ 8580  renderSummary
+ 8593  syncPrice
+ 8604  goTab
+ 8626  setLang
+ 8643  lang
+ 8674  applyText
+ 8683  fromFrance
+ 8691  fromOSM
+ 8710  close
+ 8711  render
+ 8719  pick
+ 8727  search
+ 8763  etape
 
 ## api/
 
@@ -475,8 +476,8 @@ Générée automatiquement (8777 lignes). Ouvrir une zone : Read avec offset = n
 - api/_lib/security.js (59 lignes) api/_lib/security.js — utilitaires partagés (pas une route : préfixe _)
 - api/chat.js (84 lignes) api/chat.js — proxy OpenAI VERROUILLÉ
 - api/cleanup.js (54 lignes) api/cleanup.js — Nettoyage RGPD quotidien (cron Vercel, cf. vercel.json)
-- api/create-checkout.js (172 lignes) api/create-checkout.js — création de la session Stripe
-- api/generate-pdf.js (100 lignes) api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
+- api/create-checkout.js (173 lignes) api/create-checkout.js — création de la session Stripe
+- api/generate-pdf.js (101 lignes) api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
 - api/prodigi-webhook.js (87 lignes) api/prodigi-webhook.js — callbacks Prodigi (expédition → email de suivi au client)
 - api/tools.js (27 lignes) api/tools.js — petites routes regroupées en une seule fonction
-- api/webhook.js (291 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,
+- api/webhook.js (292 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,

@@ -15,7 +15,7 @@ const spineMm = innerPages => +(6 + Math.max(0, innerPages - 24) / 2 * 0.1432).t
 // Pages intérieures envoyées : celles de l'album sans les deux couvertures, 24 au minimum (pages vierges ajoutées en fin de livre)
 const innerCount = albumPages => Math.max(24, albumPages - 2);
 // Objets livrés dans le même colis que le livre
-const EXTRAS = { affiche: 'poster_30x40', cadre: 'tegeltje_15x15_hou_houder' };
+const EXTRAS = { affiche: 'poster_30x40', cadre: 'tegeltje_15x15_hou_houder', aimant: 'tegeltje_5x5' };
 
 function call(method, path, body, token, form) {
   return new Promise(resolve => {
