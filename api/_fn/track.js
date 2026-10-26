@@ -1,6 +1,7 @@
 // api/track.js — « Suivre ma commande » : numéro NOUST-… + email de la commande
 const https = require('https');
 const { isAllowedOrigin, applyCors, rateLimit, parseBody } = require('../_lib/security');
+const PA = require('../_lib/printapi');
 const REF = /^NOUST-\d{6}-[A-Z0-9]{5}$/;
 
 function prodigi(path) {
@@ -20,14 +21,25 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
   if (!isAllowedOrigin(req)) return res.status(403).json({ error: 'Origine non autorisée.' });
   if (!rateLimit(req, 'track', 15, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez plus tard.' });
-  if (!process.env.PRODIGI_API_KEY) return res.status(500).json({ error: 'Configuration incomplète.' });
   const { ref, email } = parseBody(req);
   const R = String(ref || '').trim().toUpperCase(), E = String(email || '').trim().toLowerCase();
   if (!REF.test(R) || !E.includes('@')) return res.status(400).json({ error: 'Vérifiez le numéro de commande et l’email.' });
+  const introuvable = () => res.status(404).json({ error: 'Aucune commande ne correspond à ce numéro et cet email.' });
+  // Commandes Print API : notre numéro est leur identifiant, l'email est dans les métadonnées
+  let p = null;
+  try { p = await PA.getOrder(R); } catch (e) {}
+  if (p) {
+    let meta = {}; try { meta = JSON.parse(p.metadata || '{}'); } catch (e) {}
+    if (String(meta.email || '').toLowerCase() !== E) return introuvable();
+    const url = /^https?:\/\//.test(p.trackingUrl || '') ? p.trackingUrl : '';
+    return res.json({ ref: R, created: p.dateTime || '', step: p.status === 'Shipped' ? 3 : p.status === 'Processing' ? 2 : 1, cancelled: p.status === 'Cancelled',
+      shipments: p.status === 'Shipped' || url ? [{ carrier: '', number: '', url, date: '' }] : [], city: p.shipping && p.shipping.address && p.shipping.address.city || '' });
+  }
+  if (!process.env.PRODIGI_API_KEY) return introuvable();
   const j = await prodigi(`/v4.0/orders?merchantReferences=${encodeURIComponent(R)}&top=1`);
   const o = j && Array.isArray(j.orders) ? j.orders[0] : null;
   // Même réponse que la commande n'existe pas ou que l'email ne correspond pas (pas d'information divulguée)
-  if (!o || String(o.recipient && o.recipient.email || '').toLowerCase() !== E) return res.status(404).json({ error: 'Aucune commande ne correspond à ce numéro et cet email.' });
+  if (!o || String(o.recipient && o.recipient.email || '').toLowerCase() !== E) return introuvable();
   const st = o.status || {}, d = st.details || {};
   let step = 1;                                                     // 1 reçue · 2 en fabrication · 3 expédiée
   if (['InProgress', 'Complete'].includes(d.inProduction) || ['InProgress', 'Complete'].includes(d.allocateProductionLocation)) step = 2;

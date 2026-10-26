@@ -3,6 +3,7 @@
 const https = require('https');
 const crypto = require('crypto');
 const { escapeHtml: h } = require('./_lib/security');
+const PA = require('./_lib/printapi');
 
 async function sendEmail({ to, subject, html }) {
   const RESEND = process.env.RESEND_API_KEY;
@@ -117,6 +118,32 @@ async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, s
   return { id: null, note };
 }
 
+// Print API : livre (couverture d'un seul tenant + pages intérieures) et objets choisis, dans un seul colis.
+// Notre numéro de commande sert d'identifiant chez Print API : un événement Stripe renvoyé ne crée pas de doublon.
+const OPT_NAMES = { coffret: 'Coffret cadeau', express: 'Fabrication express', affiche: 'Affiche 30 × 40 cm', cadre: 'Petit cadre photo 15 × 15 cm' };
+async function createPrintApiOrder({ m, name, phone, email, first, names, orderNumber, pages }) {
+  const opts = String(m.options || '').split(',').filter(k => OPT_NAMES[k]);
+  const items = [{ id: 'album', productId: PA.BOOK, pageCount: PA.innerCount(parseInt(pages, 10) || 36), quantity: 1,
+    files: { content: m.pa_inner, cover: m.pa_cover }, options: opts.includes('coffret') ? [{ id: 'storage_box', value: 'yes' }] : [] }];
+  if (opts.includes('affiche') && m.affiche_url) items.push({ id: 'affiche', productId: PA.EXTRAS.affiche, quantity: 1, files: { content: m.affiche_url } });
+  if (opts.includes('cadre') && m.cadre_url) items.push({ id: 'cadre', productId: PA.EXTRAS.cadre, quantity: 1, files: { content: m.cadre_url } });
+  const address = Object.assign({ name, line1: m.addr_line1 }, m.addr_line2 ? { line2: m.addr_line2 } : {},
+    { postCode: m.addr_postal, city: m.addr_city, country: m.addr_country }, phone ? { phone } : {});
+  // L'email du client reste chez nous (métadonnées) : Print API n'écrit jamais au client, le suivi part de noustalgie.fr
+  const payload = { id: orderNumber, productionSpeed: opts.includes('express') ? 'Express' : 'Standard', items, shipping: { address },
+    metadata: JSON.stringify({ email, first, names: String(names || '').slice(0, 200) }) };
+  try {
+    const r = await PA.postOrder(payload);
+    if (r.order) { console.log(`Commande Print API : ${r.order.id}`); return { id: r.order.id, opts }; }
+    // Commande déjà créée par un premier passage de cet événement ?
+    const deja = await PA.getOrder(orderNumber);
+    if (deja) return { id: deja.id, opts, note: 'Commande déjà créée lors d’un premier envoi de Stripe.' };
+    global.__lastPrinterError = r.err;
+  } catch (e) { global.__lastPrinterError = e.message; }
+  console.error('Print API :', global.__lastPrinterError);
+  return { id: null, opts };
+}
+
 function verifyStripeSignature(rawBody, sigHeader, secret) {
   if (!secret || !sigHeader) return false;
   try {
@@ -189,7 +216,7 @@ module.exports = async (req, res) => {
   const ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
   const orderNumber = `NOUST-${ymd}-${crypto.createHash('sha1').update(session.id).digest('hex').slice(0, 5).toUpperCase()}`;
 
-  let prodigiOrderId = null, prodigi = { id: null, note: '' };
+  let prodigiOrderId = null, prodigi = { id: null, note: '' }, printer = 'Prodigi';
   // Commande payée : la relance « album en attente » n'a plus lieu d'être
   if (m.reminder_id && process.env.RESEND_API_KEY) {
     await new Promise(resolve => {
@@ -207,26 +234,34 @@ module.exports = async (req, res) => {
       });
     }
 
-    if (format === 'print' && pdfUrl) {
+    // Print API dès que ses clés sont en place et que la page a fourni ses fichiers ; sinon Prodigi, comme avant
+    const viaPA = format === 'print' && PA.configured() && m.pa_cover && m.pa_inner && m.addr_line1 && m.addr_postal && m.addr_city && m.addr_country;
+    if (viaPA) {
+      printer = 'Print API';
+      prodigi = await createPrintApiOrder({ m, name, phone, email, first, names, orderNumber, pages });
+      prodigiOrderId = prodigi.id;
+    } else if (format === 'print' && pdfUrl) {
       const addr = { line1: m.addr_line1, line2: m.addr_line2, postal: m.addr_postal, city: m.addr_city, country: m.addr_country };
       const spine = m.cover_url && m.inner_url ? { cover: m.cover_url, inner: m.inner_url } : null;
       prodigi = await createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine });
       prodigiOrderId = prodigi.id;
     }
+    const optList = (prodigi.opts || []).map(k => OPT_NAMES[k]);
 
     const NOTIFY = process.env.NOTIFY_EMAIL;
     if (NOTIFY) {
       const warn = (format === 'print' && !prodigiOrderId)
-        ? `<p style="color:#e07070"><b>⚠️ Commande Prodigi NON créée — à traiter manuellement !</b><br><small>${h(global.__lastProdigiError || 'aucune erreur capturée')}</small></p>` : '';
+        ? `<p style="color:#e07070"><b>⚠️ Commande ${printer} NON créée — à traiter manuellement !</b><br><small>${h((printer === 'Prodigi' ? global.__lastProdigiError : global.__lastPrinterError) || 'aucune erreur capturée')}</small></p>` : '';
       await sendEmail({
         to: NOTIFY,
-        subject: `🎉 ${orderNumber} — ${first} — ${price}€${prodigiOrderId ? ' ✅ Prodigi' : format === 'print' ? ' ⚠️ À TRAITER' : ''}`,
+        subject: `🎉 ${orderNumber} — ${first} — ${price}€${prodigiOrderId ? ` ✅ ${printer}` : format === 'print' ? ' ⚠️ À TRAITER' : ''}`,
         html: `<h2>Nouvelle commande</h2>
           <p><b>N° :</b> ${orderNumber}<br><b>Client :</b> ${h(name)} (${h(email)})<br><b>Couple :</b> ${h(names)}</p>
           <p><b>Format :</b> ${format} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
+          ${optList.length ? `<p><b>Options :</b> ${h(optList.join(', '))}</p>` : ''}
           <p><b>Destinataire :</b> ${h(name || '—')}${phone ? ` · <b>Tél :</b> ${h(phone)}` : ''}<br><b>Adresse :</b> ${h(address || '(PDF)')}</p>
           <p><b>PDF :</b> ${pdfUrl ? `<a href="${h(pdfUrl)}">ouvrir</a>` : 'Non disponible'}</p>
-          ${prodigiOrderId ? `<p style="color:green"><b>✅ Prodigi : ${h(prodigiOrderId)}</b> — ${prodigi.spine ? `tranche imprimée (${h(m.spine_mm)} mm)` : 'tranche unie'}</p>` : warn}
+          ${prodigiOrderId ? `<p style="color:green"><b>✅ ${printer} : ${h(prodigiOrderId)}</b> — ${printer === 'Print API' ? `tranche imprimée${PA.host() === 'test.printapi.nl' ? ' (environnement de TEST : rien ne sera imprimé)' : ''}` : prodigi.spine ? `tranche imprimée (${h(m.spine_mm)} mm)` : 'tranche unie'}</p>` : warn}
           ${prodigi.note ? `<p style="color:#9a6b12"><small>${h(prodigi.note)}</small></p>` : ''}
           <p><a href="https://dashboard.stripe.com/payments">Voir Stripe</a></p>`,
       });
@@ -237,14 +272,14 @@ module.exports = async (req, res) => {
         to: email,
         subject: 'Votre livre Noustalgie part à l’impression ♥',
         html: mail(`Bonjour ${h(first)},`, `<p>Votre commande est confirmée : le livre <b>${h(names)}</b> part à l’impression.</p>
-          <p>N° de commande : <b style="color:#1c1a18;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages<br>Livraison estimée : 10 à 12 jours environ</p>
+          <p>N° de commande : <b style="color:#1c1a18;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages${optList.length ? `<br>Avec : ${h(optList.join(', '))}` : ''}<br>Livraison estimée : 10 à 12 jours environ</p>
           <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>${btn('https://noustalgie.fr/#suivi', 'Suivre ma commande')}`),
       });
     }
   } catch (e) {
     console.error('Erreur traitement webhook:', e.message);
   }
-  return res.status(200).json({ received: true, orderNumber, prodigiOrderId });
+  return res.status(200).json({ received: true, orderNumber, printer, printerOrderId: prodigiOrderId });
 };
 
 module.exports.config = { api: { bodyParser: false } };

@@ -11,6 +11,7 @@ const H = {
   order: require('./_fn/order'),
   carte: require('./_fn/carte'),
   indexnow: require('./_fn/indexnow'),
+  'printapi-hook': require('./_fn/printapi-hook'),
 };
 const ALIAS = { 'order-status': 'track' };
 
