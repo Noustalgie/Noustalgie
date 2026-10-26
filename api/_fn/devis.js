@@ -144,7 +144,8 @@ module.exports = async (req, res) => {
   out.commandes = o.body && o.body.orders ? o.body.orders.map(x => ({ id: x.id, cree: x.created, pays: x.recipient && x.recipient.address && x.recipient.address.countryCode,
     livraison: x.shippingMethod, statut: x.status && x.status.stage, charges: x.charges })) : o;
   out.devis = [];
-  for (const pays of ['FR', 'BE']) for (const methode of ['Budget', 'Standard', 'Express']) for (const pages of [24, 36, 50]) {
+  const PAYS = req.query && req.query.pays ? String(req.query.pays).split(',') : ['FR', 'BE'];
+  for (const pays of PAYS) for (const methode of (req.query && req.query.pays ? ['Budget'] : ['Budget', 'Standard', 'Express'])) for (const pages of (req.query && req.query.pays ? [24, 36] : [24, 36, 50])) {
     const q = await call('POST', '/v4.0/quotes', { shippingMethod: methode, destinationCountryCode: pays, currencyCode: 'EUR',
       items: [{ sku: SKU, copies: 1, attributes: {}, assets: [{ printArea: 'default', pageCount: pages }] }] });
     const qs = q.body && q.body.quotes && q.body.quotes[0];
