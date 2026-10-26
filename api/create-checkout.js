@@ -78,6 +78,8 @@ module.exports = async (req, res) => {
   const F = files && typeof files === 'object' ? files : {};
   const proved = k => F[k] && F[k].url && checkProof(String(F[k].url), `${k}:${pagesNum}`, F[k].proof) ? String(F[k].url) : '';
   const paCover = proved('pa-cover'), paInner = proved('pa-inner');
+  // Sans ces deux fichiers, le livre part chez Prodigi (plus cher) : garder la trace de ce qui manquait
+  if (format !== 'pdf' && !(paCover && paInner)) console.error('create-checkout: fichiers Print API absents', JSON.stringify(Object.fromEntries(['pa-cover', 'pa-inner'].map(k => [k, !F[k] ? 'non envoyé' : F[k].url ? 'preuve invalide' : 'sans url']))));
   const opts = fmt === 'print' && Array.isArray(options) ? [...new Set(options.map(String))].filter(k => Object.prototype.hasOwnProperty.call(OPTIONS, k)) : [];
   if (opts.length && !(PA.configured() && paCover && paInner)) return res.status(400).json({ error: 'Les options ne sont pas disponibles pour le moment. Retirez-les pour commander.' });
   const optFile = {};
