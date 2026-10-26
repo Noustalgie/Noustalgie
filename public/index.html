@@ -1632,6 +1632,13 @@ html body .nst-opt-af{position:absolute;inset:0;container-type:inline-size;}
 html body .nst-opt-af .nst-opt-c{position:absolute;left:6.7%;top:6%;width:86.6%;aspect-ratio:1;overflow:hidden;}
 html body .nst-opt-af b{position:absolute;left:0;right:0;top:75%;text-align:center;font:italic 400 5cqw/1.1 'Playfair Display',serif;white-space:nowrap;}
 html body .nst-opt-ico{display:grid;place-items:center;background:#f1ede6;}
+html body .nst-opt-ph{display:inline-block;margin-top:7px;padding:5px 12px;border:1px solid #c9c2b8;border-radius:999px;background:#fff;font:500 12.5px/1.2 'Hanken Grotesk',system-ui,sans-serif;color:#1c1a18;cursor:pointer;}
+html body .nst-opt-ph:hover{border-color:#1c1a18;}
+.nst-phx{width:min(560px,100%);}
+.nst-phx-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:14px;}
+.nst-phx-g button{position:relative;padding:0;border:0;background:#eee;aspect-ratio:1;overflow:hidden;cursor:pointer;}
+.nst-phx-g img{width:100%;height:100%;object-fit:cover;display:block;}
+.nst-phx-g button.on{outline:3px solid #1c1a18;outline-offset:2px;}
 @media (max-width:520px){ html body .nst-opt{grid-template-columns:auto 64px 1fr;} html body .nst-opt-img{width:64px;height:64px;} }
 /* 36 pages mis en avant : pastille « Recommandé » et prix à la page (le 36 pages est le moins cher à la page) */
 html body .ed-price-card,html body #pal36{position:relative;}
@@ -1814,7 +1821,7 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
    "name": "Peut-on offrir l'album dans un coffret ?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt."
+    "text": "Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm en céramique avec son support en bois (19,99 €) et un aimant photo 5 × 5 cm en céramique (12,99 €), avec la photo de votre choix : la couverture ou n'importe quelle photo de l'album. Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt."
    }
   } ]
 }
@@ -2301,7 +2308,7 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
     </div>
     <div class="ed-faq-item">
       <button class="ed-faq-q" onclick="toggleFaq(this)"><span data-i18n="faq_q12">Peut-on offrir l'album dans un coffret ?</span><span class="ed-faq-sign">+</span></button>
-      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a12">Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.</div></div>
+      <div class="ed-faq-a"><div class="ed-faq-a-inner" data-i18n="faq_a12">Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm en céramique avec son support en bois (19,99 €) et un aimant photo 5 × 5 cm en céramique (12,99 €), avec la photo de votre choix : la couverture ou n'importe quelle photo de l'album. Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.</div></div>
     </div>
   </div>
 </section>
@@ -2401,7 +2408,7 @@ const LANGS = {
     faq_q7:'Mes photos sont-elles en sécurité ?', faq_a7:'La confidentialité de vos souvenirs est une priorité absolue. Vos photos servent uniquement à créer votre album et ne sont jamais vendues ni partagées à des fins commerciales. Elles sont automatiquement supprimées de nos serveurs 30 jours après leur envoi. Vous pouvez consulter notre politique de confidentialité pour connaître le détail de nos engagements en matière de protection des données.',
     faq_q8:'Que se passe-t-il si mon livre arrive abîmé ?', faq_a8:"En cas de défaut d'impression ou de colis endommagé, écrivez-nous dès que possible à contact@noustalgie.fr avec votre numéro de commande et quelques photos. Nous procédons à une réimpression ou à un remboursement, sans frais pour vous. Vos garanties légales restent bien sûr acquises.",
     faq_q9:'Puis-je modifier ma commande après le paiement ?', faq_a9:'Une fois le paiement validé, votre album part très rapidement en impression, ce qui rend les modifications difficiles. Nous vous invitons donc à bien vérifier votre aperçu avant de payer. Si vous vous rendez compte d\'une erreur juste après votre commande, écrivez-nous au plus vite à contact@noustalgie.fr : si l\'impression n\'a pas encore démarré, nous ferons notre possible pour vous aider.',
-    faq_q12:"Peut-on offrir l'album dans un coffret ?", faq_a12:"Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm de la couverture avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm, votre photo de couverture sur céramique avec son support en bois (19,99 €), et un aimant photo 5 × 5 cm en céramique avec la même photo (12,99 €). Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.", faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:'Oui, dans 12 pays d\'Europe : France, Belgique, Luxembourg, Monaco, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie et Irlande. Il vous suffit d\'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l\'expédition de votre album.',
+    faq_q12:"Peut-on offrir l'album dans un coffret ?", faq_a12:"Oui. Au moment de commander le livre imprimé, vous pouvez ajouter un coffret cadeau rigide (9,99 €), une affiche 30 × 40 cm avec vos prénoms (14,99 €), un petit cadre photo 15 × 15 cm en céramique avec son support en bois (19,99 €) et un aimant photo 5 × 5 cm en céramique (12,99 €), avec la photo de votre choix : la couverture ou n'importe quelle photo de l'album. Tout arrive dans le même colis. La fabrication express (4,99 €) fait partir votre livre un à deux jours ouvrés plus tôt.", faq_q10:'Livrez-vous en dehors de la France ?', faq_a10:'Oui, dans 12 pays d\'Europe : France, Belgique, Luxembourg, Monaco, Suisse, Allemagne, Autriche, Pays-Bas, Espagne, Portugal, Italie et Irlande. Il vous suffit d\'indiquer votre pays au moment de renseigner votre adresse de livraison. Les délais peuvent varier légèrement selon la destination, mais vous recevrez dans tous les cas un email de suivi avec un numéro de tracking dès l\'expédition de votre album.',
     nav_how:'Comment ça marche', nav_pricing:'Tarifs', nav_ideas:'Idées cadeaux', nav_create:'Créer notre album', nav_cta:'Composer mon album',
     hero_badge:'Album photo couple · Impression premium',
     hero_h1_1:'L\'album photo de couple', hero_h1_2:'qui raconte', hero_h1_sub:'votre histoire',
@@ -2489,7 +2496,7 @@ const LANGS = {
     faq_q7:'Are my photos safe?', faq_a7:'The privacy of your memories is a priority. Your photos are used only to create your album, never sold or shared, and are automatically deleted 30 days after upload.',
     faq_q8:'What if my book arrives damaged?', faq_a8:"If your album has a printing defect or arrives damaged, email us as soon as possible at contact@noustalgie.fr with your order number and a few photos. We'll reprint or refund, free of charge. Your statutory rights remain unaffected.",
     faq_q9:'Can I change my order after paying?', faq_a9:"Once payment is confirmed, your album goes to print quickly. Please check your preview carefully before paying. If there's a mistake, email us fast: if printing hasn't started, we'll do our best to help.",
-    faq_q12:"Can the album come in a gift box?", faq_a12:"Yes. When you order the printed book, you can add a rigid gift box (€9.99), a 30 × 40 cm poster of the cover with your names (€14.99), a small 15 × 15 cm photo frame, your cover photo on ceramic with a wooden stand (€19.99), and a 5 × 5 cm ceramic photo magnet with the same photo (€12.99). Everything arrives in the same parcel. Express production (€4.99) ships your book one to two working days earlier.", faq_q10:'Do you ship outside France?', faq_a10:"Yes, to 12 European countries: France, Belgium, Luxembourg, Monaco, Switzerland, Germany, Austria, the Netherlands, Spain, Portugal, Italy and Ireland. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
+    faq_q12:"Can the album come in a gift box?", faq_a12:"Yes. When you order the printed book, you can add a rigid gift box (€9.99), a 30 × 40 cm poster with your names (€14.99), a small 15 × 15 cm ceramic photo frame with a wooden stand (€19.99) and a 5 × 5 cm ceramic photo magnet (€12.99), with the photo of your choice: the cover or any photo from the album. Everything arrives in the same parcel. Express production (€4.99) ships your book one to two working days earlier.", faq_q10:'Do you ship outside France?', faq_a10:"Yes, to 12 European countries: France, Belgium, Luxembourg, Monaco, Switzerland, Germany, Austria, the Netherlands, Spain, Portugal, Italy and Ireland. Just enter your country when filling in your address. You'll get a tracking email as soon as it ships.",
     nav_how:'How it works', nav_pricing:'Pricing', nav_ideas:'Gift ideas', nav_create:'Create our album', nav_cta:'Create my album',
     hero_badge:'Couple photo album · Premium printing',
     hero_h1_1:'The couple photo album', hero_h1_2:'that tells', hero_h1_sub:'your story',
@@ -2577,7 +2584,7 @@ const LANGS = {
     faq_q7:'Sind meine Fotos sicher?', faq_a7:'Der Schutz Ihrer Erinnerungen hat Priorität. Ihre Fotos dienen nur der Erstellung Ihres Albums, werden nie verkauft oder geteilt und 30 Tage nach dem Hochladen automatisch gelöscht.',
     faq_q8:'Was, wenn mein Buch beschädigt ankommt?', faq_a8:"Bei einem Druckfehler oder beschädigtem Paket schreibt uns bitte so bald wie möglich an contact@noustalgie.fr mit eurer Bestellnummer und einigen Fotos. Wir drucken kostenlos neu oder erstatten den Betrag. Eure gesetzlichen Rechte bleiben unberührt.",
     faq_q9:'Kann ich meine Bestellung nach der Zahlung ändern?', faq_a9:'Nach bestätigter Zahlung geht Ihr Album schnell in den Druck. Bitte prüfen Sie Ihre Vorschau vor dem Bezahlen. Bei einem Fehler schreiben Sie uns schnell: Ist der Druck noch nicht gestartet, helfen wir gerne.',
-    faq_q12:"Kann man das Album in einer Geschenkbox verschenken?", faq_a12:"Ja. Bei der Bestellung des gedruckten Buchs können Sie eine feste Geschenkbox (9,99 €), ein Poster 30 × 40 cm mit dem Cover und Ihren Namen (14,99 €), einen kleinen Fotorahmen 15 × 15 cm mit Ihrem Coverfoto auf Keramik und Holzständer (19,99 €) und einen Fotomagneten 5 × 5 cm aus Keramik mit demselben Foto (12,99 €) hinzufügen. Alles kommt im selben Paket. Mit der Express-Herstellung (4,99 €) wird Ihr Buch ein bis zwei Werktage früher verschickt.", faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, in 12 europäische Länder: Frankreich, Belgien, Luxemburg, Monaco, Schweiz, Deutschland, Österreich, Niederlande, Spanien, Portugal, Italien und Irland. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
+    faq_q12:"Kann man das Album in einer Geschenkbox verschenken?", faq_a12:"Ja. Bei der Bestellung des gedruckten Buchs können Sie eine feste Geschenkbox (9,99 €), ein Poster 30 × 40 cm mit Ihren Namen (14,99 €), einen kleinen Fotorahmen 15 × 15 cm aus Keramik mit Holzständer (19,99 €) und einen Fotomagneten 5 × 5 cm aus Keramik (12,99 €) hinzufügen, jeweils mit einem Foto Ihrer Wahl: dem Cover oder einem beliebigen Foto aus dem Album. Alles kommt im selben Paket. Mit der Express-Herstellung (4,99 €) wird Ihr Buch ein bis zwei Werktage früher verschickt.", faq_q10:'Liefern Sie auch außerhalb Frankreichs?', faq_a10:'Ja, in 12 europäische Länder: Frankreich, Belgien, Luxemburg, Monaco, Schweiz, Deutschland, Österreich, Niederlande, Spanien, Portugal, Italien und Irland. Geben Sie einfach Ihr Land bei der Adresse an. Sie erhalten eine Tracking-E-Mail, sobald der Versand erfolgt.',
     nav_how:'So funktioniert\'s', nav_pricing:'Preise', nav_ideas:'Geschenkideen', nav_create:'Unser Album erstellen', nav_cta:'Mein Album gestalten',
     hero_badge:'Pärchen-Fotoalbum · Premium-Druck',
     hero_h1_1:'Das Fotoalbum für Paare,', hero_h1_2:'das eure Geschichte', hero_h1_sub:'erzählt',
@@ -2665,7 +2672,7 @@ const LANGS = {
     faq_q7:'¿Están seguras mis fotos?', faq_a7:'La privacidad de tus recuerdos es una prioridad. Tus fotos solo sirven para crear tu álbum, nunca se venden ni se comparten, y se eliminan automáticamente 30 días después de subirlas.',
     faq_q8:'¿Qué pasa si mi libro llega dañado?', faq_a8:"Si tu álbum tiene un defecto de impresión o llega dañado, escríbenos cuanto antes a contact@noustalgie.fr con tu número de pedido y algunas fotos. Reimprimimos o reembolsamos, sin coste alguno. Tus garantías legales se mantienen.",
     faq_q9:'¿Puedo modificar mi pedido tras pagar?', faq_a9:'Una vez confirmado el pago, tu álbum entra rápido en impresión. Revisa bien tu vista previa antes de pagar. Si hay un error, escríbenos rápido: si la impresión no ha empezado, haremos lo posible.',
-    faq_q12:"¿Se puede regalar el álbum en una caja?", faq_a12:"Sí. Al pedir el libro impreso, podéis añadir una caja regalo rígida (9,99 €), un póster de 30 × 40 cm con la portada y vuestros nombres (14,99 €), un pequeño marco de fotos de 15 × 15 cm con vuestra foto de portada sobre cerámica y soporte de madera (19,99 €) y un imán de cerámica de 5 × 5 cm con la misma foto (12,99 €). Todo llega en el mismo paquete. La fabricación exprés (4,99 €) envía vuestro libro uno o dos días laborables antes.", faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, a 12 países de Europa: Francia, Bélgica, Luxemburgo, Mónaco, Suiza, Alemania, Austria, Países Bajos, España, Portugal, Italia e Irlanda. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
+    faq_q12:"¿Se puede regalar el álbum en una caja?", faq_a12:"Sí. Al pedir el libro impreso, podéis añadir una caja regalo rígida (9,99 €), un póster de 30 × 40 cm con vuestros nombres (14,99 €), un pequeño marco de fotos de 15 × 15 cm de cerámica con soporte de madera (19,99 €) y un imán de cerámica de 5 × 5 cm (12,99 €), con la foto que elijáis: la portada o cualquier foto del álbum. Todo llega en el mismo paquete. La fabricación exprés (4,99 €) envía vuestro libro uno o dos días laborables antes.", faq_q10:'¿Enviáis fuera de Francia?', faq_a10:'Sí, a 12 países de Europa: Francia, Bélgica, Luxemburgo, Mónaco, Suiza, Alemania, Austria, Países Bajos, España, Portugal, Italia e Irlanda. Solo indica tu país al rellenar la dirección. Recibirás un email de seguimiento en cuanto se envíe.',
     nav_how:'Cómo funciona', nav_pricing:'Precios', nav_ideas:'Ideas de regalo', nav_create:'Crear nuestro álbum', nav_cta:'Crear mi álbum',
     hero_badge:'Álbum foto pareja · Impresión premium',
     hero_h1_1:'El álbum de fotos de pareja', hero_h1_2:'que cuenta', hero_h1_sub:'vuestra historia',
@@ -2753,7 +2760,7 @@ const LANGS = {
     faq_q7:'As minhas fotos estão seguras?', faq_a7:'A privacidade das suas memórias é uma prioridade. As suas fotos servem apenas para criar o álbum, nunca são vendidas nem partilhadas, e são automaticamente eliminadas 30 dias após o envio.',
     faq_q8:'E se o meu livro chegar danificado?', faq_a8:"Em caso de defeito de impressão ou embalagem danificada, escreva-nos o quanto antes para contact@noustalgie.fr com o número da encomenda e algumas fotos. Reimprimimos ou reembolsamos, sem custos. As suas garantias legais mantêm-se.",
     faq_q9:'Posso alterar a encomenda após pagar?', faq_a9:'Após confirmado o pagamento, o álbum segue rapidamente para impressão. Verifique bem a pré-visualização antes de pagar. Se houver um erro, escreva-nos depressa: se a impressão não começou, faremos o possível.',
-    faq_q12:"Posso oferecer o álbum numa caixa?", faq_a12:"Sim. Ao encomendar o livro impresso, podem acrescentar uma caixa de oferta rígida (9,99 €), um póster de 30 × 40 cm com a capa e os vossos nomes (14,99 €), uma pequena moldura de 15 × 15 cm com a vossa foto de capa em cerâmica e suporte de madeira (19,99 €) e um íman de cerâmica de 5 × 5 cm com a mesma foto (12,99 €). Tudo chega na mesma encomenda. A produção expresso (4,99 €) envia o vosso livro um a dois dias úteis mais cedo.", faq_q10:'Entregam fora de França?', faq_a10:'Sim, para 12 países da Europa: França, Bélgica, Luxemburgo, Mónaco, Suíça, Alemanha, Áustria, Países Baixos, Espanha, Portugal, Itália e Irlanda. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
+    faq_q12:"Posso oferecer o álbum numa caixa?", faq_a12:"Sim. Ao encomendar o livro impresso, podem acrescentar uma caixa de oferta rígida (9,99 €), um póster de 30 × 40 cm com os vossos nomes (14,99 €), uma pequena moldura de 15 × 15 cm em cerâmica com suporte de madeira (19,99 €) e um íman de cerâmica de 5 × 5 cm (12,99 €), com a foto que escolherem: a capa ou qualquer foto do álbum. Tudo chega na mesma encomenda. A produção expresso (4,99 €) envia o vosso livro um a dois dias úteis mais cedo.", faq_q10:'Entregam fora de França?', faq_a10:'Sim, para 12 países da Europa: França, Bélgica, Luxemburgo, Mónaco, Suíça, Alemanha, Áustria, Países Baixos, Espanha, Portugal, Itália e Irlanda. Basta indicar o seu país ao preencher a morada. Receberá um email de seguimento assim que for expedido.',
     nav_how:'Como funciona', nav_pricing:'Preços', nav_ideas:'Ideias de presente', nav_create:'Criar o nosso álbum', nav_cta:'Criar o meu álbum',
     hero_badge:'Álbum de casal · Impressão premium',
     hero_h1_1:'O álbum de fotos de casal', hero_h1_2:'que conta', hero_h1_sub:'a vossa história',
@@ -7119,6 +7126,7 @@ async function fullBlob(p) {
 function dataUrlToBlob(u) { const [h, b] = u.split(','); const bin = atob(b); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: h.slice(5, h.indexOf(';')) }); }
 async function uploadPhotos(onProgress, all) {
   const used = new Set(); NA.pages.forEach(p => p.slots.forEach(s => used.add(s.p)));
+  Object.entries(NA.optPhoto || {}).forEach(([k, i]) => { if (i != null && NA.opts && NA.opts.has(k)) used.add(i); });   // photo choisie pour un objet
   const todo = (all ? S.photos.map((_, i) => i) : [...used]).filter(i => S.photos[i] && !S.photos[i].pid);
   if (!todo.length) return;
   const sig = await fetch('/api/sign-upload', { method: 'POST' }).then(r => r.json());
@@ -7266,21 +7274,26 @@ function paCoverHtml() {
     + `<div class="cv" style="left:${px(236 + sp + 217 / 2 - S / 2)};top:${y}">${NA.renderPage(NA.pages[0], { print: true })}</div>`
     + `<div style="position:absolute;top:0;left:236mm;width:${sp}mm;height:254mm;background:${bg};overflow:hidden">${label}</div></div>`, W, 254, S, F.css);
 }
-// Affiche 30 × 40 cm : la couverture en grand sur le papier de l'album, les prénoms et l'année dessous
+// Photo choisie par le client pour l'affiche, le cadre ou l'aimant (NA.optPhoto[objet] = n° de photo) ; sans choix, la photo de couverture
+function optSlot(k) {
+  const c = NA.pages[0], s0 = c.slots && c.slots[0], i = (NA.optPhoto || {})[k];
+  return i != null && S.photos[i] ? { p: i, z: 1, f: (s0 && s0.f) || 'none' } : s0;
+}
+const optPage = k => { const s = optSlot(k); return s ? { layout: 'full', slots: [Object.assign({}, s)], t: {} } : NA.pages[0]; };
+// Affiche 30 × 40 cm : la couverture (ou la photo choisie) en grand sur le papier de l'album, les prénoms et l'année dessous
 function afficheHtml() {
   const T = NA.THEMES[NA.theme] || NA.THEMES.galerie, i = NA.info || coupleInfo(), F = paSheet(260);
-  return docHtml(`<div class="page" style="${F.bg}"><div class="cv" style="left:${px(20)};top:${px(24)}">${NA.renderPage(NA.pages[0], { print: true })}</div>`
+  const pg = (NA.optPhoto || {}).affiche != null ? optPage('affiche') : NA.pages[0];
+  return docHtml(`<div class="page" style="${F.bg}"><div class="cv" style="left:${px(20)};top:${px(24)}">${NA.renderPage(pg, { print: true })}</div>`
     + `<div style="position:absolute;left:0;right:0;top:300mm;text-align:center;color:${T.ink};font:italic 400 15mm/1.1 'Playfair Display',serif;">${esc(i.names || '')}</div>`
     + `<div style="position:absolute;left:0;right:0;top:330mm;text-align:center;color:${T.ink};opacity:.7;font:500 4mm/1 'Inter',sans-serif;letter-spacing:.3em;">${new Date().getFullYear()}</div></div>`, 300, 400, 260, F.css);
 }
-// Petit cadre 15 × 15 cm (carreau en céramique, 3 mm de fond perdu) : la photo de couverture, avec son cadrage et son filtre
-function cadreHtml(mm = 156) {
-  const c = NA.pages[0], s0 = c.slots && c.slots[0];
-  const pg = s0 ? { layout: 'full', slots: [Object.assign({}, s0)], t: {} } : c;
-  return docHtml(`<div class="page">${NA.renderPage(pg, { print: true })}</div>`, mm, mm, mm);
+// Petit cadre 15 × 15 cm (carreau en céramique, 3 mm de fond perdu) : la photo choisie, ou celle de la couverture avec son cadrage et son filtre
+function cadreHtml(mm = 156, k = 'cadre') {
+  return docHtml(`<div class="page">${NA.renderPage(optPage(k), { print: true })}</div>`, mm, mm, mm);
 }
-// Aimant 5 × 5 cm (carreau en céramique aimanté, 3 mm de fond perdu) : la même photo que le cadre
-const aimantHtml = () => cadreHtml(56);
+// Aimant 5 × 5 cm (carreau en céramique aimanté, 3 mm de fond perdu)
+const aimantHtml = () => cadreHtml(56, 'aimant');
 window.generateAlbumPDF = async function (onStep, opts) {
   onStep = onStep || (() => {}); opts = opts || {};
   if (NA.photosReady) await NA.photosReady();
@@ -7318,7 +7331,7 @@ window.generateAlbumPDF = async function (onStep, opts) {
   return { url: R.full.url, proof: R.full.proof, spine: null, files };
 };
 NA.coverHtml = coverHtml; NA.innerHtml = innerHtml;
-NA.paCoverHtml = paCoverHtml; NA.paInnerHtml = paInnerHtml; NA.afficheHtml = afficheHtml; NA.cadreHtml = cadreHtml; NA.aimantHtml = aimantHtml; NA.docHtml = docHtml;
+NA.paCoverHtml = paCoverHtml; NA.paInnerHtml = paInnerHtml; NA.afficheHtml = afficheHtml; NA.cadreHtml = cadreHtml; NA.aimantHtml = aimantHtml; NA.optPage = optPage; NA.optSlot = optSlot; NA.docHtml = docHtml;
 NA.printHtml = printHtml;
 NA._ed = { drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, saveLocalSoon, coupleInfo, callAI, uploadPhotos, defaultStory, go, commit, updUndo,
   sel: () => ED.sel, clearSel: () => { ED.sel = null; }, isWide, nPagesSel, visible, pageName,
@@ -7618,7 +7631,7 @@ cgv: { tab: 'CGV', toc: true, html: `
 <ul>
 <li><b>Livre imprimé</b> : format carré 21 × 21 cm, couverture rigide, papier premium, 24, 36 ou 50 pages.</li>
 <li><b>Album numérique</b> : fichier PDF haute définition des mêmes pages, à télécharger.</li>
-<li><b>Options du livre imprimé</b>, au choix lors de la commande : coffret cadeau (le livre livré dans une boîte rigide), fabrication express, affiche 30 × 40 cm reprenant la couverture de l'album avec les prénoms, petit cadre photo 15 × 15 cm (photo de couverture imprimée sur un carreau en céramique, avec son support en bois), aimant photo 5 × 5 cm (la même photo sur un petit carreau en céramique aimanté). L'affiche, le cadre et l'aimant sont livrés dans le même colis que le livre.</li>
+<li><b>Options du livre imprimé</b>, au choix lors de la commande : coffret cadeau (le livre livré dans une boîte rigide), fabrication express, affiche 30 × 40 cm avec les prénoms, petit cadre photo 15 × 15 cm (carreau en céramique avec son support en bois), aimant photo 5 × 5 cm (petit carreau en céramique aimanté), chacun avec la photo choisie par le client (la couverture de l'album, ou une photo de l'album). L'affiche, le cadre et l'aimant sont livrés dans le même colis que le livre.</li>
 </ul>
 <p>Un nombre minimum de photos est requis selon le format (14, 20 ou 31). Les couleurs d'un écran et d'une impression peuvent légèrement différer ; la netteté du livre dépend de la qualité des photos importées.</p>
 <h2 id="cgv-3">3. Prix et codes promotionnels</h2>
@@ -8208,31 +8221,37 @@ const OPTS = { coffret: 9.99, express: 4.99, affiche: 14.99, cadre: 19.99, aiman
 Object.entries({
   fr: { opt_lbl: 'Options', opt_coffret: 'Coffret cadeau', opt_coffret_d: 'Le livre arrive dans une boîte cadeau rigide, prêt à offrir.',
         opt_express: 'Fabrication express', opt_express_d: 'Votre livre est fabriqué en priorité et expédié un à deux jours ouvrés plus tôt.',
-        opt_affiche: 'Affiche 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'La couverture de votre album en affiche, avec vos prénoms. Dans le même colis.',
-        opt_cadre: 'Petit cadre photo 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Votre photo de couverture sur céramique, avec son support en bois. Dans le même colis.',
-        opt_aimant: 'Aimant photo 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Votre photo de couverture sur un petit carreau en céramique aimanté. Dans le même colis.' },
+        opt_affiche: 'Affiche 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'Votre couverture ou la photo de votre choix en affiche, avec vos prénoms. Dans le même colis.',
+        opt_cadre: 'Petit cadre photo 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'La photo de votre choix sur céramique, avec son support en bois. Dans le même colis.',
+        opt_aimant: 'Aimant photo 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'La photo de votre choix sur un petit carreau en céramique aimanté. Dans le même colis.',
+        opt_photo: 'Choisir la photo', opt_pick: 'Quelle photo pour cet objet\u00a0?', opt_close: 'Fermer' },
   en: { opt_lbl: 'Extras', opt_coffret: 'Gift box', opt_coffret_d: 'The book arrives in a rigid gift box, ready to give.',
         opt_express: 'Express production', opt_express_d: 'Your book is made first and ships one to two working days earlier.',
-        opt_affiche: '30\u00a0×\u00a040\u00a0cm poster', opt_affiche_d: 'Your album cover as a poster, with your names. In the same parcel.',
-        opt_cadre: 'Small 15\u00a0×\u00a015\u00a0cm photo frame', opt_cadre_d: 'Your cover photo on a ceramic tile with a wooden stand. In the same parcel.',
-        opt_aimant: '5\u00a0×\u00a05\u00a0cm photo magnet', opt_aimant_d: 'Your cover photo on a small magnetic ceramic tile. In the same parcel.' },
+        opt_affiche: '30\u00a0×\u00a040\u00a0cm poster', opt_affiche_d: 'Your cover or the photo of your choice as a poster, with your names. In the same parcel.',
+        opt_cadre: 'Small 15\u00a0×\u00a015\u00a0cm photo frame', opt_cadre_d: 'The photo of your choice on a ceramic tile with a wooden stand. In the same parcel.',
+        opt_aimant: '5\u00a0×\u00a05\u00a0cm photo magnet', opt_aimant_d: 'The photo of your choice on a small magnetic ceramic tile. In the same parcel.',
+        opt_photo: 'Choose the photo', opt_pick: 'Which photo for this item?', opt_close: 'Close' },
   de: { opt_lbl: 'Extras', opt_coffret: 'Geschenkbox', opt_coffret_d: 'Das Buch kommt in einer festen Geschenkbox, bereit zum Verschenken.',
         opt_express: 'Express-Herstellung', opt_express_d: 'Euer Buch wird bevorzugt hergestellt und ein bis zwei Werktage früher verschickt.',
-        opt_affiche: 'Poster 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'Das Cover eures Albums als Poster, mit euren Namen. Im selben Paket.',
-        opt_cadre: 'Kleiner Fotorahmen 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Euer Coverfoto auf einer Keramikfliese mit Holzständer. Im selben Paket.',
-        opt_aimant: 'Fotomagnet 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Euer Coverfoto auf einer kleinen magnetischen Keramikfliese. Im selben Paket.' },
+        opt_affiche: 'Poster 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'Euer Cover oder ein Foto eurer Wahl als Poster, mit euren Namen. Im selben Paket.',
+        opt_cadre: 'Kleiner Fotorahmen 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Ein Foto eurer Wahl auf einer Keramikfliese mit Holzständer. Im selben Paket.',
+        opt_aimant: 'Fotomagnet 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Ein Foto eurer Wahl auf einer kleinen magnetischen Keramikfliese. Im selben Paket.',
+        opt_photo: 'Foto wählen', opt_pick: 'Welches Foto für dieses Objekt?', opt_close: 'Schließen' },
   es: { opt_lbl: 'Extras', opt_coffret: 'Caja regalo', opt_coffret_d: 'El libro llega en una caja regalo rígida, listo para regalar.',
         opt_express: 'Fabricación exprés', opt_express_d: 'Vuestro libro se fabrica con prioridad y sale uno o dos días laborables antes.',
-        opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'La portada de vuestro álbum en póster, con vuestros nombres. En el mismo paquete.',
-        opt_cadre: 'Marco de fotos de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'Vuestra foto de portada sobre cerámica, con soporte de madera. En el mismo paquete.',
-        opt_aimant: 'Imán de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'Vuestra foto de portada sobre una pequeña baldosa de cerámica con imán. En el mismo paquete.' },
+        opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'Vuestra portada o la foto que elijáis en póster, con vuestros nombres. En el mismo paquete.',
+        opt_cadre: 'Marco de fotos de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'La foto que elijáis sobre cerámica, con soporte de madera. En el mismo paquete.',
+        opt_aimant: 'Imán de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'La foto que elijáis sobre una pequeña baldosa de cerámica con imán. En el mismo paquete.',
+        opt_photo: 'Elegir la foto', opt_pick: '¿Qué foto para este objeto?', opt_close: 'Cerrar' },
   pt: { opt_lbl: 'Extras', opt_coffret: 'Caixa de oferta', opt_coffret_d: 'O livro chega numa caixa de oferta rígida, pronto a oferecer.',
         opt_express: 'Produção expresso', opt_express_d: 'O vosso livro é produzido com prioridade e enviado um a dois dias úteis mais cedo.',
-        opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'A capa do vosso álbum em póster, com os vossos nomes. Na mesma encomenda.',
-        opt_cadre: 'Moldura de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'A vossa foto de capa em cerâmica, com suporte de madeira. Na mesma encomenda.',
-        opt_aimant: 'Íman de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'A vossa foto de capa num pequeno azulejo de cerâmica com íman. Na mesma encomenda.' },
+        opt_affiche: 'Póster de 30\u00a0×\u00a040\u00a0cm', opt_affiche_d: 'A vossa capa ou a foto que escolherem em póster, com os vossos nomes. Na mesma encomenda.',
+        opt_cadre: 'Moldura de 15\u00a0×\u00a015\u00a0cm', opt_cadre_d: 'A foto que escolherem em cerâmica, com suporte de madeira. Na mesma encomenda.',
+        opt_aimant: 'Íman de foto de 5\u00a0×\u00a05\u00a0cm', opt_aimant_d: 'A foto que escolherem num pequeno azulejo de cerâmica com íman. Na mesma encomenda.',
+        opt_photo: 'Escolher a foto', opt_pick: 'Que foto para este objeto?', opt_close: 'Fechar' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 NA.opts = new Set();
+NA.optPhoto = {};                                   // photo choisie par objet (n° dans S.photos) ; absente = photo de couverture
 function optTotal() { let s = 0; NA.opts.forEach(k => { s += OPTS[k] || 0; }); return s; }
 const money = v => (lang() === 'en' ? '€' + v.toFixed(2) : v.toFixed(2).replace('.', ',') + ' €');
 function drawOpts() {
@@ -8247,10 +8266,11 @@ function drawOpts() {
       e.target.closest('.nst-opt').classList.toggle('on', e.target.checked);
       payLabel(); if (NA.syncPrice) NA.syncPrice();
     });
+    box.addEventListener('click', e => { const b = e.target.closest('[data-ph]'); if (!b) return; e.preventDefault(); e.stopPropagation(); pickOptPhoto(b.dataset.ph); });
   }
   box.hidden = ((($('payFormat') || {}).value) || 'print') !== 'print';
   box.innerHTML = `<div class="fl">${esc(t('opt_lbl'))}</div>` + Object.keys(OPTS).map(k => `<label class="nst-opt${NA.opts.has(k) ? ' on' : ''}">`
-    + `<input type="checkbox" data-opt="${k}"${NA.opts.has(k) ? ' checked' : ''}/>${optImg(k)}<span class="nst-opt-t"><b>${esc(t('opt_' + k))}</b><span>${esc(t('opt_' + k + '_d'))}</span></span>`
+    + `<input type="checkbox" data-opt="${k}"${NA.opts.has(k) ? ' checked' : ''}/>${optImg(k)}<span class="nst-opt-t"><b>${esc(t('opt_' + k))}</b><span>${esc(t('opt_' + k + '_d'))}</span>${OPT_IMG[k] && k !== 'coffret' ? `<button type="button" class="nst-opt-ph" data-ph="${k}">${esc(t('opt_photo'))}</button>` : ''}</span>`
     + `<span class="nst-opt-p">+ ${money(OPTS[k])}</span></label>`).join('');
   fillOptImgs(box);
 }
@@ -8261,14 +8281,36 @@ const optImg = k => { const z = OPT_IMG[k];
     : `<span class="nst-opt-img nst-opt-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1c1a18" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2M10 2.8h4M12 2.8V6M18.2 6.6l1.3-1.3"/></svg></span>`; };
 function fillOptImgs(box) {
   const c = NA.pages && NA.pages[0]; if (!c) return;
-  const s0 = c.slots && c.slots[0], photo = s0 ? { layout: 'full', slots: [Object.assign({}, s0)], t: {} } : c;   // cadre et aimant : la photo de couverture, comme cadreHtml
   const T = NA.THEMES[NA.theme] || NA.THEMES.galerie, i = NA.info || {};
   box.querySelectorAll('.nst-opt-z').forEach(z => {
-    if (z.dataset.k === 'affiche') {                                                  // affiche : couverture et prénoms sur le papier de l'album, comme afficheHtml
-      z.innerHTML = `<span class="nst-opt-af" style="background:${T.paper};color:${T.ink}"><span class="nst-opt-c">${NA.renderPage(c, { thumb: true })}</span><b>${esc(i.names || '')}</b></span>`;
+    const k = z.dataset.k;
+    if (k === 'affiche') {                                                            // affiche : couverture (ou photo choisie) et prénoms sur le papier de l'album, comme afficheHtml
+      const pg = NA.optPhoto.affiche != null ? NA.optPage('affiche') : c;
+      z.innerHTML = `<span class="nst-opt-af" style="background:${T.paper};color:${T.ink}"><span class="nst-opt-c">${NA.renderPage(pg, { thumb: true })}</span><b>${esc(i.names || '')}</b></span>`;
       NA.scaleHost(z.querySelector('.nst-opt-c'));
-    } else { z.innerHTML = NA.renderPage(z.dataset.k === 'coffret' ? c : photo, { thumb: true }); NA.scaleHost(z); }
+    } else { z.innerHTML = NA.renderPage(k === 'coffret' ? c : NA.optPage(k), { thumb: true }); NA.scaleHost(z); }   // cadre et aimant : comme cadreHtml
   });
+}
+// Choix de la photo d'un objet : toutes les photos importées ; la photo de couverture est cochée tant que rien n'est choisi
+function pickOptPhoto(k) {
+  let ov = $('nstPick');
+  if (!ov) {
+    ov = document.createElement('div'); ov.id = 'nstPick'; ov.className = 'nst-track'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e => {
+      if (e.target === ov || e.target.closest('.nst-tr-x')) { ov.classList.remove('on'); return; }
+      const b = e.target.closest('[data-i]'); if (!b) return;
+      NA.optPhoto[ov.dataset.k] = +b.dataset.i; NA.opts.add(ov.dataset.k);             // choisir une photo, c'est vouloir l'objet
+      ov.classList.remove('on'); drawOpts(); payLabel(); if (NA.syncPrice) NA.syncPrice();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') ov.classList.remove('on'); });
+  }
+  const cur = NA.optSlot(k), on = cur ? cur.p : -1;
+  ov.dataset.k = k;
+  ov.innerHTML = `<div class="nst-tr-box nst-phx"><button class="nst-tr-x" type="button" aria-label="${esc(t('opt_close'))}">×</button><h2>${esc(t('opt_pick'))}</h2>`
+    + `<p class="nst-tr-sub">${esc(t('opt_' + k))}</p><div class="nst-phx-g">` + S.photos.map((p, i) => (p.thumb || p.data)
+      ? `<button type="button" data-i="${i}" class="${i === on ? 'on' : ''}" aria-pressed="${i === on}"><img src="${p.thumb || p.data}" alt="" loading="lazy" decoding="async"/></button>` : '').join('') + '</div></div>';
+  ov.classList.add('on');
 }
 NA.drawOpts = drawOpts;
 if (typeof window.selectFormat === 'function') {
