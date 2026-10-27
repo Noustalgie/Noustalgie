@@ -1,14 +1,15 @@
-/* Consentement aux cookies publicitaires (pixel Meta) : rien n'est chargé avant « Accepter ».
-   Choix gardé dans localStorage (nst_consent = oui | non) ; « Cookies » en bas de page rouvre le bandeau.
-   window.nstPixel(événement, paramètres) : n'envoie rien sans accord. */
+/* Consentement aux cookies publicitaires (pixel Meta, Google Ads) : rien n'est chargé avant « Accepter ».
+   Choix gardé dans localStorage (nst_consent2 = oui | non ; nst_consent ne couvrait que Meta, d'où la nouvelle clé) ;
+   « Cookies » en bas de page rouvre le bandeau.
+   window.nstPixel(événement, paramètres) et window.nstGads(montant, commande) : n'envoient rien sans accord. */
 (function () {
-  var PIXEL = '2148419749217096', CLE = 'nst_consent';
+  var PIXEL = '2148419749217096', ADS = 'AW-18540584693', ACHAT = ADS + '/wjcwCNmi1KsdEPW964hF', CLE = 'nst_consent2';
   var TXT = {
-    fr: ['Nous aimerions mesurer l’efficacité de nos publicités sur Facebook et Instagram (cookies Meta). Rien n’est déposé sans votre accord.', 'En savoir plus', 'Refuser', 'Accepter', 'Cookies'],
-    en: ['We would like to measure how our Facebook and Instagram ads perform (Meta cookies). Nothing is stored without your consent.', 'Learn more', 'Decline', 'Accept', 'Cookies'],
-    de: ['Wir möchten die Wirkung unserer Werbung auf Facebook und Instagram messen (Meta-Cookies). Ohne Ihre Zustimmung wird nichts gespeichert.', 'Mehr erfahren', 'Ablehnen', 'Akzeptieren', 'Cookies'],
-    es: ['Nos gustaría medir la eficacia de nuestros anuncios en Facebook e Instagram (cookies de Meta). No se guarda nada sin su consentimiento.', 'Más información', 'Rechazar', 'Aceptar', 'Cookies'],
-    pt: ['Gostaríamos de medir a eficácia dos nossos anúncios no Facebook e no Instagram (cookies da Meta). Nada é guardado sem o seu consentimento.', 'Saber mais', 'Recusar', 'Aceitar', 'Cookies'],
+    fr: ['Nous aimerions mesurer l’efficacité de nos publicités sur Facebook, Instagram et Google (cookies Meta et Google Ads). Rien n’est déposé sans votre accord.', 'En savoir plus', 'Refuser', 'Accepter', 'Cookies'],
+    en: ['We would like to measure how our Facebook, Instagram and Google ads perform (Meta and Google Ads cookies). Nothing is stored without your consent.', 'Learn more', 'Decline', 'Accept', 'Cookies'],
+    de: ['Wir möchten die Wirkung unserer Werbung auf Facebook, Instagram und Google messen (Meta- und Google-Ads-Cookies). Ohne Ihre Zustimmung wird nichts gespeichert.', 'Mehr erfahren', 'Ablehnen', 'Akzeptieren', 'Cookies'],
+    es: ['Nos gustaría medir la eficacia de nuestros anuncios en Facebook, Instagram y Google (cookies de Meta y Google Ads). No se guarda nada sin su consentimiento.', 'Más información', 'Rechazar', 'Aceptar', 'Cookies'],
+    pt: ['Gostaríamos de medir a eficácia dos nossos anúncios no Facebook, no Instagram e no Google (cookies da Meta e do Google Ads). Nada é guardado sem o seu consentimento.', 'Saber mais', 'Recusar', 'Aceitar', 'Cookies'],
   };
   var t = function () { var l = String(window.currentLang || document.documentElement.lang || 'fr').slice(0, 2); return TXT[l] || TXT.fr; };
   var lire = function () { try { return localStorage.getItem(CLE); } catch (e) { return null; } };
@@ -24,7 +25,23 @@
     window.fbq('init', PIXEL);
     window.fbq('track', 'PageView');
   }
-  window.nstPixel = function (ev, p) { if (lire() === 'oui') { pixel(); try { window.fbq('track', ev, p || {}); } catch (e) {} } };
+  // Sans réponse au bandeau, l'événement attend : envoyé si le visiteur accepte, oublié s'il refuse
+  var attente = [];
+  var siAccord = function (f) { var c = lire(); if (c === 'oui') f(); else if (c !== 'non') attente.push(f); };
+  window.nstPixel = function (ev, p) { siAccord(function () { pixel(); try { window.fbq('track', ev, p || {}); } catch (e) {} }); };
+
+  // Google Ads : balise Google chargée après accord, achat compté sur la page de confirmation (une fois par commande)
+  var gCharge = false;
+  function gads() {
+    if (gCharge) return; gCharge = true;
+    var t = document.createElement('script'); t.async = true; t.src = 'https://www.googletagmanager.com/gtag/js?id=' + ADS;
+    document.head.appendChild(t);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', ADS);
+  }
+  window.nstGads = function (v, id) { siAccord(function () { gads(); try { window.gtag('event', 'conversion', { send_to: ACHAT, value: v > 0 ? v : 49.99, currency: 'EUR', transaction_id: id || '' }); } catch (e) {} }); };
 
   function bandeau() {
     var old = document.getElementById('nstConsent'); if (old) old.remove();
@@ -34,7 +51,7 @@
     d.addEventListener('click', function (e) {
       var b = e.target.closest('[data-c]'); if (!b) return;
       ecrire(b.getAttribute('data-c')); d.remove();
-      if (b.getAttribute('data-c') === 'oui') pixel();
+      if (b.getAttribute('data-c') === 'oui') { pixel(); gads(); attente.splice(0).forEach(function (f) { f(); }); } else attente = [];
     });
     document.body.appendChild(d);
   }
@@ -49,7 +66,7 @@
 
   function demarrer() {
     var c = lire();
-    if (c === 'oui') pixel(); else if (c !== 'non') bandeau();
+    if (c === 'oui') { pixel(); gads(); } else if (c !== 'non') bandeau();
     // « Cookies » en bas de page : changer d'avis à tout moment
     var f = document.querySelector('footer');
     if (f && !f.querySelector('.nst-cookies')) {

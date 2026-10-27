@@ -50,9 +50,9 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
   fetch('/api/order-summary?session_id=' + encodeURIComponent(id), { signal: ctl ? ctl.signal : undefined }).then(function (r) { return r.json(); }).then(function (o) {
     if (!o || !o.paid) return;
     clearAlbum();
-    // pixel Meta : l'achat et son montant, une fois par commande (rien sans « Accepter », cf. consentement.js)
+    // pixel Meta et Google Ads : l'achat et son montant, une fois par commande (rien sans « Accepter », cf. consentement.js)
     try { if (!sessionStorage.getItem('nstAchat' + id)) { sessionStorage.setItem('nstAchat' + id, '1'); var v = parseFloat(String(o.price || '').replace(',', '.'));
-      var go = function () { if (window.nstPixel) window.nstPixel('Purchase', v > 0 ? { value: v, currency: 'EUR' } : {}); }; if (window.nstPixel) go(); else window.addEventListener('load', go); } } catch (e) {}
+      var go = function () { if (window.nstPixel) window.nstPixel('Purchase', v > 0 ? { value: v, currency: 'EUR' } : {}); if (window.nstGads) window.nstGads(v, o.order); }; if (window.nstPixel) go(); else window.addEventListener('load', go); } } catch (e) {}
     var pdf = o.format === 'pdf';
     // Google Avis clients : Google propose au client (qui accepte ou non) une enquête après la livraison
     if (!pdf && o.order && o.email && o.country) {
@@ -80,5 +80,5 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 })();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script defer src="/consentement.js?v=1"></script>
+<script defer src="/consentement.js?v=2"></script>
 </body></html>
