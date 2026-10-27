@@ -25,19 +25,23 @@ module.exports = async (req, res) => {
   const R = String(ref || '').trim().toUpperCase(), E = String(email || '').trim().toLowerCase();
   if (!REF.test(R) || !E.includes('@')) return res.status(400).json({ error: 'Vérifiez le numéro de commande et l’email.' });
   const introuvable = () => res.status(404).json({ error: 'Aucune commande ne correspond à ce numéro et cet email.' });
-  // Commandes Print API : notre numéro est leur identifiant, l'email est dans les métadonnées
-  let p = null;
-  try { p = await PA.getOrder(R); } catch (e) {}
-  if (p) {
-    let meta = {}; try { meta = JSON.parse(p.metadata || '{}'); } catch (e) {}
-    if (String(meta.email || '').toLowerCase() !== E) return introuvable();
-    const url = /^https?:\/\//.test(p.trackingUrl || '') ? p.trackingUrl : '';
-    return res.json({ ref: R, created: p.dateTime || '', step: p.status === 'Shipped' ? 3 : p.status === 'Processing' ? 2 : 1, cancelled: p.status === 'Cancelled',
-      shipments: p.status === 'Shipped' || url ? [{ carrier: '', number: '', url, date: '' }] : [], city: p.shipping && p.shipping.address && p.shipping.address.city || '' });
-  }
-  if (!process.env.PRODIGI_API_KEY) return introuvable();
-  const j = await prodigi(`/v4.0/orders?merchantReferences=${encodeURIComponent(R)}&top=1`);
+  // Prodigi d'abord : une recherche par référence n'y déclenche rien, alors qu'un numéro inconnu de Print API
+  // lui fait envoyer un « Foutrapport » par email (commandes Suisse, Luxembourg, Monaco ou de secours)
+  const j = process.env.PRODIGI_API_KEY ? await prodigi(`/v4.0/orders?merchantReferences=${encodeURIComponent(R)}&top=1`) : null;
   const o = j && Array.isArray(j.orders) ? j.orders[0] : null;
+  if (!o) {
+    // Commandes Print API : notre numéro est leur identifiant, l'email est dans les métadonnées
+    let p = null;
+    try { p = await PA.getOrder(R); } catch (e) {}
+    if (p) {
+      let meta = {}; try { meta = JSON.parse(p.metadata || '{}'); } catch (e) {}
+      if (String(meta.email || '').toLowerCase() !== E) return introuvable();
+      const url = /^https?:\/\//.test(p.trackingUrl || '') ? p.trackingUrl : '';
+      return res.json({ ref: R, created: p.dateTime || '', step: p.status === 'Shipped' ? 3 : p.status === 'Processing' ? 2 : 1, cancelled: p.status === 'Cancelled',
+        shipments: p.status === 'Shipped' || url ? [{ carrier: '', number: '', url, date: '' }] : [], city: p.shipping && p.shipping.address && p.shipping.address.city || '' });
+    }
+    return introuvable();
+  }
   // Même réponse que la commande n'existe pas ou que l'email ne correspond pas (pas d'information divulguée)
   if (!o || String(o.recipient && o.recipient.email || '').toLowerCase() !== E) return introuvable();
   const st = o.status || {}, d = st.details || {};
