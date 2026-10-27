@@ -39,6 +39,7 @@ module.exports = async (req, res) => {
 <div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#5f5a54;">
 <p>Votre livre vient d’être expédié.</p>
 <div style="margin:24px 0;"><a href="${h(url || 'https://noustalgie.fr/#suivi')}" style="background:#1c1a18;color:#ffffff;padding:14px 26px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;display:inline-block;">Suivre mon colis</a></div>
+<p>Une fois votre album entre vos mains, votre avis nous aiderait beaucoup&nbsp;: <a href="https://g.page/r/CWD88UdbAKFnEBM/review" style="color:#1c1a18;">laisser un avis sur Google</a>. Cela prend une minute, merci&nbsp;!</p>
 <p style="color:#8b857d;font-size:12px;">Le suivi peut mettre quelques heures à s’activer. Commande ${h(o.id)}.</p>
 </div></div></div>`,
     });
