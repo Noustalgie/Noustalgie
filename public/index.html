@@ -1648,6 +1648,7 @@ html body .ed-price-card .nst-reco{top:14px;right:14px;left:auto;transform:none;
 html body .ed-price-pp{font:400 13.5px/1.5 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;margin:-2px 0 2px;}
 html body .ed-price-card.feat .ed-price-pp{color:rgba(255,255,255,.78);}
 html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;margin-top:2px;}
+html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:none;cursor:pointer;text-align:center;font:400 14px 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;text-decoration:underline;text-underline-offset:3px;padding:6px 0;}html body .nst-promo summary::-webkit-details-marker{display:none;}
 </style>
 <script type="application/ld+json">
 {
@@ -2223,13 +2224,6 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
               </div>
             </div>
             <input type="hidden" id="payFormat" value="print"/>
-            <div style="margin-top:14px;">
-              <div style="display:flex;gap:0;border:1px solid #ddd;border-radius:0;overflow:hidden;transition:border-color .2s;" id="promoWrap">
-                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:16px !important;letter-spacing:.05em;margin:0 !important;font-family:'Hanken Grotesk',sans-serif;color:#111 !important;outline:none;"/>
-                <button type="button" onclick="applyPromo()" style="background:#111;color:#fff;border:none;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'Hanken Grotesk',sans-serif;transition:opacity .2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Appliquer</button>
-              </div>
-            </div>
-            <div id="promoMsg" style="font-size:.75rem;margin-top:4px;display:none;"></div>
             <!-- Adresse (masquée si PDF) -->
             <div id="addressField">
               <label class="fl" data-i18n="pay_addr_lbl">Adresse de livraison</label>
@@ -2244,6 +2238,16 @@ html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;
               <label class="fl" for="payPhone" data-i18n="pay_phone_lbl">Téléphone (pour le livreur)</label>
               <input type="text" id="payPhone" inputmode="tel" autocomplete="tel" maxlength="24" data-i18n-ph="pay_phone_ph" placeholder="06 12 34 56 78"/>
             </div>
+            <!-- Code promo replié : un champ ouvert pousse à quitter la page pour chercher un code -->
+            <details class="nst-promo"><summary data-i18n="promo_link">Vous avez un code promo&nbsp;?</summary>
+            <div style="margin-top:10px;">
+              <div style="display:flex;gap:0;border:1px solid #ddd;border-radius:0;overflow:hidden;transition:border-color .2s;" id="promoWrap">
+                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:16px !important;letter-spacing:.05em;margin:0 !important;font-family:'Hanken Grotesk',sans-serif;color:#111 !important;outline:none;"/>
+                <button type="button" onclick="applyPromo()" style="background:#111;color:#fff;border:none;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'Hanken Grotesk',sans-serif;transition:opacity .2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Appliquer</button>
+              </div>
+            </div>
+            <div id="promoMsg" style="font-size:.75rem;margin-top:4px;display:none;"></div>
+            </details>
           </div>
           <button class="btn-pay" id="payBtn" onclick="processPayment()" data-i18n="pay_btn">Payer & commander</button>
           <div class="pay-secure" data-i18n="pay_secure">🔒 Paiement sécurisé · Stripe · SSL</div>
@@ -2469,7 +2473,7 @@ const LANGS = {
     pay_title:'Votre livre est prêt', pay_sub:'Satisfait de l\'aperçu ? Commandez votre livre photo premium, livré en 6 à 8 jours ouvrés.',
     pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier premium", pay_inc5:"Couverture rigide, reliure solide", pay_inc6:'Livraison offerte',
     pay_name_lbl:'Prénom', pay_name_ph:'Emma', pay_last_lbl:'Nom', pay_last_ph:'Martin', pay_phone_lbl:'Téléphone (pour le livreur)', pay_phone_ph:'06 12 34 56 78', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
-    pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL',
+    pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL', promo_link:'Vous avez un code promo\u00a0?',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Vous le recevrez dans 6 à 8 jours ouvrés.', dl_pdf:'Télécharger aussi le PDF ↗',
     s70_t1:'Nouveau : l’album', s70_t2:'années 70', s70_p:'Vos photos d’aujourd’hui, comme sorties de l’album de vos parents : noir et blanc d’époque, grain argentique, tirages à bords crème et textes tapés à la machine à écrire.', s70_l1:'Photos en noir et blanc vintage', s70_l2:'Lettres façon années 70', s70_l3:'Même livre, même prix', s70_cta:'Créer mon album années 70', s70_n:'Le style se change d’un geste dans l’aperçu gratuit.', s70_cap:'L’album de Léa et Hugo au style Années 70. Couple fictif, photos Unsplash.',
     footer_tag:'L\'album photo de votre histoire d\'amour.', skip_main:'Aller au contenu', footer_info:'Informations', footer_product:'Produit',
@@ -2557,7 +2561,7 @@ const LANGS = {
     pay_title:'Your book is ready', pay_sub:'Happy with the preview? Order your premium photo book.',
     pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on premium paper", pay_inc5:"Hard cover, durable binding", pay_inc6:'Free delivery',
     pay_name_lbl:'First name', pay_name_ph:'Emma', pay_last_lbl:'Last name', pay_last_ph:'Martin', pay_phone_lbl:'Phone (for the courier)', pay_phone_ph:'+33 6 12 34 56 78', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
-    pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL',
+    pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL', promo_link:'Have a promo code?',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. You will receive it within 6 to 8 working days.', dl_pdf:'Download the PDF too ↗',
     s70_t1:'New: the', s70_t2:'70s album', s70_p:'Today’s photos, as if they came out of your parents’ album: period black and white, film grain, cream-bordered prints and typewritten text.', s70_l1:'Vintage black and white photos', s70_l2:'70s-style lettering', s70_l3:'Same book, same price', s70_cta:'Create my 70s album', s70_n:'Switch styles with one tap in the free preview.', s70_cap:'Léa and Hugo’s album in the 70s style. Fictional couple, Unsplash photos.',
     footer_tag:'The photo book of your love story.', skip_main:'Skip to content', footer_info:'Information', footer_product:'Product',
@@ -2645,7 +2649,7 @@ const LANGS = {
     pay_title:'Euer Buch ist fertig', pay_sub:'Zufrieden mit der Vorschau? Bestellt euer Premium-Fotobuch.',
     pay_inc1:'Maßgefertigte Geschichte', pay_inc2:"Eure Fotos in hoher Auflösung gedruckt", pay_inc3:'Widmungen & Bildunterschriften', pay_inc4:"Professioneller Druck auf Premium-Papier", pay_inc5:"Fester Einband, robuste Bindung", pay_inc6:'Kostenloser Versand',
     pay_name_lbl:'Vorname', pay_name_ph:'Emma', pay_last_lbl:'Nachname', pay_last_ph:'Martin', pay_phone_lbl:'Telefon (für den Zusteller)', pay_phone_ph:'+49 151 23456789', pay_email_lbl:'E-Mail (Bestellverfolgung)', pay_addr_lbl:'Lieferadresse', pay_addr_ph:'Musterstraße 12, 10115 Berlin',
-    pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL',
+    pay_btn:'Bezahlen & bestellen', pay_secure:'🔒 Sichere Zahlung · Stripe · SSL', promo_link:'Sie haben einen Gutscheincode?',
     pay_ok_title:'Bestellung bestätigt!', pay_ok_sub:'Euer Buch wird gedruckt. Ihr erhaltet es in 6 bis 8 Werktagen.', dl_pdf:'PDF auch herunterladen ↗',
     s70_t1:'Neu: das Album im', s70_t2:'70er-Stil', s70_p:'Eure Fotos von heute, als kämen sie aus dem Album eurer Eltern: Schwarzweiß wie damals, Filmkorn, Abzüge mit cremefarbenem Rand und Texte wie mit der Schreibmaschine getippt.', s70_l1:'Fotos in Vintage-Schwarzweiß', s70_l2:'Schrift im Stil der 70er', s70_l3:'Gleiches Buch, gleicher Preis', s70_cta:'Mein 70er-Album gestalten', s70_n:'Den Stil wechselt ihr mit einem Fingertipp in der kostenlosen Vorschau.', s70_cap:'Das Album von Léa und Hugo im 70er-Stil. Fiktives Paar, Fotos von Unsplash.',
     footer_tag:'Das Fotobuch eurer Liebesgeschichte.', skip_main:'Zum Inhalt springen', footer_info:'Informationen', footer_product:'Produkt',
@@ -2733,7 +2737,7 @@ const LANGS = {
     pay_title:'Vuestro libro está listo', pay_sub:'¿Satisfechos con la vista previa? Pedid vuestro libro fotográfico premium.',
     pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel premium", pay_inc5:"Tapa dura, encuadernación resistente", pay_inc6:'Envío gratuito',
     pay_name_lbl:'Nombre', pay_name_ph:'Emma', pay_last_lbl:'Apellidos', pay_last_ph:'Martin', pay_phone_lbl:'Teléfono (para el repartidor)', pay_phone_ph:'+34 612 34 56 78', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
-    pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL',
+    pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL', promo_link:'¿Tiene un código promocional?',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro se está imprimiendo. Lo recibiréis en 6 a 8 días hábiles.', dl_pdf:'Descargar también el PDF ↗',
     s70_t1:'Novedad: el álbum', s70_t2:'años 70', s70_p:'Vuestras fotos de hoy, como sacadas del álbum de vuestros padres: blanco y negro de época, grano de película, copias con borde crema y textos escritos a máquina.', s70_l1:'Fotos en blanco y negro vintage', s70_l2:'Letras al estilo de los 70', s70_l3:'Mismo libro, mismo precio', s70_cta:'Crear mi álbum años 70', s70_n:'El estilo se cambia con un gesto en la vista previa gratuita.', s70_cap:'El álbum de Léa y Hugo al estilo años 70. Pareja ficticia, fotos de Unsplash.',
     footer_tag:'El álbum fotográfico de vuestra historia de amor.', skip_main:'Saltar al contenido', footer_info:'Información', footer_product:'Producto',
@@ -2821,7 +2825,7 @@ const LANGS = {
     pay_title:'O vosso livro está pronto', pay_sub:'Satisfeitos com a pré-visualização? Encomendai o vosso livro fotográfico premium.',
     pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel premium", pay_inc5:"Capa dura, encadernação resistente", pay_inc6:'Envio gratuito',
     pay_name_lbl:'Nome', pay_name_ph:'Emma', pay_last_lbl:'Apelido', pay_last_ph:'Martin', pay_phone_lbl:'Telefone (para o estafeta)', pay_phone_ph:'+351 912 345 678', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
-    pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL',
+    pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL', promo_link:'Tem um código promocional?',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Vão recebê-lo em 6 a 8 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
     s70_t1:'Novidade: o álbum', s70_t2:'anos 70', s70_p:'As vossas fotos de hoje, como se saíssem do álbum dos vossos pais: preto e branco de época, grão de película, provas com margem creme e textos escritos à máquina.', s70_l1:'Fotos a preto e branco vintage', s70_l2:'Letras ao estilo dos anos 70', s70_l3:'O mesmo livro, o mesmo preço', s70_cta:'Criar o meu álbum anos 70', s70_n:'O estilo muda-se com um gesto na pré-visualização gratuita.', s70_cap:'O álbum da Léa e do Hugo ao estilo anos 70. Casal fictício, fotos Unsplash.',
     footer_tag:'O álbum fotográfico da vossa história de amor.', skip_main:'Saltar para o conteúdo', footer_info:'Informações', footer_product:'Produto',
@@ -8261,7 +8265,7 @@ const money = v => (lang() === 'en' ? '€' + v.toFixed(2) : v.toFixed(2).replac
 function drawOpts() {
   let box = $('nstOpts');
   if (!box) {
-    const anchor = $('payFormat'); if (!anchor) return;
+    const anchor = $('addressField') || $('payFormat'); if (!anchor) return;   // après l'adresse : les champs obligatoires d'abord
     box = document.createElement('div'); box.id = 'nstOpts'; box.className = 'nst-opts';
     anchor.after(box);
     box.addEventListener('change', e => {
