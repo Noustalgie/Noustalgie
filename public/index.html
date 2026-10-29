@@ -7379,12 +7379,15 @@ window.processPayment = async function () {
     if (NA.payLabel) try { NA.payLabel(); } catch (e) {}
   }
   const label = btn.innerHTML;
+  let etape = 'preparation';
   const say = t => { btn.innerHTML = `<span class="nst-spin"></span>${esc(t)}`; };
   btn.disabled = true;
   try {
     say(NA.t('p_prep'));
     const extras = format === 'print' && NA.opts ? [...NA.opts] : [];
+    etape = 'fichier';
     const pdf = await window.generateAlbumPDF(say, { print: format === 'print', extras }), pdfUrl = pdf.url;
+    etape = 'paiement';
     say(NA.t('p_redirect'));
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -7395,6 +7398,8 @@ window.processPayment = async function () {
   } catch (e) {
     console.error(e);
     btn.disabled = false; btn.innerHTML = label;
+    // Alerte à Gabin : l'erreur exacte et le contexte, pour corriger avant le client suivant
+    try { fetch('/api/tools?fn=alerte', { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify({ etape, erreur: (e && e.message) || String(e), pagesAlbum: NA.pages.length, pages: nPagesSel(), format, style: NA.THEMES[NA.theme] && NA.THEMES[NA.theme].name, options: (NA.opts ? [...NA.opts] : []).join(','), pays: countryCode, langue: (typeof currentLang !== 'undefined' && currentLang) || 'fr', photos: (typeof S !== 'undefined' && S.photos) ? S.photos.length : '', email, ua: navigator.userAgent }) }).catch(() => {}); } catch (x) {}
     alert(NA.t('p_fail', e.message || 'réseau'));
   }
 };
@@ -7975,6 +7980,16 @@ function removePhoto(idx) {
 }
 
 NA.syncStory = syncStory; NA.recomposeAlbum = recompose; NA.removePhotoFromAlbum = removePhoto;
+// Un format choisi après la composition (cartes de prix, choix à l'étape Commander) recompose l'album à ce nombre de pages :
+// sinon le prix affiché était celui du format choisi et le livre payé celui de l'album déjà composé
+if (typeof window.selectPricing === 'function') {
+  const selPrix = window.selectPricing;
+  window.selectPricing = function (n, el) {
+    if (!(NA.pages && NA.pages.length) || n === NA.pages.length || ![24, 36, 50].includes(n)) return selPrix.apply(this, arguments);
+    if (S.photos.length < MIN(n)) { alert(t('format_min', MIN(n), n)); return selPrix.call(this, NA.pages.length, el); }
+    const r = selPrix.apply(this, arguments); recompose(n); return r;
+  };
+}
 
 /* ── Événements du panneau d'outils ── */
 const tools = $('nstTools');

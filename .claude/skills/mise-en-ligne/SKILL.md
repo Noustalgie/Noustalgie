@@ -21,6 +21,12 @@ python3 outils/verifier-site.py
 ```
 Tout doit afficher OK : syntaxe (scripts, JSON-LD, CSS, api/), aucune erreur JavaScript sur ordinateur et mobile, pas de défilement horizontal, sections et menu présents, français identique après un aller-retour de langue, formulaire de paiement (nom de famille, téléphone, données envoyées), aucun tiret cadratin visible. Le travail peut être confié à l'agent `verificateur` (Haiku, moins cher).
 
+Si la modification touche l'album, l'éditeur, l'étape Commander, le paiement ou `api/` (generate-pdf, create-checkout, options, prix) :
+```bash
+python3 outils/parcours-commande.py
+```
+Joue la commande comme un client sur 24 cas (formats, styles, options, pays, langues, code promo, format changé après la composition, téléphone) avec le vrai code serveur, PDFShift/Stripe/Print API simulés. Tous les cas doivent être OK : un échec est un client bloqué ou mal facturé. Un nouveau bug trouvé chez un client devient un nouveau cas dans la liste `CAS`.
+
 Si la modification est visuelle : `python3 outils/rendu.py --sortie /tmp/rendu` puis regarder les tranches `/tmp/rendu_1440_part*.png` et `/tmp/rendu_390_part*.png`.
 
 ## 3. Committer et ouvrir la PR
