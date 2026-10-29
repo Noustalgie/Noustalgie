@@ -7098,7 +7098,7 @@ async function offerResume() {
   bar.querySelector('.nst-r-no').onclick = () => bar.remove();
   bar.querySelector('.nst-r-yes').onclick = () => {
     S.photos = a.photos || []; S.captions = a.captions || {}; S.story = a.story; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.info = a.info; NA.spineText = a.spineText != null ? a.spineText : null; NA.albumId = a.albumId || ''; NA.reminder = a.reminder || null;
-    if (a.selectedPages) { try { selectedPages = a.selectedPages; } catch (e) {} }
+    if (Array.isArray(a.pages) && a.pages.length) { try { selectedPages = a.pages.length; } catch (e) {} }   // l'album repris fait foi, pas un format choisi après coup
     if (a.info) { const set = (id, v) => { if ($(id) && v) $(id).value = v; }; set('name1', a.info.n1); set('name2', a.info.n2); set('meetDate', a.info.meet); set('dedication', a.info.dedication); }
     S.done.add(0); S.done.add(1); S.done.add(2);
     if (typeof renderPhotos === 'function') renderPhotos();
@@ -7371,6 +7371,13 @@ window.processPayment = async function () {
   if (format === 'print' && (!line1 || !postal || !city)) { alert(NA.t('p_addr')); return; }
   if (format === 'print' && !phoneOk(phone)) { alert(NA.t('p_phone')); if ($('payPhone')) $('payPhone').focus(); return; }
   if (!NA.pages.length) { alert(NA.t('p_empty')); return; }
+  // Le livre payé est celui qui est composé : un format choisi après la composition (carte de prix, curseur)
+  // faisait refuser le fichier par le serveur (« fichier non valide »), à chaque essai
+  if ([24, 36, 50].includes(NA.pages.length) && nPagesSel() !== NA.pages.length) {
+    try { selectedPages = NA.pages.length; } catch (e) {}
+    if (typeof updateFormatPrices === 'function') try { updateFormatPrices(); } catch (e) {}
+    if (NA.payLabel) try { NA.payLabel(); } catch (e) {}
+  }
   const label = btn.innerHTML;
   const say = t => { btn.innerHTML = `<span class="nst-spin"></span>${esc(t)}`; };
   btn.disabled = true;
@@ -8038,7 +8045,7 @@ async function openFromLink(id) {
     S.photos = (a.photos || []).map(p => Object.assign({}, p, { data: cloudUrl(p), full: null }));
     S.story = a.story; S.captions = {}; NA.info = a.info; NA.theme = a.theme || 'galerie'; NA.pages = a.pages; NA.spineText = a.spineText != null ? a.spineText : null;
     NA.albumId = id; NA.reminder = null; NA.cur = 0; NA.hist = []; NA.fut = [];
-    try { selectedPages = a.selectedPages || NA.pages.length; } catch (e) {}
+    try { selectedPages = NA.pages.length || a.selectedPages; } catch (e) {}
     if (a.lang && typeof window.setLang === 'function' && a.lang !== lang()) try { window.setLang(a.lang); } catch (e) {}
     const set = (k, v) => { if ($(k) && v) $(k).value = v; };
     if (a.info) { set('name1', a.info.n1); set('name2', a.info.n2); set('meetDate', a.info.meet); set('dedication', a.info.dedication); }

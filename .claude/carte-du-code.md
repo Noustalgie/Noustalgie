@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8868 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (8868 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 1727-1830 : <script type="application/ld+json"> (6 Ko)
 - lignes 2394-4566 : <script> (189 Ko)
 - lignes 4567-5892 : <script> (122 Ko)
-- lignes 5893-8836 : <script> (254 Ko)
-- lignes 8837-8865 : <script> (2 Ko)
+- lignes 5893-8843 : <script> (255 Ko)
+- lignes 8844-8872 : <script> (2 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -63,12 +63,12 @@ Générée automatiquement (8868 lignes). Ouvrir une zone : Read avec offset = n
  7078  4. Sauvegarde locale (IndexedDB : photos comprises)
  7113  5. Impression : photos en pleine résolution + PDF hébergé
  7348  6. Paiement
- 8367  1. Livre 3D réutilisable
- 8488  2. Aperçu en direct pendant la création (ordinateur)
- 8522  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8624  4. Génération vivante : leurs photos se posent dans un livre
- 8650  5. Récapitulatif de commande avec LEUR couverture
- 8688  6. Finitions : apparition au défilement, page tournée
+ 8374  1. Livre 3D réutilisable
+ 8495  2. Aperçu en direct pendant la création (ordinateur)
+ 8529  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8631  4. Génération vivante : leurs photos se posent dans un livre
+ 8657  5. Récapitulatif de commande avec LEUR couverture
+ 8695  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -369,96 +369,96 @@ Générée automatiquement (8868 lignes). Ouvrir une zone : Read avec offset = n
  7316  doc
  7317  tries
  7358  processPayment
- 7399  goTab
- 7426  lang
- 7436  img
- 7461  stop
- 7492  upd
- 7518  apply
- 7537  T
- 7538  nm
- 7539  renderQuiz
- 7545  mark
- 7551  save
- 7598  mail
- 7753  backLbl
- 7758  toc
- 7765  show
- 7772  openLegal
- 7780  hideLegal
- 7781  closeLegal
- 7809  cur
- 7818  paint
- 7843  lang
- 7848  applyUI
- 7855  setLang
- 7875  syncStory
- 7909  ensureStoryFor
- 7925  recompose
- 7939  addInput
- 7958  removePhoto
- 8011  saveLink
- 8033  openFromLink
- 8043  set
- 8061  trHide
- 8063  trackOverlay
- 8071  close
- 8110  ouvrir
- 8136  ekLabel
- 8147  drawEbar
- 8172  coach
- 8178  done
- 8184  goTab
- 8193  draw
- 8221  payLabel
- 8263  optTotal
- 8265  drawOpts
- 8290  fillOptImgs
- 8303  pickOptPhoto
- 8326  selectFormat
- 8335  highlightPal
- 8340  setLang
- 8355  lang
- 8368  spineColors
- 8395  sampleCover
- 8414  auto
- 8415  build
- 8422  name
- 8438  words
- 8445  apply
- 8472  build
- 8481  nst70
- 8501  names
- 8502  renderLive
- 8515  flowMode
- 8524  exifDate
- 8534  readAscii
- 8535  scan
- 8552  addPhotos
- 8561  remap
- 8562  applyOrder
- 8575  movePhoto
- 8578  sortByDate
- 8587  renderPhotosPlus
- 8626  startGenAnim
- 8638  tick
- 8646  stopGenAnim
- 8648  runGeneration
- 8653  noel
- 8657  fill
- 8660  renderSummary
- 8673  syncPrice
- 8684  goTab
- 8706  setLang
- 8723  lang
- 8754  applyText
- 8763  fromFrance
- 8771  fromOSM
- 8790  close
- 8791  render
- 8799  pick
- 8807  search
- 8843  etape
+ 7406  goTab
+ 7433  lang
+ 7443  img
+ 7468  stop
+ 7499  upd
+ 7525  apply
+ 7544  T
+ 7545  nm
+ 7546  renderQuiz
+ 7552  mark
+ 7558  save
+ 7605  mail
+ 7760  backLbl
+ 7765  toc
+ 7772  show
+ 7779  openLegal
+ 7787  hideLegal
+ 7788  closeLegal
+ 7816  cur
+ 7825  paint
+ 7850  lang
+ 7855  applyUI
+ 7862  setLang
+ 7882  syncStory
+ 7916  ensureStoryFor
+ 7932  recompose
+ 7946  addInput
+ 7965  removePhoto
+ 8018  saveLink
+ 8040  openFromLink
+ 8050  set
+ 8068  trHide
+ 8070  trackOverlay
+ 8078  close
+ 8117  ouvrir
+ 8143  ekLabel
+ 8154  drawEbar
+ 8179  coach
+ 8185  done
+ 8191  goTab
+ 8200  draw
+ 8228  payLabel
+ 8270  optTotal
+ 8272  drawOpts
+ 8297  fillOptImgs
+ 8310  pickOptPhoto
+ 8333  selectFormat
+ 8342  highlightPal
+ 8347  setLang
+ 8362  lang
+ 8375  spineColors
+ 8402  sampleCover
+ 8421  auto
+ 8422  build
+ 8429  name
+ 8445  words
+ 8452  apply
+ 8479  build
+ 8488  nst70
+ 8508  names
+ 8509  renderLive
+ 8522  flowMode
+ 8531  exifDate
+ 8541  readAscii
+ 8542  scan
+ 8559  addPhotos
+ 8568  remap
+ 8569  applyOrder
+ 8582  movePhoto
+ 8585  sortByDate
+ 8594  renderPhotosPlus
+ 8633  startGenAnim
+ 8645  tick
+ 8653  stopGenAnim
+ 8655  runGeneration
+ 8660  noel
+ 8664  fill
+ 8667  renderSummary
+ 8680  syncPrice
+ 8691  goTab
+ 8713  setLang
+ 8730  lang
+ 8761  applyText
+ 8770  fromFrance
+ 8778  fromOSM
+ 8797  close
+ 8798  render
+ 8806  pick
+ 8814  search
+ 8850  etape
 
 ## api/
 
