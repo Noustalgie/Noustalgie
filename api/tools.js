@@ -13,6 +13,7 @@ const H = {
   indexnow: require('./_fn/indexnow'),
   'printapi-hook': require('./_fn/printapi-hook'),
   sante: require('./_fn/sante'),
+  alerte: require('./_fn/alerte'),
 };
 const ALIAS = { 'order-status': 'track' };
 

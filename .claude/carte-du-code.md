@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (8890 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = n
 - lignes 1727-1830 : <script type="application/ld+json"> (6 Ko)
 - lignes 2394-4566 : <script> (189 Ko)
 - lignes 4567-5892 : <script> (122 Ko)
-- lignes 5893-8843 : <script> (255 Ko)
-- lignes 8844-8872 : <script> (2 Ko)
+- lignes 5893-8858 : <script> (256 Ko)
+- lignes 8859-8887 : <script> (2 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -63,12 +63,12 @@ Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = n
  7078  4. Sauvegarde locale (IndexedDB : photos comprises)
  7113  5. Impression : photos en pleine résolution + PDF hébergé
  7348  6. Paiement
- 8374  1. Livre 3D réutilisable
- 8495  2. Aperçu en direct pendant la création (ordinateur)
- 8529  3. Photos : date de prise de vue, couverture, glisser-déposer
- 8631  4. Génération vivante : leurs photos se posent dans un livre
- 8657  5. Récapitulatif de commande avec LEUR couverture
- 8695  6. Finitions : apparition au défilement, page tournée
+ 8389  1. Livre 3D réutilisable
+ 8510  2. Aperçu en direct pendant la création (ordinateur)
+ 8544  3. Photos : date de prise de vue, couverture, glisser-déposer
+ 8646  4. Génération vivante : leurs photos se posent dans un livre
+ 8672  5. Récapitulatif de commande avec LEUR couverture
+ 8710  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -369,100 +369,102 @@ Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = n
  7316  doc
  7317  tries
  7358  processPayment
- 7406  goTab
- 7433  lang
- 7443  img
- 7468  stop
- 7499  upd
- 7525  apply
- 7544  T
- 7545  nm
- 7546  renderQuiz
- 7552  mark
- 7558  save
- 7605  mail
- 7760  backLbl
- 7765  toc
- 7772  show
- 7779  openLegal
- 7787  hideLegal
- 7788  closeLegal
- 7816  cur
- 7825  paint
- 7850  lang
- 7855  applyUI
- 7862  setLang
- 7882  syncStory
- 7916  ensureStoryFor
- 7932  recompose
- 7946  addInput
- 7965  removePhoto
- 8018  saveLink
- 8040  openFromLink
- 8050  set
- 8068  trHide
- 8070  trackOverlay
- 8078  close
- 8117  ouvrir
- 8143  ekLabel
- 8154  drawEbar
- 8179  coach
- 8185  done
- 8191  goTab
- 8200  draw
- 8228  payLabel
- 8270  optTotal
- 8272  drawOpts
- 8297  fillOptImgs
- 8310  pickOptPhoto
- 8333  selectFormat
- 8342  highlightPal
- 8347  setLang
- 8362  lang
- 8375  spineColors
- 8402  sampleCover
- 8421  auto
- 8422  build
- 8429  name
- 8445  words
- 8452  apply
- 8479  build
- 8488  nst70
- 8508  names
- 8509  renderLive
- 8522  flowMode
- 8531  exifDate
- 8541  readAscii
- 8542  scan
- 8559  addPhotos
- 8568  remap
- 8569  applyOrder
- 8582  movePhoto
- 8585  sortByDate
- 8594  renderPhotosPlus
- 8633  startGenAnim
- 8645  tick
- 8653  stopGenAnim
- 8655  runGeneration
- 8660  noel
- 8664  fill
- 8667  renderSummary
- 8680  syncPrice
- 8691  goTab
- 8713  setLang
- 8730  lang
- 8761  applyText
- 8770  fromFrance
- 8778  fromOSM
- 8797  close
- 8798  render
- 8806  pick
- 8814  search
- 8850  etape
+ 7411  goTab
+ 7438  lang
+ 7448  img
+ 7473  stop
+ 7504  upd
+ 7530  apply
+ 7549  T
+ 7550  nm
+ 7551  renderQuiz
+ 7557  mark
+ 7563  save
+ 7610  mail
+ 7765  backLbl
+ 7770  toc
+ 7777  show
+ 7784  openLegal
+ 7792  hideLegal
+ 7793  closeLegal
+ 7821  cur
+ 7830  paint
+ 7855  lang
+ 7860  applyUI
+ 7867  setLang
+ 7887  syncStory
+ 7921  ensureStoryFor
+ 7937  recompose
+ 7951  addInput
+ 7970  removePhoto
+ 7987  selectPricing
+ 8033  saveLink
+ 8055  openFromLink
+ 8065  set
+ 8083  trHide
+ 8085  trackOverlay
+ 8093  close
+ 8132  ouvrir
+ 8158  ekLabel
+ 8169  drawEbar
+ 8194  coach
+ 8200  done
+ 8206  goTab
+ 8215  draw
+ 8243  payLabel
+ 8285  optTotal
+ 8287  drawOpts
+ 8312  fillOptImgs
+ 8325  pickOptPhoto
+ 8348  selectFormat
+ 8357  highlightPal
+ 8362  setLang
+ 8377  lang
+ 8390  spineColors
+ 8417  sampleCover
+ 8436  auto
+ 8437  build
+ 8444  name
+ 8460  words
+ 8467  apply
+ 8494  build
+ 8503  nst70
+ 8523  names
+ 8524  renderLive
+ 8537  flowMode
+ 8546  exifDate
+ 8556  readAscii
+ 8557  scan
+ 8574  addPhotos
+ 8583  remap
+ 8584  applyOrder
+ 8597  movePhoto
+ 8600  sortByDate
+ 8609  renderPhotosPlus
+ 8648  startGenAnim
+ 8660  tick
+ 8668  stopGenAnim
+ 8670  runGeneration
+ 8675  noel
+ 8679  fill
+ 8682  renderSummary
+ 8695  syncPrice
+ 8706  goTab
+ 8728  setLang
+ 8745  lang
+ 8776  applyText
+ 8785  fromFrance
+ 8793  fromOSM
+ 8812  close
+ 8813  render
+ 8821  pick
+ 8829  search
+ 8865  etape
 
 ## api/
 
 - api/_fn/album.js (107 lignes) api/album.js — « Recevoir le lien de mon album »
+- api/_fn/alerte.js (34 lignes) /api/tools?fn=alerte — un client bloqué au moment de payer : email à Gabin avec l'erreur exacte et le contexte
 - api/_fn/cancel.js (28 lignes) 
 - api/_fn/carte.js (239 lignes) /api/carte?q=Lille : plan du lieu de rencontre pour la page « Là où tout a commencé ».
 - api/_fn/indexnow.js (24 lignes) /api/indexnow (cron Vercel quotidien, cf. vercel.json) : signale à IndexNow (Bing, qui sert à ChatGPT Search e
@@ -482,5 +484,5 @@ Générée automatiquement (8875 lignes). Ouvrir une zone : Read avec offset = n
 - api/create-checkout.js (175 lignes) api/create-checkout.js — création de la session Stripe
 - api/generate-pdf.js (101 lignes) api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
 - api/prodigi-webhook.js (88 lignes) api/prodigi-webhook.js — callbacks Prodigi (expédition → email de suivi au client)
-- api/tools.js (27 lignes) api/tools.js — petites routes regroupées en une seule fonction
+- api/tools.js (28 lignes) api/tools.js — petites routes regroupées en une seule fonction
 - api/webhook.js (292 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,
