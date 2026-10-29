@@ -38,6 +38,8 @@
     document.head.appendChild(t);
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
+    // Mode de consentement de Google : la balise n'est chargée qu'après « Accepter », l'accord est donc transmis tel quel
+    window.gtag('consent', 'default', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' });
     window.gtag('js', new Date());
     window.gtag('config', ADS);
   }
