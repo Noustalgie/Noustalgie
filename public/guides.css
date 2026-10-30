@@ -192,3 +192,20 @@ h1 em,h2 em{font-weight:400;}
 .g-legal table{width:100%;min-width:520px;border-collapse:collapse;font:400 15px/1.5 var(--ui);}
 .g-legal th,.g-legal td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
 .g-legal th{font-weight:600;color:var(--ink);}
+
+/* Calculateurs (noces, jours ensemble), listes courtes en tableau, lettres */
+.g-calc{margin:24px 0 8px;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--soft);}
+.g-calc label{display:block;margin-bottom:10px;font:600 15px/1.35 var(--ui);color:var(--ink);}
+.g-calc input{width:100%;max-width:280px;height:50px;padding:0 14px;border:1px solid var(--line2);border-radius:12px;background:#fff;font:500 16px/1 var(--ui);color:var(--ink);}
+.g-calc input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
+.g-calc output{display:block;font:400 16px/1.6 var(--ui);color:#3d3935;}
+.g-calc output:not(:empty){margin-top:18px;}
+.g-calc output strong{color:var(--ink);font-weight:600;}
+.g-calc output ul{margin:10px 0 0;padding-left:1.2em;}
+.g-body blockquote{margin:20px 0;padding:18px 22px;border-left:2px solid var(--ink);background:var(--soft);}
+.g-body blockquote p{margin:0 0 10px;}
+.g-body blockquote p:last-child{margin-bottom:0;}
+@media (max-width:760px){
+  .g-table.g-liste tr{display:table-row;padding:0;border:0;}
+  .g-table.g-liste td{display:table-cell;padding:10px 14px 10px 0;border-bottom:1px solid var(--line);}
+}
