@@ -155,7 +155,7 @@
   </url>
   <url>
     <loc>https://noustalgie.fr/guides</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -239,7 +239,7 @@
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-anniversaire-de-mariage</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
       <image:image>
@@ -248,7 +248,7 @@
   </url>
   <url>
     <loc>https://noustalgie.fr/cadeau-1-an-de-mariage</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
       <image:image>
@@ -305,5 +305,47 @@
     <lastmod>2026-10-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/noces-de-mariage</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/noces-de-coton</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/noces-de-cuir</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/noces-de-papier</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/anniversaire-de-rencontre</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/questions-couple</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://noustalgie.fr/lettre-d-amour</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
