@@ -125,11 +125,17 @@ async def jouer(nav, port, api, c, captures):
         await pg.fill('#name1', 'Emma')
         await pg.fill('#name2', 'Hugo')
         await pg.fill('#meetDate', 'juin 2021')
-        await pg.click('details[data-mq="city"] summary')
-        await pg.fill('#qCity', 'Lille')
+        if not c['tel']:                                   # sur téléphone, « Votre magazine » est à l'étape Photos
+            await pg.click('details[data-mq="city"] summary')
+            await pg.fill('#qCity', 'Lille')
         await etape('questionnaire')
         await pg.click('#panel0 .btn-row .btn-gold')
         await pg.wait_for_timeout(800)
+        if c['tel']:
+            if not await pg.evaluate("!!document.querySelector('#panel1 #mqCard')"):
+                pb.append('téléphone : les rubriques « Votre magazine » ne sont pas à l’étape Photos')
+            await pg.click('details[data-mq="city"] summary')
+            await pg.fill('#qCity', 'Lille')
         await pg.set_input_files('#dz input[type=file]', fichiers)
         if not await attendre(f"S.photos.length >= {c['photos']} && S.photos.every(p => p.data || p.failed)", 60, 'envoi des photos'):
             return c['nom'], pb, js, req
