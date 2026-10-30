@@ -42,7 +42,7 @@ li::before{content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;border
 <script>
 (function () {
   // Commande payée : l'album en cours est effacé de l'appareil
-  function clearAlbum() { try { var r = indexedDB.open('noustalgie', 1); r.onsuccess = function () { try { var d = r.result; if (d.objectStoreNames.contains('kv')) d.transaction('kv', 'readwrite').objectStore('kv').delete('album'); } catch (e) {} }; } catch (e) {} try { localStorage.removeItem('nst_log'); } catch (e) {} }
+  function clearAlbum() { try { var r = indexedDB.open('noustalgie', 1); r.onsuccess = function () { try { var d = r.result; if (d.objectStoreNames.contains('kv')) d.transaction('kv', 'readwrite').objectStore('kv').delete('album'); } catch (e) {} }; } catch (e) {} try { localStorage.removeItem('nst_log'); sessionStorage.removeItem('nst_retour'); } catch (e) {} }
   function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   var id = new URLSearchParams(location.search).get('session_id');
   if (!id) return;

@@ -27,6 +27,12 @@ python3 outils/parcours-commande.py
 ```
 Joue la commande comme un client sur 24 cas (formats, styles, options, pays, langues, code promo, format changé après la composition, téléphone) avec le vrai code serveur, PDFShift/Stripe/Print API simulés. Tous les cas doivent être OK : un échec est un client bloqué ou mal facturé. Un nouveau bug trouvé chez un client devient un nouveau cas dans la liste `CAS`.
 
+Si la modification touche le questionnaire, l'import des photos, la création de l'album, l'éditeur, l'étape Commander ou le retour depuis Stripe :
+```bash
+python3 outils/parcours-client.py > /tmp/parcours-client.txt 2>&1; tail -20 /tmp/parcours-client.txt
+```
+Le parcours entier en vrais clics, sur téléphone et ordinateur (12 cas, environ 15 minutes) : questionnaire, vraies photos, création par l'IA (simulée, et en panne), aperçu, formulaire, options, paiement, retour depuis Stripe (bouton Précédent et page « Paiement annulé »), photo refusée par le réseau, client allemand. `--cas N` pour un seul cas, `--captures DIR` pour voir chaque étape. Ne pas couper la sortie avec `| head`.
+
 Si la modification est visuelle : `python3 outils/rendu.py --sortie /tmp/rendu` puis regarder les tranches `/tmp/rendu_1440_part*.png` et `/tmp/rendu_390_part*.png`.
 
 ## 3. Committer et ouvrir la PR

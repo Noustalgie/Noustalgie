@@ -7,7 +7,7 @@ Object.assign(process.env, { CLOUDINARY_CLOUD_NAME: 'daxkn7pyb', CLOUDINARY_API_
   STRIPE_SECRET_KEY: 'sk_test', PRINTAPI_CLIENT_ID: 'c', PRINTAPI_SECRET: 's', PROMO_CODES: 'MOITIE:50' });
 delete process.env.NOTIFY_EMAIL; delete process.env.RESEND_API_KEY;
 
-let dernierStripe = null, n = 0;
+let dernierStripe = null, n = 0, basseDef = 0;   // basseDef : photos glissées dans le PDF en data: (version écran) faute de version HD
 https.request = (opts, cb) => {
   const req = new EventEmitter(); let body = '';
   req.write = b => { body += b; }; req.setTimeout = () => {}; req.destroy = () => {};
@@ -24,17 +24,35 @@ https.request = (opts, cb) => {
 };
 https.get = (o, cb) => { const r = https.request(Object.assign({ method: 'GET' }, o), cb); r.end(); return r; };
 
-const H = { '/api/generate-pdf': require(R + 'api/generate-pdf.js'), '/api/create-checkout': require(R + 'api/create-checkout.js'), '/api/promo': require(R + 'api/tools.js') };
+const H = { '/api/generate-pdf': require(R + 'api/generate-pdf.js'), '/api/create-checkout': require(R + 'api/create-checkout.js'), '/api/promo': require(R + 'api/tools.js'),
+  '/api/sign-upload': require(R + 'api/tools.js') };
+
+// IA simulée (réponse au format OpenAI) : légendes, histoire ; « panne » renvoie une erreur 500 comme un OpenAI indisponible
+let ia = 'ok';
+const HISTOIRE = { title: 'Emma & Hugo', chapters: ['Le début', 'Nos jours ordinaires', 'Ce qu’on construit', 'Et maintenant', 'Toujours'].map(t => ({ title: t, text: 'Un texte de test écrit par l’IA simulée pour ce chapitre.' })),
+  notes: Array.from({ length: 8 }, (_, i) => `Mot doux ${i + 1}`), love: Array.from({ length: 8 }, (_, i) => `Chose ${i + 1}`), quote: 'Une citation.', film: 'Un film.',
+  disputes: ['Le lait', 'La série', 'La route', 'Le chauffage'], wishlist: ['Un voyage', 'Un lever de soleil', 'Danser', 'Cuisiner', 'Relire ce livre', 'Continuer'],
+  weather: 'Beau temps.', letter: 'Une lettre.', journal_prompt: 'Écrivez ici.', closing: 'À suivre.' };
+function reponseIA(body) {
+  const txt = JSON.stringify(body.messages || '');
+  const m = txt.match(/with exactly (\d+) items/);
+  const contenu = m ? { items: Array.from({ length: +m[1] }, (_, i) => ({ caption: `Légende ${i + 1}`, scene: 'une scène de test' })) } : HISTOIRE;
+  return { choices: [{ message: { content: JSON.stringify(contenu) } }] };
+}
 const alertes = [];
 http.createServer((rq, rs) => {
   let data = ''; rq.on('data', c => data += c); rq.on('end', () => {
     const u = new URL(rq.url, 'http://x'), envoyer = (code, j) => { rs.writeHead(code, { 'Content-Type': 'application/json' }); rs.end(JSON.stringify(j)); };
-    if (u.pathname === '/__dernier') { const d = { stripe: dernierStripe, alertes: alertes.splice(0) }; dernierStripe = null; return envoyer(200, d); }
+    if (u.pathname === '/__dernier') { const d = { stripe: dernierStripe, alertes: alertes.splice(0), basse_def: basseDef }; dernierStripe = null; basseDef = 0; return envoyer(200, d); }
     let body = {}; try { body = JSON.parse(data || '{}'); } catch (e) {}
     if (u.searchParams.get('fn') === 'alerte') { alertes.push(body); return envoyer(200, { ok: true }); }
+    if (u.pathname === '/__ia') { ia = u.searchParams.get('mode') || 'ok'; return envoyer(200, { ia }); }
+    if (u.pathname === '/api/chat' || u.pathname === '/api/compose') return ia === 'panne' ? envoyer(500, { error: { message: 'Service IA indisponible.' } }) : envoyer(200, reponseIA(body));
+    if (u.pathname === '/api/generate-pdf' && typeof body.html === 'string' && (!body.kind || body.kind === 'pa-inner')) basseDef = Math.max(basseDef, (body.html.match(/<img[^>]+src="data:image/g) || []).length);
     const h = H[u.pathname]; if (!h) return envoyer(200, {});
     const req = { method: rq.method, headers: { origin: 'https://noustalgie.fr', 'x-forwarded-for': '10.0.' + (++n % 250) + '.1' }, body, query: Object.fromEntries(u.searchParams), url: rq.url };
     if (u.pathname === '/api/promo') req.query.fn = 'promo';
+    if (u.pathname === '/api/sign-upload') req.query.fn = 'sign-upload';
     const res = { code: 200, setHeader() {}, status(c) { this.code = c; return this; }, json(j) { envoyer(this.code, j); return this; }, end() { rs.writeHead(this.code); rs.end(); return this; }, send(t) { rs.writeHead(this.code); rs.end(String(t)); return this; } };
     Promise.resolve(h(req, res)).catch(e => envoyer(500, { error: e.message }));
   });
