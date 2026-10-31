@@ -1649,6 +1649,15 @@ html body .ed-price-pp{font:400 13.5px/1.5 'Hanken Grotesk',system-ui,sans-serif
 html body .ed-price-card.feat .ed-price-pp{color:rgba(255,255,255,.78);}
 html body .nst-pal-pp{font:400 10.5px/1.3 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;margin-top:2px;}
 html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:none;cursor:pointer;text-align:center;font:400 14px 'Hanken Grotesk',system-ui,sans-serif;color:#5f5a54;text-decoration:underline;text-underline-offset:3px;padding:6px 0;}html body .nst-promo summary::-webkit-details-marker{display:none;}
+/* Encart « encore N photos pour le 36 pages » (étape Photos) */
+#nstUp36.nst-up36{margin:12px 0 4px;padding:16px 18px;border:1px solid #e4dfd7;border-radius:20px;background:#fff;}
+#nstUp36 p{margin:0 0 12px;font:500 15px/1.45 'Hanken Grotesk',system-ui,sans-serif;color:#1c1a18;}
+#nstUp36 div{display:flex;flex-wrap:wrap;gap:8px;}
+#nstUp36 button{min-height:44px;padding:0 18px;border-radius:999px;font:600 14px/1 'Hanken Grotesk',system-ui,sans-serif;cursor:pointer;}
+#nstUp36 .nst-up-main{background:#1c1a18;color:#fff;border:1px solid #1c1a18;}
+#nstUp36 .nst-up-alt{background:#fff;color:#1c1a18;border:1px solid #d6d0c6;}
+#nstUp36.nst-up-flash{animation:nstUpFlash 1.2s ease;}
+@keyframes nstUpFlash{0%,100%{box-shadow:0 0 0 0 rgba(28,26,24,0);}30%{box-shadow:0 0 0 4px rgba(28,26,24,.18);}}
 </style>
 <script type="application/ld+json">
 {
@@ -5925,6 +5934,7 @@ fr: {
   save_title: 'Gardez votre album', save_sub: 'Recevez le lien par email pour le reprendre plus tard, sur n’importe quel appareil.', save_email: 'Votre email', save_remind: 'Me le rappeler demain si je n’ai pas terminé', save_btn: 'Recevoir le lien',
   save_busy: 'Enregistrement… {0}/{1}', save_ok: 'C’est envoyé ! Pensez à regarder vos spams.', save_fail: 'L’enregistrement a échoué. Réessayez dans un instant.', save_note: 'Vos photos sont conservées 30 jours, uniquement pour ce lien.',
   restore_busy: 'Ouverture de votre album…', restore_fail: 'Impossible d’ouvrir cet album : {0}',
+  up36: 'Ajoutez encore {0} photos pour passer au livre de 36 pages (+10 €) : plus de pages, plus de souvenirs.', up36_1: 'Ajoutez encore 1 photo pour passer au livre de 36 pages (+10 €) : plus de pages, plus de souvenirs.', up36_ok: 'Vous avez assez de photos pour le livre de 36 pages (+10 €).', up36_add: 'Ajouter des photos', up36_go: 'Passer au 36 pages', up36_24: 'Créer en 24 pages',
   add_photos: 'Ajouter des photos', remove_photo: 'Retirer cette photo du livre', remove_min: 'Il faut garder au moins {0} photos pour ce format.', recompose: 'Recomposition de votre livre…',
   format_lbl: 'Format', format_opt: '{0} pages', format_min: 'Il faut au moins {0} photos pour {1} pages.', format_adding: 'Écriture des pages supplémentaires…', drag_hint: 'Glissez les miniatures pour réordonner les pages.', photos_lbl: 'Photos',
   tr_title: 'Suivre ma commande', tr_sub: 'Entrez le numéro reçu par email (NOUST-…) et l’adresse email utilisée pour la commande.', tr_ref: 'Numéro de commande', tr_email: 'Email', tr_btn: 'Voir le suivi',
@@ -5954,6 +5964,7 @@ en: {
   save_title: 'Keep your album', save_sub: 'Get the link by email to pick it up later, on any device.', save_email: 'Your email', save_remind: 'Remind me tomorrow if I haven’t finished', save_btn: 'Send me the link',
   save_busy: 'Saving… {0}/{1}', save_ok: 'Sent! Check your spam folder too.', save_fail: 'Saving failed. Please try again in a moment.', save_note: 'Your photos are kept for 30 days, only for this link.',
   restore_busy: 'Opening your album…', restore_fail: 'Unable to open this album: {0}',
+  up36: 'Add {0} more photos to upgrade to the 36-page book (+€10): more pages, more memories.', up36_1: 'Add 1 more photo to upgrade to the 36-page book (+€10): more pages, more memories.', up36_ok: 'You have enough photos for the 36-page book (+€10).', up36_add: 'Add photos', up36_go: 'Switch to 36 pages', up36_24: 'Create with 24 pages',
   add_photos: 'Add photos', remove_photo: 'Remove this photo from the book', remove_min: 'You need to keep at least {0} photos for this format.', recompose: 'Recomposing your book…',
   format_lbl: 'Format', format_opt: '{0} pages', format_min: 'You need at least {0} photos for {1} pages.', format_adding: 'Writing the extra pages…', drag_hint: 'Drag the thumbnails to reorder pages.', photos_lbl: 'Photos',
   tr_title: 'Track my order', tr_sub: 'Enter the number from your email (NOUST-…) and the email address used for the order.', tr_ref: 'Order number', tr_email: 'Email', tr_btn: 'Track',
@@ -5983,6 +5994,7 @@ de: {
   save_title: 'Album behalten', save_sub: 'Erhaltet den Link per E-Mail, um später auf jedem Gerät weiterzumachen.', save_email: 'Eure E-Mail', save_remind: 'Morgen erinnern, falls ich nicht fertig bin', save_btn: 'Link erhalten',
   save_busy: 'Wird gespeichert… {0}/{1}', save_ok: 'Gesendet! Schaut auch im Spam-Ordner nach.', save_fail: 'Speichern fehlgeschlagen. Bitte gleich erneut versuchen.', save_note: 'Eure Fotos werden 30 Tage aufbewahrt, nur für diesen Link.',
   restore_busy: 'Album wird geöffnet…', restore_fail: 'Album kann nicht geöffnet werden: {0}',
+  up36: 'Noch {0} Fotos, und ihr bekommt das Buch mit 36 Seiten (+10 €): mehr Seiten, mehr Erinnerungen.', up36_1: 'Noch 1 Foto, und ihr bekommt das Buch mit 36 Seiten (+10 €): mehr Seiten, mehr Erinnerungen.', up36_ok: 'Ihr habt genug Fotos für das Buch mit 36 Seiten (+10 €).', up36_add: 'Fotos hinzufügen', up36_go: 'Zu 36 Seiten wechseln', up36_24: 'Mit 24 Seiten erstellen',
   add_photos: 'Fotos hinzufügen', remove_photo: 'Foto aus dem Buch entfernen', remove_min: 'Für dieses Format braucht ihr mindestens {0} Fotos.', recompose: 'Buch wird neu zusammengestellt…',
   format_lbl: 'Format', format_opt: '{0} Seiten', format_min: 'Für {1} Seiten braucht ihr mindestens {0} Fotos.', format_adding: 'Zusätzliche Seiten werden geschrieben…', drag_hint: 'Miniaturen ziehen, um Seiten umzusortieren.', photos_lbl: 'Fotos',
   tr_title: 'Bestellung verfolgen', tr_sub: 'Gebt die Nummer aus der E-Mail (NOUST-…) und die bei der Bestellung verwendete E-Mail an.', tr_ref: 'Bestellnummer', tr_email: 'E-Mail', tr_btn: 'Anzeigen',
@@ -6012,6 +6024,7 @@ es: {
   save_title: 'Guarda tu álbum', save_sub: 'Recibe el enlace por email para retomarlo más tarde, en cualquier dispositivo.', save_email: 'Tu email', save_remind: 'Recordármelo mañana si no he terminado', save_btn: 'Recibir el enlace',
   save_busy: 'Guardando… {0}/{1}', save_ok: '¡Enviado! Revisa también el correo no deseado.', save_fail: 'No se pudo guardar. Inténtalo de nuevo.', save_note: 'Tus fotos se conservan 30 días, solo para este enlace.',
   restore_busy: 'Abriendo tu álbum…', restore_fail: 'No se puede abrir este álbum: {0}',
+  up36: 'Añade {0} fotos más para pasar al libro de 36 páginas (+10 €): más páginas, más recuerdos.', up36_1: 'Añade 1 foto más para pasar al libro de 36 páginas (+10 €): más páginas, más recuerdos.', up36_ok: 'Tienes fotos suficientes para el libro de 36 páginas (+10 €).', up36_add: 'Añadir fotos', up36_go: 'Pasar a 36 páginas', up36_24: 'Crear con 24 páginas',
   add_photos: 'Añadir fotos', remove_photo: 'Quitar esta foto del libro', remove_min: 'Debes conservar al menos {0} fotos para este formato.', recompose: 'Recomponiendo tu libro…',
   format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Necesitas al menos {0} fotos para {1} páginas.', format_adding: 'Escribiendo las páginas adicionales…', drag_hint: 'Arrastra las miniaturas para reordenar las páginas.', photos_lbl: 'Fotos',
   tr_title: 'Seguir mi pedido', tr_sub: 'Introduce el número recibido por email (NOUST-…) y el email usado en el pedido.', tr_ref: 'Número de pedido', tr_email: 'Email', tr_btn: 'Ver el seguimiento',
@@ -6041,6 +6054,7 @@ pt: {
   save_title: 'Guarda o teu álbum', save_sub: 'Recebe o link por email para o retomar mais tarde, em qualquer dispositivo.', save_email: 'O teu email', save_remind: 'Lembrar-me amanhã se não tiver terminado', save_btn: 'Receber o link',
   save_busy: 'A guardar… {0}/{1}', save_ok: 'Enviado! Vê também o correio não desejado.', save_fail: 'Não foi possível guardar. Tenta de novo.', save_note: 'As tuas fotos são guardadas 30 dias, apenas para este link.',
   restore_busy: 'A abrir o teu álbum…', restore_fail: 'Não é possível abrir este álbum: {0}',
+  up36: 'Adiciona mais {0} fotos para passar ao livro de 36 páginas (+10 €): mais páginas, mais memórias.', up36_1: 'Adiciona mais 1 foto para passar ao livro de 36 páginas (+10 €): mais páginas, mais memórias.', up36_ok: 'Tens fotos suficientes para o livro de 36 páginas (+10 €).', up36_add: 'Adicionar fotos', up36_go: 'Passar a 36 páginas', up36_24: 'Criar com 24 páginas',
   add_photos: 'Adicionar fotos', remove_photo: 'Retirar esta foto do livro', remove_min: 'Tens de manter pelo menos {0} fotos para este formato.', recompose: 'A recompor o teu livro…',
   format_lbl: 'Formato', format_opt: '{0} páginas', format_min: 'Precisas de pelo menos {0} fotos para {1} páginas.', format_adding: 'A escrever as páginas adicionais…', drag_hint: 'Arrasta as miniaturas para reordenar as páginas.', photos_lbl: 'Fotos',
   tr_title: 'Seguir a minha encomenda', tr_sub: 'Introduz o número recebido por email (NOUST-…) e o email usado na encomenda.', tr_ref: 'Número da encomenda', tr_email: 'Email', tr_btn: 'Ver o seguimento',
@@ -6362,7 +6376,26 @@ window.renderPhotos = function () {
   const minPh = window.getMinPhotos(), ok = S.photos.length >= minPh;
   c.className = 'count-bar ' + (ok ? 'c-ok' : 'c-warn');
   c.textContent = ok ? `✓ ${S.photos.length}${T.photos_ok || ' photos prêtes'}` : `${S.photos.length}/${minPh}${T.photos_warn || ''}${Math.max(0, minPh - S.photos.length)}${T.photos_warn2 || ''}`;
+  drawUp36(c);
 };
+// 14 à 19 photos : plutôt que de se rabattre sur 24 pages, proposer d'en ajouter quelques-unes pour le 36 pages (+10 €)
+function drawUp36(c) {
+  let box = $('nstUp36');
+  const n = S.photos.length, sel = nPagesSel(), min24 = NA.minPhotos(24), min36 = NA.minPhotos(36), manque = min36 - n;
+  const voir = n >= min24 && (sel === 24 || (sel > 24 && n < NA.minPhotos(sel)));
+  if (!voir) { if (box) box.remove(); return; }
+  if (!box) { box = document.createElement('div'); box.id = 'nstUp36'; box.className = 'nst-up36'; c.insertAdjacentElement('afterend', box); }
+  const txt = manque > 0 ? (manque === 1 ? NA.t('up36_1') : NA.t('up36', manque)) : NA.t('up36_ok');
+  box.innerHTML = `<p>${esc(txt)}</p><div>`
+    + (manque > 0 ? `<button type="button" class="nst-up-main" data-up="add">+ ${esc(NA.t('up36_add'))}</button>` : `<button type="button" class="nst-up-main" data-up="go">${esc(NA.t('up36_go'))}</button>`)
+    + (sel !== 24 ? `<button type="button" class="nst-up-alt" data-up="24">${esc(NA.t('up36_24'))}</button>` : '') + '</div>';
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('#nstUp36 [data-up]'); if (!b) return;
+  const k = b.dataset.up;
+  if (k === 'add') { const f = document.querySelector('#dz input[type=file]'); if (f) f.click(); }
+  else if (k === 'go' || k === '24') { const n = k === 'go' ? 36 : 24; selectPricing(n, null); if (typeof highlightPal === 'function') highlightPal(n); renderPhotos(); if (k === '24') runGeneration(); }
+});
 window.getMinPhotos = () => NA.minPhotos(nPagesSel());
 
 /* ══ 2. Génération : histoire + légendes à partir des photos ══ */
@@ -6611,7 +6644,11 @@ window.runGeneration = async function () {
   if (NA.photosReady) await NA.photosReady();
   S.photos.filter(p => p.failed || !p.data).forEach(dropPhoto);        // on ne compose qu'avec les photos prêtes
   const min = NA.minPhotos(nPages);
-  if (S.photos.length < min) { alert(NA.t('gen_min', min, nPages, S.photos.length)); return; }
+  if (S.photos.length < min) {
+    const up = S.photos.length >= NA.minPhotos(24) && $('nstUp36');
+    if (up) { up.scrollIntoView({ behavior: 'smooth', block: 'center' }); up.classList.remove('nst-up-flash'); void up.offsetWidth; up.classList.add('nst-up-flash'); return; }
+    alert(NA.t('gen_min', min, nPages, S.photos.length)); return;
+  }
   const btn = $('btnGen'); if (btn) btn.disabled = true;
   goTab(2);
   const logBox = $('logBox'); if (logBox) { logBox.innerHTML = ''; logBox.style.display = 'none'; }
