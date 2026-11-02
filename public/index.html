@@ -1658,6 +1658,10 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
 #nstUp36 .nst-up-alt{background:#fff;color:#1c1a18;border:1px solid #d6d0c6;}
 #nstUp36.nst-up-flash{animation:nstUpFlash 1.2s ease;}
 @keyframes nstUpFlash{0%,100%{box-shadow:0 0 0 0 rgba(28,26,24,0);}30%{box-shadow:0 0 0 4px rgba(28,26,24,.18);}}
+/* Bandeau « ancien album » : texte long, en carte plutôt qu'en pilule */
+.nst-resume.nst-old{width:min(560px,calc(100% - 32px));box-sizing:border-box;border-radius:20px;justify-content:flex-start;padding:16px 18px;gap:10px;}
+.nst-resume.nst-old span{flex:1 1 100%;font-size:14.5px;line-height:1.45;}
+.nst-resume.nst-old button{min-height:42px;}
 </style>
 <script type="application/ld+json">
 {
@@ -5924,6 +5928,7 @@ fr: {
   text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA :', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
   layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
   move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
+  old_txt: 'Cet album a été créé avec notre ancienne mise en page. Le passer au nouveau style Magazine ? Vos photos et vos légendes sont gardées.', old_go: 'Passer au Magazine', old_keep: 'Garder l\'ancienne',
   resume_txt: 'Vous avez un album en cours :', resume_yes: 'Reprendre', resume_no: 'Plus tard',
   issue_txt: 'L’écriture automatique n’a pas répondu : votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
   gen_min: 'Il faut au moins {0} photos pour un album de {1} pages (vous en avez {2}).', g_analyze: 'Analyse de vos photos… {0}/{1}', g_read: 'Lecture de vos photos… {0}/{1}', g_write: 'Écriture de votre histoire…', g_fail: 'La composition n’a pas abouti ({0}).', g_retry: 'Relancer',
@@ -5954,6 +5959,7 @@ en: {
   text: 'Text', text_list: ' (one item per line)', ai_alt: 'Another wording by AI:', rw_short: 'Shorter', rw_tender: 'More tender', rw_funny: 'Funnier', rw_again: 'Another version', writing: 'Writing…', rw_fail: 'Rewriting is unavailable right now.',
   layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid', ly_spread: 'Double page', sp_make: 'Spread across both pages', sp_undo: 'Back to a single page', sp_note: 'The photo spans both facing pages. The middle falls into the binding, so avoid placing a face there.', sp_edge: 'A double page is possible from pages 3 and 4 up to the second-to-last pair of pages.', sp_text: 'The facing page contains text. Move it first, then try again.', sp_full: 'Not enough room to move the other photos from these two pages.', sp_move: 'A double page cannot be moved: go back to a single page first.',
   move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
+  old_txt: 'This album was made with our old layout. Switch it to the new Magazine style? Your photos and captions are kept.', old_go: 'Switch to Magazine', old_keep: 'Keep the old one',
   resume_txt: 'You have an album in progress:', resume_yes: 'Resume', resume_no: 'Later',
   issue_txt: 'Automatic writing did not respond: your album uses default texts. Tap a text to write it, or try the writing again.', issue_retry: 'Retry writing',
   gen_min: 'You need at least {0} photos for a {1}-page album (you have {2}).', g_analyze: 'Analysing your photos… {0}/{1}', g_read: 'Reading your photos… {0}/{1}', g_write: 'Writing your story…', g_fail: 'The album could not be composed ({0}).', g_retry: 'Try again',
@@ -5984,6 +5990,7 @@ de: {
   text: 'Text', text_list: ' (ein Eintrag pro Zeile)', ai_alt: 'Andere Formulierung per KI:', rw_short: 'Kürzer', rw_tender: 'Zärtlicher', rw_funny: 'Lustiger', rw_again: 'Andere Version', writing: 'Schreibt…', rw_fail: 'Umschreiben gerade nicht verfügbar.',
   layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster', ly_spread: 'Doppelseite', sp_make: 'Über die Doppelseite ziehen', sp_undo: 'Zurück zu einer Seite', sp_note: 'Das Foto erstreckt sich über beide gegenüberliegenden Seiten. Die Mitte liegt in der Bindung, platziert dort also kein Gesicht.', sp_edge: 'Eine Doppelseite ist ab den Seiten 3 und 4 bis zum vorletzten Seitenpaar möglich.', sp_text: 'Die gegenüberliegende Seite enthält Text. Verschiebt sie zuerst und versucht es dann erneut.', sp_full: 'Nicht genug Platz, um die anderen Fotos dieser beiden Seiten unterzubringen.', sp_move: 'Eine Doppelseite lässt sich nicht verschieben: Wechselt zuerst zurück zu einer Seite.',
   move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
+  old_txt: 'Dieses Album wurde mit unserem alten Layout erstellt. Auf den neuen Magazin-Stil umstellen? Eure Fotos und Bildunterschriften bleiben erhalten.', old_go: 'Zum Magazin-Stil', old_keep: 'Altes behalten',
   resume_txt: 'Ihr habt ein angefangenes Album:', resume_yes: 'Fortsetzen', resume_no: 'Später',
   issue_txt: 'Das automatische Schreiben hat nicht geantwortet: euer Album nutzt Standardtexte. Tippt auf einen Text, um ihn zu schreiben, oder versucht es erneut.', issue_retry: 'Erneut schreiben',
   gen_min: 'Für ein Album mit {1} Seiten braucht ihr mindestens {0} Fotos (ihr habt {2}).', g_analyze: 'Fotos werden analysiert… {0}/{1}', g_read: 'Fotos werden gelesen… {0}/{1}', g_write: 'Eure Geschichte wird geschrieben…', g_fail: 'Das Album konnte nicht erstellt werden ({0}).', g_retry: 'Erneut versuchen',
@@ -6014,6 +6021,7 @@ es: {
   text: 'Texto', text_list: ' (un elemento por línea)', ai_alt: 'Otra redacción con IA:', rw_short: 'Más corto', rw_tender: 'Más tierno', rw_funny: 'Más divertido', rw_again: 'Otra versión', writing: 'Escribiendo…', rw_fail: 'Reescritura no disponible por ahora.',
   layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula', ly_spread: 'Doble página', sp_make: 'Extender a doble página', sp_undo: 'Volver a una sola página', sp_note: 'La foto ocupa las dos páginas enfrentadas. El centro queda en la encuadernación: evitad colocar ahí una cara.', sp_edge: 'La doble página es posible desde las páginas 3 y 4 hasta el penúltimo par de páginas.', sp_text: 'La página de enfrente contiene texto. Movedla primero y volved a intentarlo.', sp_full: 'No hay sitio suficiente para recolocar las demás fotos de estas dos páginas.', sp_move: 'Una doble página no se puede mover: volved primero a una sola página.',
   move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
+  old_txt: 'Este álbum se creó con nuestro diseño antiguo. ¿Pasarlo al nuevo estilo Magazine? Tus fotos y textos de las fotos se conservan.', old_go: 'Pasar a Magazine', old_keep: 'Mantener el antiguo',
   resume_txt: 'Tienes un álbum en curso:', resume_yes: 'Retomar', resume_no: 'Más tarde',
   issue_txt: 'La escritura automática no respondió: tu álbum usa textos por defecto. Toca un texto para escribirlo o vuelve a intentarlo.', issue_retry: 'Volver a escribir',
   gen_min: 'Necesitas al menos {0} fotos para un álbum de {1} páginas (tienes {2}).', g_analyze: 'Analizando tus fotos… {0}/{1}', g_read: 'Leyendo tus fotos… {0}/{1}', g_write: 'Escribiendo vuestra historia…', g_fail: 'No se pudo componer el álbum ({0}).', g_retry: 'Reintentar',
@@ -6044,6 +6052,7 @@ pt: {
   text: 'Texto', text_list: ' (um item por linha)', ai_alt: 'Outra redação com IA:', rw_short: 'Mais curto', rw_tender: 'Mais terno', rw_funny: 'Mais divertido', rw_again: 'Outra versão', writing: 'A escrever…', rw_fail: 'Reescrita indisponível de momento.',
   layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha', ly_spread: 'Página dupla', sp_make: 'Estender à página dupla', sp_undo: 'Voltar a uma só página', sp_note: 'A foto ocupa as duas páginas frente a frente. O centro fica na encadernação: evitem colocar aí um rosto.', sp_edge: 'A página dupla é possível a partir das páginas 3 e 4 até ao penúltimo par de páginas.', sp_text: 'A página da frente contém texto. Movam-na primeiro e tentem de novo.', sp_full: 'Não há espaço suficiente para recolocar as outras fotos destas duas páginas.', sp_move: 'Uma página dupla não pode ser movida: voltem primeiro a uma só página.',
   move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
+  old_txt: 'Este álbum foi criado com o nosso antigo layout. Passá-lo para o novo estilo Magazine? As tuas fotos e legendas são mantidas.', old_go: 'Passar a Magazine', old_keep: 'Manter o antigo',
   resume_txt: 'Tens um álbum em curso:', resume_yes: 'Retomar', resume_no: 'Mais tarde',
   issue_txt: 'A escrita automática não respondeu: o teu álbum usa textos por defeito. Toca num texto para o escrever, ou tenta de novo.', issue_retry: 'Escrever de novo',
   gen_min: 'Precisas de pelo menos {0} fotos para um álbum de {1} páginas (tens {2}).', g_analyze: 'A analisar as tuas fotos… {0}/{1}', g_read: 'A ler as tuas fotos… {0}/{1}', g_write: 'A escrever a vossa história…', g_fail: 'Não foi possível compor o álbum ({0}).', g_retry: 'Tentar de novo',
@@ -7155,6 +7164,7 @@ async function offerResume() {
     if (typeof highlightPal === 'function') try { highlightPal(nPagesSel()); } catch (e) {}
     if (typeof updateFormatPrices === 'function') try { updateFormatPrices(); } catch (e) {}
     goTab(3);
+    proposerMagazine();
   };
   if (retour) {
     // Le client revient de Stripe sans avoir payé : il retrouve son album et le formulaire rempli, prêt à payer
@@ -7166,6 +7176,26 @@ async function offerResume() {
     if (NA.drawOpts) try { NA.drawOpts(); } catch (e) {}
     if (NA.payLabel) try { NA.payLabel(); } catch (e) {}
   }
+}
+// Album repris composé avant le style Magazine (19 octobre) : il se commandait tel quel, à l'ancienne mise en page
+// (commande du 1er novembre). On propose de le recomposer en Magazine avec les mêmes photos, légendes et réponses.
+function proposerMagazine() {
+  if (!Array.isArray(NA.pages) || !NA.pages.length || NA.pages.some(p => p && p.layout === 'mcover') || !S.story || !NA.info) return;
+  document.querySelectorAll('.nst-old').forEach(x => x.remove());
+  const bar = document.createElement('div'); bar.className = 'nst-resume nst-old';
+  bar.innerHTML = `<span>${esc(NA.t('old_txt'))}</span><button class="nst-r-yes">${esc(NA.t('old_go'))}</button><button class="nst-r-no">${esc(NA.t('old_keep'))}</button>`;
+  document.body.appendChild(bar);
+  bar.querySelector('.nst-r-no').onclick = () => bar.remove();
+  bar.querySelector('.nst-r-yes').onclick = () => {
+    bar.remove();
+    try {
+      commit();                                              // « Annuler » ramène l'ancienne version
+      S.story.mag = S.story.mag || {};
+      NA.pages = NA.plan(NA.pages.length, S.story, NA.info);
+      if (NA.theme === 'galerie') NA.theme = 'magazine';     // ancien style par défaut
+      NA.cur = 0; drawAll(); saveLocal();
+    } catch (e) { console.warn('[Noustalgie] passage au Magazine', e); }
+  };
 }
 // Safari remet la page telle qu'avant Stripe (bouton grisé « Redirection… ») : on le réactive
 window.addEventListener('pageshow', e => {
@@ -7410,7 +7440,7 @@ window.generateAlbumPDF = async function (onStep, opts) {
 NA.coverHtml = coverHtml; NA.innerHtml = innerHtml;
 NA.paCoverHtml = paCoverHtml; NA.paInnerHtml = paInnerHtml; NA.afficheHtml = afficheHtml; NA.cadreHtml = cadreHtml; NA.aimantHtml = aimantHtml; NA.optPage = optPage; NA.optSlot = optSlot; NA.docHtml = docHtml;
 NA.printHtml = printHtml;
-NA._ed = { drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, saveLocalSoon, coupleInfo, callAI, uploadPhotos, defaultStory, go, commit, updUndo,
+NA._ed = { proposerMagazine, drawAll, drawStage, drawStrip, drawTools, highlightSel, saveLocal, saveLocalSoon, coupleInfo, callAI, uploadPhotos, defaultStory, go, commit, updUndo,
   sel: () => ED.sel, clearSel: () => { ED.sel = null; }, isWide, nPagesSel, visible, pageName,
   select: s => { ED.sel = s; highlightSel(); drawTools(); revealStage(); } };
 
@@ -8156,7 +8186,7 @@ async function openFromLink(id) {
     history.replaceState(null, '', location.pathname + location.hash);
     ov.remove();
     const app = $('app'); if (app) app.scrollIntoView();
-    goTab(3); E.saveLocal();
+    goTab(3); E.saveLocal(); E.proposerMagazine();
   } catch (e) {
     ov.textContent = t('restore_fail', e.message === '404' ? '—' : e.message);
     setTimeout(() => ov.remove(), 6000);
