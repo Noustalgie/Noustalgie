@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Album photo de couple en magazine | Noustalgie</title>
+<meta name="description" content="Vos photos et votre histoire mises en page comme un magazine, en livre rigide 21 × 21 cm. Aperçu gratuit, dès 39,99 €, livraison offerte en 6 à 8 jours ouvrés."/>
+<meta name="robots" content="noindex, follow"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Noustalgie"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta property="og:title" content="L'album de votre couple, en magazine imprimé"/>
+<meta property="og:description" content="Vos photos et votre histoire mises en page comme un magazine. Aperçu gratuit, dès 39,99 €."/>
+<meta property="og:image" content="https://noustalgie.fr/img/exemple/og-noustalgie.jpg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="theme-color" content="#ffffff"/>
+<meta name="color-scheme" content="light"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/guides.css?v=20261030"/>
+<style>
+/* Page d'arrivée des publicités : une seule action, « Créer notre album » */
+.lp{max-width:1120px;margin:0 auto;padding:0 20px;}
+.lp-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,64px);align-items:center;padding:36px 0 56px;}
+.lp-hero h1{margin:0 0 18px;font:400 clamp(36px,5.2vw,62px)/1.04 var(--disp);letter-spacing:-.025em;text-wrap:balance;}
+.lp-hero h1 em{font-style:italic;}
+.lp-lead{margin:0 0 22px;max-width:46ch;font:400 18px/1.55 var(--ui);color:#3d3935;}
+.lp-facts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px;padding:0;list-style:none;}
+.lp-facts li{padding:7px 14px;border:1px solid var(--line2);border-radius:999px;background:#fff;font:500 14px/1.2 var(--ui);color:var(--ink);}
+.lp-note{margin:14px 0 0;font:400 14.5px/1.5 var(--ui);color:var(--mut);}
+.lp-cover{margin:0;justify-self:center;width:min(500px,100%);}
+.lp-cover img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;box-shadow:0 34px 60px -34px rgba(40,30,20,.55);}
+.lp-cover figcaption{margin-top:12px;font:400 14px/1.4 var(--ui);color:var(--mut);}
+.lp-noel{margin:0 0 8px;padding:14px 18px;border:1px solid var(--ink);border-radius:20px;font:500 15.5px/1.45 var(--ui);color:var(--ink);background:#fff;}
+.lp-sec{padding:56px 0 8px;border-top:1px solid var(--line);}
+.lp-sec h2{margin:0 0 10px;font:400 clamp(28px,3.6vw,42px)/1.1 var(--disp);letter-spacing:-.018em;}
+.lp-sec > p{margin:0 0 24px;max-width:58ch;color:var(--mut);font-size:16.5px;}
+.lp-strip{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 18px;margin:0 -20px;padding-left:20px;padding-right:20px;scrollbar-width:thin;}
+.lp-strip figure{flex:0 0 min(62vw,240px);margin:0;scroll-snap-align:start;}
+.lp-strip img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:var(--soft);box-shadow:0 18px 30px -22px rgba(40,30,20,.5);}
+.lp-strip figcaption{margin-top:10px;font:500 14px/1.35 var(--ui);color:var(--ink);}
+.lp-video{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;}
+.lp-video video{display:block;width:100%;height:auto;aspect-ratio:9/16;background:#000;border-radius:0;}
+.lp-video ul{margin:0;padding-left:1.2em;}
+.lp-video li{margin:8px 0;color:#3d3935;}
+.lp-trust{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:8px 0 0;padding:0;list-style:none;}
+.lp-trust li{padding:20px 22px;border:1px solid var(--line);border-radius:20px;background:#fff;}
+.lp-trust b{display:block;margin-bottom:6px;font:600 16px/1.3 var(--ui);color:var(--ink);}
+.lp-trust span{font-size:15px;color:var(--mut);}
+.lp-offer a{text-decoration:none;color:inherit;display:block;}
+.lp-offer .g-card{height:100%;transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
+.lp-offer a:hover .g-card{transform:translateY(-2px);box-shadow:0 18px 30px -22px rgba(40,30,20,.45);}
+.lp-offer em{display:block;margin-top:12px;font:600 14px/1 var(--ui);font-style:normal;text-decoration:underline;text-underline-offset:3px;}
+.lp-sticky{position:fixed;left:16px;right:16px;bottom:16px;z-index:50;display:none;}
+.lp-sticky .g-btn{width:100%;justify-content:center;box-shadow:0 14px 30px -12px rgba(28,26,24,.6);}
+.lp-sticky.on{display:block;}
+@media (max-width:760px){
+  .lp-hero{grid-template-columns:minmax(0,1fr);padding:20px 0 40px;}
+  .lp-cover{width:min(340px,92%);}
+  .lp-hero h1{font-size:34px;margin-bottom:14px;}
+  .lp-lead{font-size:16.5px;margin-bottom:18px;}
+  .lp-facts{margin-bottom:20px;}
+  .lp-facts li{font-size:13.5px;padding:6px 12px;}
+  .lp-video{grid-template-columns:minmax(0,1fr);}
+  .lp-video video{width:min(300px,80%);margin:0 auto;}
+  .lp-trust{grid-template-columns:minmax(0,1fr);}
+  .lp-foot-space{height:84px;}
+}
+@media (min-width:761px){ .lp-sticky{display:none!important;} }
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="g-nav"><a class="g-logo" href="/">Noustalgie</a><a class="g-cta" href="/#app">Créer notre album</a></header>
+<main class="lp">
+
+<section class="lp-hero">
+<div>
+<h1>Votre histoire d'amour, <em>en magazine imprimé</em></h1>
+<p class="lp-lead">Ajoutez vos photos, répondez à quelques questions sur votre couple : nous mettons tout en page comme un vrai magazine, à vos prénoms. Vous voyez l'album complet avant de payer.</p>
+<ul class="lp-facts">
+<li>Dès 39,99 €</li>
+<li>Livraison offerte</li>
+<li>Livre rigide 21 × 21 cm</li>
+<li>6 à 8 jours ouvrés</li>
+</ul>
+<a class="g-btn" href="/#app">Créer notre album <span aria-hidden="true">→</span></a>
+<p class="lp-note">Aperçu complet gratuit : vous ne payez que s'il vous plaît.</p>
+</div>
+<figure class="lp-cover"><img src="/img/exemple/album-couverture.jpg" alt="Album photo de couple Noustalgie au style magazine, couverture « Nous » avec la photo de Léa et Hugo, posé sur une table en bois" width="1200" height="1200" fetchpriority="high"/><figcaption>Exemple composé avec Noustalgie pour un couple fictif.</figcaption></figure>
+</section>
+
+<p class="lp-noel" id="lpNoel">Pour l'offrir à Noël, commandez avant le jeudi 10 décembre (livraison en France métropolitaine).</p>
+
+<section class="lp-sec">
+<h2>Ce que contient votre album</h2>
+<p>Chaque page est composée avec vos photos et vos mots. Les rubriques que vous ne remplissez pas laissent simplement plus de place aux photos.</p>
+<div class="lp-strip">
+<figure><img src="/img/exemple/album/mini/page-01.jpg" alt="Couverture du magazine aux prénoms du couple" width="360" height="360" loading="lazy"/><figcaption>La couverture, à vos prénoms</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-04.jpg" alt="Plan de la ville de la rencontre dans un cœur" width="360" height="360" loading="lazy"/><figcaption>Le plan du lieu de votre rencontre</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-05.jpg" alt="Les grandes étapes du couple sur une pellicule" width="360" height="360" loading="lazy"/><figcaption>Vos grandes étapes</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-07.jpg" alt="Une année en photos, une photo par mois" width="360" height="360" loading="lazy"/><figcaption>Une année en photos</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-10.jpg" alt="Les chansons de leur histoire" width="360" height="360" loading="lazy"/><figcaption>Votre playlist</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-13.jpg" alt="Interview du couple" width="360" height="360" loading="lazy"/><figcaption>L'interview du couple</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-17.jpg" alt="Quiz « Qui est le plus… ? » à cocher à deux" width="360" height="360" loading="lazy"/><figcaption>Le quiz « Qui est le plus… ? »</figcaption></figure>
+<figure><img src="/img/exemple/album/mini/page-22.jpg" alt="Lettre d'amour écrite à la main" width="360" height="360" loading="lazy"/><figcaption>Une lettre d'amour pour finir</figcaption></figure>
+</div>
+<p class="g-ex-more"><a href="/exemple-album">Feuilleter les 24 pages de l'exemple <span aria-hidden="true">→</span></a></p>
+</section>
+
+<section class="lp-sec">
+<h2>Comment ça marche</h2>
+<ol class="g-steps">
+<li><b>1</b><h3>Vos photos</h3><p>Choisissez au moins 14 photos depuis votre téléphone, et répondez à quelques questions sur vous deux.</p></li>
+<li><b>2</b><h3>L'aperçu</h3><p>L'album se compose en quelques minutes. Feuilletez-le, changez une photo, réécrivez un texte : tout est modifiable.</p></li>
+<li><b>3</b><h3>Le livre</h3><p>Il est imprimé sur papier premium, sous couverture rigide, et livré chez vous en 6 à 8 jours ouvrés.</p></li>
+</ol>
+</section>
+
+<section class="lp-sec">
+<div class="lp-video">
+<video controls playsinline preload="none" poster="/video/magazine-lea-hugo.jpg" width="540" height="960"><source src="/video/magazine-lea-hugo.mp4" type="video/mp4"/></video>
+<div>
+<h2>De vos photos au livre, en 22 secondes</h2>
+<p>Le film de l'album d'exemple, page après page.</p>
+<ul>
+<li>Des photos qui dormaient dans le téléphone deviennent un magazine à feuilleter.</li>
+<li>Les textes sont écrits à partir de vos réponses, et vous les relisez avant de commander.</li>
+<li>Un cadeau unique : il n'existe qu'un exemplaire de votre histoire.</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="lp-sec">
+<h2>Formats et prix</h2>
+<p>Livraison offerte dans les 12 pays livrés. Version PDF aussi disponible, envoyée par email juste après le paiement.</p>
+<div class="g-offer lp-offer">
+<a href="/?pages=24#app"><div class="g-card"><small>Essentiel</small><strong>24</strong><p>pages, dès 14 photos<br>Livre 39,99 €<br>PDF 14,99 €</p><em>Choisir</em></div></a>
+<a href="/?pages=36#app"><div class="g-card feat"><small>Classique</small><strong>36</strong><p>pages, dès 20 photos<br>Livre 49,99 €<br>PDF 19,99 €</p><em>Choisir</em></div></a>
+<a href="/?pages=50#app"><div class="g-card"><small>Premium</small><strong>50</strong><p>pages, dès 31 photos<br>Livre 69,99 €<br>PDF 24,99 €</p><em>Choisir</em></div></a>
+</div>
+<p class="g-facts">Format carré 21 × 21 cm, couverture rigide, reliure solide. Coffret cadeau en option.</p>
+</section>
+
+<section class="lp-sec">
+<h2>Commander en confiance</h2>
+<ul class="lp-trust">
+<li><b>Aperçu gratuit</b><span>Vous voyez chaque page avant de payer, sans créer de compte.</span></li>
+<li><b>Paiement sécurisé</b><span>Paiement par carte sur Stripe, la plateforme de paiement sécurisée. Rien n'est prélevé avant la commande.</span></li>
+<li><b>Livraison suivie à domicile</b><span>Numéro de suivi par email dès l'expédition.</span></li>
+<li><b>Défaut d'impression ?</b><span>Livre réimprimé ou remboursé, comme le prévoient nos <a href="/cgv">conditions de vente</a>.</span></li>
+</ul>
+</section>
+
+<section class="g-faq g-section">
+<h2>Questions fréquentes</h2>
+<details><summary>Combien de photos faut-il ?</summary><p>14 photos suffisent pour l'album de 24 pages, 20 pour 36 pages et 31 pour 50 pages. Vous pouvez en ajouter davantage.</p></details>
+<details><summary>Puis-je modifier l'album avant de commander ?</summary><p>Oui. Dans l'aperçu, vous changez une photo, réécrivez un texte ou changez de style. Vous ne payez qu'une fois satisfait.</p></details>
+<details><summary>En combien de temps est-il livré ?</summary><p>Environ 6 à 8 jours ouvrés en France métropolitaine, un peu plus ailleurs. Pour une date trop proche, la version PDF arrive par email juste après le paiement.</p></details>
+<details><summary>Que deviennent mes photos ?</summary><p>Elles servent uniquement à fabriquer votre album et sont supprimées de nos serveurs 30 jours après la commande.</p></details>
+</section>
+
+<section class="g-final">
+<h2>Composez votre album en quelques minutes</h2>
+<p>Vos photos, vos souvenirs, et un aperçu complet gratuit. Vous ne payez que si le résultat vous plaît.</p>
+<a class="g-btn" href="/#app">Créer notre album <span aria-hidden="true">→</span></a>
+</section>
+<div class="lp-foot-space"></div>
+</main>
+<div class="lp-sticky" id="lpSticky"><a class="g-btn" href="/#app">Créer notre album <span aria-hidden="true">→</span></a></div>
+<footer class="g-foot"><div class="g-wrap"><span>© 2026 Noustalgie. Tous droits réservés.</span><nav aria-label="Informations"><a href="/guides">Guides</a><a href="/exemple-album">Exemple d'album</a><a href="/mentions-legales">Mentions légales</a><a href="/cgv">CGV</a><a href="/confidentialite">Confidentialité</a><a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></nav></div></footer>
+<script>
+(function () {
+  // La date limite de Noël disparaît d'elle-même après le 10 décembre (comme sur l'accueil)
+  var n = document.getElementById('lpNoel'), now = new Date();
+  if (n && now > new Date(2026, 11, 10, 23, 59)) n.remove();
+  // Bouton collé en bas sur téléphone, une fois le premier bouton sorti de l'écran
+  var s = document.getElementById('lpSticky'), h = document.querySelector('.lp-hero .g-btn');
+  if (s && h && 'IntersectionObserver' in window) new IntersectionObserver(function (e) { s.classList.toggle('on', !e[0].isIntersecting && e[0].boundingClientRect.top < 0); }).observe(h);
+})();
+</script>
+<script defer src="/consentement.js?v=3"></script>
+</body>
+</html>
