@@ -73,6 +73,15 @@
   .lp-foot-space{height:84px;}
 }
 @media (min-width:761px){ .lp-sticky{display:none!important;} }
+/* Même fond que l'accueil : le couple dans la montagne, flouté et voilé, fixe derrière la page.
+   Textes gris posés sur la photo en #4a4540 (contraste AA mesuré sur l'image, comme sur l'accueil). */
+html{background:#DCDBD6;}
+html body{background:transparent;--mut:#4a4540;--mut2:#4a4540;}
+html body::before{content:"";position:fixed;left:0;right:0;top:0;height:100vh;height:100lvh;z-index:-1;pointer-events:none;
+  background:radial-gradient(70% 60% at 100% 0%,rgba(250,249,246,.35),rgba(250,249,246,0)),linear-gradient(rgba(250,249,246,.55),rgba(250,249,246,.62) 55%,rgba(250,249,246,.76)),url(/img/fond-site.jpg) center 75%/cover no-repeat;}
+.g-nav{background:rgba(250,249,246,.7);}
+.lp-offer .g-card:not(.feat){background:#fff;}
+.lp-sec,.g-foot{border-color:rgba(28,26,24,.12);}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
