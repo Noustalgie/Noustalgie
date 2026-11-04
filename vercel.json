@@ -92,6 +92,12 @@
   ],
   "redirects": [
     {
+      "source": "/:path((?!api/).*)",
+      "has": [{ "type": "host", "value": "noustalgie.vercel.app" }],
+      "destination": "https://noustalgie.fr/:path",
+      "permanent": true
+    },
+    {
       "source": "/landing.html",
       "destination": "/",
       "permanent": true
