@@ -1662,6 +1662,13 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
 .nst-resume.nst-old{width:min(560px,calc(100% - 32px));box-sizing:border-box;border-radius:20px;justify-content:flex-start;padding:16px 18px;gap:10px;}
 .nst-resume.nst-old span{flex:1 1 100%;font-size:14.5px;line-height:1.45;}
 .nst-resume.nst-old button{min-height:42px;}
+/* Aperçu sur téléphone : « Commander ce livre » était presque 2 écrans sous l'album (après les outils et les miniatures) :
+   sur 19 aperçus venus des pubs, 2 seulement sont passés à la commande. La rangée reste collée en bas de l'écran pendant l'aperçu. */
+@media (max-width:760px){
+  #panel3 #previewActions{position:sticky;bottom:0;z-index:40;margin:12px -20px 0!important;padding:10px 20px calc(10px + env(safe-area-inset-bottom));background:rgba(250,249,246,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 -12px 24px -18px rgba(28,26,24,.45);flex-direction:row!important;flex-wrap:nowrap;}
+  #panel3 #previewActions>.btn{width:auto;flex:0 0 auto;padding-left:16px;padding-right:16px;}   /* une seule ligne : « ← Photos » à gauche, « Commander » prend le reste */
+  #panel3 #previewActions>#btnOrder{flex:1 1 auto;}
+}
 </style>
 <script type="application/ld+json">
 {
