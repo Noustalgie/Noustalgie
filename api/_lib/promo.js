@@ -1,10 +1,11 @@
 // api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
 // Format : "CODE1:free,CODE2:20,CODE3:10"  (free = album offert à 0,50€, nombre = % de remise)
+// PROMO_CODES_EXTRA, même format : codes personnels des relances (ajoutés sans toucher aux codes existants).
 // Usage unique : un code déjà utilisé dans un paiement réussi est refusé (recherche Stripe).
 const https = require('https');
 
 function loadPromos() {
-  const raw = process.env.PROMO_CODES || '';
+  const raw = [process.env.PROMO_CODES, process.env.PROMO_CODES_EXTRA].filter(Boolean).join(',');
   const map = {};
   raw.split(',').map(s => s.trim()).filter(Boolean).forEach(entry => {
     const [code, val] = entry.split(':').map(s => (s || '').trim());
