@@ -4744,12 +4744,44 @@ function slot(pg, i, x, y, w, h, o = {}) {
        + `<div style="position:relative;width:100%;height:100%;overflow:hidden;">${inner}${grain}</div></div>`;
 }
 
+/* Mise en beauté des textes tapés au téléphone, au rendu seulement (le texte enregistré ne change pas) :
+   emojis de cœur → petit cœur dessiné à la couleur de l'album, autres emojis retirés (les emojis en couleur font
+   « bon marché » une fois imprimés), apostrophes et guillemets typographiques, élisions oubliées du clavier
+   (« l eau » → « l’eau »), points de suspension, ponctuation répétée, espaces, majuscule en début de phrase
+   (textes de 5 mots et plus : les petits titres de l'album, « un mot doux », gardent leur minuscule). */
+const COEUR = '\uE000';   // marque provisoire, remplacée par le cœur dessiné après l'échappement HTML
+const EMO_COEUR = /(?:\u2764\uFE0F?\u200D(?:\u{1F525}|\u{1FA79})|[❤♥❣💓💔💕💖💗💘💙💚💛💜💝💞💟🧡🤍🤎🖤🩷🩵🩶😍🥰😘😻💑💏💌🫶])[\uFE0F\uFE0E]?|<3+/gu;
+const EMO = /(?:\p{Extended_Pictographic}|\p{Regional_Indicator})(?:\uFE0F|\uFE0E|[\u{1F3FB}-\u{1F3FF}]|\u200D\p{Extended_Pictographic}\uFE0F?)*|[\uFE0F\uFE0E\u200D]/gu;
+const FR_MOTS = /(?:^|[^\p{L}])(?:je|tu|nous|vous|le|la|les|de|des|du|au|et|est|une|pour|avec|sur|pas|mon|ma|mes|ton|ta|tes|que|qui|dans|toi|moi|notre|nos)(?=[^\p{L}]|$)/giu;
+function joli(s) {
+  let v = String(s).replace(/\r\n?/g, '\n');
+  if (!v.trim()) return v;
+  const fr = (v.match(FR_MOTS) || []).length >= 2;
+  const [ouv, fer] = fr ? ['« ', ' »'] : ['“', '”'];
+  v = v.replace(EMO_COEUR, COEUR).replace(EMO, '')
+    .replace(new RegExp(`${COEUR}(?:\\s*${COEUR})+`, 'g'), COEUR)          // ❤️❤️❤️ → un seul cœur
+    .replace(/(^|[\s(])['‘]([^'‘’\n]+?)['’](?=[\s.,;:!?)]|$)/g, (m, a, b) => a + ouv + b.trim() + fer)   // 'Mi señora' → « Mi señora »
+    .replace(/"\s*([^"\n]+?)\s*"/g, (m, b) => ouv + b + fer).replace(/"/g, '')                          // guillemet resté seul : retiré
+    .replace(/['`´‘]/g, '’')
+    .replace(/\.{3,}/g, '…').replace(/!{2,}/g, '!').replace(/\?{2,}/g, '?').replace(/,{2,}/g, ',')
+    .replace(/[ \t  ]+/g, ' ').replace(/ *\n */g, '\n').replace(/\n{3,}/g, '\n\n').trim()
+    .replace(/ ([,.…])/g, '$1').replace(/,(?=\p{L})/gu, ', ').replace(/\( +/g, '(').replace(/ +\)/g, ')');
+  if (fr) v = v
+    .replace(/(?<!\d)(^|[\s(«“])((?:[ldjtmnsc]|qu|jusqu|lorsqu|puisqu)) (?=[aeiouyhâàäéèêëîïôöûùüœ])/giu, '$1$2’')
+    .replace(/ ?([?!;])/g, ' $1').replace(/(\S) ?:(?=\s|$)/g, '$1 :')
+    .replace(/« */g, '« ').replace(/ *»/g, ' »');
+  else v = v.replace(/ ([?!;:])/g, '$1');
+  v = v.replace(/([.!?]\s+)(\p{Ll})/gu, (m, a, b) => a + b.toUpperCase());
+  return v.split('\n').map(l => l.trim().split(/\s+/).length >= 5 ? l.replace(/^([\s«“ —–-]*)(\p{Ll})/u, (m, a, b) => a + b.toUpperCase()) : l).join('\n');
+}
+const coeur = () => `<span style="white-space:nowrap"><svg viewBox="0 0 24 22" aria-hidden="true" style="display:inline-block;width:.74em;height:.68em;margin:0 .06em 0 .14em;vertical-align:-.04em;overflow:visible"><path fill="${MT().accent}" d="M12 21.4 10.3 19.9C4.2 14.4.2 10.8.2 6.4.2 2.8 3 0 6.6 0c2 0 4 .9 5.4 2.4C13.4.9 15.4 0 17.4 0c3.6 0 6.4 2.8 6.4 6.4 0 4.4-4 8-10.1 13.5z"/></svg><span style="font-size:0">♥</span></span>`;
+
 /* Texte éditable : data-t = clé dans page.t */
 function tx(pg, key, css, ph) {
-  const v = pg.t[key] == null ? '' : String(pg.t[key]);
+  const v = pg.t[key] == null ? '' : joli(pg.t[key]);
   if (!v && !CTX.editing) return '';
   const ce = CTX.inline ? ' contenteditable="true" spellcheck="true"' : '';
-  return `<div class="nst-t" data-t="${key}" data-ph="${esc(ph || '')}"${ce} style="${css}">${esc(v).replace(/\n/g, '<br>')}</div>`;
+  return `<div class="nst-t" data-t="${key}" data-ph="${esc(ph || '')}"${ce} style="${css}">${esc(v).replace(/\n/g, '<br>').split(COEUR).join(coeur())}</div>`;
 }
 // Taille de police qui se réduit avec la longueur du texte
 const fit = (s, big, small, from, to) => { const n = String(s || '').length; if (n <= from) return big; if (n >= to) return small; return Math.round(big - (big - small) * (n - from) / (to - from)); };
@@ -6465,7 +6497,9 @@ async function callAI(body, tries = 2, label = 'IA') {
 async function thumb(p) { const img = await loadImage(p.data); return toJpeg(img, 384, 0.62); }
 
 function coupleInfo() {
-  const n1 = val('name1') || 'Toi', n2 = val('name2');
+  // Prénoms tapés en minuscules au téléphone (« arthur & zoe » imprimé sur la couverture) : majuscule à chaque partie (Jean-Marc, Anne Sophie)
+  const maj = s => s.replace(/(^|[\s-])(\p{Ll})/gu, (m, a, b) => a + b.toUpperCase());
+  const n1 = maj(val('name1')) || 'Toi', n2 = maj(val('name2'));
   return {
     n1, n2, names: n2 ? `${n1} & ${n2}` : n1,
     meet: val('meetDate'), occasion: val('occasion'), dedication: val('dedication'),
