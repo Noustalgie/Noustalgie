@@ -4753,6 +4753,18 @@ function tx(pg, key, css, ph) {
 }
 // Taille de police qui se réduit avec la longueur du texte
 const fit = (s, big, small, from, to) => { const n = String(s || '').length; if (n <= from) return big; if (n >= to) return small; return Math.round(big - (big - small) * (n - from) / (to - from)); };
+// Lettre (mlettre_b) : le texte doit finir au-dessus du cœur (y 594) et de la signature. Hauteur estimée paragraphe par
+// paragraphe, avec la largeur moyenne d'un caractère mesurée dans Chromium (Homemade Apple 0,58 em, Cormorant Garamond
+// italique 0,36 em, comptée 0,37 par prudence). Une longue lettre passe en Cormorant, plus compact, sur 634 px, avec des lignes vides
+// réduites à 0,45 em (lettrePara) au lieu de déborder : lettre de 2 525 caractères imprimée par-dessus la signature (9 novembre).
+const lettreFit = s => {
+  const paras = String(s || '').split('\n');
+  const haut = (fs, lh, r, w, vide) => paras.reduce((n, p) => n + (p ? Math.max(1, Math.ceil(p.length * r * fs / w)) * fs * lh : vide * fs), 0);
+  for (let fs = 19; fs >= 13; fs--) if (haut(fs, 2.05, .58, 600, 2.05) <= 448) return { hand: true, fs, lh: 2.05, w: 600 };
+  for (let fs = 17; fs >= 10; fs -= .5) if (haut(fs, 1.45, .37, 634, .45) <= 452) return { hand: false, fs, lh: 1.45, w: 634 };
+  return { hand: false, fs: 10, lh: 1.35, w: 634 };
+};
+const lettrePara = h => h.replace(/<br><br>/g, '<br><span style="display:block;height:.45em"></span>');
 const orientOf = (pg, i) => { const s = pg.slots[i]; const p = s && photos()[s.p]; return p ? (p.orient || 'carre') : 'carre'; };
 
 /* ── Mises en page ─────────────────────────────────────────────── */
@@ -5247,10 +5259,11 @@ Object.assign(LAYOUTS, {
       + svgHeart(379, 228, 36, T.rose, -6) + folio(pg, T);
   } },
   mlettre_b: { n: 0, text: true, mag: 'lettre', render(pg) {
-    const T = MT(), txt = pg.t.text || '';
+    const T = MT(), L = lettreFit(pg.t.text);
+    const font = L.hand ? T.hand : "'Cormorant Garamond',Georgia,serif", st = L.hand ? '' : 'italic ';
     return `<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 32.9%,rgba(0,0,0,.035) 33.3%,rgba(0,0,0,0) 33.8%,rgba(0,0,0,0) 66.2%,rgba(0,0,0,.03) 66.6%,rgba(0,0,0,0) 67%);pointer-events:none;"></div>`
       + tx(pg, 'hello', `position:absolute;left:${M + 16}px;top:78px;color:${T.accent};font:400 23px/1.2 ${T.hand};`, lm('hello'))
-      + tx(pg, 'text', `position:absolute;left:${M + 16}px;top:136px;width:600px;color:${T.accent};font:400 ${fit(txt, 19, 13, 380, 1300)}px/2.05 ${T.hand};`, 'Votre lettre…')
+      + (h => L.hand ? h : lettrePara(h))(tx(pg, 'text', `position:absolute;left:${M + 16}px;top:136px;width:${L.w}px;color:${T.accent};font:${st}400 ${L.fs}px/${L.lh} ${font};`, 'Votre lettre…'))
       + tx(pg, 'sign', `position:absolute;left:${M + 16}px;bottom:${M + 30}px;width:420px;color:${T.accent};font:400 19px/1.6 ${T.hand};`, '')
       + svgHeart(600, 600, 64, T.accent, 12, .9) + folio(pg, T);
   } },
