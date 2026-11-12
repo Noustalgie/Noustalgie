@@ -14,6 +14,7 @@ const H = {
   'printapi-hook': require('./_fn/printapi-hook'),
   sante: require('./_fn/sante'),
   alerte: require('./_fn/alerte'),
+  recommande: require('./_fn/recommande'),
 };
 const ALIAS = { 'order-status': 'track' };
 

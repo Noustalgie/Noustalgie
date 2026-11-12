@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   if (!J || !same((req.query && req.query.jeton) || '', J)) return res.status(401).json({ error: 'Unauthorized' });
   const out = { hote: PA.host(), configure: PA.configured() };
   const ref = String((req.query && req.query.commande) || '');
-  if (/^NOUST-\d{6}-[A-Z0-9]{5}$/.test(ref)) {
+  if (/^NOUST-\d{6}-[A-Z0-9]{5}(-R\d?)?$/.test(ref)) {
     try {
       const o = await PA.getOrder(ref);
       if (!o) return res.status(404).json({ erreur: 'Commande inconnue chez Print API' });

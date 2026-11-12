@@ -121,7 +121,8 @@ async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, s
 // Print API : livre (couverture d'un seul tenant + pages intérieures) et objets choisis, dans un seul colis.
 // Notre numéro de commande sert d'identifiant chez Print API : un événement Stripe renvoyé ne crée pas de doublon.
 const OPT_NAMES = { coffret: 'Coffret cadeau', express: 'Fabrication express', affiche: 'Affiche 30 × 40 cm', cadre: 'Petit cadre photo 15 × 15 cm', aimant: 'Aimant photo 5 × 5 cm' };
-async function createPrintApiOrder({ m, name, phone, email, first, names, orderNumber, pages }) {
+// Contenu de la commande Print API (aussi utilisé par _fn/recommande.js pour repasser une commande annulée)
+function printApiPayload({ m, name, phone, email, first, names, orderNumber, pages }) {
   const opts = String(m.options || '').split(',').filter(k => OPT_NAMES[k]);
   const items = [{ id: 'album', productId: PA.BOOK, pageCount: PA.innerCount(parseInt(pages, 10) || 36), quantity: 1,
     files: { content: m.pa_inner, cover: m.pa_cover }, options: opts.includes('coffret') ? [{ id: 'storage_box', value: 'yes' }] : [] }];
@@ -133,6 +134,10 @@ async function createPrintApiOrder({ m, name, phone, email, first, names, orderN
   // L'email du client reste chez nous (métadonnées) : Print API n'écrit jamais au client, le suivi part de noustalgie.fr
   const payload = { id: orderNumber, productionSpeed: opts.includes('express') ? 'Express' : 'Standard', items, shipping: { address },
     metadata: JSON.stringify({ email, first, names: String(names || '').slice(0, 200) }) };
+  return { opts, payload };
+}
+async function createPrintApiOrder(args) {
+  const { opts, payload } = printApiPayload(args), orderNumber = args.orderNumber;
   try {
     const r = await PA.postOrder(payload);
     if (r.order) { console.log(`Commande Print API : ${r.order.id}`); return { id: r.order.id, opts }; }
@@ -289,3 +294,5 @@ module.exports = async (req, res) => {
 };
 
 module.exports.config = { api: { bodyParser: false } };
+module.exports.printApiPayload = printApiPayload;
+module.exports.createPrintApiOrder = createPrintApiOrder;
