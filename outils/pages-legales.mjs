@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Pages légales statiques (/mentions-legales, /cgv, /confidentialite), générées à partir du texte de la fenêtre
+// Pages légales statiques (/mentions-legales, /cgv, /confidentialite, /contact), générées à partir du texte de la fenêtre
 // « Informations légales » de public/index.html : il n'y a qu'une seule source. Après toute modification de ce texte :
-//   node outils/pages-legales.mjs            → réécrit les trois pages dans public/
+//   node outils/pages-legales.mjs            → réécrit les quatre pages dans public/
 // L'étape de construction Vercel (outils/preparer-production.mjs) les régénère aussi à chaque déploiement.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,6 +23,10 @@ const PAGES = {
   confidentialite: {
     slug: 'confidentialite', nom: 'Politique de confidentialité', titre: 'Politique de confidentialité | Noustalgie',
     desc: `Politique de confidentialité de Noustalgie${NB}: données collectées, parcours de vos photos, prestataires, durées de conservation et vos droits.`,
+  },
+  contact: {
+    slug: 'contact', nom: 'Contact', titre: 'Contact et service client | Noustalgie',
+    desc: `Contacter Noustalgie${NB}: une question avant de commander, une commande en cours ou un problème avec votre livre. Email, téléphone et adresse à Lille.`,
   },
 };
 
@@ -105,7 +109,7 @@ ${autres}
 </ul>
 </nav>
 </main>
-<footer class="g-foot"><div class="g-wrap"><span>© 2026 Noustalgie. Tous droits réservés.</span><nav aria-label="Informations"><a href="/guides">Guides</a><a href="/exemple-album">Exemple d'album</a><a href="/mentions-legales">Mentions légales</a><a href="/cgv">CGV</a><a href="/confidentialite">Confidentialité</a><a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></nav></div></footer>
+<footer class="g-foot"><div class="g-wrap"><span>© 2026 Noustalgie. Tous droits réservés.</span><nav aria-label="Informations"><a href="/guides">Guides</a><a href="/exemple-album">Exemple d'album</a><a href="/mentions-legales">Mentions légales</a><a href="/cgv">CGV</a><a href="/confidentialite">Confidentialité</a><a href="/contact">Contact</a><a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></nav></div></footer>
 </body>
 </html>
 `;
