@@ -33,6 +33,8 @@ module.exports = async (req, res) => {
     // Commandes Print API : notre numéro est leur identifiant, l'email est dans les métadonnées
     let p = null;
     try { p = await PA.getOrder(R); } catch (e) {}
+    // Annulée puis repassée par _fn/recommande.js (fichier corrigé) : la nouvelle commande porte le suffixe -R
+    if (p && p.status === 'Cancelled') { try { const r = await PA.getOrder(R + '-R'); if (r) p = r; } catch (e) {} }
     if (p) {
       let meta = {}; try { meta = JSON.parse(p.metadata || '{}'); } catch (e) {}
       if (String(meta.email || '').toLowerCase() !== E) return introuvable();

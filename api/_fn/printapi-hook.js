@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
   const b = req.body;
   const id = String((b && typeof b === 'object' ? b.orderId : new URLSearchParams(String(b || '')).get('orderId')) || '').trim();
-  if (!/^NOUST-\d{6}-[A-Z0-9]{5}$/.test(id) || !PA.configured()) return res.status(200).json({ received: true, ignored: true });
+  if (!/^NOUST-\d{6}-[A-Z0-9]{5}(-R\d?)?$/.test(id) || !PA.configured()) return res.status(200).json({ received: true, ignored: true });
   let o = null;
   try { o = await PA.getOrder(id); } catch (e) { console.error('printapi-hook:', e.message); }
   // Print API réessaie plus tard si on ne répond pas 200 : utile quand sa lecture a échoué
