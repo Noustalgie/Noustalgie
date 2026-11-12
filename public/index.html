@@ -2354,7 +2354,7 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
           <a class="footer-link" href="/mentions-legales" onclick="openLegal('mentions');return false;" data-i18n="legal_mentions">Mentions légales</a>
           <a class="footer-link" href="/cgv" onclick="openLegal('cgv');return false;" data-i18n="legal_cgv">CGV</a>
           <a class="footer-link" href="/confidentialite" onclick="openLegal('confidentialite');return false;" data-i18n="legal_privacy">Confidentialité</a>
-          <button class="footer-link" onclick="openLegal('contact')" data-i18n="legal_contact">Contact</button>
+          <a class="footer-link" href="/contact" onclick="openLegal('contact');return false;" data-i18n="legal_contact">Contact</a>
           <a class="footer-link" href="https://www.tiktok.com/@noustalgie_" target="_blank" rel="me noopener">TikTok</a>
         </div>
       </div>
@@ -2374,6 +2374,10 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
           <a class="footer-link" href="/magazine-personnalise">Magazine personnalisé</a>
           <a class="footer-link" href="/album-photo-couple">Album photo couple</a>
           <a class="footer-link" href="/idee-cadeau-noel-couple">Cadeau de Noël pour un couple</a>
+          <a class="footer-link" href="/cadeau-noel-copine">Cadeau de Noël pour sa copine</a>
+          <a class="footer-link" href="/cadeau-noel-copain">Cadeau de Noël pour son copain</a>
+          <a class="footer-link" href="/message-noel-amoureux">Messages de Noël d'amour</a>
+          <a class="footer-link" href="/calendrier-avent-couple">Calendrier de l'Avent couple</a>
           <a class="footer-link" href="/cadeau-anniversaire-couple">Anniversaire de couple</a>
           <a class="footer-link" href="/livre-personnalise-couple">Livre personnalisé couple</a>
           <a class="footer-link" href="/cadeau-anniversaire-de-mariage">Anniversaire de mariage</a>
@@ -2473,7 +2477,7 @@ const LANGS = {
     cmp_show:'Voir le tableau comparatif ↓', cmp_hide:'Masquer le tableau ↑',
     cmp_tier:'Palier', pdf_only:'PDF seul', printed_book:'Livre imprimé', delivery_col:'Livraison', included:'Offerte',
     
-    price_note:'✓ Aperçu gratuit avant paiement · Satisfait ou remboursé · Livraison offerte',
+    price_note:'✓ Aperçu gratuit avant paiement · Livraison offerte',
     testi_eyebrow:'Ils ont créé leur album', testi_title1:'Des histoires', testi_title2:'vraies',
     testi1_q:'« J\'ai offert ça à mon copain pour notre anniversaire. Il a pleuré. »', testi1_date:'Anniversaire 3 ans · 30 pages',
     testi2_q:'« Cadeau de Saint-Valentin parfait. La qualité d\'impression est bluffante. »', testi2_date:'Saint-Valentin · 20 pages',
@@ -2561,7 +2565,7 @@ const LANGS = {
     cmp_show:'View full comparison table ↓', cmp_hide:'Hide table ↑',
     cmp_tier:'Tier', pdf_only:'PDF only', printed_book:'Printed book', delivery_col:'Delivery', included:'Free',
     
-    price_note:'✓ Free preview before payment · Satisfaction guaranteed · Free delivery on all printed albums',
+    price_note:'✓ Free preview before payment · Free delivery on all printed albums',
     testi_eyebrow:'They created their album', testi_title1:'Real', testi_title2:'stories',
     testi1_q:'"I gave this to my boyfriend for our anniversary. He cried. Our story is beautifully written."', testi1_date:'3rd anniversary · 30 pages',
     testi2_q:'"Perfect Valentine\'s gift. Done in 15 minutes. Print quality is stunning."', testi2_date:'Valentine\'s Day · 20 pages',
@@ -2649,7 +2653,7 @@ const LANGS = {
     cmp_show:'Vollständige Vergleichstabelle ↓', cmp_hide:'Tabelle ausblenden ↑',
     cmp_tier:'Stufe', pdf_only:'Nur PDF', printed_book:'Gedrucktes Buch', delivery_col:'Versand', included:'Gratis',
     
-    price_note:'✓ Kostenlose Vorschau · Zufriedenheitsgarantie · Kostenloser Versand',
+    price_note:'✓ Kostenlose Vorschau · Kostenloser Versand',
     testi_eyebrow:'Ihre Alben', testi_title1:'Echte', testi_title2:'Geschichten',
     testi1_q:'"Ich habe das meinem Freund zum Jahrestag geschenkt. Er hat geweint. Unsere Geschichte ist wunderschön erzählt."', testi1_date:'3. Jahrestag · 30 Seiten',
     testi2_q:'"Perfektes Valentinstaggeschenk. In 15 Minuten fertig. Die Druckqualität ist beeindruckend."', testi2_date:'Valentinstag · 20 Seiten',
@@ -2737,7 +2741,7 @@ const LANGS = {
     cmp_show:'Ver tabla comparativa completa ↓', cmp_hide:'Ocultar tabla ↑',
     cmp_tier:'Nivel', pdf_only:'Solo PDF', printed_book:'Libro impreso', delivery_col:'Envío', included:'Gratis',
     
-    price_note:'✓ Vista previa gratis · Satisfacción garantizada · Envío gratuito en todos los álbumes impresos',
+    price_note:'✓ Vista previa gratis · Envío gratuito en todos los álbumes impresos',
     testi_eyebrow:'Han creado su álbum', testi_title1:'Historias', testi_title2:'reales',
     testi1_q:'"Se lo regalé a mi novio por nuestro aniversario. Lloró al verlo. Nuestra historia está magníficamente narrada."', testi1_date:'3er aniversario · 30 páginas',
     testi2_q:'"Regalo de San Valentín perfecto. Listo en 15 minutos. La calidad de impresión es increíble."', testi2_date:'San Valentín · 20 páginas',
@@ -2825,7 +2829,7 @@ const LANGS = {
     cmp_show:'Ver tabela comparativa completa ↓', cmp_hide:'Ocultar tabela ↑',
     cmp_tier:'Nível', pdf_only:'Só PDF', printed_book:'Livro impresso', delivery_col:'Envio', included:'Grátis',
     
-    price_note:'✓ Pré-visualização gratuita · Satisfação garantida · Envio gratuito em todos os álbuns impressos',
+    price_note:'✓ Pré-visualização gratuita · Envio gratuito em todos os álbuns impressos',
     testi_eyebrow:'Criaram o seu álbum', testi_title1:'Histórias', testi_title2:'reais',
     testi1_q:'"Ofereci isto ao meu namorado no nosso aniversário. Ele chorou. A nossa história está magnificamente narrada."', testi1_date:'3º aniversário · 30 páginas',
     testi2_q:'"Presente perfeito de Dia dos Namorados. Pronto em 15 minutos. A qualidade de impressão é incrível."', testi2_date:'Dia dos Namorados · 20 páginas',
@@ -7909,6 +7913,13 @@ contact: { tab: 'Contact', html: `
   <a class="lg-card" href="mailto:${E}?subject=${encodeURIComponent('Réclamation commande')}"><b>Un problème avec mon livre</b><span>Défaut d'impression ou colis abîmé : joignez quelques photos, nous trouvons une solution.</span></a>
   <a class="lg-card" href="mailto:${E}?subject=${encodeURIComponent('Question avant commande')}"><b>Une question avant de commander</b><span>Formats, photos, délais, cadeau pour une date précise.</span></a>
 </div>
+<h2>Avant de nous écrire</h2>
+<ul>
+<li><b>Où en est ma commande ?</b> Suivez-la avec votre numéro (NOUST-…) et votre email : <a href="/#suivi">suivre ma commande</a>. Le livre imprimé est livré en 6 à 8 jours ouvrés environ en France métropolitaine, un peu plus dans les autres pays.</li>
+<li><b>Un défaut d'impression ou un colis abîmé ?</b> Écrivez-nous avec votre numéro de commande et quelques photos : la réimpression ou le remboursement est sans frais pour vous (voir les <a href="#" data-lg="cgv">conditions générales de vente</a>).</li>
+<li><b>Retour pour changement d'avis :</b> le livre étant fabriqué à votre nom, il n'ouvre pas droit à rétractation (article L221-28 du Code de la consommation). L'aperçu complet est gratuit : relisez-le avant de commander.</li>
+<li><b>Noël 2026 :</b> commandez au plus tard le 10 décembre pour recevoir le livre avant Noël en France métropolitaine. Après cette date, la version PDF arrive par email juste après le paiement.</li>
+</ul>
 <h2>Email</h2>
 <p>${mail('Contact', E)}${tel}</p>
 <h2>Adresse</h2>
