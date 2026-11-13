@@ -35,6 +35,7 @@ MOTS_CLES = {
     'album photo mariage': 2900, 'livre photo mariage': 1300, 'cadeau pour son copain': 1900, 'cadeau pour sa copine': 1600,
     'album photo voyage': 0, 'texte album photo': 0, 'mots doux': 0,
     'cadeau noël copine': 0, 'cadeau noël copain': 0, 'message noël amoureux': 0, "calendrier de l'avent couple": 0,
+    'idée cadeau saint valentin': 0, 'message saint valentin': 0, 'première saint valentin': 0, 'cadeau noël dernière minute': 0, 'cadeau noël parents': 0,
 }
 GENERIQUES = {'cliquez ici', 'ici', 'en savoir plus', 'lire la suite', 'voir plus', 'plus', 'cliquez', 'lien', 'suite', 'read more', 'click here'}
 
