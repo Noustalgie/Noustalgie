@@ -469,7 +469,7 @@ Générée automatiquement (9129 lignes). Ouvrir une zone : Read avec offset = n
 
 ## api/
 
-- api/_fn/album.js (107 lignes) api/album.js — « Recevoir le lien de mon album »
+- api/_fn/album.js (124 lignes) api/album.js — « Recevoir le lien de mon album »
 - api/_fn/alerte.js (34 lignes) /api/tools?fn=alerte — un client bloqué au moment de payer : email à Gabin avec l'erreur exacte et le contexte
 - api/_fn/cancel.js (28 lignes) 
 - api/_fn/carte.js (239 lignes) /api/carte?q=Lille : plan du lieu de rencontre pour la page « Là où tout a commencé ».
@@ -484,7 +484,7 @@ Générée automatiquement (9129 lignes). Ouvrir une zone : Read avec offset = n
 - api/_fn/track.js (60 lignes) api/track.js — « Suivre ma commande » : numéro NOUST-… + email de la commande
 - api/_lib/cloudinary.js (43 lignes) api/_lib/cloudinary.js — signature et upload serveur (pas une route)
 - api/_lib/printapi.js (59 lignes) api/_lib/printapi.js — imprimeur Print API (Groningue, Pays-Bas) : jeton OAuth, commandes, lecture d'une comma
-- api/_lib/promo.js (50 lignes) api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
+- api/_lib/promo.js (81 lignes) api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
 - api/_lib/security.js (59 lignes) api/_lib/security.js — utilitaires partagés (pas une route : préfixe _)
 - api/chat.js (84 lignes) api/chat.js — proxy OpenAI VERROUILLÉ
 - api/cleanup.js (54 lignes) api/cleanup.js — Nettoyage RGPD quotidien (cron Vercel, cf. vercel.json)
@@ -492,4 +492,4 @@ Générée automatiquement (9129 lignes). Ouvrir une zone : Read avec offset = n
 - api/generate-pdf.js (101 lignes) api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
 - api/prodigi-webhook.js (88 lignes) api/prodigi-webhook.js — callbacks Prodigi (expédition → email de suivi au client)
 - api/tools.js (29 lignes) api/tools.js — petites routes regroupées en une seule fonction
-- api/webhook.js (299 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,
+- api/webhook.js (309 lignes) api/webhook.js — Webhook Stripe : déclenché à chaque paiement réussi,

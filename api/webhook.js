@@ -223,13 +223,23 @@ module.exports = async (req, res) => {
   const orderNumber = `NOUST-${ymd}-${crypto.createHash('sha1').update(session.id).digest('hex').slice(0, 5).toUpperCase()}`;
 
   let prodigiOrderId = null, prodigi = { id: null, note: '' }, printer = 'Prodigi';
-  // Commande payée : la relance « album en attente » n'a plus lieu d'être
-  if (m.reminder_id && process.env.RESEND_API_KEY) {
-    await new Promise(resolve => {
-      const q = https.request({ hostname: 'api.resend.com', path: `/emails/${encodeURIComponent(m.reminder_id)}/cancel`, method: 'POST', timeout: 8000,
-        headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY } }, r => { r.on('data', () => {}); r.on('end', resolve); });
-      q.on('error', resolve); q.on('timeout', () => { q.destroy(); resolve(); }); q.end();
+  // Commande payée : les relances « album en attente » n'ont plus lieu d'être. Celles de cet album (reminder_id, « id1,id2 »),
+  // et tout email encore programmé à l'adresse du client (album rouvert par son lien sur un autre appareil)
+  if (process.env.RESEND_API_KEY) {
+    const resend = (method, path) => new Promise(resolve => {
+      const q = https.request({ hostname: 'api.resend.com', path, method, timeout: 8000, headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY } }, r => {
+        let d = ''; r.on('data', c => d += c); r.on('end', () => { try { resolve(JSON.parse(d)); } catch (e) { resolve(null); } });
+      });
+      q.on('error', () => resolve(null)); q.on('timeout', () => { q.destroy(); resolve(null); }); q.end();
     });
+    const ids = new Set(String(m.reminder_id || '').split(',').map(x => x.trim()).filter(Boolean));
+    if (email) {
+      const liste = await resend('GET', '/emails?limit=100');
+      ((liste && liste.data) || []).forEach(e => {
+        if (e && e.id && e.last_event === 'scheduled' && [].concat(e.to || []).some(t => String(t).toLowerCase() === String(email).toLowerCase())) ids.add(e.id);
+      });
+    }
+    for (const id of ids) await resend('POST', `/emails/${encodeURIComponent(id)}/cancel`);
   }
   try {
     if (format === 'pdf' && pdfUrl && email) {
