@@ -14,6 +14,7 @@ https.request = (opts, cb) => {
   req.end = () => setImmediate(() => {
     let out = {}, status = 200;
     if (opts.hostname === 'api.pdfshift.io') out = { url: `https://pdfshift.example/${++n}.pdf`, filesize: 4000000 };
+    else if (opts.hostname === 'api.cloudinary.com' && /\/image\/upload$/.test(opts.path)) out = { public_id: `noustalgie/photos/relais/${++n}` };   // photo relayée (/api/tools?fn=photo)
     else if (opts.hostname === 'api.cloudinary.com') { const id = new URLSearchParams(body).get('public_id'); out = { secure_url: `https://res.cloudinary.com/daxkn7pyb/raw/upload/v1/noustalgie/pdf/${id}` }; }
     else if (opts.hostname === 'api.stripe.com' && /^\/v1\/coupons\//.test(opts.path)) {
       // Cartes cadeaux : CADEAUTEST0001 valable, CADEAUDEJA0001 déjà utilisée, tout autre code inconnu
@@ -32,7 +33,7 @@ https.request = (opts, cb) => {
 https.get = (o, cb) => { const r = https.request(Object.assign({ method: 'GET' }, o), cb); r.end(); return r; };
 
 const H = { '/api/generate-pdf': require(R + 'api/generate-pdf.js'), '/api/create-checkout': require(R + 'api/create-checkout.js'), '/api/promo': require(R + 'api/tools.js'),
-  '/api/sign-upload': require(R + 'api/tools.js') };
+  '/api/sign-upload': require(R + 'api/tools.js'), '/api/tools': require(R + 'api/tools.js') };
 
 // IA simulée (réponse au format OpenAI) : légendes, histoire ; « panne » renvoie une erreur 500 comme un OpenAI indisponible
 let ia = 'ok';

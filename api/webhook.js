@@ -320,6 +320,7 @@ module.exports = async (req, res) => {
           <p><b>N° :</b> ${orderNumber}<br><b>Client :</b> ${h(name)} (${h(email)})<br><b>Couple :</b> ${h(names)}</p>
           <p><b>Format :</b> ${format} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
           ${optList.length ? `<p><b>Options :</b> ${h(optList.join(', '))}</p>` : ''}
+          ${+m.basse_def > 0 ? `<p style="color:#9a6b12">⚠️ ${h(m.basse_def)} photo(s) imprimée(s) en version écran (1200 px) : leur haute définition n'était plus lisible sur le téléphone du client. Jeter un œil au PDF avant expédition.</p>` : ''}
           <p><b>Destinataire :</b> ${h(name || '—')}${phone ? ` · <b>Tél :</b> ${h(phone)}` : ''}<br><b>Adresse :</b> ${h(address || '(PDF)')}</p>
           <p><b>PDF :</b> ${pdfUrl ? `<a href="${h(pdfUrl)}">ouvrir</a>` : 'Non disponible'}</p>
           ${prodigiOrderId ? `<p style="color:green"><b>✅ ${printer} : ${h(prodigiOrderId)}</b> — ${printer === 'Print API' ? `tranche imprimée${PA.host() === 'test.printapi.nl' ? ' (environnement de TEST : rien ne sera imprimé)' : ''}` : prodigi.spine ? `tranche imprimée (${h(m.spine_mm)} mm)` : 'tranche unie'}</p>` : warn}

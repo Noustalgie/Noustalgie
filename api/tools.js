@@ -16,6 +16,7 @@ const H = {
   alerte: require('./_fn/alerte'),
   recommande: require('./_fn/recommande'),
   cadeau: require('./_fn/cadeau'),
+  photo: require('./_fn/photo'),
 };
 const ALIAS = { 'order-status': 'track' };
 

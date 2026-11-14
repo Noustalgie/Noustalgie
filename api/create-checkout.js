@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'checkout', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez dans quelques minutes.' });
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).json({ error: 'Configuration de paiement incomplète.' });
 
-  const { name, firstName, lastName, phone, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album, options, files } = parseBody(req);
+  const { name, firstName, lastName, phone, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album, options, files, basse } = parseBody(req);
   const rem = album && album.reminder && album.reminder.id && checkProof(String(album.reminder.id), 'reminder', album.reminder.sig) ? String(album.reminder.id) : '';
 
   if (!email || !EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'Email invalide.' });
@@ -135,6 +135,7 @@ module.exports = async (req, res) => {
     name: cut(fullName, 200), first_name: first, last_name: last, phone: fmt === 'print' && telOk ? tel : '',
     email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
     reminder_id: cut(rem, 100),
+    basse_def: Math.min(99, parseInt(basse, 10) || 0) > 0 ? String(Math.min(99, parseInt(basse, 10))) : '',   // photos parties en version écran (1200 px)
     cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
     addr_line1: A ? A.line1 : '', addr_line2: A ? A.line2 : '', addr_postal: A ? A.postal : '', addr_city: A ? A.city : '', addr_country: A ? A.country : '',
     names: cut(names, 200), style: cut(style, 100), pdf_url: cut(pdfUrl, 480), format: fmt, price: priceStr, promo: appliedPromo,

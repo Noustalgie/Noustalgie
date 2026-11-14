@@ -7281,11 +7281,30 @@ window.addEventListener('pageshow', e => {
 window.addEventListener('load', () => setTimeout(offerResume, 600));
 
 /* ══ 5. Impression : photos en pleine résolution + PDF hébergé ══ */
-async function fullBlob(p) {
-  if (p.hd) return p.hd;                                             // déjà prête depuis l'import
-  if (p.full) return dataUrlToBlob(p.full);                          // anciens albums enregistrés
+// Sur iPhone, dans le navigateur intégré d'une application (Google, Instagram…), les photos gardées par le navigateur peuvent devenir
+// illisibles quand l'application passe en arrière-plan : chaque envoi échouait aussitôt, à chaque nouvel essai (« photos non envoyées : 22 »,
+// 14 novembre, application Google). Chaque photo est donc relue avant l'envoi ; illisible, on reprend la copie de l'album enregistrée sur
+// l'appareil (IndexedDB, écrite après la composition), puis l'original, et en dernier recours la version écran de 1200 px (signalée à Gabin).
+async function lisible(b) {
+  try {
+    if (!b || !(b.size > 2048)) return null;
+    const buf = await within(b.arrayBuffer(), 8000, 'lecture');
+    return buf.byteLength > 2048 ? new Blob([buf], { type: b.type || 'image/jpeg' }) : null;
+  } catch (e) { nlog('photo illisible : ' + (e.message || e.name)); return null; }
+}
+let copieLocale = null;                                              // photos de l'album enregistré sur l'appareil, relues une fois par envoi
+async function hdCopie(p) {
+  copieLocale = copieLocale || idbGet('album').then(a => (a && a.photos) || []).catch(() => []);
+  const q = p.thumb && (await copieLocale).find(x => x && x.thumb === p.thumb);
+  return q ? lisible(q.hd) : null;
+}
+async function photoAEnvoyer(p) {
+  const hd = await lisible(p.hd) || await hdCopie(p);
+  if (hd) return { b: hd };
+  if (p.hd) { NA.envoi.illisibles++; nlog('haute définition illisible : ' + (p.name || '')); }
+  if (p.full) return { b: dataUrlToBlob(p.full) };                   // anciens albums enregistrés
   if (p.file) {
-    const d = await decodeFile(p.file);
+    const d = await decodeFile(p.file);                               // l'original, s'il est encore lisible
     if (d) {
       const c = document.createElement('canvas'), img = d.img, max = TOUCH ? 2200 : 2400;
       const r = Math.min(max / (img.naturalWidth || img.width), max / (img.naturalHeight || img.height), 1);
@@ -7294,16 +7313,26 @@ async function fullBlob(p) {
       d.done();
       const b = await new Promise(res => c.toBlob(res, 'image/jpeg', 0.9));
       c.width = c.height = 0;                                        // libère la mémoire tout de suite
-      if (b) return b;
+      if (b) return { b };
     }
   }
-  return dataUrlToBlob(p.data);
+  return { b: dataUrlToBlob(p.data), basse: true };                  // version écran (1200 px) : la haute définition est perdue
 }
 function dataUrlToBlob(u) { const [h, b] = u.split(','); const bin = atob(b); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: h.slice(5, h.indexOf(';')) }); }
+const enTexte = b => new Promise((ok, ko) => { const f = new FileReader(); f.onload = () => ok(f.result); f.onerror = () => ko(f.error); f.readAsDataURL(b); });
+// 3e essai d'une photo : envoyée en texte à noustalgie.fr, qui la transmet à Cloudinary (ni fichier du navigateur, ni appel direct à
+// api.cloudinary.com : ce qui marchait encore chez la cliente bloquée du 14 novembre, puisque ses alertes nous parvenaient)
+async function relais(src, p, sig) {
+  let uri = await enTexte(src.b).catch(() => '');
+  if (!/^data:image\//.test(uri) || uri.length > 4e6) { uri = p.data; src.basse = true; }
+  const r = await fetch('/api/tools?fn=photo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file: uri, folder: sig.folder }) });
+  return r.json();
+}
 async function uploadPhotos(onProgress, all) {
   const used = new Set(); NA.pages.forEach(p => p.slots.forEach(s => used.add(s.p)));
   Object.entries(NA.optPhoto || {}).forEach(([k, i]) => { if (i != null && NA.opts && NA.opts.has(k)) used.add(i); });   // photo choisie pour un objet
   const todo = (all ? S.photos.map((_, i) => i) : [...used]).filter(i => S.photos[i] && !S.photos[i].pid);
+  NA.envoi = NA.envoi || { illisibles: 0, relais: 0, err: '' }; copieLocale = null;
   if (!todo.length) return 0;
   const sig = await fetch('/api/sign-upload', { method: 'POST' }).then(r => r.json());
   if (!sig || !sig.signature) throw new Error('signature');
@@ -7311,19 +7340,25 @@ async function uploadPhotos(onProgress, all) {
   const work = todo.slice();
   async function worker() {
     while (work.length) {
-      const i = work.shift(), p = S.photos[i];
-      const fd = new FormData();
-      fd.append('file', await fullBlob(p), `photo-${i}.jpg`);
-      fd.append('api_key', sig.apiKey); fd.append('timestamp', sig.timestamp); fd.append('folder', sig.folder); fd.append('signature', sig.signature);
-      if (sig.allowed_formats) fd.append('allowed_formats', sig.allowed_formats);
-      if (sig.transformation) fd.append('transformation', sig.transformation);
+      const i = work.shift(), p = S.photos[i], src = await photoAEnvoyer(p);
       for (let a = 0; a < 3; a++) {
         try {
-          const r = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloud}/image/upload`, { method: 'POST', body: fd });
-          const j = await r.json();
-          if (j.public_id) { p.pid = j.public_id; p.cloud = sig.cloud; break; }
-          throw new Error((j.error && j.error.message) || 'upload');
-        } catch (e) { if (a === 2) console.warn('photo non envoyée', i, e); else await sleep(1200); }
+          let j;
+          if (a < 2) {
+            const fd = new FormData();
+            fd.append('file', src.b, `photo-${i}.jpg`);
+            fd.append('api_key', sig.apiKey); fd.append('timestamp', sig.timestamp); fd.append('folder', sig.folder); fd.append('signature', sig.signature);
+            if (sig.allowed_formats) fd.append('allowed_formats', sig.allowed_formats);
+            if (sig.transformation) fd.append('transformation', sig.transformation);
+            const r = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloud}/image/upload`, { method: 'POST', body: fd });
+            j = await r.json();
+          } else { j = await relais(src, p, sig); if (j && j.public_id) NA.envoi.relais++; }
+          if (j && j.public_id) { p.pid = j.public_id; p.cloud = sig.cloud; if (src.basse) p.basse = 1; break; }
+          throw new Error((j && j.error && (j.error.message || j.error)) || 'upload');
+        } catch (e) {
+          if (!NA.envoi.err) NA.envoi.err = String((e && (e.message || e.name)) || e).slice(0, 140);
+          if (a === 2) console.warn('photo non envoyée', i, e); else await sleep(1200);
+        }
       }
       onProgress(++done, todo.length);
     }
@@ -7475,6 +7510,7 @@ window.generateAlbumPDF = async function (onStep, opts) {
   onStep = onStep || (() => {}); opts = opts || {};
   if (NA.photosReady) await NA.photosReady();
   // Une photo non envoyée partirait à l'impression en basse définition (aperçu de 1200 px) : un second envoi, sinon le client est prévenu
+  NA.envoi = { illisibles: 0, relais: 0, err: '' };                  // bilan de l'envoi, joint à l'alerte en cas d'échec
   let manque = await uploadPhotos((d, n) => onStep(NA.t('p_upload', d, n)));
   if (manque) manque = await uploadPhotos((d, n) => onStep(NA.t('p_upload', d, n)));
   if (manque) throw Object.assign(new Error(`photos non envoyées : ${manque}`), { photos: manque });
@@ -7568,7 +7604,7 @@ window.processPayment = async function () {
     say(NA.t('p_redirect'));
     const info = NA.info || coupleInfo();
     const r = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, firstName, lastName, phone: format === 'print' ? phone : '', email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, options: extras, files: pdf.files || {}, album: { id: NA.albumId || '', reminder: NA.reminder || null }, promoCode: (promo() && promo().code) || '' }) });
+      body: JSON.stringify({ name, firstName, lastName, phone: format === 'print' ? phone : '', email, address, addr: { line1, line2, postal, city, country: countryCode }, pages: nPagesSel(), names: info.names, style: NA.THEMES[NA.theme].name, format, pdfUrl, pdfProof: pdf.proof, spine: pdf.spine, options: extras, files: pdf.files || {}, album: { id: NA.albumId || '', reminder: NA.reminder || null }, promoCode: (promo() && promo().code) || '', basse: S.photos.filter(p => p && p.basse).length }) });
     const d = await r.json();
     if (d.url) {
       // Retour depuis Stripe (bouton Précédent, ou « Retour à l'aperçu » de la page d'annulation) : on rouvrira la commande telle quelle
@@ -7581,7 +7617,7 @@ window.processPayment = async function () {
     console.error(e);
     btn.disabled = false; btn.innerHTML = label;
     // Alerte à Gabin : l'erreur exacte et le contexte, pour corriger avant le client suivant
-    try { fetch('/api/tools?fn=alerte', { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify({ etape, erreur: (e && e.message) || String(e), pagesAlbum: NA.pages.length, pages: nPagesSel(), format, style: NA.THEMES[NA.theme] && NA.THEMES[NA.theme].name, options: (NA.opts ? [...NA.opts] : []).join(','), pays: countryCode, langue: (typeof currentLang !== 'undefined' && currentLang) || 'fr', photos: (typeof S !== 'undefined' && S.photos) ? S.photos.length : '', email, ua: navigator.userAgent }) }).catch(() => {}); } catch (x) {}
+    try { fetch('/api/tools?fn=alerte', { method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true, body: JSON.stringify({ etape, erreur: (e && e.message) || String(e), pagesAlbum: NA.pages.length, pages: nPagesSel(), format, style: NA.THEMES[NA.theme] && NA.THEMES[NA.theme].name, options: (NA.opts ? [...NA.opts] : []).join(','), pays: countryCode, langue: (typeof currentLang !== 'undefined' && currentLang) || 'fr', photos: (typeof S !== 'undefined' && S.photos) ? S.photos.length : '', email, ua: navigator.userAgent, detail: NA.envoi ? `haute définition illisible : ${NA.envoi.illisibles} · relayées : ${NA.envoi.relais} · erreur : ${NA.envoi.err || 'aucune'}` : '' }) }).catch(() => {}); } catch (x) {}
     alert(e.photos ? NA.t('p_upload_fail') : NA.t('p_fail', e.message || 'réseau'));
   }
 };
