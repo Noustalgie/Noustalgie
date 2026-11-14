@@ -1672,6 +1672,23 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
 /* Lien vers la carte cadeau, sous les tarifs */
 html body a.nst-gift{display:inline-block;color:#1c1a18;text-decoration:underline;text-decoration-color:rgba(28,26,24,.35);text-underline-offset:3px;}
 html body a.nst-gift:hover{text-decoration-color:#1c1a18;}
+/* Haut de page : ce qui rassure avant de commencer (aperçu gratuit, prix de départ, livraison), sous le bouton */
+html body .ed-hero-note{margin:14px 0 0;font:400 14px/1.45 var(--v6-ui);color:#4a4540;}
+@media (max-width:760px){html body .ed-hero-note{margin:10px 0 0;font-size:13px;text-align:center;}}
+/* Étape Photos sur téléphone : « Créer notre histoire » était sous la grille, les paliers et les rubriques (3 à 4 écrans plus bas
+   avec 25 photos). La rangée reste collée en bas de l'écran, comme celle de l'aperçu. */
+@media (max-width:760px){
+  #panel1>.btn-row{position:sticky;bottom:0;z-index:40;margin:12px -20px 0!important;padding:10px 20px calc(10px + env(safe-area-inset-bottom));background:rgba(250,249,246,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 -12px 24px -18px rgba(28,26,24,.45);flex-direction:row!important;flex-wrap:nowrap;}
+  #panel1>.btn-row>.btn{width:auto;flex:0 0 auto;padding-left:16px;padding-right:16px;}
+  #panel1>.btn-row>#btnGen{flex:1 1 auto;}
+  /* Étape Commander : le bouton de paiement (avec le montant) reste visible pendant qu'on remplit le formulaire et les options */
+  #panel4 .pay-wrap{overflow:visible;}                                /* « overflow:hidden » empêchait le bouton de rester collé */
+  #panel4 #payBtn{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;box-shadow:0 14px 30px -12px rgba(28,26,24,.55);}
+}
+/* Aperçu sur ordinateur : « Commander ce livre » restait sous l'éditeur et les miniatures, hors de l'écran */
+@media (min-width:761px){
+  #panel3 #previewActions{position:sticky;bottom:0;z-index:40;padding:14px 0 16px;margin-bottom:0!important;background:linear-gradient(rgba(250,249,246,0),rgba(250,249,246,.94) 35%);}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1852,7 +1869,7 @@ html body a.nst-gift:hover{text-decoration-color:#1c1a18;}
 }
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script defer src="/consentement.js?v=3"></script>
+<script defer src="/consentement.js?v=4"></script>
 </head>
 <body>
 <a class="nst-skip" href="#main" data-i18n="skip_main">Aller au contenu</a>
@@ -1912,6 +1929,7 @@ html body a.nst-gift:hover{text-decoration-color:#1c1a18;}
       <button class="ed-btn-dark" onclick="startApp()" data-i18n="hero_cta">Composer mon album</button>
       <button class="ed-btn-out" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="hero_how">Comment ça marche</button>
     </div>
+    <p class="ed-hero-note" data-i18n="hero_note">Aperçu gratuit · Dès 39,99&nbsp;€ · Livraison offerte</p>
   </div>
   <div class="ed-hero-img"><div class="nst-demo" id="nstDemo" aria-label="Exemple d’album Noustalgie"></div>
     <img src="/img/exemple/photo-portee.jpg" alt="Le marié portant la mariée dans un champ" width="900" height="900" fetchpriority="high" decoding="async" onerror="this.style.display='none'"/>
@@ -2460,7 +2478,7 @@ const LANGS = {
     hero_badge:'Album photo couple · Impression premium',
     hero_h1_1:'L\'album photo de couple', hero_h1_2:'qui raconte', hero_h1_sub:'votre histoire',
     hero_p1:'Envoyez vos plus belles photos.', hero_p2:'Envoyez vos plus belles photos.', hero_p3:'Nous composons votre album et vous livrons un livre imprimé sur papier premium.',
-    hero_cta:'Composer mon album', hero_how:'Comment ça marche',
+    hero_cta:'Composer mon album', hero_how:'Comment ça marche', hero_note:'Aperçu gratuit · Dès 39,99\u00a0€ · Livraison offerte',
     proof1:"Couverture rigide", proof2_n:"24 à 50", proof2:"pages", proof3:"Livre imprimé", proof4:'Cadeau inoubliable',
     how_eyebrow:'Le processus', how_title1:'Simple comme', how_title2:'dire je t\'aime', how_sub:'Zéro compétence requise. Vous envoyez les photos, nous faisons la magie.',
     step1_name:'Vos infos & photos', step1_desc:'Vos prénoms, date de rencontre, minimum 15 photos.',
@@ -2548,7 +2566,7 @@ const LANGS = {
     hero_badge:'Couple photo album · Premium printing',
     hero_h1_1:'The couple photo album', hero_h1_2:'that tells', hero_h1_sub:'your story',
     hero_p1:'Send your best photos.', hero_p2:'Send us your best photos.', hero_p3:'We design your album and deliver a book printed on premium paper.',
-    hero_cta:'Create my album', hero_how:'How it works',
+    hero_cta:'Create my album', hero_how:'How it works', hero_note:'Free preview · From €39.99 · Free delivery',
     proof1:"Hardcover", proof2_n:"24 to 50", proof2:"pages", proof3:"Printed book", proof4:'Unforgettable gift',
     how_eyebrow:'The process', how_title1:'As simple as', how_title2:'saying I love you', how_sub:'No skills required. You send the photos, we do the magic. You receive the book.',
     step1_name:'Your info & photos', step1_desc:'Your names, when you met, minimum 10 couple photos.',
@@ -2636,7 +2654,7 @@ const LANGS = {
     hero_badge:'Pärchen-Fotoalbum · Premium-Druck',
     hero_h1_1:'Das Fotoalbum für Paare,', hero_h1_2:'das eure Geschichte', hero_h1_sub:'erzählt',
     hero_p1:'Schickt eure schönsten Fotos.', hero_p2:'Schickt uns eure schönsten Fotos.', hero_p3:'Wir gestalten euer Album und liefern ein Buch, gedruckt auf Premium-Papier.',
-    hero_cta:'Mein Album gestalten', hero_how:'So funktioniert\'s',
+    hero_cta:'Mein Album gestalten', hero_how:'So funktioniert\'s', hero_note:'Kostenlose Vorschau · Ab 39,99\u00a0€ · Kostenloser Versand',
     proof1:"Hardcover", proof2_n:"24 bis 50", proof2:"Seiten", proof3:"Gedrucktes Buch", proof4:'Unvergessliches Geschenk',
     how_eyebrow:'Der Ablauf', how_title1:'So einfach wie', how_title2:'Ich liebe dich sagen', how_sub:'Keine Kenntnisse erforderlich. Ihr schickt die Fotos, wir machen die Magie.',
     step1_name:'Eure Infos & Fotos', step1_desc:'Eure Vornamen, Kennenlerndatum, mindestens 10 Pärchenfot.',
@@ -2724,7 +2742,7 @@ const LANGS = {
     hero_badge:'Álbum foto pareja · Impresión premium',
     hero_h1_1:'El álbum de fotos de pareja', hero_h1_2:'que cuenta', hero_h1_sub:'vuestra historia',
     hero_p1:'Enviad vuestras mejores fotos.', hero_p2:'Enviadnos vuestras mejores fotos.', hero_p3:'Diseñamos vuestro álbum y os entregamos un libro impreso en papel premium.',
-    hero_cta:'Crear mi álbum', hero_how:'Cómo funciona',
+    hero_cta:'Crear mi álbum', hero_how:'Cómo funciona', hero_note:'Vista previa gratis · Desde 39,99\u00a0€ · Envío gratis',
     proof1:"Tapa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Libro impreso", proof4:'Regalo inolvidable',
     how_eyebrow:'El proceso', how_title1:'Tan sencillo como', how_title2:'decir te quiero', how_sub:'Sin necesidad de habilidades. Enviadlas fotos, nosotros hacemos la magia.',
     step1_name:'Vuestros datos & fotos', step1_desc:'Vuestros nombres, cuándo os conocisteis, mínimo 10 fotos.',
@@ -2812,7 +2830,7 @@ const LANGS = {
     hero_badge:'Álbum de casal · Impressão premium',
     hero_h1_1:'O álbum de fotos de casal', hero_h1_2:'que conta', hero_h1_sub:'a vossa história',
     hero_p1:'Enviem as vossas melhores fotos.', hero_p2:'Enviem-nos as vossas melhores fotos.', hero_p3:'Desenhamos o vosso álbum e entregamos um livro impresso em papel premium.',
-    hero_cta:'Criar o meu álbum', hero_how:'Como funciona',
+    hero_cta:'Criar o meu álbum', hero_how:'Como funciona', hero_note:'Pré-visualização grátis · Desde 39,99\u00a0€ · Envio grátis',
     proof1:"Capa dura", proof2_n:"24 a 50", proof2:"páginas", proof3:"Livro impresso", proof4:'Presente inesquecível',
     how_eyebrow:'O processo', how_title1:'Tão simples como', how_title2:'dizer eu te amo', how_sub:'Sem necessidade de competências. Enviam as fotos, nós fazemos a magia.',
     step1_name:'As vossas infos & fotos', step1_desc:'Os vossos nomes, quando se conheceram, mínimo 10 fotos.',
@@ -3123,7 +3141,7 @@ function edPickPrice(pages){
   if(typeof highlightPal==='function')highlightPal(pages);
 }
 function toggleFaq(btn){var item=btn.closest('.ed-faq-item');if(item)item.classList.toggle('open');}
-function startApp(){document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>{goTab(0);if(typeof highlightPal==='function')highlightPal(selectedPages);if(typeof updateFormatPrices==='function')updateFormatPrices();},300);}
+function startApp(){var ps=[].slice.call(document.querySelectorAll('.panel')),en=Math.max(0,ps.findIndex(function(p){return p.classList.contains('active');}));document.getElementById('app').scrollIntoView({behavior:'smooth'});setTimeout(()=>{if(en===0)goTab(0);if(typeof highlightPal==='function')highlightPal(selectedPages);if(typeof updateFormatPrices==='function')updateFormatPrices();},300);}
 
 // ══════════════════════════════════════════
 // PHOTOS
@@ -7574,14 +7592,15 @@ window.processPayment = async function () {
   const name = [firstName, lastName].filter(Boolean).join(' ');
   const email = val('payEmail'), format = ($('payFormat') && $('payFormat').value) || 'print';
   if ($('hpField') && $('hpField').value) return;
-  if (!firstName || !email) { alert(NA.t('p_need')); return; }
+  const vers = (...ids) => { const f = ids.map($).find(x => x && !x.value.trim()) || $(ids[0]); if (f) try { f.focus(); f.scrollIntoView({ block: 'center' }); } catch (x) {} };   // le curseur va au champ à remplir
+  if (!firstName || !email) { alert(NA.t('p_need')); vers('payName', 'payEmail'); return; }
   if (format === 'print' && !lastName) { alert(NA.t('p_last')); if ($('payLastName')) $('payLastName').focus(); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(NA.t('p_email')); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(NA.t('p_email')); vers('payEmail'); return; }
   const line1 = val('payAddrLine1'), line2 = val('payAddrLine2'), postal = val('payAddrPostal'), city = val('payAddrCity');
   const cSel = $('payAddrCountry'), countryCode = (cSel && cSel.value) || 'FR';
   const country = cSel && cSel.options ? cSel.options[cSel.selectedIndex].text : 'France';
   const address = [line1, line2, (postal + ' ' + city).trim(), country].filter(Boolean).join(', ');
-  if (format === 'print' && (!line1 || !postal || !city)) { alert(NA.t('p_addr')); return; }
+  if (format === 'print' && (!line1 || !postal || !city)) { alert(NA.t('p_addr')); vers('payAddrLine1', 'payAddrPostal', 'payAddrCity'); return; }
   if (format === 'print' && !phoneOk(phone)) { alert(NA.t('p_phone')); if ($('payPhone')) $('payPhone').focus(); return; }
   if (!NA.pages.length) { alert(NA.t('p_empty')); return; }
   // Le livre payé est celui qui est composé : un format choisi après la composition (carte de prix, curseur)
@@ -7639,19 +7658,19 @@ window.processPayment = async function () {
   const TXT = {
     fr: { a1t: 'Vos photos', a1d: 'Importez-les et parlez-nous de vous deux.', a2t: 'La composition', a2d: 'Aperçu gratuit, tout est modifiable avant de payer.', a3t: 'Le livre', a3d: 'Imprimé et livré chez vous en 6 à 8 jours ouvrés environ.', facts: '21 × 21 cm · Couverture rigide · 24 à 50 pages · Dès 39,99 €, livraison offerte', how_eb: 'Comment ça marche', how_t: 'Trois étapes, <em>un vrai livre</em>', s1t: 'Vos photos et votre histoire', s1d: 'Importez vos photos préférées et répondez à quelques questions sur vous deux.', s1m: 'Quelques minutes', s2t: 'La composition', s2d: 'Textes, légendes et mises en page se composent sous vos yeux. Vous modifiez tout avant de payer.', s2m: 'Aperçu gratuit', s3t: 'L’impression', s3d: 'Imprimé sur papier premium, couverture rigide, puis livré chez vous.', s3m: 'Environ 6 à 8 jours ouvrés', f1v: '21 × 21 cm', f1l: 'Format carré', f2v: 'Couverture rigide', f2l: 'Papier premium', f3v: '24 à 50 pages', f3l: 'Selon le format', f4v: 'Dès 39,99 €', f4l: 'Livraison offerte', c1: 'Aperçu complet avant de payer', c2: 'Paiement sécurisé', c3: 'Photos supprimées après 30 jours', eyebrow: 'À quoi ressemble votre livre', title: 'De vraies pages, <em>pas des modèles</em>', sub: 'L’album de Léa et Hugo, imaginé pour l’exemple\u00a0: 24\u00a0pages au style Magazine. Tout reste modifiable avant de payer.', more: 'Feuilleter l’album complet', exnote: 'Couple fictif, photos Unsplash.',
           g: ['Aperçu complet et gratuit avant de payer', 'Livraison offerte à domicile', 'Vos photos supprimées après 30 jours'], nav_ex: 'Exemples', nav_70: 'Années 70', galLabel: 'Exemples de doubles pages',
-          cta: 'Composer mon album', from: 'dès 39,99€', choose: 'Choisir', themes: ['Là où tout a commencé · le plan de votre rencontre', 'Vos grandes étapes, sur une pellicule', 'La playlist de votre histoire', 'Une interview exclusive et 5 raisons de s’aimer', 'Des jeux à deux\u00a0: quiz et mots mêlés', 'Une lettre d’amour, rien que pour l’autre'] },
+          cta: 'Composer mon album', cta_go: 'Reprendre mon album', from: 'dès 39,99€', choose: 'Choisir', themes: ['Là où tout a commencé · le plan de votre rencontre', 'Vos grandes étapes, sur une pellicule', 'La playlist de votre histoire', 'Une interview exclusive et 5 raisons de s’aimer', 'Des jeux à deux\u00a0: quiz et mots mêlés', 'Une lettre d’amour, rien que pour l’autre'] },
     en: { a1t: 'Your photos', a1d: 'Upload them and tell us about the two of you.', a2t: 'The layout', a2d: 'Free preview, everything can be edited before you pay.', a3t: 'The book', a3d: 'Printed and delivered to your door in about 6 to 8 working days.', facts: '21 × 21 cm · Hardcover · 24 to 50 pages · From €39.99, free delivery', how_eb: 'How it works', how_t: 'Three steps, <em>a real book</em>', s1t: 'Your photos and your story', s1d: 'Upload your favourite photos and answer a few questions about the two of you.', s1m: 'A few minutes', s2t: 'The layout', s2d: 'Text, captions and layouts come together before your eyes. Edit everything before you pay.', s2m: 'Free preview', s3t: 'Printing', s3d: 'Printed on premium paper with a hard cover, then delivered to your door.', s3m: 'About 6 to 8 working days', f1v: '21 × 21 cm', f1l: 'Square format', f2v: 'Hardcover', f2l: 'Premium paper', f3v: '24 to 50 pages', f3l: 'Depending on format', f4v: 'From €39.99', f4l: 'Free delivery', c1: 'Full preview before you pay', c2: 'Secure payment', c3: 'Photos deleted after 30 days', eyebrow: 'What your book looks like', title: 'Real pages, <em>not templates</em>', sub: 'Léa and Hugo’s album, created as an example: 24\u00a0pages in the Magazine style. Everything can be edited before you pay.', more: 'Browse the full album', exnote: 'Fictional couple, Unsplash photos.',
           g: ['Full free preview before you pay', 'Free home delivery', 'Your photos deleted after 30 days'], nav_ex: 'Examples', nav_70: '70s', galLabel: 'Example spreads',
-          cta: 'Create my album', from: 'from €39.99', choose: 'Choose', themes: ['Where it all began · the map of where you met', 'Your milestones, on a film strip', 'The playlist of your story', 'An exclusive interview and 5 reasons to love', 'Games for two: a quiz and a word search', 'A love letter, just for the other one'] },
+          cta: 'Create my album', cta_go: 'Back to my album', from: 'from €39.99', choose: 'Choose', themes: ['Where it all began · the map of where you met', 'Your milestones, on a film strip', 'The playlist of your story', 'An exclusive interview and 5 reasons to love', 'Games for two: a quiz and a word search', 'A love letter, just for the other one'] },
     de: { a1t: 'Eure Fotos', a1d: 'Ladet sie hoch und erzählt uns von euch beiden.', a2t: 'Die Gestaltung', a2d: 'Kostenlose Vorschau, alles lässt sich vor dem Bezahlen ändern.', a3t: 'Das Buch', a3d: 'Gedruckt und in etwa 6 bis 8 Werktagen zu euch nach Hause geliefert.', facts: '21 × 21 cm · Hardcover · 24 bis 50 Seiten · Ab 39,99 €, kostenloser Versand', how_eb: 'So funktioniert’s', how_t: 'Drei Schritte, <em>ein echtes Buch</em>', s1t: 'Eure Fotos und eure Geschichte', s1d: 'Ladet eure Lieblingsfotos hoch und beantwortet ein paar Fragen über euch beide.', s1m: 'Ein paar Minuten', s2t: 'Die Gestaltung', s2d: 'Texte, Bildunterschriften und Layouts entstehen vor euren Augen. Ihr könnt alles vor dem Bezahlen ändern.', s2m: 'Kostenlose Vorschau', s3t: 'Der Druck', s3d: 'Auf Premium-Papier gedruckt, mit festem Einband, direkt zu euch nach Hause.', s3m: 'Etwa 6 bis 8 Werktage', f1v: '21 × 21 cm', f1l: 'Quadratisches Format', f2v: 'Hardcover', f2l: 'Premium-Papier', f3v: '24 bis 50 Seiten', f3l: 'Je nach Format', f4v: 'Ab 39,99 €', f4l: 'Kostenloser Versand', c1: 'Vollständige Vorschau vor dem Bezahlen', c2: 'Sichere Zahlung', c3: 'Fotos nach 30 Tagen gelöscht', eyebrow: 'So sieht euer Buch aus', title: 'Echte Seiten, <em>keine Vorlagen</em>', sub: 'Das Album von Léa und Hugo, als Beispiel gestaltet: 24\u00a0Seiten im Stil Magazine. Alles lässt sich vor dem Bezahlen ändern.', more: 'Das ganze Album durchblättern', exnote: 'Fiktives Paar, Fotos von Unsplash.',
           g: ['Vollständige Gratis-Vorschau vor dem Bezahlen', 'Kostenlose Lieferung nach Hause', 'Eure Fotos werden nach 30 Tagen gelöscht'], nav_ex: 'Beispiele', nav_70: '70er', galLabel: 'Beispielseiten',
-          cta: 'Album gestalten', from: 'ab 39,99€', choose: 'Wählen', themes: ['Wo alles begann · der Stadtplan eures Kennenlernens', 'Eure großen Etappen, auf einem Filmstreifen', 'Die Playlist eurer Geschichte', 'Ein Exklusiv-Interview und 5 Gründe, sich zu lieben', 'Spiele zu zweit: Quiz und Suchrätsel', 'Ein Liebesbrief, nur für den anderen'] },
+          cta: 'Album gestalten', cta_go: 'Zurück zu meinem Album', from: 'ab 39,99€', choose: 'Wählen', themes: ['Wo alles begann · der Stadtplan eures Kennenlernens', 'Eure großen Etappen, auf einem Filmstreifen', 'Die Playlist eurer Geschichte', 'Ein Exklusiv-Interview und 5 Gründe, sich zu lieben', 'Spiele zu zweit: Quiz und Suchrätsel', 'Ein Liebesbrief, nur für den anderen'] },
     es: { a1t: 'Vuestras fotos', a1d: 'Subidlas y habladnos de vosotros dos.', a2t: 'La composición', a2d: 'Vista previa gratuita, todo se puede cambiar antes de pagar.', a3t: 'El libro', a3d: 'Impreso y entregado en casa en unos 6 a 8 días hábiles.', facts: '21 × 21 cm · Tapa dura · 24 a 50 páginas · Desde 39,99 €, envío gratis', how_eb: 'Cómo funciona', how_t: 'Tres pasos, <em>un libro de verdad</em>', s1t: 'Vuestras fotos y vuestra historia', s1d: 'Subid vuestras fotos favoritas y responded a unas preguntas sobre vosotros.', s1m: 'Unos minutos', s2t: 'La composición', s2d: 'Textos, pies de foto y maquetación se crean ante vuestros ojos. Podéis cambiarlo todo antes de pagar.', s2m: 'Vista previa gratuita', s3t: 'La impresión', s3d: 'Impreso en papel premium, tapa dura, y entregado a domicilio.', s3m: 'Unos 6 a 8 días hábiles', f1v: '21 × 21 cm', f1l: 'Formato cuadrado', f2v: 'Tapa dura', f2l: 'Papel premium', f3v: '24 a 50 páginas', f3l: 'Según el formato', f4v: 'Desde 39,99 €', f4l: 'Envío gratis', c1: 'Vista previa completa antes de pagar', c2: 'Pago seguro', c3: 'Fotos borradas a los 30 días', eyebrow: 'Así es vuestro libro', title: 'Páginas reales, <em>no plantillas</em>', sub: 'El álbum de Léa y Hugo, creado como ejemplo: 24\u00a0páginas en estilo Magazine. Todo se puede cambiar antes de pagar.', more: 'Hojear el álbum completo', exnote: 'Pareja ficticia, fotos de Unsplash.',
           g: ['Vista previa completa y gratuita antes de pagar', 'Envío gratis a domicilio', 'Vuestras fotos se borran a los 30 días'], nav_ex: 'Ejemplos', nav_70: 'Años 70', galLabel: 'Páginas de ejemplo',
-          cta: 'Crear mi álbum', from: 'desde 39,99€', choose: 'Elegir', themes: ['Donde todo empezó · el plano de vuestro encuentro', 'Vuestras grandes etapas, en una película', 'La playlist de vuestra historia', 'Una entrevista exclusiva y 5 razones para amarse', 'Juegos para dos: quiz y sopa de letras', 'Una carta de amor, solo para el otro'] },
+          cta: 'Crear mi álbum', cta_go: 'Volver a mi álbum', from: 'desde 39,99€', choose: 'Elegir', themes: ['Donde todo empezó · el plano de vuestro encuentro', 'Vuestras grandes etapas, en una película', 'La playlist de vuestra historia', 'Una entrevista exclusiva y 5 razones para amarse', 'Juegos para dos: quiz y sopa de letras', 'Una carta de amor, solo para el otro'] },
     pt: { a1t: 'As vossas fotos', a1d: 'Carreguem-nas e falem-nos de vocês os dois.', a2t: 'A composição', a2d: 'Pré-visualização grátis, tudo pode ser alterado antes de pagar.', a3t: 'O livro', a3d: 'Impresso e entregue em casa em cerca de 6 a 8 dias úteis.', facts: '21 × 21 cm · Capa dura · 24 a 50 páginas · Desde 39,99 €, envio grátis', how_eb: 'Como funciona', how_t: 'Três passos, <em>um livro a sério</em>', s1t: 'As vossas fotos e a vossa história', s1d: 'Carreguem as vossas fotos preferidas e respondam a algumas perguntas sobre vocês.', s1m: 'Alguns minutos', s2t: 'A composição', s2d: 'Textos, legendas e paginação ganham forma diante dos vossos olhos. Podem alterar tudo antes de pagar.', s2m: 'Pré-visualização grátis', s3t: 'A impressão', s3d: 'Impresso em papel premium, capa dura, e entregue em casa.', s3m: 'Cerca de 6 a 8 dias úteis', f1v: '21 × 21 cm', f1l: 'Formato quadrado', f2v: 'Capa dura', f2l: 'Papel premium', f3v: '24 a 50 páginas', f3l: 'Conforme o formato', f4v: 'Desde 39,99 €', f4l: 'Envio grátis', c1: 'Pré-visualização completa antes de pagar', c2: 'Pagamento seguro', c3: 'Fotos apagadas após 30 dias', eyebrow: 'Assim é o vosso livro', title: 'Páginas reais, <em>não modelos</em>', sub: 'O álbum da Léa e do Hugo, criado como exemplo: 24\u00a0páginas no estilo Magazine. Tudo pode ser alterado antes de pagar.', more: 'Folhear o álbum completo', exnote: 'Casal fictício, fotos do Unsplash.',
           g: ['Pré-visualização completa e gratuita antes de pagar', 'Envio grátis ao domicílio', 'As vossas fotos apagadas após 30 dias'], nav_ex: 'Exemplos', nav_70: 'Anos 70', galLabel: 'Páginas de exemplo',
-          cta: 'Criar o meu álbum', from: 'desde 39,99€', choose: 'Escolher', themes: ['Onde tudo começou · o mapa do vosso encontro', 'As vossas grandes etapas, num rolo de filme', 'A playlist da vossa história', 'Uma entrevista exclusiva e 5 razões para se amarem', 'Jogos a dois: quiz e sopa de letras', 'Uma carta de amor, só para o outro'] },
+          cta: 'Criar o meu álbum', cta_go: 'Voltar ao meu álbum', from: 'desde 39,99€', choose: 'Escolher', themes: ['Onde tudo começou · o mapa do vosso encontro', 'As vossas grandes etapas, num rolo de filme', 'A playlist da vossa história', 'Uma entrevista exclusiva e 5 razões para se amarem', 'Jogos a dois: quiz e sopa de letras', 'Uma carta de amor, só para o outro'] },
   };
   const lang = () => (typeof currentLang !== 'undefined' && TXT[currentLang]) ? currentLang : 'fr';
   // Album d'exemple « Léa & Hugo » (couple fictif, photos Unsplash) : vraies doubles pages du magazine, les mêmes que /exemple-album
@@ -7721,6 +7740,8 @@ window.processPayment = async function () {
   const vis = new Map();
   const upd = () => {
     const show = !vis.get(hero) && !vis.get(app) && !vis.get(foot) && !document.querySelector('.nst-resume');
+    const go = !!document.querySelector('.panel.active:not(#panel0)'), sp = bar.querySelector('span');      // déjà commencé : on reprend là où il en était
+    if (sp.dataset.nst !== (go ? 'cta_go' : 'cta')) { sp.dataset.nst = go ? 'cta_go' : 'cta'; sp.textContent = (TXT[lang()] || TXT.fr)[sp.dataset.nst]; bar.querySelector('small').hidden = go; }
     bar.classList.toggle('on', show); bar.setAttribute('aria-hidden', show ? 'false' : 'true'); bar.querySelector('button').tabIndex = show ? 0 : -1; if ('inert' in bar) bar.inert = !show;
   };
   if (window.IntersectionObserver) {
