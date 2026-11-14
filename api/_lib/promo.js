@@ -4,6 +4,7 @@
 // Usage unique : un code déjà utilisé dans un paiement réussi est refusé (recherche Stripe).
 const https = require('https');
 const crypto = require('crypto');
+const { lireCarte } = require('./cadeau');
 
 // Codes de la relance automatique (email programmé 3 jours après l'enregistrement d'un album, api/_fn/album.js) :
 // ALBUM- + date limite (3 caractères) + empreinte de l'album (3) + signature (4), vérifiés sans liste ni base de données.
@@ -67,6 +68,8 @@ async function checkPromo(input) {
   const code = normaliser(String(input || '').trim().toUpperCase());
   if (!code) return { valid: false, error: 'Code manquant.' };
   let promo = loadPromos()[code];
+  // Carte cadeau (CADEAU-XXXX-XXXX) : un bon Stripe à usage unique, vérifié chez Stripe (api/_lib/cadeau.js)
+  if (!promo && /^CADEAU/.test(code.replace(/[\s\-_.]/g, ''))) return (await lireCarte(code)) || { valid: false, error: 'Code invalide.' };
   if (!promo) {
     const r = lireRelance(code);
     if (r && r.expire) return { valid: false, error: 'Ce code a expiré.' };

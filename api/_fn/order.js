@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
   const liv = new Date(d);
   while (jours > 0) { liv.setDate(liv.getDate() + 1); if (liv.getDay() % 6) jours--; }
   return res.json({
-    paid: s.payment_status === 'paid',
+    paid: s.payment_status === 'paid' || (s.payment_status === 'no_payment_required' && s.amount_total === 0),   // 0 € : livre payé par une carte cadeau
     firstName: String(m.first_name || String(m.name || '').trim().split(' ')[0]).slice(0, 40),
     pages: String(m.pages || '').slice(0, 3),
     price: typeof s.amount_total === 'number' ? (s.amount_total / 100).toFixed(2).replace('.', ',') : '',
