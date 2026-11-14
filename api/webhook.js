@@ -241,8 +241,9 @@ module.exports = async (req, res) => {
 
   const session = event.data.object;
   const m = session.metadata || {};
-  // Livre entièrement payé par une carte cadeau : commande à 0 €, Stripe la valide sans paiement (« no_payment_required »)
-  const offert = session.payment_status === 'no_payment_required' && session.amount_total === 0 && /^CADEAU/.test(m.promo || '');
+  // Livre entièrement payé par une carte cadeau : commande à 0 € terminée, Stripe la valide sans paiement
+  // (« no_payment_required » ; la session ouverte se dit « unpaid », d'où le contrôle sur status === 'complete')
+  const offert = session.amount_total === 0 && /^CADEAU/.test(m.promo || '') && (session.payment_status === 'no_payment_required' || session.status === 'complete');
   if (session.payment_status !== 'paid' && !offert) return res.status(200).json({ received: true, ignored: 'unpaid' });
   if (m.type === 'cadeau') return carteVendue(session, res);
   const name = m.name || session.customer_details?.name || '';
