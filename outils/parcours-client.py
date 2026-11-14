@@ -33,6 +33,8 @@ CAS = [
     dict(nom='téléphone, une photo refusée par le réseau', tel=True, envoi_ko=True, attendu='message-envoi'),
     dict(nom='téléphone, coffret, « Retour à l’aperçu » de la page d’annulation', tel=True, options=['coffret'], retour='annulation'),
     dict(nom='ordinateur, allemand, livré en Allemagne, numéro « 0170/1234567 »', langue='de', pays='DE', tel_num='0170/1234567'),
+    # navigateur intégré d'une application (Google, Instagram) : l'envoi direct vers Cloudinary échoue toujours, les photos passent par noustalgie.fr
+    dict(nom='téléphone, envoi direct vers Cloudinary impossible : relais par le site', tel=True, direct_ko=True),
 ]
 
 
@@ -53,7 +55,7 @@ def photos(n, dossier):
 
 
 async def jouer(nav, port, api, c, captures):
-    c = dict(dict(tel=False, pages=36, photos=None, options=[], ia='ok', langue='fr', format='print', attendu='stripe', retour=False, envoi_ko=False, pays='FR', tel_num='06 12 34 56 78'), **c)
+    c = dict(dict(tel=False, pages=36, photos=None, options=[], ia='ok', langue='fr', format='print', attendu='stripe', retour=False, envoi_ko=False, direct_ko=False, pays='FR', tel_num='06 12 34 56 78'), **c)
     if not c['photos']:
         c['photos'] = {24: 16, 36: 24, 50: 34}[c['pages']]
     urllib.request.urlopen(f'http://127.0.0.1:{api}/__ia?mode={c["ia"]}').read()
@@ -76,6 +78,8 @@ async def jouer(nav, port, api, c, captures):
             stripe['ok'] = True
             return await r.fulfill(status=200, content_type='text/html', body='<p>Stripe</p>')
         if u.startswith('https://api.cloudinary.com/') and '/image/upload' in u:
+            if c['direct_ko']:
+                return await r.abort('connectionreset')            # l'application bloque l'envoi direct : relais par /api/tools?fn=photo
             if reseau['coupe'] and b'filename="photo-3.jpg"' in (r.request.post_data_buffer or b''):
                 return await r.abort('connectionreset')            # cette photo ne passe jamais (réseau mobile)
             n_img[0] += 1
@@ -84,6 +88,10 @@ async def jouer(nav, port, api, c, captures):
             return await r.fulfill(path=SOURCES[0], content_type='image/jpeg')
         if 'data.geopf.fr' in u or 'photon.komoot.io' in u:
             return await r.fulfill(content_type='application/json', body='{"features": []}')
+        if '/api/tools?fn=photo' in u:
+            if reseau['coupe']:
+                return await r.abort('connectionreset')            # réseau coupé : le relais ne passe pas non plus
+            n_img[0] += 1                                          # photo relayée par noustalgie.fr vers Cloudinary
         if f'127.0.0.1:{port}/api/' in u:
             q = u.split(f'127.0.0.1:{port}', 1)[1]
             return await r.fulfill(response=await r.fetch(url=f'http://127.0.0.1:{api}{q}'))

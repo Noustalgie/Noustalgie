@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const c = (v, n) => String(v == null ? '' : v).slice(0, n);
   const lignes = [['Étape', c(b.etape, 40)], ['Erreur', c(b.erreur, 500)], ['Pages (album / choisies)', `${c(b.pagesAlbum, 4)} / ${c(b.pages, 4)}`],
     ['Format', c(b.format, 10)], ['Style', c(b.style, 40)], ['Options', c(b.options, 120)], ['Pays', c(b.pays, 4)], ['Langue', c(b.langue, 4)],
-    ['Photos', c(b.photos, 6)], ['Client', c(b.email, 120)], ['Navigateur', c(b.ua, 300)]];
+    ['Photos', c(b.photos, 6)], ['Client', c(b.email, 120)], ['Navigateur', c(b.ua, 300)], ['Envoi des photos', c(b.detail, 300)]].filter(l => l[1]);
   console.error('alerte paiement:', c(b.etape, 40), c(b.erreur, 300));
   if (process.env.NOTIFY_EMAIL) await sendEmail({ to: process.env.NOTIFY_EMAIL, subject: `⚠️ Paiement bloqué : ${c(b.erreur, 80) || 'erreur inconnue'}`,
     html: `<h2>Un client n'a pas pu payer</h2><table>${lignes.map(([k, v]) => `<tr><td style="padding:2px 12px 2px 0;color:#666">${h(k)}</td><td>${h(v)}</td></tr>`).join('')}</table><p>Le client n'a pas été débité.</p>` });
