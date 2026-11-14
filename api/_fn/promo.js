@@ -14,5 +14,5 @@ module.exports = async (req, res) => {
   const { code } = parseBody(req);
   const r = await checkPromo(code);
   if (!r.valid) return res.json({ valid: false, error: r.error });
-  return res.json({ valid: true, discount: r.discount, type: r.type });
+  return res.json({ valid: true, discount: r.discount, type: r.type, amount: r.amount });
 };

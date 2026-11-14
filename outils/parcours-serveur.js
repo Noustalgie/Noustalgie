@@ -15,6 +15,13 @@ https.request = (opts, cb) => {
     let out = {}, status = 200;
     if (opts.hostname === 'api.pdfshift.io') out = { url: `https://pdfshift.example/${++n}.pdf`, filesize: 4000000 };
     else if (opts.hostname === 'api.cloudinary.com') { const id = new URLSearchParams(body).get('public_id'); out = { secure_url: `https://res.cloudinary.com/daxkn7pyb/raw/upload/v1/noustalgie/pdf/${id}` }; }
+    else if (opts.hostname === 'api.stripe.com' && /^\/v1\/coupons\//.test(opts.path)) {
+      // Cartes cadeaux : CADEAUTEST0001 valable, CADEAUDEJA0001 déjà utilisée, tout autre code inconnu
+      const id = opts.path.split('/').pop(), c = { id, object: 'coupon', amount_off: 4999, currency: 'eur', max_redemptions: 1, metadata: { type: 'cadeau' } };
+      if (id === 'CADEAUTEST0001') out = Object.assign(c, { valid: true, times_redeemed: 0 });
+      else if (id === 'CADEAUDEJA0001') out = Object.assign(c, { valid: false, times_redeemed: 1 });
+      else { status = 404; out = { error: { message: 'No such coupon' } }; }
+    }
     else if (opts.hostname === 'api.stripe.com') { dernierStripe = Object.fromEntries(new URLSearchParams(body)); out = { id: 'cs_test_parcours', url: 'https://checkout.stripe.com/c/pay/cs_test_parcours' }; }
     else if (/printapi/.test(opts.hostname)) out = opts.path === '/v2/oauth' ? { access_token: 't', expires_in: 14400 } : {};
     const res = new EventEmitter(); res.statusCode = status; res.headers = {}; res.resume = () => {};

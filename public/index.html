@@ -1669,6 +1669,9 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
   #panel3 #previewActions>.btn{width:auto;flex:0 0 auto;padding-left:16px;padding-right:16px;}   /* une seule ligne : « ← Photos » à gauche, « Commander » prend le reste */
   #panel3 #previewActions>#btnOrder{flex:1 1 auto;}
 }
+/* Lien vers la carte cadeau, sous les tarifs */
+html body a.nst-gift{display:inline-block;color:#1c1a18;text-decoration:underline;text-decoration-color:rgba(28,26,24,.35);text-underline-offset:3px;}
+html body a.nst-gift:hover{text-decoration-color:#1c1a18;}
 </style>
 <script type="application/ld+json">
 {
@@ -1985,6 +1988,7 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
   <div class="ed-cta-center">
     <button class="ed-btn-dark" onclick="startApp()" data-i18n="hero_cta">Composer mon album</button>
     <div class="ed-note" data-i18n="soon_note">Aperçu gratuit avant paiement · Livraison offerte</div>
+    <a class="ed-note nst-gift" href="/carte-cadeau" data-i18n="gift_link">Offrir l’album à un autre couple&nbsp;? La carte cadeau, 49,99&nbsp;€</a>
   </div>
 </section>
 </div>
@@ -2260,10 +2264,10 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
               <input type="text" id="payPhone" inputmode="tel" autocomplete="tel" maxlength="24" data-i18n-ph="pay_phone_ph" placeholder="06 12 34 56 78"/>
             </div>
             <!-- Code promo replié : un champ ouvert pousse à quitter la page pour chercher un code -->
-            <details class="nst-promo"><summary data-i18n="promo_link">Vous avez un code promo&nbsp;?</summary>
+            <details class="nst-promo"><summary data-i18n="promo_link">Vous avez un code promo ou une carte cadeau&nbsp;?</summary>
             <div style="margin-top:10px;">
               <div style="display:flex;gap:0;border:1px solid #ddd;border-radius:0;overflow:hidden;transition:border-color .2s;" id="promoWrap">
-                <input type="text" id="promoCode" placeholder="Code promotionnel" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:16px !important;letter-spacing:.05em;margin:0 !important;font-family:'Hanken Grotesk',sans-serif;color:#111 !important;outline:none;"/>
+                <input type="text" id="promoCode" placeholder="Code promo ou carte cadeau" style="flex:1;text-transform:uppercase;border:none !important;background:#fff !important;padding:12px 14px !important;font-size:16px !important;letter-spacing:.05em;margin:0 !important;font-family:'Hanken Grotesk',sans-serif;color:#111 !important;outline:none;"/>
                 <button type="button" onclick="applyPromo()" style="background:#111;color:#fff;border:none;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'Hanken Grotesk',sans-serif;transition:opacity .2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Appliquer</button>
               </div>
             </div>
@@ -2373,6 +2377,7 @@ html body .nst-promo{margin:14px 0 0;}html body .nst-promo summary{list-style:no
           <a class="footer-link" href="/cadeau-couple-personnalise">Cadeau couple personnalisé</a>
           <a class="footer-link" href="/magazine-personnalise">Magazine personnalisé</a>
           <a class="footer-link" href="/album-photo-couple">Album photo couple</a>
+          <a class="footer-link" href="/carte-cadeau">Carte cadeau</a>
           <a class="footer-link" href="/idee-cadeau-noel-couple">Cadeau de Noël pour un couple</a>
           <a class="footer-link" href="/cadeau-noel-copine">Cadeau de Noël pour sa copine</a>
           <a class="footer-link" href="/cadeau-noel-copain">Cadeau de Noël pour son copain</a>
@@ -2509,7 +2514,7 @@ const LANGS = {
     pay_title:'Votre livre est prêt', pay_sub:'Satisfait de l\'aperçu ? Commandez votre livre photo premium, livré en 6 à 8 jours ouvrés.',
     pay_inc1:'Histoire rédigée sur mesure', pay_inc2:"Vos photos imprimées en haute définition", pay_inc3:'Vos dédicaces & légendes intégrées', pay_inc4:"Impression professionnelle sur papier premium", pay_inc5:"Couverture rigide, reliure solide", pay_inc6:'Livraison offerte',
     pay_name_lbl:'Prénom', pay_name_ph:'Emma', pay_last_lbl:'Nom', pay_last_ph:'Martin', pay_phone_lbl:'Téléphone (pour le livreur)', pay_phone_ph:'06 12 34 56 78', pay_email_lbl:'Email (suivi de commande)', pay_addr_lbl:'Adresse de livraison', pay_addr_ph:'12 rue des Amoureux, 75001 Paris',
-    pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL', promo_link:'Vous avez un code promo\u00a0?',
+    pay_btn:'Payer & commander', pay_secure:'🔒 Paiement sécurisé · Stripe · SSL', promo_link:'Vous avez un code promo ou une carte cadeau\u00a0?',
     pay_ok_title:'Commande confirmée !', pay_ok_sub:'Votre livre est en cours d\'impression. Vous le recevrez dans 6 à 8 jours ouvrés.', dl_pdf:'Télécharger aussi le PDF ↗',
     s70_t1:'Nouveau : l’album', s70_t2:'années 70', s70_p:'Vos photos d’aujourd’hui, comme sorties de l’album de vos parents : noir et blanc d’époque, grain argentique, tirages à bords crème et textes tapés à la machine à écrire.', s70_l1:'Photos en noir et blanc vintage', s70_l2:'Lettres façon années 70', s70_l3:'Même livre, même prix', s70_cta:'Créer mon album années 70', s70_n:'Le style se change d’un geste dans l’aperçu gratuit.', s70_cap:'L’album de Léa et Hugo au style Années 70. Couple fictif, photos Unsplash.',
     footer_tag:'L\'album photo de votre histoire d\'amour.', skip_main:'Aller au contenu', footer_info:'Informations', footer_product:'Produit',
@@ -2518,7 +2523,7 @@ const LANGS = {
     close_btn:'← Fermer', modal_title:'Votre petit mot 💌', modal_sub:'Cette légende apparaîtra sous cette photo dans votre livre.', modal_lbl:'Légende personnelle', modal_ph:'Notre premier soir à Paris...', cancel:'Annuler', save_word:'Sauvegarder',
     log_analyzing:'Analyse de vos photos...', log_analyzed:'Analyse terminée ✓', log_themes:'Thèmes :', log_writing:'Rédaction de votre histoire d\'amour...', log_ready:'Votre album est prêt ✓', log_error:'Erreur :', log_server_tip:'Réessaie dans quelques secondes ou contacte contact@noustalgie.fr',
     photos_ok:' photos prêtes', photos_warn:' · il reste ', photos_warn2:' photos minimum à ajouter',
-    soon_eyebrow:'Bientôt', soon_title1:'Les premières histoires', soon_title2:'seront les vôtres', soon_sub:'Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album.', soon_cta:'Créer le premier album', soon_note:'Aperçu gratuit avant paiement · Livraison offerte',
+    soon_eyebrow:'Bientôt', soon_title1:'Les premières histoires', soon_title2:'seront les vôtres', soon_sub:'Noustalgie est en cours de lancement. Soyez parmi les premiers à créer votre album.', soon_cta:'Créer le premier album', soon_note:'Aperçu gratuit avant paiement · Livraison offerte', gift_link:'Offrir l’album à un autre couple\u00a0? La carte cadeau, 49,99\u00a0€',
   },
   en: {
     occ1:'Romantic surprise', occ2:"Valentine's Day", occ3:'Couple anniversary', occ4:'Christmas', occ5:'Wedding', occ6:'Gift for a loved one',
@@ -2597,7 +2602,7 @@ const LANGS = {
     pay_title:'Your book is ready', pay_sub:'Happy with the preview? Order your premium photo book.',
     pay_inc1:'Custom-written story', pay_inc2:"Your photos printed in high definition", pay_inc3:'Your dedications & captions', pay_inc4:"Professional printing on premium paper", pay_inc5:"Hard cover, durable binding", pay_inc6:'Free delivery',
     pay_name_lbl:'First name', pay_name_ph:'Emma', pay_last_lbl:'Last name', pay_last_ph:'Martin', pay_phone_lbl:'Phone (for the courier)', pay_phone_ph:'+33 6 12 34 56 78', pay_email_lbl:'Email (order tracking)', pay_addr_lbl:'Delivery address', pay_addr_ph:'12 Love Street, London W1 1AA',
-    pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL', promo_link:'Have a promo code?',
+    pay_btn:'Pay & order', pay_secure:'🔒 Secure payment · Stripe · SSL', promo_link:'Have a promo code or gift card?',
     pay_ok_title:'Order confirmed!', pay_ok_sub:'Your book is being printed. You will receive it within 6 to 8 working days.', dl_pdf:'Download the PDF too ↗',
     s70_t1:'New: the', s70_t2:'70s album', s70_p:'Today’s photos, as if they came out of your parents’ album: period black and white, film grain, cream-bordered prints and typewritten text.', s70_l1:'Vintage black and white photos', s70_l2:'70s-style lettering', s70_l3:'Same book, same price', s70_cta:'Create my 70s album', s70_n:'Switch styles with one tap in the free preview.', s70_cap:'Léa and Hugo’s album in the 70s style. Fictional couple, Unsplash photos.',
     footer_tag:'The photo book of your love story.', skip_main:'Skip to content', footer_info:'Information', footer_product:'Product',
@@ -2606,7 +2611,7 @@ const LANGS = {
     close_btn:'← Close', modal_title:'Your personal note 💌', modal_sub:'This caption will appear under the photo in your book.', modal_lbl:'Personal caption', modal_ph:'Our first night in Paris...', cancel:'Cancel', save_word:'Save',
     log_analyzing:'Analysing your photos...', log_analyzed:'Analysis complete ✓', log_themes:'Themes:', log_writing:'Writing your love story...', log_ready:'Your album is ready ✓', log_error:'Error:', log_server_tip:'Please try again in a few seconds.',
     photos_ok:' photos ready', photos_warn:' · at least ', photos_warn2:' more photos needed',
-    soon_eyebrow:'Coming soon', soon_title1:'The first stories', soon_title2:'will be yours', soon_sub:'Noustalgie is launching soon. Be among the first to create your album.', soon_cta:'Create the first album', soon_note:'Free preview before you pay · Free delivery',
+    soon_eyebrow:'Coming soon', soon_title1:'The first stories', soon_title2:'will be yours', soon_sub:'Noustalgie is launching soon. Be among the first to create your album.', soon_cta:'Create the first album', soon_note:'Free preview before you pay · Free delivery', gift_link:'Giving it to another couple? The gift card, €49.99',
   },
   de: {
     occ1:'Romantische Überraschung', occ2:'Valentinstag', occ3:'Paar-Jahrestag', occ4:'Weihnachten', occ5:'Hochzeit', occ6:'Geschenk für einen geliebten Menschen',
@@ -2694,7 +2699,7 @@ const LANGS = {
     close_btn:'← Schließen', modal_title:'Eure persönliche Notiz 💌', modal_sub:'Diese Bildunterschrift erscheint unter dem Foto.', modal_lbl:'Persönliche Bildunterschrift', modal_ph:'Unser erster Abend in Paris...', cancel:'Abbrechen', save_word:'Speichern',
     log_analyzing:'Fotos werden analysiert...', log_analyzed:'Analyse abgeschlossen ✓', log_themes:'Themen:', log_writing:'Liebesgeschichte wird geschrieben...', log_ready:'Eure Geschichte ist fertig', log_error:'Fehler:', log_server_tip:'Bitte versuche es in einigen Sekunden erneut.',
     photos_ok:' Fotos bereit', photos_warn:' · mindestens noch ', photos_warn2:' Fotos erforderlich',
-    soon_eyebrow:'Demnächst', soon_title1:'Die ersten Geschichten', soon_title2:'werden eure sein', soon_sub:'Noustalgie ist im Start. Gehört zu den Ersten, die ihr Album erstellen.', soon_cta:'Das erste Album erstellen', soon_note:'Kostenlose Vorschau vor der Zahlung · Kostenloser Versand',
+    soon_eyebrow:'Demnächst', soon_title1:'Die ersten Geschichten', soon_title2:'werden eure sein', soon_sub:'Noustalgie ist im Start. Gehört zu den Ersten, die ihr Album erstellen.', soon_cta:'Das erste Album erstellen', soon_note:'Kostenlose Vorschau vor der Zahlung · Kostenloser Versand', gift_link:'Ein Album für ein anderes Paar? Der Geschenkgutschein, 49,99\u00a0€',
   },
   es: {
     occ1:'Sorpresa romántica', occ2:'San Valentín', occ3:'Aniversario de pareja', occ4:'Navidad', occ5:'Boda', occ6:'Regalo para un ser querido',
@@ -2773,7 +2778,7 @@ const LANGS = {
     pay_title:'Vuestro libro está listo', pay_sub:'¿Satisfechos con la vista previa? Pedid vuestro libro fotográfico premium.',
     pay_inc1:'Historia escrita a medida', pay_inc2:"Vuestras fotos impresas en alta definición", pay_inc3:'Vuestras dedicatorias & pies de foto', pay_inc4:"Impresión profesional en papel premium", pay_inc5:"Tapa dura, encuadernación resistente", pay_inc6:'Envío gratuito',
     pay_name_lbl:'Nombre', pay_name_ph:'Emma', pay_last_lbl:'Apellidos', pay_last_ph:'Martin', pay_phone_lbl:'Teléfono (para el repartidor)', pay_phone_ph:'+34 612 34 56 78', pay_email_lbl:'Email (seguimiento del pedido)', pay_addr_lbl:'Dirección de entrega', pay_addr_ph:'Calle del Amor 12, 28001 Madrid',
-    pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL', promo_link:'¿Tiene un código promocional?',
+    pay_btn:'Pagar & pedir', pay_secure:'🔒 Pago seguro · Stripe · SSL', promo_link:'¿Tiene un código promocional o una tarjeta regalo?',
     pay_ok_title:'¡Pedido confirmado!', pay_ok_sub:'Vuestro libro se está imprimiendo. Lo recibiréis en 6 a 8 días hábiles.', dl_pdf:'Descargar también el PDF ↗',
     s70_t1:'Novedad: el álbum', s70_t2:'años 70', s70_p:'Vuestras fotos de hoy, como sacadas del álbum de vuestros padres: blanco y negro de época, grano de película, copias con borde crema y textos escritos a máquina.', s70_l1:'Fotos en blanco y negro vintage', s70_l2:'Letras al estilo de los 70', s70_l3:'Mismo libro, mismo precio', s70_cta:'Crear mi álbum años 70', s70_n:'El estilo se cambia con un gesto en la vista previa gratuita.', s70_cap:'El álbum de Léa y Hugo al estilo años 70. Pareja ficticia, fotos de Unsplash.',
     footer_tag:'El álbum fotográfico de vuestra historia de amor.', skip_main:'Saltar al contenido', footer_info:'Información', footer_product:'Producto',
@@ -2782,7 +2787,7 @@ const LANGS = {
     close_btn:'← Cerrar', modal_title:'Vuestro pequeño mensaje 💌', modal_sub:'Este pie de foto aparecerá bajo la foto en vuestro libro.', modal_lbl:'Pie de foto personal', modal_ph:'Nuestra primera noche en París...', cancel:'Cancelar', save_word:'Guardar',
     log_analyzing:'Analizando vuestras fotos...', log_analyzed:'Análisis completado ✓', log_themes:'Temas:', log_writing:'Escribiendo vuestra historia de amor...', log_ready:'¡Vuestra historia está lista', log_error:'Error:', log_server_tip:'Por favor, inténtalo de nuevo en unos segundos.',
     photos_ok:' fotos listas', photos_warn:' · faltan al menos ', photos_warn2:' fotos como mínimo',
-    soon_eyebrow:'Próximamente', soon_title1:'Las primeras historias', soon_title2:'serán las vuestras', soon_sub:'Noustalgie está en lanzamiento. Sed de los primeros en crear vuestro álbum.', soon_cta:'Crear el primer álbum', soon_note:'Vista previa gratis antes de pagar · Envío gratuito',
+    soon_eyebrow:'Próximamente', soon_title1:'Las primeras historias', soon_title2:'serán las vuestras', soon_sub:'Noustalgie está en lanzamiento. Sed de los primeros en crear vuestro álbum.', soon_cta:'Crear el primer álbum', soon_note:'Vista previa gratis antes de pagar · Envío gratuito', gift_link:'¿Regalar el álbum a otra pareja? La tarjeta regalo, 49,99\u00a0€',
   },
   pt: {
     occ1:'Surpresa romântica', occ2:'Dia dos Namorados', occ3:'Aniversário de casal', occ4:'Natal', occ5:'Casamento', occ6:'Presente para alguém querido',
@@ -2861,7 +2866,7 @@ const LANGS = {
     pay_title:'O vosso livro está pronto', pay_sub:'Satisfeitos com a pré-visualização? Encomendai o vosso livro fotográfico premium.',
     pay_inc1:'História escrita à medida', pay_inc2:"As vossas fotos impressas em alta definição", pay_inc3:'As vossas dedicatórias & legendas', pay_inc4:"Impressão profissional em papel premium", pay_inc5:"Capa dura, encadernação resistente", pay_inc6:'Envio gratuito',
     pay_name_lbl:'Nome', pay_name_ph:'Emma', pay_last_lbl:'Apelido', pay_last_ph:'Martin', pay_phone_lbl:'Telefone (para o estafeta)', pay_phone_ph:'+351 912 345 678', pay_email_lbl:'Email (rastreio da encomenda)', pay_addr_lbl:'Morada de entrega', pay_addr_ph:'Rua do Amor 12, 1000-001 Lisboa',
-    pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL', promo_link:'Tem um código promocional?',
+    pay_btn:'Pagar & encomendar', pay_secure:'🔒 Pagamento seguro · Stripe · SSL', promo_link:'Tem um código promocional ou um cartão-presente?',
     pay_ok_title:'Encomenda confirmada!', pay_ok_sub:'O vosso livro está a ser impresso. Vão recebê-lo em 6 a 8 dias úteis.', dl_pdf:'Descarregar também o PDF ↗',
     s70_t1:'Novidade: o álbum', s70_t2:'anos 70', s70_p:'As vossas fotos de hoje, como se saíssem do álbum dos vossos pais: preto e branco de época, grão de película, provas com margem creme e textos escritos à máquina.', s70_l1:'Fotos a preto e branco vintage', s70_l2:'Letras ao estilo dos anos 70', s70_l3:'O mesmo livro, o mesmo preço', s70_cta:'Criar o meu álbum anos 70', s70_n:'O estilo muda-se com um gesto na pré-visualização gratuita.', s70_cap:'O álbum da Léa e do Hugo ao estilo anos 70. Casal fictício, fotos Unsplash.',
     footer_tag:'O álbum fotográfico da vossa história de amor.', skip_main:'Saltar para o conteúdo', footer_info:'Informações', footer_product:'Produto',
@@ -2870,7 +2875,7 @@ const LANGS = {
     close_btn:'← Fechar', modal_title:'A vossa mensagem pessoal 💌', modal_sub:'Esta legenda aparecerá sob a foto no vosso livro.', modal_lbl:'Legenda pessoal', modal_ph:'A nossa primeira noite em Paris...', cancel:'Cancelar', save_word:'Guardar',
     log_analyzing:'A analisar as vossas fotos...', log_analyzed:'Análise concluída ✓', log_themes:'Temas:', log_writing:'A escrever a vossa história de amor...', log_ready:'A vossa história está pronta', log_error:'Erro:', log_server_tip:'Por favor, tente novamente em alguns segundos.',
     photos_ok:' fotos prontas', photos_warn:' · faltam pelo menos ', photos_warn2:' fotos no mínimo',
-    soon_eyebrow:'Em breve', soon_title1:'As primeiras histórias', soon_title2:'serão as vossas', soon_sub:'O Noustalgie está a lançar. Sejam dos primeiros a criar o vosso álbum.', soon_cta:'Criar o primeiro álbum', soon_note:'Pré-visualização gratuita antes de pagar · Envio gratuito',
+    soon_eyebrow:'Em breve', soon_title1:'As primeiras histórias', soon_title2:'serão as vossas', soon_sub:'O Noustalgie está a lançar. Sejam dos primeiros a criar o vosso álbum.', soon_cta:'Criar o primeiro álbum', soon_note:'Pré-visualização gratuita antes de pagar · Envio gratuito', gift_link:'Oferecer o álbum a outro casal? O cartão-presente, 49,99\u00a0€',
   }
 };
 
@@ -4475,9 +4480,10 @@ async function applyPromo() {
     const res = await fetch('/api/promo', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
     const data = await res.json();
     if(data.valid) {
-      appliedPromo = {code, discount:data.discount, type:data.type};
+      appliedPromo = {code, discount:data.discount, type:data.type, amount:data.amount};
       msg.style.display='block'; msg.style.color='#7ec8a0';
-      msg.textContent = data.type==='free' ? 'Code valide - commande gratuite !' : 'Code valide - '+data.discount+'% de reduction !';
+      // Carte cadeau : son montant est déduit du livre imprimé et de ses options (NA.curPrice)
+      msg.textContent = data.type==='cadeau' ? 'Carte cadeau valide\u00a0: '+String((data.amount||0).toFixed(2)).replace('.',',')+'\u00a0€ déduits du livre imprimé.' : data.type==='free' ? 'Code valide - commande gratuite !' : 'Code valide - '+data.discount+'% de reduction !';
       updateFormatPrices();
     } else {
       msg.style.display='block'; msg.style.color='#e07070';
@@ -7776,7 +7782,7 @@ window.processPayment = async function () {
 
 /* ── À compléter par Gabin : chaque ligne vide est simplement masquée ── */
 const CFG = {
-  maj: '13 novembre 2026',
+  maj: '14 novembre 2026',
   telephone: '06 85 91 28 28',   // obligatoire (LCEN)
   rcs: '',                       // ex. 'RCS Lille Métropole 100 004 738' si immatriculé
   mediateur: { nom: '', site: '', adresse: '' }, // obligatoire (Code conso, L616-1)
@@ -7843,6 +7849,7 @@ cgv: { tab: 'CGV', toc: true, html: `
 <tr><td>Petit cadre photo 15 × 15 cm</td><td>19,99 €</td></tr><tr><td>Aimant photo 5 × 5 cm</td><td>12,99 €</td></tr></tbody></table></div>
 <p>Prix en euros, toutes taxes comprises (TVA non applicable, art. 293 B du CGI). Le prix applicable est celui affiché au moment de la commande.</p>
 <p>Les codes promotionnels sont personnels, à usage unique, non cumulables et ne peuvent être échangés contre de l'argent. Leurs conditions sont indiquées lors de leur remise. Ils s'appliquent au prix de l'album, pas aux options.</p>
+<p><b>Carte cadeau</b> : vendue 49,99 €, elle est envoyée par email dès le paiement et vaut 49,99 € sur un livre imprimé et ses options, en une seule fois. Elle est valable un an à compter de l'achat ; la date limite figure sur la carte. Si la commande coûte moins que la carte, la différence n'est ni remboursée ni reportée ; si elle coûte plus, le client règle la différence. Une carte qui n'a pas encore servi peut être annulée et remboursée sur simple demande dans les 14 jours suivant son achat ; passé ce délai, elle n'est ni remboursable ni échangeable contre de l'argent. Elle ne se cumule pas avec un code promotionnel.</p>
 <h2 id="cgv-4">4. Commande et aperçu</h2>
 <p>Le client compose son album et en consulte gratuitement un aperçu complet, page par page, avant tout paiement. Il lui appartient de relire les textes (orthographe, prénoms, dates) et de vérifier les photos et leur cadrage : <b>l'album est fabriqué exactement tel qu'il a été validé</b>.</p>
 <p>La commande devient ferme après confirmation du paiement ; un email récapitulatif est alors envoyé. Une fois la fabrication lancée, l'album ne peut plus être modifié.</p>
@@ -7885,6 +7892,7 @@ confidentialite: { tab: 'Confidentialité', html: `
 <tr><td>Photos, prénoms, informations sur votre histoire, dédicace</td><td>Composer et fabriquer votre album</td><td>Exécution du contrat</td><td>30 jours sur nos serveurs</td></tr>
 <tr><td>Email pour recevoir le lien de votre album</td><td>Vous envoyer le lien et, si vous le demandez, deux rappels</td><td>Votre demande (consentement)</td><td>Le temps de l'envoi ; album conservé 30 jours</td></tr>
 <tr><td>Email, nom, adresse de livraison, téléphone</td><td>Traiter, livrer et suivre votre commande</td><td>Exécution du contrat</td><td>Durée de la relation, puis archivage légal</td></tr>
+<tr><td>Carte cadeau : votre email, les prénoms et le message écrits sur la carte</td><td>Vous envoyer la carte et son code, l'afficher à nouveau depuis le lien de l'email</td><td>Exécution du contrat</td><td>Enregistrés avec le paiement chez Stripe, puis archivage légal</td></tr>
 <tr><td>Justificatifs de commande et de paiement</td><td>Obligations comptables</td><td>Obligation légale</td><td>10 ans</td></tr>
 <tr><td>Statistiques de visite anonymes</td><td>Améliorer le site</td><td>Intérêt légitime</td><td>Données agrégées, sans cookie</td></tr>
 </tbody></table></div>
@@ -8470,7 +8478,10 @@ Object.entries({
 NA.curPrice = () => {
   const fmt = (($('payFormat') || {}).value) || 'print';
   const pr = (typeof PRICES !== 'undefined' && typeof selectedPages !== 'undefined' && PRICES[selectedPages]) || null;
-  const v = pr ? +((fmt === 'pdf' ? pr.pdf : pr.print + optTotal())).toFixed(2) : null;
+  let v = pr ? +((fmt === 'pdf' ? pr.pdf : pr.print + optTotal())).toFixed(2) : null;
+  // Carte cadeau (49,99 €) : déduite du livre imprimé et de ses options, jamais en dessous de 0 (create-checkout.js fait de même chez Stripe)
+  const pc = typeof appliedPromo !== 'undefined' && appliedPromo;
+  if (v != null && fmt !== 'pdf' && pc && pc.type === 'cadeau' && pc.amount) v = Math.max(0, +(v - pc.amount).toFixed(2));
   return { fmt, v, txt: v == null ? '' : (lang() === 'en' ? '€' + v.toFixed(2) : v.toFixed(2).replace('.', ',') + ' €') };
 };
 function payLabel() {
@@ -8934,9 +8945,18 @@ function syncPrice() {
 NA.syncPrice = syncPrice;
 if (window.MutationObserver && $('payFinalPrice')) new MutationObserver(syncPrice).observe($('payFinalPrice'), { childList: true, characterData: true, subtree: true });
 
+/* ── Carte cadeau reçue par lien (/?cadeau=CODE, envoyé depuis /carte-cadeau/merci) : le code attend l'étape Commander ── */
+(function () { try { const c = new URLSearchParams(location.search).get('cadeau'); if (c) localStorage.setItem('nst_cadeau', String(c).toUpperCase().slice(0, 24)); } catch (e) {} })();
+function cadeauLien() {
+  let c = ''; try { c = localStorage.getItem('nst_cadeau') || ''; } catch (e) {}
+  const inp = $('promoCode'); if (!c || !inp || inp.value || (typeof appliedPromo !== 'undefined' && appliedPromo)) return;
+  inp.value = c; const d = inp.closest('details'); if (d) d.open = true;
+  if (typeof applyPromo === 'function') applyPromo();
+}
+
 /* ── Navigation : aperçu en direct, récapitulatif ── */
 const og = window.goTab;
-window.goTab = function (n) { const r = og.apply(this, arguments); try { flowMode(n); if (n === 4) { renderSummary(); if (NA.drawOpts) NA.drawOpts(); } } catch (e) {} return r; };   // vignettes des options : couverture du moment
+window.goTab = function (n) { const r = og.apply(this, arguments); try { flowMode(n); if (n === 4) { renderSummary(); if (NA.drawOpts) NA.drawOpts(); cadeauLien(); } } catch (e) {} return r; };   // vignettes des options : couverture du moment
 window.addEventListener('resize', () => { const a = document.querySelector('.panel.active'); if (a) flowMode(+a.id.replace('panel', '')); });
 ['pal24', 'pal36', 'pal50'].forEach(id => { const x = $(id); if (x) x.addEventListener('click', liveSoon); });
 
