@@ -63,7 +63,9 @@
   css.textContent = '#nstConsent{position:fixed;left:16px;right:16px;bottom:16px;z-index:9600;max-width:520px;margin:0 auto;padding:16px 18px;background:#fff;border:1px solid #e4dfd7;border-radius:20px;box-shadow:0 12px 40px rgba(28,26,24,.18);font:400 13.5px/1.5 "Hanken Grotesk",system-ui,sans-serif;color:#1c1a18;}'
     + '#nstConsent p{margin:0 0 12px;}#nstConsent a{color:#1c1a18;}#nstConsent div{display:flex;gap:8px;}'
     + '#nstConsent button{flex:1;min-height:42px;border:1px solid #1c1a18;border-radius:999px;background:#1c1a18;color:#fff;font:500 14px "Hanken Grotesk",system-ui,sans-serif;cursor:pointer;}'
-    + '.nst-cookies{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer;}';
+    + '.nst-cookies{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer;}'
+    // téléphone : le bandeau cachait le bas du premier écran (livre et « Essayez avec vos deux prénoms »), plus compact, mêmes boutons
+    + '@media (max-width:480px){#nstConsent{left:10px;right:10px;bottom:10px;padding:11px 13px;border-radius:16px;font-size:12.5px;line-height:1.4;}#nstConsent p{margin:0 0 9px;}#nstConsent button{min-height:38px;font-size:13.5px;}}';
   document.head.appendChild(css);
 
   function demarrer() {
