@@ -1687,8 +1687,24 @@ html body .ed-hero-note{margin:14px 0 0;font:400 14px/1.45 var(--v6-ui);color:#4
 }
 /* Aperçu sur ordinateur : « Commander ce livre » restait sous l'éditeur et les miniatures, hors de l'écran */
 @media (min-width:761px){
-  #panel3 #previewActions{position:sticky;bottom:0;z-index:40;padding:14px 0 16px;margin-bottom:0!important;background:linear-gradient(rgba(250,249,246,0),rgba(250,249,246,.94) 35%);}
+  #panel3 #previewActions{position:sticky;bottom:0;z-index:40;padding:12px 16px;margin-bottom:0!important;background:rgba(250,249,246,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:16px 16px 0 0;box-shadow:0 -12px 24px -18px rgba(28,26,24,.45);}   /* fond plein : le texte du panneau d'outils ne se lit plus à travers */
 }
+/* Aperçu : « Finir plus tard ? » ouvre l'enregistrement de l'album (lien par email, rappels), à gauche de la barre d'action */
+html body #previewActions .nst-later{margin:0 auto 0 0;align-self:center;background:none;border:0;padding:6px 0;font:500 14px/1.35 var(--v6-ui);color:#1c1a18;text-align:left;text-decoration:underline;text-decoration-color:rgba(28,26,24,.35);text-underline-offset:3px;cursor:pointer;}
+html body #previewActions .nst-later:hover{text-decoration-color:#1c1a18;}
+@media (max-width:760px){
+  html body #panel3 #previewActions{flex-wrap:wrap;row-gap:8px;}           /* rangée (jamais en colonne) : le lien prend sa ligne au-dessus des boutons */
+  html body #previewActions .nst-later{order:-1;flex:1 1 100%;margin:0;padding:0;font-size:13px;text-align:center;}
+}
+/* la fenêtre est hors de #app : sans cela, le champ reprend l'ancien style sombre des champs (fond noir, indication en italique) */
+html body .nst-later-box .nst-input{margin:6px 0 0;min-height:48px;background:#fff!important;color:var(--v6-ink)!important;border:1px solid var(--v6-line2)!important;border-radius:12px!important;font:400 16px/1.4 var(--v6-ui)!important;}
+html body .nst-later-box .nst-input:focus{border-color:var(--v6-ink)!important;box-shadow:0 0 0 3px rgba(28,26,24,.08)!important;outline:none;}
+html body .nst-later-box .nst-input::placeholder{font:400 16px var(--v6-ui)!important;font-style:normal!important;color:var(--v6-mut2)!important;}
+/* Aperçu et Commander : l'en-tête « Votre album commence ici » (250 px sur téléphone) poussait l'album sous la barre collée,
+   par-dessus les flèches des pages ; il reste affiché aux étapes 1 et 2 */
+#app:has(#panel3.active)>.app-wrap>.reveal:first-child,#app:has(#panel4.active)>.app-wrap>.reveal:first-child{display:none;}
+.nst-later-box .nst-check{margin:12px 0 16px!important;align-items:flex-start;}
+.nst-later-box .nst-note{margin:10px 0 0;text-align:center;}
 </style>
 <script type="application/ld+json">
 {
@@ -2218,6 +2234,7 @@ html body .ed-hero-note{margin:14px 0 0;font:400 14px/1.45 var(--v6-ui);color:#4
         <div class="nst-strip" id="nstStrip"></div>
       </div>
       <div class="btn-row" id="previewActions" style="margin-top:1rem;display:none;">
+        <button class="nst-later" type="button" onclick="NA.plusTard()" data-ui="later">Finir plus tard&nbsp;? Recevez le lien par email</button>
         <button class="btn" onclick="goTab(1)" data-ui="back_photos">← Photos</button>
         <button class="btn btn-gold" onclick="goTab(4)" id="btnOrder" data-ui="order_book">Commander ce livre</button>
       </div>
@@ -6005,8 +6022,8 @@ Object.assign(window.NA, { analyzePhoto: analyze, analyzeAll, loadDetector, VIS_
 'use strict';
 const UI = {
 fr: {
-  ph_prep: 'Préparation de vos photos…', ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre iPhone n’a pas pu préparer les photos choisies\u00a0: cela arrive surtout quand il manque d’espace de stockage, ou quand les photos sont sur iCloud («\u00a0Optimiser le stockage\u00a0») et qu’il ne peut pas les télécharger.', ph_help_n: '{0} photo(s) sur {1} n’ont pas pu être transmises.', ph_help_0: 'Aucune photo n’est arrivée de votre iPhone.', ph_help_4: 'Ajoutez-les en plusieurs fois, 5 à 10 à la fois\u00a0: l’iPhone a besoin de bien moins de place.', ph_help_1: 'Libérez de l’espace\u00a0: Photos › Albums › Supprimés récemment › Tout supprimer, ou Réglages › Général › Stockage iPhone.', ph_retry_few: 'Réessayer avec moins de photos', ph_mail: 'M’envoyer le lien pour l’ordinateur', ph_mail_s: 'Mon album Noustalgie', ph_mail_b: 'Pour continuer mon album sur ordinateur\u00a0: https://noustalgie.fr/#app', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger : vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
-  undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
+  ph_prep: 'Préparation de vos photos…', ph_cancel: 'Aucune photo sélectionnée. Si vous en aviez choisi, elles sont peut-être sur iCloud et votre iPhone n’a pas pu les télécharger.', ph_help_t: 'Vos photos n’ont pas été transmises', ph_help_p: 'Votre iPhone n’a pas pu préparer les photos choisies\u00a0: cela arrive surtout quand il manque d’espace de stockage, ou quand les photos sont sur iCloud («\u00a0Optimiser le stockage\u00a0») et qu’il ne peut pas les télécharger.', ph_help_n: '{0} photo(s) sur {1} n’ont pas pu être transmises.', ph_help_0: 'Aucune photo n’est arrivée de votre iPhone.', ph_help_4: 'Ajoutez-les en plusieurs fois, 5 à 10 à la fois\u00a0: l’iPhone a besoin de bien moins de place.', ph_help_1: 'Libérez de l’espace\u00a0: Photos › Albums › Supprimés récemment › Tout supprimer, ou Réglages › Général › Stockage iPhone.', ph_retry_few: 'Réessayer avec moins de photos', ph_mail: 'M’envoyer le lien pour l’ordinateur', ph_mail_s: 'Mon album Noustalgie', ph_mail_b: 'Pour continuer mon album sur ordinateur\u00a0: https://noustalgie.fr/#app', ph_help_2: 'Ou ouvrez d’abord la photo dans l’app Photos, attendez qu’elle soit nette, puis réessayez.', ph_help_3: 'Ou continuez depuis un ordinateur, où vos photos iCloud sont accessibles.', ph_nothing: 'Aucune photo n’a été reçue. Si vos photos sont sur iCloud, iOS doit d’abord les télécharger\u00a0: vérifiez votre connexion (et le mode Économie de données), puis réessayez.', ph_retry: 'Réessayer', ph_fail: '{0} photo(s) n’ont pas pu être lue(s). Réessayez avec ces photos, ou choisissez-en d’autres.', ph_none: 'Ces fichiers ne sont pas des photos.',
+  undo: 'Annuler', redo: 'Rétablir', read: 'Feuilleter', back_photos: '← Photos', order_book: 'Commander ce livre', later: 'Finir plus tard\u00a0? Recevez le lien par email', style_aria: 'Style de l’album', prev: 'Page précédente', next: 'Page suivante', close: 'Fermer',
   hint_wide: 'Cliquez sur une photo pour la changer ou la recadrer, cliquez sur un texte pour l’écrire directement sur la page.',
   hint_mobile: 'Touchez une photo ou un texte pour le modifier. Glissez vers la gauche ou la droite pour tourner les pages.',
   cover: 'Couverture', back: '4e de couverture', page: 'Page {0}', pages: 'Pages {0}–{1}', th_cover: 'Couv.', th_back: 'Dos',
@@ -6014,31 +6031,31 @@ fr: {
   swap_wide: 'Faites glisser la photo sur la page pour la recadrer, molette pour zoomer.',
   swap_mobile: 'Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.',
   used: 'Déjà utilisée page {0}', ph_import: 'Importer une nouvelle photo', photo_n: 'Photo {0}', current: '(actuelle)',
-  text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA :', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
+  text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA\u00a0:', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
   layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
   move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
   old_txt: 'Cet album a été créé avec notre ancienne mise en page. Le passer au nouveau style Magazine ? Vos photos et vos légendes sont gardées.', old_go: 'Passer au Magazine', old_keep: 'Garder l\'ancienne',
-  resume_txt: 'Vous avez un album en cours :', resume_yes: 'Reprendre', resume_no: 'Plus tard',
-  issue_txt: 'L’écriture automatique n’a pas répondu : votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
+  resume_txt: 'Vous avez un album en cours\u00a0:', resume_yes: 'Reprendre', resume_no: 'Plus tard',
+  issue_txt: 'L’écriture automatique n’a pas répondu\u00a0: votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
   gen_min: 'Il faut au moins {0} photos pour un album de {1} pages (vous en avez {2}).', g_analyze: 'Analyse de vos photos… {0}/{1}', g_read: 'Lecture de vos photos… {0}/{1}', g_write: 'Écriture de votre histoire…', g_fail: 'La composition n’a pas abouti ({0}).', g_retry: 'Relancer',
   p_need: 'Merci de renseigner votre prénom et votre email.', p_email: 'Votre email semble invalide.', p_addr: 'Merci de renseigner votre adresse complète (rue, code postal, ville) pour la livraison.', p_empty: 'Votre album n’est pas encore composé.',
   p_prep: 'Préparation de votre livre…', p_upload: 'Envoi de vos photos en haute définition… {0}/{1}', p_layout: 'Mise en page de votre livre…', p_redirect: 'Redirection vers le paiement…',
   p_fail: 'La préparation de votre livre a échoué ({0}). Vous n’avez pas été débité. Réessayez dans un instant, ou écrivez à contact@noustalgie.fr.',
-  p_upload_fail: 'La connexion a coupé pendant l’envoi de vos photos en haute définition. Vous n’avez pas été débité. Réessayez dans un instant, si possible en Wi-Fi : les photos déjà envoyées ne repartent pas.',
-  fix_lbl: 'Vos textes', fix_btn: 'Corriger l’orthographe', fix_note: 'Corrige les fautes et la ponctuation de vos textes, sans les réécrire. Relisez-les ensuite ; « Annuler » revient en arrière.', fix_busy: 'Correction en cours…', fix_done: '{0} textes corrigés : relisez-les avant de commander.', fix_none: 'Aucune faute trouvée.', fix_fail: 'La correction n’a pas abouti, réessayez dans un instant.',
+  p_upload_fail: 'La connexion a coupé pendant l’envoi de vos photos en haute définition. Vous n’avez pas été débité. Réessayez dans un instant, si possible en Wi-Fi\u00a0: les photos déjà envoyées ne repartent pas.',
+  fix_lbl: 'Vos textes', fix_btn: 'Corriger l’orthographe', fix_note: 'Corrige les fautes et la ponctuation de vos textes, sans les réécrire. Relisez-les ensuite\u00a0; «\u00a0Annuler\u00a0» revient en arrière.', fix_busy: 'Correction en cours…', fix_done: '{0} textes corrigés\u00a0: relisez-les avant de commander.', fix_none: 'Aucune faute trouvée.', fix_fail: 'La correction n’a pas abouti, réessayez dans un instant.',
   save_title: 'Gardez votre album', save_sub: 'Recevez le lien par email pour le reprendre plus tard, sur n’importe quel appareil.', save_email: 'Votre email', save_remind: 'Me le rappeler si je n’ai pas commandé (demain, puis dans 3 jours avec un code de réduction)', save_btn: 'Recevoir le lien',
-  save_busy: 'Enregistrement… {0}/{1}', save_ok: 'C’est envoyé ! Pensez à regarder vos spams.', save_fail: 'L’enregistrement a échoué. Réessayez dans un instant.', save_note: 'Vos photos sont conservées 30 jours, uniquement pour ce lien.',
-  restore_busy: 'Ouverture de votre album…', restore_fail: 'Impossible d’ouvrir cet album : {0}',
+  save_busy: 'Enregistrement… {0}/{1}', save_ok: 'C’est envoyé\u00a0! Pensez à regarder vos spams.', save_fail: 'L’enregistrement a échoué. Réessayez dans un instant.', save_note: 'Vos photos sont conservées 30 jours, uniquement pour ce lien.',
+  restore_busy: 'Ouverture de votre album…', restore_fail: 'Impossible d’ouvrir cet album\u00a0: {0}',
   up36: 'Ajoutez encore {0} photos pour passer au livre de 36 pages (+10 €) : plus de pages, plus de souvenirs.', up36_1: 'Ajoutez encore 1 photo pour passer au livre de 36 pages (+10 €) : plus de pages, plus de souvenirs.', up36_ok: 'Vous avez assez de photos pour le livre de 36 pages (+10 €).', up36_add: 'Ajouter des photos', up36_go: 'Passer au 36 pages', up36_24: 'Créer en 24 pages',
   add_photos: 'Ajouter des photos', remove_photo: 'Retirer cette photo du livre', remove_min: 'Il faut garder au moins {0} photos pour ce format.', recompose: 'Recomposition de votre livre…',
   format_lbl: 'Format', format_opt: '{0} pages', format_min: 'Il faut au moins {0} photos pour {1} pages.', format_adding: 'Écriture des pages supplémentaires…', drag_hint: 'Glissez les miniatures pour réordonner les pages.', photos_lbl: 'Photos',
   tr_title: 'Suivre ma commande', tr_sub: 'Entrez le numéro reçu par email (NOUST-…) et l’adresse email utilisée pour la commande.', tr_ref: 'Numéro de commande', tr_email: 'Email', tr_btn: 'Voir le suivi',
   tr_s1: 'Commande reçue', tr_s2: 'En fabrication', tr_s3: 'Expédiée', tr_track: 'Suivre le colis', tr_num: 'N° de suivi', tr_cancel: 'Cette commande a été annulée. Écrivez-nous si vous avez une question.',
-  tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée : environ 5 à 7 jours ouvrés après la commande.', tr_busy: 'Recherche…',
+  tr_pdf: 'Pour un album numérique, le lien de téléchargement se trouve dans votre email de confirmation.', tr_eta: 'Livraison estimée\u00a0: environ 5 à 7 jours ouvrés après la commande.', tr_busy: 'Recherche…',
 },
 en: {
   ph_prep: 'Preparing your photos…', ph_cancel: 'No photo selected. If you did choose some, they may be in iCloud and your iPhone could not download them.', ph_help_t: 'Your photos were not sent', ph_help_p: 'Your iPhone could not prepare the photos you chose: this mostly happens when it is short on storage, or when the photos are in iCloud (“Optimize Storage”) and it cannot download them.', ph_help_n: '{0} of {1} photo(s) could not be sent.', ph_help_0: 'No photo arrived from your iPhone.', ph_help_4: 'Add them in several goes, 5 to 10 at a time: your iPhone needs far less space.', ph_help_1: 'Free up space: Photos › Albums › Recently Deleted › Delete All, or Settings › General › iPhone Storage.', ph_retry_few: 'Try again with fewer photos', ph_mail: 'Email me the link for my computer', ph_mail_s: 'My Noustalgie album', ph_mail_b: 'To continue my album on a computer: https://noustalgie.fr/#app', ph_help_2: 'Or open the photo in the Photos app first, wait until it is sharp, then try again.', ph_help_3: 'Or continue on a computer, where your iCloud photos are available.', ph_nothing: 'No photo was received. If your photos are in iCloud, iOS must download them first: check your connection (and Low Data Mode), then try again.', ph_retry: 'Retry', ph_fail: '{0} photo(s) could not be read. Try these photos again, or choose others.', ph_none: 'These files are not photos.',
-  undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
+  undo: 'Undo', redo: 'Redo', read: 'Flip through', back_photos: '← Photos', order_book: 'Order this book', later: 'Finish later? Get the link by email', style_aria: 'Album style', prev: 'Previous page', next: 'Next page', close: 'Close',
   hint_wide: 'Click a photo to change or crop it, click a text to write directly on the page.',
   hint_mobile: 'Tap a photo or a text to edit it. Swipe left or right to turn the pages.',
   cover: 'Cover', back: 'Back cover', page: 'Page {0}', pages: 'Pages {0}–{1}', th_cover: 'Cover', th_back: 'Back',
@@ -6070,7 +6087,7 @@ en: {
 },
 de: {
   ph_prep: 'Eure Fotos werden vorbereitet…', ph_cancel: 'Kein Foto ausgewählt. Falls doch, liegen sie vielleicht in iCloud und das iPhone konnte sie nicht laden.', ph_help_t: 'Eure Fotos wurden nicht übertragen', ph_help_p: 'Euer iPhone konnte die ausgewählten Fotos nicht vorbereiten: Das passiert vor allem, wenn der Speicher knapp ist, oder wenn die Fotos in iCloud liegen („Speicher optimieren“) und es sie nicht laden kann.', ph_help_n: '{0} von {1} Foto(s) konnten nicht übertragen werden.', ph_help_0: 'Von eurem iPhone ist kein Foto angekommen.', ph_help_4: 'Fügt sie in mehreren Durchgängen hinzu, 5 bis 10 auf einmal: Das iPhone braucht dann viel weniger Platz.', ph_help_1: 'Speicher freigeben: Fotos › Alben › Zuletzt gelöscht › Alle löschen, oder Einstellungen › Allgemein › iPhone-Speicher.', ph_retry_few: 'Mit weniger Fotos erneut versuchen', ph_mail: 'Link für den Computer per E-Mail senden', ph_mail_s: 'Unser Noustalgie-Album', ph_mail_b: 'Um unser Album am Computer fortzusetzen: https://noustalgie.fr/#app', ph_help_2: 'Oder das Foto zuerst in der Fotos-App öffnen, warten bis es scharf ist, dann erneut versuchen.', ph_help_3: 'Oder am Computer weitermachen, wo eure iCloud-Fotos verfügbar sind.', ph_nothing: 'Es wurde kein Foto empfangen. Liegen eure Fotos in iCloud, muss iOS sie zuerst laden: prüft die Verbindung (und den Datensparmodus) und versucht es erneut.', ph_retry: 'Erneut', ph_fail: '{0} Foto(s) konnten nicht gelesen werden. Versucht es erneut oder wählt andere Fotos.', ph_none: 'Diese Dateien sind keine Fotos.',
-  undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
+  undo: 'Rückgängig', redo: 'Wiederholen', read: 'Durchblättern', back_photos: '← Fotos', order_book: 'Dieses Buch bestellen', later: 'Später weitermachen? Erhaltet den Link per E-Mail', style_aria: 'Albumstil', prev: 'Vorherige Seite', next: 'Nächste Seite', close: 'Schließen',
   hint_wide: 'Klickt auf ein Foto, um es zu ändern oder zuzuschneiden, und auf einen Text, um direkt auf der Seite zu schreiben.',
   hint_mobile: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten. Wischt nach links oder rechts, um umzublättern.',
   cover: 'Cover', back: 'Rückseite', page: 'Seite {0}', pages: 'Seiten {0}–{1}', th_cover: 'Cover', th_back: 'Rücks.',
@@ -6102,7 +6119,7 @@ de: {
 },
 es: {
   ph_prep: 'Preparando tus fotos…', ph_cancel: 'No se seleccionó ninguna foto. Si elegiste alguna, puede que esté en iCloud y el iPhone no pudiera descargarla.', ph_help_t: 'Tus fotos no se enviaron', ph_help_p: 'Tu iPhone no pudo preparar las fotos elegidas: pasa sobre todo cuando le falta espacio de almacenamiento, o cuando las fotos están en iCloud («Optimizar almacenamiento») y no puede descargarlas.', ph_help_n: 'No se pudieron enviar {0} de {1} foto(s).', ph_help_0: 'No ha llegado ninguna foto de tu iPhone.', ph_help_4: 'Añádelas en varias veces, de 5 a 10 cada vez: el iPhone necesita mucho menos espacio.', ph_help_1: 'Libera espacio: Fotos › Álbumes › Eliminado › Eliminar todo, o Ajustes › General › Almacenamiento del iPhone.', ph_retry_few: 'Reintentar con menos fotos', ph_mail: 'Enviarme el enlace para el ordenador', ph_mail_s: 'Mi álbum Noustalgie', ph_mail_b: 'Para continuar mi álbum en el ordenador: https://noustalgie.fr/#app', ph_help_2: 'O abre primero la foto en la app Fotos, espera a que se vea nítida y vuelve a intentarlo.', ph_help_3: 'O continúa desde un ordenador, donde tus fotos de iCloud están disponibles.', ph_nothing: 'No se recibió ninguna foto. Si tus fotos están en iCloud, iOS debe descargarlas primero: revisa tu conexión (y el modo de datos reducidos) y vuelve a intentarlo.', ph_retry: 'Reintentar', ph_fail: 'No se pudieron leer {0} foto(s). Vuelve a intentarlo o elige otras.', ph_none: 'Estos archivos no son fotos.',
-  undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
+  undo: 'Deshacer', redo: 'Rehacer', read: 'Hojear', back_photos: '← Fotos', order_book: 'Pedir este libro', later: '¿Terminar más tarde? Recibe el enlace por email', style_aria: 'Estilo del álbum', prev: 'Página anterior', next: 'Página siguiente', close: 'Cerrar',
   hint_wide: 'Haz clic en una foto para cambiarla o recortarla, y en un texto para escribir directamente en la página.',
   hint_mobile: 'Toca una foto o un texto para editarlo. Desliza a izquierda o derecha para pasar las páginas.',
   cover: 'Portada', back: 'Contraportada', page: 'Página {0}', pages: 'Páginas {0}–{1}', th_cover: 'Port.', th_back: 'Contra.',
@@ -6134,7 +6151,7 @@ es: {
 },
 pt: {
   ph_prep: 'A preparar as tuas fotos…', ph_cancel: 'Nenhuma foto selecionada. Se escolheste alguma, talvez esteja no iCloud e o iPhone não a tenha conseguido descarregar.', ph_help_t: 'As tuas fotos não foram enviadas', ph_help_p: 'O teu iPhone não conseguiu preparar as fotos escolhidas: acontece sobretudo quando falta espaço de armazenamento, ou quando as fotos estão no iCloud («Otimizar armazenamento») e não as consegue descarregar.', ph_help_n: 'Não foi possível enviar {0} de {1} foto(s).', ph_help_0: 'Não chegou nenhuma foto do teu iPhone.', ph_help_4: 'Adiciona-as em várias vezes, 5 a 10 de cada vez: o iPhone precisa de muito menos espaço.', ph_help_1: 'Liberta espaço: Fotografias › Álbuns › Apagados › Apagar tudo, ou Definições › Geral › Armazenamento do iPhone.', ph_retry_few: 'Tentar de novo com menos fotos', ph_mail: 'Enviar-me a ligação para o computador', ph_mail_s: 'O meu álbum Noustalgie', ph_mail_b: 'Para continuar o meu álbum no computador: https://noustalgie.fr/#app', ph_help_2: 'Ou abre primeiro a foto na app Fotografias, espera que fique nítida e tenta de novo.', ph_help_3: 'Ou continua num computador, onde as tuas fotos do iCloud estão disponíveis.', ph_nothing: 'Nenhuma foto foi recebida. Se as fotos estão no iCloud, o iOS tem de as descarregar primeiro: verifica a ligação (e o modo de poucos dados) e tenta de novo.', ph_retry: 'Tentar de novo', ph_fail: 'Não foi possível ler {0} foto(s). Tenta novamente ou escolhe outras.', ph_none: 'Estes ficheiros não são fotos.',
-  undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
+  undo: 'Anular', redo: 'Refazer', read: 'Folhear', back_photos: '← Fotos', order_book: 'Encomendar este livro', later: 'Terminar mais tarde? Recebe o link por email', style_aria: 'Estilo do álbum', prev: 'Página anterior', next: 'Página seguinte', close: 'Fechar',
   hint_wide: 'Clica numa foto para a mudar ou recortar, e num texto para escrever diretamente na página.',
   hint_mobile: 'Toca numa foto ou num texto para o editar. Desliza para a esquerda ou direita para virar as páginas.',
   cover: 'Capa', back: 'Contracapa', page: 'Página {0}', pages: 'Páginas {0}–{1}', th_cover: 'Capa', th_back: 'Contra.',
@@ -8330,8 +8347,9 @@ ${JSON.stringify(o)}` }] }, 2, 'Correction')));
   } catch (e) { console.warn(e); const m2 = $('nstFixMsg'); if (m2) m2.textContent = t('fix_fail'); }
   btn.disabled = false;
 }
-async function saveLink(btn) {
-  const email = (($('nstSaveEmail') || {}).value || '').trim(), remind = !!($('nstSaveRemind') || {}).checked, msg = $('nstSaveMsg');
+async function saveLink(btn, box) {
+  const q = (sel, id) => box ? box.querySelector(sel) : $(id);       // box : fenêtre « Finir plus tard » (NA.plusTard)
+  const email = ((q('input[type=email]', 'nstSaveEmail') || {}).value || '').trim(), remind = !!(q('input[type=checkbox]', 'nstSaveRemind') || {}).checked, msg = q('.nst-note', 'nstSaveMsg');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert(t('p_email')); return; }
   NA.saveEmail = email; btn.disabled = true;
   try {
@@ -8344,12 +8362,48 @@ async function saveLink(btn) {
     NA.albumId = r.id; if (r.reminder) NA.reminder = r.reminder;
     E.saveLocal();
     if (msg) { msg.textContent = t('save_ok'); msg.classList.add('nst-ok'); }
+    try { window.va('pageview', { route: '/_etape/4b-album-garde', path: '/_etape/4b-album-garde' }); } catch (x) {}   // entonnoir : lien envoyé
   } catch (e) {
     console.warn('[Noustalgie] sauvegarde', e);
     if (msg) { msg.textContent = t('save_fail'); msg.classList.remove('nst-ok'); }
   }
   btn.disabled = false;
 }
+
+/* ── « Finir plus tard » (barre de l'aperçu) : le même enregistrement que la carte « Gardez votre album », qui était en bas du
+   panneau d'outils, hors de l'écran. D'octobre à mi-novembre, 5 des 11 visiteurs qui avaient enregistré leur album ont commandé
+   ensuite (rappels avec code), contre 16 % des aperçus. ── */
+NA.plusTard = function () {
+  if ($('nstLater')) return;
+  const m = document.createElement('div'); m.id = 'nstLater'; m.className = 'nst-pickhelp';
+  m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); m.setAttribute('aria-labelledby', 'nstLaterT');
+  m.innerHTML = `<div class="nst-ph-box nst-later-box"><h3 id="nstLaterT">${t('save_title')}</h3><p>${t('save_sub')}</p>
+    <input class="nst-input" type="email" autocomplete="email" placeholder="${t('save_email')}" aria-label="${t('save_email')}" value="${esc(NA.saveEmail || '')}"/>
+    <label class="nst-check"><input type="checkbox" checked/> <span>${t('save_remind')}</span></label>
+    <button type="button" data-act="save">${t('save_btn')}</button><p class="nst-note">${t('save_note')}</p>
+    <button type="button" class="nst-ph-x" data-act="close">${t('close')}</button></div>`;
+  document.body.appendChild(m);
+  const box = m.firstElementChild, inp = box.querySelector('input[type=email]'), ok = box.querySelector('[data-act=save]');
+  // clavier écouté sur toute la page : pendant l'envoi, le bouton désactivé perd le focus et Échap n'atteindrait plus la fenêtre
+  const touche = e => { if (e.key === 'Escape') fermer(); else if (e.key === 'Enter' && e.target === inp && !ok.disabled) saveLink(ok, box); };
+  const fermer = () => { m.remove(); document.removeEventListener('keydown', touche, true); };
+  document.addEventListener('keydown', touche, true);
+  m.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button');
+    if (b === ok) saveLink(ok, box);
+    else if (e.target === m || (b && b.dataset.act === 'close')) fermer();
+  });
+  inp.addEventListener('input', () => { NA.saveEmail = inp.value; });
+  setTimeout(() => { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 60);
+};
+// Ordinateur : la souris quitte la fenêtre par le haut (onglets, fermeture) pendant l'aperçu, album pas encore enregistré :
+// la même fenêtre, une seule fois par visite
+document.addEventListener('mouseout', e => {
+  if (e.relatedTarget || e.clientY > 0 || NA.albumId || $('nstLater')) return;
+  const p = $('panel3'); if (!p || !p.classList.contains('active') || !matchMedia('(pointer: fine)').matches) return;
+  try { if (sessionStorage.getItem('nst_plustard')) return; sessionStorage.setItem('nst_plustard', '1'); } catch (x) { return; }
+  NA.plusTard();
+});
 
 /* ── Ouvrir un album depuis son lien (?album=…) ── */
 async function openFromLink(id) {
