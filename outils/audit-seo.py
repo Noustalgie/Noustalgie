@@ -38,6 +38,7 @@ MOTS_CLES = {
     'idée cadeau saint valentin': 0, 'message saint valentin': 0, 'première saint valentin': 0, 'cadeau noël dernière minute': 0, 'cadeau noël parents': 0,
     'cadeau 6 mois de couple': 0, 'cadeau 2 ans de couple': 0, 'cadeau 5 ans de couple': 0, 'cadeau pacs': 0, 'cadeau fiançailles': 0,
     'carte cadeau album photo': 0,
+    "noces d'or": 0, "noces d'argent": 0, 'noces de bois': 0, 'noces de cristal': 0, 'noces de porcelaine': 0, 'noces de perle': 0,
 }
 GENERIQUES = {'cliquez ici', 'ici', 'en savoir plus', 'lire la suite', 'voir plus', 'plus', 'cliquez', 'lien', 'suite', 'read more', 'click here'}
 
