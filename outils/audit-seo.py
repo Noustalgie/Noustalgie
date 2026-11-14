@@ -39,6 +39,7 @@ MOTS_CLES = {
     'cadeau 6 mois de couple': 0, 'cadeau 2 ans de couple': 0, 'cadeau 5 ans de couple': 0, 'cadeau pacs': 0, 'cadeau fiançailles': 0,
     'carte cadeau album photo': 0,
     "noces d'or": 0, "noces d'argent": 0, 'noces de bois': 0, 'noces de cristal': 0, 'noces de porcelaine': 0, 'noces de perle': 0,
+    "noces d'étain": 0, 'noces de rubis': 0, "noces d'émeraude": 0, 'noces de diamant': 0,
 }
 GENERIQUES = {'cliquez ici', 'ici', 'en savoir plus', 'lire la suite', 'voir plus', 'plus', 'cliquez', 'lien', 'suite', 'read more', 'click here'}
 
