@@ -35,6 +35,8 @@ CAS = [
     dict(nom='ordinateur, allemand, livré en Allemagne, numéro « 0170/1234567 »', langue='de', pays='DE', tel_num='0170/1234567'),
     # navigateur intégré d'une application (Google, Instagram) : l'envoi direct vers Cloudinary échoue toujours, les photos passent par noustalgie.fr
     dict(nom='téléphone, envoi direct vers Cloudinary impossible : relais par le site', tel=True, direct_ko=True),
+    # « Finir plus tard » (barre de l'aperçu) : lien de l'album par email avec les rappels, puis commande quand même
+    dict(nom='téléphone, « Finir plus tard » : lien de l’album par email, puis commande', tel=True, garder=True),
 ]
 
 
@@ -55,7 +57,7 @@ def photos(n, dossier):
 
 
 async def jouer(nav, port, api, c, captures):
-    c = dict(dict(tel=False, pages=36, photos=None, options=[], ia='ok', langue='fr', format='print', attendu='stripe', retour=False, envoi_ko=False, direct_ko=False, pays='FR', tel_num='06 12 34 56 78'), **c)
+    c = dict(dict(tel=False, pages=36, photos=None, options=[], ia='ok', langue='fr', format='print', attendu='stripe', retour=False, envoi_ko=False, direct_ko=False, garder=False, pays='FR', tel_num='06 12 34 56 78'), **c)
     if not c['photos']:
         c['photos'] = {24: 16, 36: 24, 50: 34}[c['pages']]
     urllib.request.urlopen(f'http://127.0.0.1:{api}/__ia?mode={c["ia"]}').read()
@@ -70,7 +72,7 @@ async def jouer(nav, port, api, c, captures):
     ignorer = ('/_vercel/insights/', 'tfjs-backend-wasm') + (('/api/compose', '/api/chat') if c['ia'] == 'panne' else ())   # statistiques Vercel (absentes en local) ; moteur facultatif de face-api ; panne voulue
     pg.on('response', lambda r: req.append(f'{r.status} {r.url.split("?")[0][-60:]}') if r.status >= 400 and f'127.0.0.1:{port}' in r.url and not any(x in r.url for x in ignorer) else None)
     pg.on('dialog', lambda d: (alertes.append(d.message), asyncio.ensure_future(d.dismiss())))
-    n_img, reseau = [0], {'coupe': c['envoi_ko']}
+    n_img, reseau, albums = [0], {'coupe': c['envoi_ko']}, []
 
     async def route(r):
         u = r.request.url
@@ -92,6 +94,9 @@ async def jouer(nav, port, api, c, captures):
             if reseau['coupe']:
                 return await r.abort('connectionreset')            # réseau coupé : le relais ne passe pas non plus
             n_img[0] += 1                                          # photo relayée par noustalgie.fr vers Cloudinary
+        if f'127.0.0.1:{port}/api/album' in u:                   # enregistrement de l'album (« Finir plus tard ») : stockage et emails simulés
+            albums.append(json.loads(r.request.post_data or '{}'))
+            return await r.fulfill(content_type='application/json', body=json.dumps({'id': 'album-test', 'reminder': ''}))
         if f'127.0.0.1:{port}/api/' in u:
             q = u.split(f'127.0.0.1:{port}', 1)[1]
             return await r.fulfill(response=await r.fetch(url=f'http://127.0.0.1:{api}{q}'))
@@ -169,6 +174,28 @@ async def jouer(nav, port, api, c, captures):
         if c['ia'] == 'panne' and not await pg.is_visible('#nstIssue'):
             pb.append('IA en panne : aucun message ni bouton pour réessayer')
         await etape('aperçu')
+        if c['garder']:
+            await pg.click('#previewActions .nst-later')
+            await pg.wait_for_timeout(400)
+            if not await pg.is_visible('#nstLater'):
+                pb.append('« Finir plus tard » n’ouvre pas la fenêtre')
+                return c['nom'], pb, js, req
+            await pg.fill('#nstLater input[type=email]', 'emma.martin@example.com')
+            await etape('finir plus tard')
+            await pg.click('#nstLater [data-act=save]')
+            if await attendre('!!NA.albumId', 60, 'enregistrement de l’album'):
+                a = albums[-1] if albums else {}
+                if not a.get('remind'):
+                    pb.append('« Finir plus tard » : rappels non demandés alors que la case est cochée')
+                if len((a.get('album') or {}).get('pages') or []) != c['pages']:
+                    pb.append('« Finir plus tard » : album enregistré incomplet')
+                if 'envoyé' not in await pg.evaluate("document.querySelector('#nstLater .nst-note').textContent"):
+                    pb.append('« Finir plus tard » : pas de confirmation pour le client')
+            await pg.keyboard.press('Escape')
+            await pg.wait_for_timeout(300)
+            if await pg.is_visible('#nstLater'):
+                pb.append('« Finir plus tard » : la fenêtre ne se ferme pas (Échap)')
+                return c['nom'], pb, js, req
         await pg.click('#btnOrder')
         await pg.wait_for_timeout(1000)
         if not await pg.evaluate("document.getElementById('panel4').classList.contains('active')"):
