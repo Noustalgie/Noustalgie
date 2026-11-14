@@ -37,6 +37,7 @@ MOTS_CLES = {
     'cadeau noël copine': 0, 'cadeau noël copain': 0, 'message noël amoureux': 0, "calendrier de l'avent couple": 0,
     'idée cadeau saint valentin': 0, 'message saint valentin': 0, 'première saint valentin': 0, 'cadeau noël dernière minute': 0, 'cadeau noël parents': 0,
     'cadeau 6 mois de couple': 0, 'cadeau 2 ans de couple': 0, 'cadeau 5 ans de couple': 0, 'cadeau pacs': 0, 'cadeau fiançailles': 0,
+    'carte cadeau album photo': 0,
 }
 GENERIQUES = {'cliquez ici', 'ici', 'en savoir plus', 'lire la suite', 'voir plus', 'plus', 'cliquez', 'lien', 'suite', 'read more', 'click here'}
 

@@ -4,15 +4,16 @@ const https = require('https');
 const crypto = require('crypto');
 const { escapeHtml: h } = require('./_lib/security');
 const PA = require('./_lib/printapi');
+const CADEAU = require('./_lib/cadeau');
 
-async function sendEmail({ to, subject, html }) {
+async function sendEmail({ to, subject, html }, cle) {
   const RESEND = process.env.RESEND_API_KEY;
   if (!RESEND) { console.log('Email non envoyé (pas de RESEND_API_KEY):', to); return; }
   const buf = Buffer.from(JSON.stringify({ from: 'Noustalgie <contact@noustalgie.fr>', reply_to: 'contact@noustalgie.fr', to, subject, html }));
   return new Promise(resolve => {
     const req = https.request({
       hostname: 'api.resend.com', path: '/emails', method: 'POST',
-      headers: { Authorization: 'Bearer ' + RESEND, 'Content-Type': 'application/json', 'Content-Length': buf.length },
+      headers: Object.assign({ Authorization: 'Bearer ' + RESEND, 'Content-Type': 'application/json', 'Content-Length': buf.length }, cle ? { 'Idempotency-Key': cle } : {}),
     }, r => { r.on('data', () => {}); r.on('end', () => { console.log('Email →', to, r.statusCode); resolve(); }); });
     req.on('error', e => { console.error('Email error:', e.message); resolve(); });
     req.write(buf); req.end();
@@ -184,6 +185,42 @@ const mail = (title, inner) => `<div style="background:#f6f4f0;padding:32px 16px
 </div></div>`;
 const btn = (href, label) => `<div style="margin:24px 0;"><a href="${h(href)}" style="background:#1c1a18;color:#ffffff;padding:14px 26px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;display:inline-block;">${label}</a></div>`;
 
+// Carte cadeau payée : le bon Stripe est créé (ou retrouvé), l'acheteur reçoit le code et le lien de la carte à imprimer
+async function carteVendue(session, res) {
+  const m = session.metadata || {};
+  const email = session.customer_details?.email || session.customer_email || m.email || '';
+  const carte = await CADEAU.assurerCarte(session);
+  const lien = `https://noustalgie.fr/carte-cadeau/merci?session_id=${encodeURIComponent(session.id)}`;
+  const fin = new Date(((session.created || Date.now() / 1000) + CADEAU.DUREE_JOURS * 86400) * 1000).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' });
+  const prix = typeof session.amount_total === 'number' ? (session.amount_total / 100).toFixed(2) : '49.99';
+  try {
+    if (carte.id && email) {
+      await sendEmail({
+        to: email,
+        subject: 'Votre carte cadeau Noustalgie ♥',
+        html: mail(`Merci${m.de ? ' ' + h(m.de) : ''},`, `<p>Votre carte cadeau${m.pour ? ` pour <b>${h(m.pour)}</b>` : ''} est prête : un livre photo de 36 pages, imprimé et livré chez eux.</p>
+          <p style="font-size:13px;margin:0;">Code de la carte</p>
+          <p style="font-family:'Courier New',monospace;font-size:22px;letter-spacing:.08em;color:#1c1a18;margin:4px 0 0;"><b>${CADEAU.affiche(carte.id)}</b></p>
+          <p style="font-size:13px;">Valable jusqu’au ${fin}, sur noustalgie.fr : le code se saisit au moment de commander l’album.</p>
+          ${btn(lien, 'Voir et imprimer la carte')}
+          <p style="font-size:13px;">Vous pouvez aussi transférer cet email : le lien ouvre la carte à imprimer ou à envoyer.</p>`),
+      }, `cadeau-${session.id}`);
+    }
+    const NOTIFY = process.env.NOTIFY_EMAIL;
+    if (NOTIFY) {
+      await sendEmail({
+        to: NOTIFY,
+        subject: `🎁 Carte cadeau vendue — ${String(m.de || email).replace(/[\r\n]+/g, ' ').slice(0, 60)} — ${prix}€${carte.id ? '' : ' ⚠️ CODE NON CRÉÉ'}`,
+        html: `<h2>Carte cadeau vendue</h2>
+          <p><b>Acheteur :</b> ${h(m.de || '')} (${h(email)})<br><b>Pour :</b> ${h(m.pour || '')}<br><b>Montant :</b> ${h(prix)}€</p>
+          <p><b>Code :</b> ${carte.id ? h(CADEAU.affiche(carte.id)) : `<span style="color:#e07070">non créé : ${h(carte.erreur || '')}. La page de la carte réessaie à chaque ouverture.</span>`}<br><b>Valable jusqu’au :</b> ${fin}</p>
+          <p><a href="${h(lien)}">Voir la carte</a> · <a href="https://dashboard.stripe.com/coupons">Bons de réduction dans Stripe</a></p>`,
+      }, `cadeau-notif-${session.id}`);
+    }
+  } catch (e) { console.error('Carte cadeau, email :', e.message); }
+  return res.status(200).json({ received: true, cadeau: carte.id || null });
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -203,9 +240,12 @@ module.exports = async (req, res) => {
   if (event.type !== 'checkout.session.completed' && event.type !== 'checkout.session.async_payment_succeeded') return res.status(200).json({ received: true, ignored: event.type });
 
   const session = event.data.object;
-  if (session.payment_status !== 'paid') return res.status(200).json({ received: true, ignored: 'unpaid' });
-
   const m = session.metadata || {};
+  // Livre entièrement payé par une carte cadeau : commande à 0 € terminée, Stripe la valide sans paiement
+  // (« no_payment_required » ; la session ouverte se dit « unpaid », d'où le contrôle sur status === 'complete')
+  const offert = session.amount_total === 0 && /^CADEAU/.test(m.promo || '') && (session.payment_status === 'no_payment_required' || session.status === 'complete');
+  if (session.payment_status !== 'paid' && !offert) return res.status(200).json({ received: true, ignored: 'unpaid' });
+  if (m.type === 'cadeau') return carteVendue(session, res);
   const name = m.name || session.customer_details?.name || '';
   const email = session.customer_details?.email || session.customer_email || m.email || '';
   const address = m.address || '';

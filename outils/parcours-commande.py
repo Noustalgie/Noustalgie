@@ -45,6 +45,11 @@ CAS = [
     dict(pages=36, langue='en'), dict(pages=24, langue='de', options=['aimant']),
     dict(pages=36, promo='MOITIE'), dict(pages=36, promo='MOITIE', options=['coffret']),
     dict(pages=36, mobile=True), dict(pages=24, mobile=True, options=['coffret', 'affiche'], apres=36),
+    # Carte cadeau (49,99 € déduits chez Stripe par un bon) : livre offert, différence à régler, refus sur le PDF, carte déjà utilisée
+    dict(pages=36, promo='CADEAU-TEST-0001'), dict(pages=50, promo='cadeau test 0001', options=['coffret']),
+    dict(pages=24, promo='CADEAU-TEST-0001', mobile=True),
+    dict(pages=36, format='pdf', promo='CADEAU-TEST-0001', refus='livre imprimé'),
+    dict(pages=36, promo='CADEAU-DEJA-0001', message='déjà été utilisée'),
 ]
 
 
@@ -54,7 +59,7 @@ def demarrer_serveur():
 
 
 async def jouer(nav, port, api, i, c):
-    c = dict(dict(format='print', style=None, options=[], pays='FR', langue='fr', apres=None, promo=None, photos=None, mobile=False), **c)
+    c = dict(dict(format='print', style=None, options=[], pays='FR', langue='fr', apres=None, promo=None, photos=None, mobile=False, refus=None, message=None), **c)
     ctx = await nav.new_context(viewport={'width': 390, 'height': 844} if c['mobile'] else {'width': 1280, 'height': 900}, is_mobile=c['mobile'], has_touch=c['mobile'])
     pg = await ctx.new_page()
     alertes, erreurs, stripe = [], [], {'ok': False}
@@ -118,17 +123,30 @@ async def jouer(nav, port, api, i, c):
         await pg.fill('#promoCode', c['promo'])
         await pg.click('#promoWrap button')
         await pg.wait_for_timeout(500)
+    msg_promo = await pg.evaluate("(document.getElementById('promoMsg') || {}).textContent || ''")
     affiche = await pg.evaluate("NA.curPrice ? NA.curPrice().v : null")
     await pg.evaluate("processPayment()")
     for _ in range(240):
         if stripe['ok'] or alertes:
             break
         await pg.wait_for_timeout(250)
+    if alertes and not stripe['ok']:
+        await pg.wait_for_timeout(1500)                      # laisse partir l'alerte envoyée à Gabin avant de fermer la page
     d = json.loads(urllib.request.urlopen(f'http://127.0.0.1:{api}/__dernier').read())
     await ctx.close()
 
     pb = []
     s = d['stripe'] or {}
+    cadeau = bool(c['promo'] and c['promo'].upper().replace(' ', '').replace('-', '').startswith('CADEAU'))
+    if c['message'] and c['message'] not in msg_promo:
+        pb.append(f"message du code : « {msg_promo} » au lieu de « …{c['message']}… »")
+    if c['refus']:
+        if stripe['ok']:
+            pb.append('paiement ouvert alors qu’il aurait dû être refusé')
+        elif not any(c['refus'] in a for a in alertes):
+            pb.append(f"refus attendu (« …{c['refus']}… »), message reçu : {alertes[:1]}")
+        desc = ', '.join(f'{k}={v}' for k, v in c.items() if v and not (k == 'format' and v == 'print') and not (k == 'pays' and v == 'FR') and not (k == 'langue' and v == 'fr'))
+        return desc, pb + (['erreur JavaScript : ' + erreurs[0]] if erreurs else [])
     if not stripe['ok']:
         pb.append('pas de passage sur Stripe' + (f' : « {alertes[0][:160]} »' if alertes else ' (aucun message, délai dépassé)'))
     else:
@@ -139,6 +157,16 @@ async def jouer(nav, port, api, i, c):
         attendu = affiche if not c['promo'] else None
         if attendu is not None and abs(total - attendu) > 0.01:
             pb.append(f'prix affiché {attendu} € mais Stripe demande {total} €')
+        if cadeau and not c['message']:
+            if s.get('discounts[0][coupon]') != 'CADEAUTEST0001':
+                pb.append(f"bon de la carte cadeau absent chez Stripe ({s.get('discounts[0][coupon]')!r})")
+            if any(k.startswith('payment_intent_data') for k in s):
+                pb.append('payment_intent_data envoyé avec une carte cadeau (commande à 0 € sans paiement)')
+            du = round(max(0, total - 49.99), 2)
+            if affiche is None or abs(du - affiche) > 0.01:
+                pb.append(f'reste à payer affiché {affiche} € mais Stripe demandera {du} € après la carte')
+            if m.get('promo') != 'CADEAUTEST0001':
+                pb.append(f"code de la carte absent des métadonnées ({m.get('promo')!r})")
         if c['format'] == 'print':
             if not (m.get('pa_cover') and m.get('pa_inner')):
                 pb.append('fichiers Print API absents (le livre partirait chez Prodigi)')

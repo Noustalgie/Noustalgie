@@ -110,12 +110,18 @@ module.exports = async (req, res) => {
   }
 
   let priceEuros = PRICES[pagesNum][fmt];
-  let appliedPromo = '';
+  let appliedPromo = '', carte = '';
   if (promoCode) {
     const promo = await checkPromo(promoCode);
     if (!promo.valid) return res.status(400).json({ error: promo.error });
     appliedPromo = promo.code;
-    priceEuros = promo.type === 'free'
+    // Carte cadeau : bon Stripe de 49,99 € déduit du total (livre et options) ; Stripe le marque utilisé au paiement.
+    // Un livre de 24 ou 36 pages sans option revient à 0 € : Stripe valide alors la commande sans demander de carte.
+    if (promo.type === 'cadeau') {
+      if (fmt !== 'print') return res.status(400).json({ error: 'La carte cadeau est valable sur le livre imprimé. Choisissez « Livre imprimé » pour l’utiliser.' });
+      carte = promo.coupon;
+    }
+    else priceEuros = promo.type === 'free'
       ? 0.50
       : Math.max(0.50, +(priceEuros * (1 - promo.discount / 100)).toFixed(2));
   }
@@ -160,6 +166,11 @@ module.exports = async (req, res) => {
     params[`${L}[price_data][unit_amount]`] = Math.round(OPTIONS[k].price * 100);
     params[`${L}[quantity]`] = '1';
   });
+  if (carte) {
+    params['discounts[0][coupon]'] = carte;
+    // L'usage unique d'une carte est tenu par Stripe (pas de recherche sur le paiement), et une commande à 0 € n'a pas de paiement
+    Object.keys(params).filter(k => k.startsWith('payment_intent_data')).forEach(k => delete params[k]);
+  }
   Object.entries(meta).forEach(([k, v]) => { params[`metadata[${k}]`] = v; });
 
   try {

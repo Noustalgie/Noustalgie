@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="robots" content="noindex"/>
+<title>Votre carte cadeau | Noustalgie</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/carte-cadeau/carte.css?v=1"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+html{background:#fbfaf7;-webkit-text-size-adjust:100%;}
+body{margin:0;color:#1c1a18;font:400 16px/1.65 'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+main{max-width:860px;margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 20px calc(48px + env(safe-area-inset-bottom));}
+.logo{display:inline-block;margin-bottom:28px;font:700 24px/1 'Times New Roman',Georgia,serif;color:#1c1a18;text-decoration:none;}
+h1{margin:0 0 10px;font:400 clamp(30px,5vw,44px)/1.12 'Playfair Display',Georgia,serif;letter-spacing:-.02em;}
+h1 em{font-style:italic;}
+.sub{margin:0 0 28px;color:#5f5a54;max-width:60ch;}
+.sub b{color:#1c1a18;font-weight:500;}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 34px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 24px;border-radius:999px;border:1px solid #1c1a18;background:#fff;color:#1c1a18;font:500 15px 'Hanken Grotesk',sans-serif;text-decoration:none;cursor:pointer;}
+.btn.dark{background:#1c1a18;color:#fff;}
+h2{margin:0 0 12px;font:400 26px/1.2 'Playfair Display',Georgia,serif;}
+ol{margin:0 0 28px;padding-left:1.2em;color:#3d3935;}
+li{margin:6px 0;}
+.help{font-size:14px;color:#77726b;}.help a{color:#1c1a18;}
+.cut{margin:10px 0 0;font-size:13px;color:#77726b;}
+.etat{padding:22px;border:1px solid #e4dfd7;border-radius:20px;background:#fff;color:#5f5a54;}
+@media (max-width:480px){.btn{flex:1 1 100%;}}
+@media print{
+  html,body{background:#fff;}
+  main{max-width:none;padding:0;}
+  .logo,h1,.sub,.btns,.suite,.help,.etat,#nstConsent{display:none !important;}
+  .cut{display:block;margin-top:4mm;font-size:9pt;}
+}
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<main>
+<a class="logo" href="/">Noustalgie</a>
+<h1 id="t">Votre carte <em>se prépare</em></h1>
+<p class="sub" id="sub">Un instant : nous préparons la carte et son code.</p>
+<div id="zone"><p class="etat" id="etat">Chargement de votre carte…</p></div>
+<div class="btns" id="btns" hidden>
+<button class="btn dark" type="button" id="imprimer">Imprimer la carte</button>
+<button class="btn" type="button" id="copier">Copier le code</button>
+<a class="btn" id="envoyer" href="#">L’envoyer par email</a>
+</div>
+<section class="suite" id="suite" hidden>
+<h2>Comment ils l’utilisent</h2>
+<ol>
+<li>Ils vont sur <b>noustalgie.fr</b> et composent leur album avec leurs photos. L’aperçu est gratuit.</li>
+<li>Au moment de commander, ils saisissent le code dans « Code promo ou carte cadeau ».</li>
+<li>Leur livre de 36 pages leur est offert, livraison comprise. Pour 50 pages ou des options, ils règlent seulement la différence.</li>
+</ol>
+</section>
+<p class="help">Une question ? <a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></p>
+</main>
+<script>
+(function () {
+  function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var id = new URLSearchParams(location.search).get('session_id'), essais = 0;
+  var etat = function (txt) { document.getElementById('zone').innerHTML = '<p class="etat">' + txt + '</p>'; };
+  if (!id) { etat('Lien incomplet. Ouvrez la carte depuis l’email reçu, ou écrivez-nous à <a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a>.'); return; }
+  function charger() {
+    fetch('/api/tools?fn=cadeau&session_id=' + encodeURIComponent(id)).then(function (r) { return r.json(); }).then(function (o) {
+      // Paiement pas encore confirmé (ou code en préparation) : on réessaie quelques fois
+      if (!o || !o.paid || !o.code) {
+        if (++essais < 6) { setTimeout(charger, 2500); return; }
+        etat(o && o.error ? esc(o.error) : 'Le paiement n’est pas encore confirmé. Rechargez la page dans une minute : la carte arrivera aussi par email.');
+        return;
+      }
+      afficher(o);
+    }).catch(function () { if (++essais < 6) setTimeout(charger, 2500); else etat('Connexion impossible. Rechargez la page : la carte arrive aussi par email.'); });
+  }
+  function afficher(o) {
+    var fin = new Date(o.fin + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('t').innerHTML = 'Merci' + (o.de ? ' ' + esc(o.de) : '') + ', <em>votre carte est prête</em>';
+    document.getElementById('sub').innerHTML = 'Elle vient aussi de partir par email' + (o.email ? ' à <b>' + esc(o.email) + '</b>' : '') + ', avec son code. Imprimez-la, ou transférez-leur l’email.';
+    document.getElementById('zone').innerHTML = '<div class="cc">' +
+      '<div class="cc-ph"><img src="/img/exemple/noel-album-couple-lit.jpg" alt="" width="900" height="900"/></div>' +
+      '<div class="cc-tx"><p class="cc-logo">Noustalgie</p><p class="cc-kind">Carte cadeau</p>' +
+      '<p class="cc-pour">Pour <em>' + esc(o.pour) + '</em></p>' +
+      '<p class="cc-what">Le livre photo de votre histoire, composé avec vos photos et vos souvenirs.</p>' +
+      (o.message ? '<p class="cc-msg">' + esc(o.message) + '</p>' : '') +
+      (o.de ? '<p class="cc-de">De la part de ' + esc(o.de) + '</p>' : '') +
+      '<div class="cc-code"><span>Code</span><b>' + esc(o.code) + '</b></div>' +
+      '<p class="cc-use">Un livre de 36 pages, couverture rigide 21 × 21 cm, livré chez vous. À créer sur noustalgie.fr avant le ' + esc(fin) + '.</p>' +
+      '</div></div><p class="cut">Découpez la carte en suivant le pointillé.</p>';
+    document.getElementById('btns').hidden = false; document.getElementById('suite').hidden = false;
+    document.getElementById('imprimer').onclick = function () { window.print(); };
+    document.getElementById('copier').onclick = function () {
+      var b = this; (navigator.clipboard ? navigator.clipboard.writeText(o.code) : Promise.reject()).then(function () { b.textContent = 'Code copié'; }, function () { prompt('Code de la carte :', o.code); });
+    };
+    var lien = 'https://noustalgie.fr/?cadeau=' + encodeURIComponent(o.code) + '#app';
+    document.getElementById('envoyer').href = 'mailto:?subject=' + encodeURIComponent('Une carte cadeau pour vous : le livre de votre histoire') +
+      '&body=' + encodeURIComponent((o.message ? o.message + '\n\n' : '') + 'Pour ' + o.pour + (o.de ? ', de la part de ' + o.de : '') + ' :\nune carte cadeau Noustalgie, un livre photo de 36 pages composé avec vos photos et livré chez vous.\n\nCode : ' + o.code + '\nValable jusqu’au ' + fin + '.\n\nComposez votre album ici, le code se saisit au moment de commander :\n' + lien + '\n');
+    // Pixel Meta et Google Ads (rien sans « Accepter », cf. consentement.js) et entonnoir : une fois par carte
+    try { if (!sessionStorage.getItem('nstCadeau' + id)) { sessionStorage.setItem('nstCadeau' + id, '1'); var v = parseFloat(o.prix) || 49.99;
+      var go = function () { if (window.nstPixel) window.nstPixel('Purchase', { value: v, currency: 'EUR', content_name: 'Carte cadeau' }); if (window.nstGads) window.nstGads(v, o.code); }; if (window.nstPixel) go(); else window.addEventListener('load', go);
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); }; window.va('pageview', { route: '/_etape/carte-cadeau-payee', path: '/_etape/carte-cadeau-payee' }); } } catch (e) {}
+  }
+  charger();
+})();
+</script>
+<script defer src="/consentement.js?v=3"></script>
+</body>
+</html>
