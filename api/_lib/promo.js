@@ -20,16 +20,25 @@ function codeRelance(albumId, maintenant = Date.now()) {
   const empreinte = enB32(parseInt(crypto.createHash('sha256').update(String(albumId)).digest('hex').slice(0, 4), 16) % (32 ** 3), 3);
   return `ALBUM-${fin}${empreinte}${signeRelance(fin + empreinte)}`;
 }
-function lireRelance(code) {
-  const m = /^ALBUM-([0-9A-Z]{3})([0-9A-Z]{3})([0-9A-Z]{4})$/.exec(code);
-  if (!m || !process.env.CLOUDINARY_API_SECRET || /[ILOU]/.test(m[1] + m[2] + m[3])) return null;
-  const a = Buffer.from(signeRelance(m[1] + m[2])), b = Buffer.from(m[3]);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
-  if (Math.floor((Date.now() - JOUR0) / JOUR) > deB32(m[1])) return { expire: true };
-  return { type: 'percent', discount: RELANCE_PCT };
+// Codes « couple ami » (email envoyé à l'arrivée du livre, api/_fn/printapi-hook.js) : même forme, préfixe AMI-,
+// valables 90 jours (Noël puis Saint-Valentin), usage unique comme les autres.
+const AMI_PCT = 10, AMI_JOURS = 90;
+function codeAmi(commande, maintenant = Date.now()) {
+  const fin = enB32(Math.floor((maintenant - JOUR0) / JOUR) + AMI_JOURS, 3);
+  const empreinte = enB32(parseInt(crypto.createHash('sha256').update('ami:' + String(commande)).digest('hex').slice(0, 4), 16) % (32 ** 3), 3);
+  return `AMI-${fin}${empreinte}${signeRelance('AMI' + fin + empreinte)}`;
 }
-// Saisie tolérante : O tapé pour 0, I ou L pour 1, dans la partie après « ALBUM- »
-const normaliser = c => /^ALBUM-/.test(c) ? 'ALBUM-' + c.slice(6).replace(/O/g, '0').replace(/[IL]/g, '1') : c;
+function lireRelance(code) {
+  const m = /^(ALBUM|AMI)-([0-9A-Z]{3})([0-9A-Z]{3})([0-9A-Z]{4})$/.exec(code);
+  if (!m || !process.env.CLOUDINARY_API_SECRET || /[ILOU]/.test(m[2] + m[3] + m[4])) return null;
+  const ami = m[1] === 'AMI';
+  const a = Buffer.from(signeRelance((ami ? 'AMI' : '') + m[2] + m[3])), b = Buffer.from(m[4]);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  if (Math.floor((Date.now() - JOUR0) / JOUR) > deB32(m[2])) return { expire: true };
+  return { type: 'percent', discount: ami ? AMI_PCT : RELANCE_PCT };
+}
+// Saisie tolérante : O tapé pour 0, I ou L pour 1, dans la partie après « ALBUM- » ou « AMI- »
+const normaliser = c => { const m = /^(ALBUM|AMI)-(.*)$/.exec(c); return m ? m[1] + '-' + m[2].replace(/O/g, '0').replace(/[IL]/g, '1') : c; };
 
 function loadPromos() {
   const raw = [process.env.PROMO_CODES, process.env.PROMO_CODES_EXTRA].filter(Boolean).join(',');
@@ -80,4 +89,4 @@ async function checkPromo(input) {
   return { valid: true, code, type: promo.type, discount: promo.discount };
 }
 
-module.exports = { checkPromo, codeRelance, RELANCE_PCT };
+module.exports = { checkPromo, codeRelance, RELANCE_PCT, codeAmi, AMI_PCT };
