@@ -187,9 +187,10 @@ html body::before{content:"";position:fixed;left:0;right:0;top:0;height:100vh;he
 <footer class="g-foot"><div class="g-wrap"><span>© 2026 Noustalgie. Tous droits réservés.</span><nav aria-label="Informations"><a href="/guides">Guides</a><a href="/exemple-album">Exemple d'album</a><a href="/mentions-legales">Mentions légales</a><a href="/cgv">CGV</a><a href="/confidentialite">Confidentialité</a><a href="/contact">Contact</a><a href="mailto:contact@noustalgie.fr">contact@noustalgie.fr</a></nav></div></footer>
 <script>
 (function () {
-  // La date limite de Noël disparaît d'elle-même après le 10 décembre (comme sur l'accueil)
+  // Date limite de Noël jusqu'au 10 décembre ; ensuite, jusqu'au 25, la carte cadeau (comme sur l'accueil), puis plus rien
   var n = document.getElementById('lpNoel'), now = new Date();
-  if (n && now > new Date(2026, 11, 10, 23, 59)) n.remove();
+  if (n && now > new Date(2026, 11, 25, 23, 59)) n.remove();
+  else if (n && now > new Date(2026, 11, 10, 23, 59)) n.innerHTML = 'Trop tard pour recevoir le livre avant Noël\u00a0? <a href="/carte-cadeau" style="color:inherit">Offrez la carte cadeau</a>, reçue dans la minute et à imprimer\u00a0: le couple compose son album quand il veut.';
   // Bouton collé en bas sur téléphone, une fois le premier bouton sorti de l'écran
   var s = document.getElementById('lpSticky'), h = document.querySelector('.lp-hero .g-btn');
   if (s && h && 'IntersectionObserver' in window) new IntersectionObserver(function (e) { s.classList.toggle('on', !e[0].isIntersecting && e[0].boundingClientRect.top < 0); }).observe(h);
