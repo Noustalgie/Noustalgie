@@ -364,21 +364,22 @@
    }
   },
   {
-   "id": "lettre-a",
+   "id": "lettre-enveloppe",
    "k": "lettre",
-   "layout": "mlettre_a",
-   "t": {
-    "h1": "Une lettre",
-    "h2": "pour toi"
-   }
+   "layout": "mlettre_c",
+   "ph": [
+    "assis"
+   ],
+   "t": {}
   },
   {
-   "id": "lettre-b",
-   "layout": "mlettre_b",
+   "id": "lettre",
+   "layout": "mlettre_d",
    "t": {
+    "title": "Une lettre pour Hugo",
     "hello": "Mon cœur,",
     "text": "Je ne sais pas exactement à quel moment tout a commencé. Peut-être sous ce parapluie, peut-être au troisième café. Je sais seulement que depuis, les jours ordinaires ont un autre goût. Merci pour les dimanches qui s’éternisent, pour les fous rires dans la voiture, pour ta main qui trouve la mienne sans chercher. Tu es devenu mon endroit préféré, celui où je peux être moi, rire sans raison et oublier le reste du monde.",
-    "sign": "Je t’aime.\nLéa"
+    "sign": "Avec amour, pour toujours\nLéa"
    }
   },
   {

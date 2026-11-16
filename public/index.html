@@ -5101,7 +5101,7 @@ function folio(pg, T) {
   const left = i % 2 === 0, mast = (NA.pages[0] && NA.pages[0].t && NA.pages[0].t.mast) || lm('mast');
   return `<div style="position:absolute;bottom:30px;${left ? `left:${M}px` : `right:${M}px`};color:${T.muted};font:600 9px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;pointer-events:none;">${left ? `${String(i + 1).padStart(2, '0')} · ${esc(mast)}` : `${esc(mast)} · ${String(i + 1).padStart(2, '0')}`}</div>`;
 }
-const TOC_KEYS = ['debut', 'dico', 'etapes', 'moments', 'annee', 'playlist', 'aime', 'adresses', 'voyages', 'souvenir', 'memory', 'interview', 'raisons', 'musee', 'profil', 'quiz', 'mots', 'bingo', 'voeux', 'bucket', 'lettre'];
+const TOC_KEYS = ['debut', 'dico', 'etapes', 'moments', 'annee', 'playlist', 'aime', 'adresses', 'voyages', 'postale', 'souvenir', 'memory', 'interview', 'raisons', 'bouquet', 'musee', 'profil', 'quiz', 'mots', 'bingo', 'voeux', 'bucket', 'lettre'];
 
 /* Rubriques */
 Object.assign(LAYOUTS, {
@@ -5437,7 +5437,8 @@ const LMAG2 = {
     museeFoot: 'Exposition permanente', since: 'Ensemble depuis {meet}', pSouv: 'souvenirs', pJours: 'jours', pAmour: 'amour', hl: ['Voyages', 'Soirées', 'Chez nous', 'Nous deux'],
     filmSel: 'Sélection officielle', filmFest: 'Festival de nos cœurs', filmBill: '{a} · Scénario\u00a0: le hasard · Musique\u00a0: nos chansons · Suite au prochain épisode',
     meteo1: 'Météo', meteo2: 'de notre amour', temp: '37,2°', days: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'], duelWin: 'Qui gagne\u00a0?',
-    toc2: { dico: 'Nous, définition', moments: 'Nos plus beaux moments', aime: 'Ce que j’aime chez toi', souvenir: 'Notre souvenir préféré', musee: 'Le musée de nous',
+    lettreTo: 'Une lettre pour {n}', signAlways: 'Avec amour, pour toujours', kiss: 'Bons baisers de', together: 'Toujours ensemble', stampVal: 'Par avion', postaleLab: 'Carte postale',
+    toc2: { postale: 'Une carte postale', bouquet: 'Un bouquet pour toi', dico: 'Nous, définition', moments: 'Nos plus beaux moments', aime: 'Ce que j’aime chez toi', souvenir: 'Notre souvenir préféré', musee: 'Le musée de nous',
       profil: 'Notre profil', bingo: 'Bingo spécial couple', voeux: 'Ce que je nous souhaite' } },
   en: { jtm: 'I love you', geant: ['you & me', 'forever', 'I love you'], moments1: 'Our most iconic', moments2: 'moments', souv1: 'our favourite', souv2: 'memory', voeux: 'here’s to us…',
     voeuxW: ['Laughter', 'Adventures', 'Always us'], dest1: 'our', dest2: 'getaways', bingo2: 'couple edition',
@@ -5452,7 +5453,8 @@ const LMAG2 = {
     museeFoot: 'Permanent exhibition', since: 'Together since {meet}', pSouv: 'memories', pJours: 'days', pAmour: 'love', hl: ['Trips', 'Nights out', 'Home', 'Just us'],
     filmSel: 'Official selection', filmFest: 'Festival of our hearts', filmBill: '{a} · Written by chance · Music: our songs · To be continued',
     meteo1: 'Forecast', meteo2: 'for our love', temp: '37.2°', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], duelWin: 'Who wins?',
-    toc2: { dico: 'Us, defined', moments: 'Our most iconic moments', aime: 'What I love about you', souvenir: 'Our favourite memory', musee: 'The museum of us',
+    lettreTo: 'A love letter to {n}', signAlways: 'With love, always', kiss: 'Greetings from', together: 'Always together', stampVal: 'Par avion', postaleLab: 'Postcard',
+    toc2: { postale: 'A postcard', bouquet: 'A bouquet for you', dico: 'Us, defined', moments: 'Our most iconic moments', aime: 'What I love about you', souvenir: 'Our favourite memory', musee: 'The museum of us',
       profil: 'Our profile', bingo: 'Couples bingo', voeux: 'What I wish for us' } },
   de: { jtm: 'ich liebe dich', geant: ['du & ich', 'für immer', 'ich liebe dich'], moments1: 'Unsere schönsten', moments2: 'Momente', souv1: 'unsere liebste', souv2: 'Erinnerung', voeux: 'ich wünsche uns…',
     voeuxW: ['Viel Lachen', 'Reisen', 'Immer wir'], dest1: 'unsere', dest2: 'Reiseziele', bingo2: 'Paar-Edition',
@@ -5467,7 +5469,8 @@ const LMAG2 = {
     museeFoot: 'Dauerausstellung', since: 'Zusammen seit {meet}', pSouv: 'Erinnerungen', pJours: 'Tage', pAmour: 'Liebe', hl: ['Reisen', 'Abende', 'Zuhause', 'Wir zwei'],
     filmSel: 'Offizielle Auswahl', filmFest: 'Festival unserer Herzen', filmBill: '{a} · Drehbuch: der Zufall · Musik: unsere Lieder · Fortsetzung folgt',
     meteo1: 'Wetter', meteo2: 'unserer Liebe', temp: '37,2°', days: ['Mo', 'Di', 'Mi', 'Do', 'Fr'], duelWin: 'Wer gewinnt?',
-    toc2: { dico: 'Wir, die Definition', moments: 'Unsere schönsten Momente', aime: 'Was ich an dir liebe', souvenir: 'Unsere liebste Erinnerung', musee: 'Das Museum von uns',
+    lettreTo: 'Ein Liebesbrief an {n}', signAlways: 'In Liebe, für immer', kiss: 'Grüße aus', together: 'Für immer zusammen', stampVal: 'Luftpost', postaleLab: 'Postkarte',
+    toc2: { postale: 'Eine Postkarte', bouquet: 'Ein Strauß für dich', dico: 'Wir, die Definition', moments: 'Unsere schönsten Momente', aime: 'Was ich an dir liebe', souvenir: 'Unsere liebste Erinnerung', musee: 'Das Museum von uns',
       profil: 'Unser Profil', bingo: 'Paar-Bingo', voeux: 'Was ich uns wünsche' } },
   es: { jtm: 'te quiero', geant: ['tú y yo', 'para siempre', 'te quiero'], moments1: 'Nuestros mejores', moments2: 'momentos', souv1: 'nuestro recuerdo', souv2: 'favorito', voeux: 'nos deseo…',
     voeuxW: ['Risas', 'Viajes', 'Siempre nosotros'], dest1: 'nuestras', dest2: 'escapadas', bingo2: 'edición pareja',
@@ -5482,7 +5485,8 @@ const LMAG2 = {
     museeFoot: 'Exposición permanente', since: 'Juntos desde {meet}', pSouv: 'recuerdos', pJours: 'días', pAmour: 'amor', hl: ['Viajes', 'Noches', 'En casa', 'Los dos'],
     filmSel: 'Selección oficial', filmFest: 'Festival de nuestros corazones', filmBill: '{a} · Guion: el azar · Música: nuestras canciones · Continuará',
     meteo1: 'El tiempo', meteo2: 'de nuestro amor', temp: '37,2°', days: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'], duelWin: '¿Quién gana?',
-    toc2: { dico: 'Nosotros, definición', moments: 'Nuestros mejores momentos', aime: 'Lo que amo de ti', souvenir: 'Nuestro recuerdo favorito', musee: 'El museo de nosotros',
+    lettreTo: 'Una carta de amor para {n}', signAlways: 'Con amor, siempre', kiss: 'Recuerdos de', together: 'Siempre juntos', stampVal: 'Por avión', postaleLab: 'Tarjeta postal',
+    toc2: { postale: 'Una postal', bouquet: 'Un ramo para ti', dico: 'Nosotros, definición', moments: 'Nuestros mejores momentos', aime: 'Lo que amo de ti', souvenir: 'Nuestro recuerdo favorito', musee: 'El museo de nosotros',
       profil: 'Nuestro perfil', bingo: 'Bingo de pareja', voeux: 'Lo que nos deseo' } },
   pt: { jtm: 'amo-te', geant: ['tu e eu', 'para sempre', 'amo-te'], moments1: 'Os nossos melhores', moments2: 'momentos', souv1: 'a nossa memória', souv2: 'favorita', voeux: 'desejo-nos…',
     voeuxW: ['Gargalhadas', 'Viagens', 'Sempre nós'], dest1: 'as nossas', dest2: 'escapadinhas', bingo2: 'edição casal',
@@ -5497,7 +5501,8 @@ const LMAG2 = {
     museeFoot: 'Exposição permanente', since: 'Juntos desde {meet}', pSouv: 'memórias', pJours: 'dias', pAmour: 'amor', hl: ['Viagens', 'Noites', 'Em casa', 'Nós dois'],
     filmSel: 'Seleção oficial', filmFest: 'Festival dos nossos corações', filmBill: '{a} · Argumento: o acaso · Música: as nossas canções · Continua',
     meteo1: 'Meteorologia', meteo2: 'do nosso amor', temp: '37,2°', days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'], duelWin: 'Quem ganha?',
-    toc2: { dico: 'Nós, definição', moments: 'Os nossos melhores momentos', aime: 'O que amo em ti', souvenir: 'A nossa memória favorita', musee: 'O museu de nós',
+    lettreTo: 'Uma carta de amor para {n}', signAlways: 'Com amor, sempre', kiss: 'Saudações de', together: 'Sempre juntos', stampVal: 'Por avião', postaleLab: 'Postal',
+    toc2: { postale: 'Um postal', bouquet: 'Um ramo para ti', dico: 'Nós, definição', moments: 'Os nossos melhores momentos', aime: 'O que amo em ti', souvenir: 'A nossa memória favorita', musee: 'O museu de nós',
       profil: 'O nosso perfil', bingo: 'Bingo de casal', voeux: 'O que nos desejo' } },
 };
 Object.keys(LMAG2).forEach(l => { const d = LMAG[l]; Object.assign(d, LMAG2[l]); d.toc = Object.assign({}, d.toc, LMAG2[l].toc2); });
@@ -5863,6 +5868,194 @@ Object.assign(LAYOUTS, {
       + tx(pg, 'text', `position:absolute;left:${M + 20}px;right:${M + 20}px;bottom:${M + 6}px;text-align:center;color:#fff;font:italic 400 ${fit(txt, 25, 18, 40, 200)}px/1.4 ${T.disp};${TSH}`, 'Un mot doux…');
   } },
 });
+/* ══ Pages « objets » : roses, nœud de dentelle, enveloppe, cachet de cire, carte postale ═════════════════
+   D'après une lettre d'amour vue sur TikTok (16 novembre 2026) : objets dessinés en SVG (rien à télécharger, net
+   à l'impression). Aucune ombre floutée (filtre SVG) : les ombres sont des copies décalées et translucides. */
+const objRng = seed => { let s = 2166136261; for (const c of String(seed)) s = Math.imul(s ^ c.charCodeAt(0), 16777619) >>> 0; return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; };
+// Teintes des roses : rose poudré, ivoire ; au style Années 70, des roses sépia comme les photos
+const ROSE_PAL = { rose: { light: '#FFF5F6', mid: '#F3C2CB', deep: '#DC8597', core: '#A94862', shade: '#5E1F31' },
+  ivoire: { light: '#FFFDFB', mid: '#F6E4E1', deep: '#E9B9BF', core: '#B96A7C', shade: '#5E1F31' },
+  sepia: { light: '#FBF7EF', mid: '#E6DCCB', deep: '#C7B59A', core: '#8C7658', shade: '#3B2F22' } };
+const rosePal = alt => themeKey() === 'seventies' ? ROSE_PAL.sepia : alt ? ROSE_PAL.ivoire : ROSE_PAL.rose;
+// Rose vue de dessus : anneaux de pétales, chacun foncé à la base et clair au bord, liseré de lumière
+function rose(x, y, size, rot, P, seed) {
+  const id = 'nRo' + (++MAGID), r = objRng(seed || id);
+  const RINGS = [[8, 41, 68, 52], [7, 31, 58, 44], [6, 22, 47, 36], [5, 14, 37, 28], [4, 7, 27, 20], [3, 3, 18, 14]];
+  let defs = `<radialGradient id="${id}h" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${P.mid}" stop-opacity=".5"/><stop offset="1" stop-color="${P.mid}" stop-opacity="0"/></radialGradient>`;
+  RINGS.forEach((_, k) => {
+    const t = k / (RINGS.length - 1);
+    defs += `<linearGradient id="${id}r${k}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t > .5 ? P.core : P.deep}"/><stop offset="${(.42 - t * .12).toFixed(2)}" stop-color="${t > .6 ? P.deep : P.mid}"/><stop offset="1" stop-color="${t > .75 ? P.mid : P.light}"/></linearGradient>`;
+  });
+  const petal = (ang, dist, w, h, k) => {
+    const a = ang * Math.PI / 180, t = `translate(${(100 + Math.cos(a) * dist).toFixed(1)} ${(100 + Math.sin(a) * dist).toFixed(1)}) rotate(${(ang + 90).toFixed(1)})`;
+    const d = `M0 4C${(-w * .62).toFixed(1)} ${(-h * .1).toFixed(1)} ${(-w * .64).toFixed(1)} ${(-h * .82).toFixed(1)} ${(-w * .26).toFixed(1)} ${-h.toFixed(1)}Q0 ${(-h * 1.1).toFixed(1)} ${(w * .26).toFixed(1)} ${-h.toFixed(1)}C${(w * .64).toFixed(1)} ${(-h * .82).toFixed(1)} ${(w * .62).toFixed(1)} ${(-h * .1).toFixed(1)} 0 4Z`;
+    return `<g transform="${t}"><path transform="translate(0 2.5)" d="${d}" fill="${P.shade}" opacity=".14"/><path d="${d}" fill="url(#${id}r${k})"/>`
+      + `<path d="M${(-w * .3).toFixed(1)} ${(-h * .97).toFixed(1)}Q0 ${(-h * 1.1).toFixed(1)} ${(w * .3).toFixed(1)} ${(-h * .97).toFixed(1)}" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"/>`
+      + `<path d="M${(-w * .4).toFixed(1)} ${(-h * .22).toFixed(1)}C${(-w * .2).toFixed(1)} ${(-h * .5).toFixed(1)} ${(w * .2).toFixed(1)} ${(-h * .5).toFixed(1)} ${(w * .4).toFixed(1)} ${(-h * .22).toFixed(1)}" fill="none" stroke="${P.shade}" stroke-width="1" opacity=".16"/></g>`;
+  };
+  let out = `<circle cx="100" cy="100" r="98" fill="url(#${id}h)"/>`;
+  RINGS.forEach(([n, d, w, h], k) => { const off = r() * 360; for (let i = 0; i < n; i++) out += petal(off + i * 360 / n + (r() - .5) * 16, d + (r() - .5) * 3, w * (.9 + r() * .2), h * (.9 + r() * .2), k); });
+  for (let i = 0; i < 3; i++) { const a = r() * 6.28, rr = 2.5 + i * 2.6; out += `<path d="M${(100 + Math.cos(a) * rr).toFixed(1)} ${(100 + Math.sin(a) * rr).toFixed(1)}A${rr} ${rr} 0 0 1 ${(100 + Math.cos(a + 2.6) * rr).toFixed(1)} ${(100 + Math.sin(a + 2.6) * rr).toFixed(1)}" fill="none" stroke="${P.shade}" stroke-width="${(1.8 - i * .3).toFixed(1)}" stroke-linecap="round" opacity=".55"/>`; }
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${size}px;height:${size}px;transform:rotate(${rot}deg);overflow:visible;pointer-events:none" viewBox="0 0 200 200"><defs>${defs}</defs>${out}</svg>`;
+}
+// Feuille de rosier : ovale pointu vert sauge, nervures claires
+function feuille(x, y, len, rot) {
+  const id = 'nFe' + (++MAGID), c = themeKey() === 'seventies' ? ['#6F6A5C', '#A9A391'] : ['#6E8B6A', '#A7BF9E'];
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${len}px;height:${(len * .42).toFixed(1)}px;transform:rotate(${rot}deg);transform-origin:0 50%;overflow:visible;pointer-events:none" viewBox="0 0 100 42">`
+    + `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs>`
+    + `<path d="M0 21C22-2 70-4 100 21C70 46 22 44 0 21Z" fill="url(#${id})"/><path d="M2 21C34 18 66 19 97 21" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/>`
+    + [20, 36, 52, 68].map(t => `<path d="M${t} 20.5L${t + 10} 11M${t} 21.5L${t + 10} 31" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/>`).join('') + `</svg>`;
+}
+// Nœud de dentelle argentée : boucles en ruban évidé, longs pans coupés en V, jours en pointillés, reflet satiné.
+// Pas de motif SVG répété (pattern) : Chrome le convertit en image dans le PDF (1,4 Mo par nœud) ; ici, rien que du vectoriel.
+function noeud(x, y, w, rot) {
+  const id = 'nNo' + (++MAGID);
+  const defs = `<linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3F4F6"/><stop offset="1" stop-color="#DCDEE3"/></linearGradient>`
+    + `<linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".7" stop-color="#8F939C" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient>`;
+  const loopL = 'M100 70C76 40 34 22 14 38C-2 52 18 86 62 84C76 83 90 78 100 74ZM92 70C72 52 44 44 32 52C24 58 34 72 60 73C72 73 84 72 92 70Z';
+  const loopR = 'M100 70C124 40 166 22 186 38C202 52 182 86 138 84C124 83 110 78 100 74ZM108 70C128 52 156 44 168 52C176 58 166 72 140 73C128 73 116 72 108 70Z';
+  const tailL = 'M95 76C86 110 62 150 40 196L58 186L64 204C88 160 104 116 106 80Z', tailR = 'M105 76C118 112 134 152 146 200L130 190L122 206C112 160 100 118 96 80Z';
+  const knot = 'M86 62C92 54 108 54 114 62C118 70 116 82 108 86C100 89 92 87 88 81C84 75 83 68 86 62Z';
+  // lignes médianes des rubans : la dentelle (jours et fleurettes) suit le ruban
+  const mids = ['M97 71C78 50 40 30 22 44C10 54 28 79 62 79C78 79 90 76 97 72', 'M103 71C122 50 160 30 178 44C190 54 172 79 138 79C122 79 110 76 103 72',
+    'M100 78C93 112 70 152 52 192', 'M100 78C110 114 126 154 138 196'];
+  const edge = d => `<path d="${d}" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="0.1 4" stroke-linecap="round" opacity=".95"/><path d="${d}" fill="none" stroke="#9DA1AA" stroke-width=".7" opacity=".55"/>`;
+  const part = d => `<path d="${d}" fill="url(#${id}f)" fill-rule="evenodd"/><path d="${d}" fill="url(#${id}g)" fill-rule="evenodd"/>${edge(d)}`;
+  const lace = d => `<path d="${d}" fill="none" stroke="#C4C7CE" stroke-width="3.4" stroke-dasharray="0.1 7" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#fff" stroke-width="1.8" stroke-dasharray="0.1 7" stroke-dashoffset="3.5" stroke-linecap="round"/>`;
+  const shadow = [3, 6, 9].map(o => `<g transform="translate(${o * .6} ${o})" opacity=".07"><path d="${loopL}" fill-rule="evenodd"/><path d="${loopR}" fill-rule="evenodd"/><path d="${tailL}"/><path d="${tailR}"/><path d="${knot}"/></g>`).join('');
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${(w * 1.05).toFixed(1)}px;transform:rotate(${rot}deg);overflow:visible;pointer-events:none" viewBox="0 0 200 210"><defs>${defs}</defs>${shadow}`
+    + part(tailR) + lace(mids[3]) + part(tailL) + lace(mids[2]) + part(loopL) + lace(mids[0]) + part(loopR) + lace(mids[1]) + part(knot)
+    + `<path d="M90 64C97 60 104 60 110 64" fill="none" stroke="#8F939C" stroke-width="1.4" opacity=".5"/><path d="M92 82C98 85 104 85 108 82" fill="none" stroke="#8F939C" stroke-width="1.2" opacity=".45"/></svg>`;
+}
+// Cachet de cire à la couleur de l'album : bord irrégulier, anneau en relief, cœur en creux
+function cachet(x, y, d, col, seed) {
+  const id = 'nCa' + (++MAGID), r = objRng(seed || 'cachet'), N = 22, pts = [];
+  for (let i = 0; i < N; i++) { const a = i / N * Math.PI * 2, rr = 46 + (r() - .5) * 7 + (i % 3 === 0 ? 3 : 0); pts.push([50 + Math.cos(a) * rr, 50 + Math.sin(a) * rr]); }
+  let p = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < N; i++) { const a = pts[i], b = pts[(i + 1) % N]; p += `Q${a[0].toFixed(1)} ${a[1].toFixed(1)} ${((a[0] + b[0]) / 2).toFixed(1)} ${((a[1] + b[1]) / 2).toFixed(1)}`; }
+  p += 'Z';
+  const hi = mixc(col, '#ffffff', .32), lo = mixc(col, '#000000', .5), deep = mixc(col, '#000000', .38);
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${d}px;height:${d}px;overflow:visible;pointer-events:none" viewBox="0 0 100 100"><defs>`
+    + `<radialGradient id="${id}b" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${col}"/><stop offset="1" stop-color="${lo}"/></radialGradient>`
+    + `<radialGradient id="${id}c" cx="60%" cy="66%" r="70%"><stop offset="0" stop-color="${deep}"/><stop offset="1" stop-color="${col}"/></radialGradient></defs>`
+    + `<path d="${p}" transform="translate(2 3)" fill="#000" opacity=".22"/><path d="${p}" fill="url(#${id}b)"/>`
+    + `<circle cx="50" cy="50" r="33" fill="url(#${id}c)"/><circle cx="50" cy="50" r="33" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="2"/><circle cx="50" cy="50" r="34.5" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.2"/>`
+    + `<path d="M50 70C34 59 27 50 29 41 31 33 41 30 50 39 59 30 69 33 71 41 73 50 66 59 50 70Z" fill="${col}" stroke="${lo}" stroke-opacity=".7" stroke-width="1.6"/>`
+    + `<path d="M33 40C35 34 42 33 49 40" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="34" cy="26" rx="10" ry="5" transform="rotate(-30 34 26)" fill="#fff" opacity=".18"/></svg>`;
+}
+// Enveloppe ouverte vue de face : le dos et son rabat relevé, puis (après la photo) la poche avant
+function envDos(x, y, w, h) {
+  const id = 'nEd' + (++MAGID), H = h * 1.62;
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-shadow:0 26px 40px -26px rgba(40,30,20,.45);"></div>`
+    + `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${(y - h * .62).toFixed(1)}px;width:${w}px;height:${H.toFixed(1)}px;overflow:visible;pointer-events:none" viewBox="0 0 ${w} ${H.toFixed(1)}">`
+    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DEDCD7"/><stop offset="1" stop-color="#EEEDE9"/></linearGradient><linearGradient id="${id}b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E7E5E0"/><stop offset="1" stop-color="#F7F6F3"/></linearGradient></defs>`
+    + `<path d="M0 ${h * .62}L${w / 2} 0L${w} ${h * .62}Z" fill="url(#${id}b)" stroke="#CFCCC6" stroke-width="1.2"/><path d="M14 ${h * .6}L${w / 2} ${h * .05}L${w - 14} ${h * .6}" fill="none" stroke="#000" stroke-opacity=".05" stroke-width="10"/>`
+    + `<rect x="0" y="${h * .62}" width="${w}" height="${h}" fill="url(#${id}a)" stroke="#CFCCC6" stroke-width="1.2"/><rect x="0" y="${h * .62}" width="${w}" height="${h * .35}" fill="#000" opacity=".045"/></svg>`;
+}
+function envFace(x, y, w, h) {
+  const id = 'nEf' + (++MAGID);
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;overflow:visible;pointer-events:none" viewBox="0 0 ${w} ${h}">`
+    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7F6F3"/><stop offset="1" stop-color="#ECEBE7"/></linearGradient><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`
+    + `<path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}L${w} ${h}L0 ${h}Z" fill="url(#${id}a)" stroke="#D3D1CC" stroke-width="1"/>`
+    + `<path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}" fill="none" stroke="url(#${id}s)" stroke-width="10" opacity=".6"/>`
+    + `<path d="M0 ${h}L${w * .43} ${h * .55}M${w} ${h}L${w * .57} ${h * .55}" stroke="#D9D7D2" stroke-width="1.2"/><path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}" fill="none" stroke="#C9C7C1" stroke-width="1"/></svg>`;
+}
+// Timbre : photo, bord blanc dentelé (pastilles de la couleur de la carte), valeur ; tampon de la poste
+function timbre(pg, i, x, y, w, h, rot, card, valKey) {
+  const n = Math.round(w / 9), m = Math.round(h / 9);
+  let dots = '';
+  for (let k = 0; k <= n; k++) { const cx = (k * w / n).toFixed(1); dots += `<circle cx="${cx}" cy="0" r="3.2" fill="${card}"/><circle cx="${cx}" cy="${h}" r="3.2" fill="${card}"/>`; }
+  for (let k = 0; k <= m; k++) { const cy = (k * h / m).toFixed(1); dots += `<circle cx="0" cy="${cy}" r="3.2" fill="${card}"/><circle cx="${w}" cy="${cy}" r="3.2" fill="${card}"/>`; }
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:rotate(${rot}deg);background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.18);">`
+    + `<div style="position:absolute;left:7px;top:7px;width:${w - 14}px;height:${h - 27}px;">${slot(pg, i, 0, 0, w - 14, h - 27, { border: 0 })}</div>`
+    + tx(pg, valKey, `position:absolute;left:8px;bottom:5px;color:${MT().accent};font:600 9px/1 ${MT().ui};letter-spacing:.12em;white-space:nowrap;`, '')
+    + `<svg aria-hidden="true" style="position:absolute;left:0;top:0;width:${w}px;height:${h}px;overflow:visible;pointer-events:none" viewBox="0 0 ${w} ${h}">${dots}</svg></div>`;
+}
+function tampon(x, y, s, txt, col, rot) {
+  const id = 'nTa' + (++MAGID), r = s / 2 - 3;
+  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${(s * 2.2).toFixed(1)}px;height:${s}px;transform:rotate(${rot}deg);overflow:visible;opacity:.8;pointer-events:none" viewBox="0 0 ${(s * 2.2).toFixed(1)} ${s}">`
+    + `<defs><path id="${id}" d="M${s / 2} ${s / 2}m-${r - 8} 0a${r - 8} ${r - 8} 0 1 1 ${2 * (r - 8)} 0a${r - 8} ${r - 8} 0 1 1 -${2 * (r - 8)} 0"/></defs>`
+    + `<circle cx="${s / 2}" cy="${s / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="2"/><circle cx="${s / 2}" cy="${s / 2}" r="${r - 16}" fill="none" stroke="${col}" stroke-width="1.2"/>`
+    + `<text font-family="Inter,Arial,sans-serif" font-size="9" font-weight="600" letter-spacing="1.5" fill="${col}"><textPath href="#${id}" textLength="${Math.floor(2 * Math.PI * (r - 8) - 4)}" lengthAdjust="spacingAndGlyphs">${esc(txt)}</textPath></text>`
+    + [0, 1, 2, 3, 4].map(k => `<path d="M${(s * .95).toFixed(1)} ${(s * .22 + k * s * .14).toFixed(1)}q${(s * .14).toFixed(1)} -6 ${(s * .28).toFixed(1)} 0t${(s * .28).toFixed(1)} 0t${(s * .28).toFixed(1)} 0t${(s * .28).toFixed(1)} 0" fill="none" stroke="${col}" stroke-width="1.6"/>`).join('') + `</svg>`;
+}
+// Longueur de la lettre : à la plume (Pinyon Script) tant qu'elle tient sur le papier (570 × 372 px), sinon en Cormorant italique,
+// lignes vides réduites (lettrePara) ; largeur moyenne d'un caractère comptée large (0,36 em et 0,37 em)
+const lettrePlume = s => {
+  const paras = String(s || '').split('\n'), H = 372, Wl = 570;
+  const haut = (fs, lh, r, vide) => paras.reduce((n, p) => n + (p ? Math.max(1, Math.ceil(p.length * r * fs / Wl)) * fs * lh : vide * fs), 0);
+  for (let fs = 25; fs >= 18; fs--) if (haut(fs, 1.6, .36, .8) <= H) return { plume: true, fs, lh: 1.6 };
+  for (let fs = 17; fs >= 10; fs -= .5) if (haut(fs, 1.45, .37, .45) <= H) return { plume: false, fs, lh: 1.45 };
+  return { plume: false, fs: 10, lh: 1.35 };
+};
+
+Object.assign(LAYOUTS, {
+  // Lettre, page de gauche : l'enveloppe ouverte, une photo qui en sort, des roses, un nœud de dentelle
+  mlettre_c: { n: 1, text: true, mag: 'lettre', render(pg) {
+    const T = MT(), ew = 560, eh = 330, ex = 117, ey = 420, [w, h] = boxFor(pg, 0, 304, 354);
+    const px = 400 - (w + 26) / 2, py = 154 + (354 - h) / 2;
+    return envDos(ex, ey, ew, eh)
+      + feuille(150, 250, 120, -150) + feuille(600, 205, 110, -20) + feuille(640, 360, 100, 25) + feuille(120, 330, 90, 160)
+      + rose(112, 138, 210, 10, rosePal(), 'a') + rose(500, 104, 180, 40, rosePal(true), 'b') + rose(566, 296, 150, -20, rosePal(), 'c') + rose(206, 96, 120, 70, rosePal(true), 'e')
+      + `<div style="position:absolute;left:${px}px;top:${py}px;width:${w + 26}px;height:${h + 26}px;background:${T.card || '#fff'};transform:rotate(-5deg);${SHADOW}"><div style="position:absolute;left:13px;top:13px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div></div>`
+      + envFace(ex, ey, ew, eh)
+      + rose(92, 380, 120, -30, rosePal(true), 'd') + noeud(118, 430, 330, -6) + folio(pg, T);
+  } },
+  // Lettre, page de droite : le papier, l'écriture à la plume, la signature et le cachet de cire
+  mlettre_d: { n: 0, text: true, mag: 'lettre', render(pg) {
+    const T = MT(), ink = '#2A2420', L = lettrePlume(pg.t.text), top = 178 + Math.round((L.plume ? L.fs : 22) * 1.6);
+    const body = L.plume ? `font:400 ${L.fs}px/${L.lh} ${T.script};` : `font:italic 400 ${L.fs}px/${L.lh} 'Cormorant Garamond',Georgia,serif;`;
+    return `<div style="position:absolute;left:54px;top:54px;width:686px;height:686px;background:#F1F0EC;box-shadow:0 1px 2px rgba(0,0,0,.08),0 18px 40px -30px rgba(0,0,0,.35);"></div>`
+      + tx(pg, 'title', `position:absolute;left:84px;right:84px;top:100px;text-align:center;color:#1E1A17;font:400 ${fit(pg.t.title, 46, 32, 18, 40)}px/1.05 ${T.disp};`, 'Titre')
+      + tx(pg, 'hello', `position:absolute;left:112px;top:178px;width:570px;color:${ink};font:400 ${L.plume ? L.fs : 22}px/1.4 ${T.script};`, '')
+      + (h => L.plume ? h : lettrePara(h))(tx(pg, 'text', `position:absolute;left:112px;top:${top}px;width:570px;color:${ink};${body}`, 'Votre lettre…'))
+      + cachet(300, 598, 96, T.accent, pg.id || 'cachet')
+      + tx(pg, 'sign', `position:absolute;left:420px;top:612px;width:300px;color:${ink};font:400 30px/1.25 ${T.script};`, '')
+      + folio(pg, T);
+  } },
+  // Carte postale d'un voyage : le recto (photo, « Bons baisers de… »), le verso (message, timbre, tampon, adresse)
+  mpostale: { n: 2, text: true, mag: 'postale', render(pg) {
+    const T = MT(), card = '#FBF7EF', ink = '#2A2420', dest = String(pg.t.dest || ''), dfs = fit(dest, 104, 54, 8, 16);
+    return VEIL(mixc('#EFE7DA', T.paper, .35))
+      + `<div style="position:absolute;left:58px;top:58px;width:560px;height:384px;background:#fff;padding:11px;box-sizing:border-box;transform:rotate(-4deg);${SHADOW}">`
+      + `<div style="position:relative;width:538px;height:362px;">${slot(pg, 0, 0, 0, 538, 362, { border: 0 })}`
+      + `<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.42),rgba(0,0,0,0) 52%);pointer-events:none;"></div>`
+      + tx(pg, 'kiss', `position:absolute;left:24px;top:18px;color:#fff;font:400 40px/1.1 ${T.script};white-space:nowrap;${TSH}`, '')
+      + tx(pg, 'dest', `position:absolute;left:20px;top:58px;width:510px;color:#fff;font:400 ${dfs}px/1 ${T.disp};text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;${TSH}`, 'Destination')
+      + `</div></div>`
+      + `<div style="position:absolute;left:196px;top:410px;width:560px;height:346px;background:${card};transform:rotate(3deg);${SHADOW}">`
+      + `<div style="position:absolute;left:290px;top:40px;bottom:36px;width:1px;background:#CFC6B8;"></div>`
+      + tx(pg, 'text', `position:absolute;left:28px;top:34px;width:244px;max-height:250px;overflow:hidden;color:${ink};font:400 ${fit(pg.t.text, 15, 12, 80, 220)}px/1.95 ${T.hand};`, 'Votre message…')
+      + tx(pg, 'sign', `position:absolute;left:28px;top:286px;width:244px;text-align:right;color:${ink};font:400 14px/1 ${T.hand};`, '')
+      + timbre(pg, 1, 432, 26, 96, 116, 3, card, 'val')
+      + (m => tampon(260, 52, 88, `${m} · `.repeat(m.length > 12 ? 1 : 2), T.accent, -12))(   // le tampon suit le lieu, même modifié
+        [dest.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().slice(0, 14), (String(pg.t.mark || '').match(/\b(?:19|20)\d{2}\b/) || [''])[0]].filter(Boolean).join(' · '))
+      + [0, 1, 2].map(k => `<div style="position:absolute;left:316px;right:30px;top:${206 + k * 38}px;height:1px;background:#CFC6B8;"></div>`).join('')
+      + tx(pg, 'to1', `position:absolute;left:322px;top:178px;width:210px;color:${ink};font:400 16px/1 ${T.hand};white-space:nowrap;overflow:hidden;`, '')
+      + tx(pg, 'to2', `position:absolute;left:322px;top:216px;width:210px;color:${ink};font:400 13px/1 ${T.hand};white-space:nowrap;overflow:hidden;`, '')
+      + tx(pg, 'lab', `position:absolute;left:28px;bottom:16px;color:#9A8F80;font:600 8px/1 ${T.ui};letter-spacing:.28em;text-transform:uppercase;`, '')
+      + `</div>` + folio(pg, T);
+  } },
+  // Mot doux au bouquet : photo instantanée, bouquet de roses noué de dentelle, étiquette manuscrite au bout d'un fil
+  mbouquet: { n: 1, text: true, mag: 'quote', render(pg) {
+    const T = MT(), [w, h] = boxFor(pg, 0, 384, 384);
+    const tige = (a, b, c, d) => `<path d="M${a} ${b}Q${(a + c) / 2 + 20} ${(b + d) / 2} ${c} ${d}" stroke="${themeKey() === 'seventies' ? '#6F6A5C' : '#6E8B6A'}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    return VEIL(mixc(T.rose, T.paper, .78))
+      + `<div style="position:absolute;left:${70 + (384 - w) / 2}px;top:64px;width:${w + 36}px;height:${h + 104}px;background:${T.card || '#fff'};transform:rotate(-3deg);${SHADOW}">`
+      + `<div style="position:absolute;left:18px;top:18px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div>`
+      + tx(pg, 'cap', `position:absolute;left:12px;right:12px;bottom:28px;text-align:center;color:${T.cardInk};font:400 15px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, '') + `</div>`
+      + `<svg aria-hidden="true" style="position:absolute;left:0;top:0;width:${PX}px;height:${PX}px;overflow:visible;pointer-events:none" viewBox="0 0 ${PX} ${PX}">`
+      + tige(540, 470, 690, 760) + tige(600, 450, 700, 770) + tige(470, 520, 680, 770) + tige(560, 560, 690, 775) + tige(640, 520, 705, 772) + `</svg>`
+      + feuille(470, 470, 120, -150) + feuille(620, 430, 110, -60) + feuille(560, 600, 100, 40) + feuille(650, 560, 90, -10) + feuille(420, 560, 100, 170)
+      + rose(470, 400, 170, 0, rosePal(), 'f') + rose(580, 380, 150, 30, rosePal(true), 'g') + rose(520, 500, 150, 60, rosePal(true), 'h') + rose(410, 470, 130, 20, rosePal(), 'i') + rose(620, 480, 120, -20, rosePal(), 'j')
+      + noeud(600, 600, 170, -30)
+      + `<svg aria-hidden="true" style="position:absolute;left:520px;top:40px;width:220px;height:240px;overflow:visible;pointer-events:none" viewBox="0 0 220 240"><path d="M30 6C90 40 150 60 170 120" fill="none" stroke="#B9A88F" stroke-width="1.6"/></svg>`
+      + `<div style="position:absolute;left:540px;top:110px;width:200px;height:220px;background:#FBF7EF;transform:rotate(7deg);clip-path:polygon(18% 0,82% 0,100% 14%,100% 100%,0 100%,0 14%);box-shadow:0 10px 20px -10px rgba(0,0,0,.35);">`
+      + `<div style="position:absolute;left:93px;top:18px;width:14px;height:14px;border-radius:50%;background:${mixc(T.rose, T.paper, .78)};box-shadow:inset 0 0 0 2px #D8CBB6;"></div>`
+      + tx(pg, 'h', `position:absolute;left:16px;right:16px;top:44px;color:${T.accent};font:400 24px/1 ${T.script};text-align:center;white-space:nowrap;`, '')
+      + tx(pg, 'text', `position:absolute;left:18px;right:18px;top:84px;color:#2A2420;font:400 ${fit(pg.t.text, 13.5, 10.5, 50, 140)}px/1.85 ${T.hand};text-align:center;`, 'Un mot doux…') + `</div>`;
+  } },
+});
 /* ── Planificateur Magazine ─────────────────────────────────────────
    Les rubriques n'apparaissent que si le couple a donné de quoi les remplir (étapes, playlist, adresses,
    voyages, photos datées) ; les pages restantes vont aux photos, puis aux mots doux. Les doubles pages
@@ -5931,7 +6124,7 @@ function planMagazine(nPages, story, info) {
   const pano = panoC.length ? panoC.reduce((b, i) => (cropCost(ph[i], 2) < cropCost(ph[b], 2) ? i : b), panoC[0]) : null;
 
   // 1) rubriques : [pages, double page, photos propres, priorité (la plus basse part en premier si la place manque)]
-  const on = { edito: [1, 0, 0, 99], debut: [2, 1, 2, 99], interview: [1, 0, 1, 90], raisons: [1, 0, 0, 80], quiz: [1, 0, 0, 72], lettre: [2, 1, 0, 95] };
+  const on = { edito: [1, 0, 0, 99], debut: [2, 1, 2, 99], interview: [1, 0, 1, 90], raisons: [1, 0, 0, 80], quiz: [1, 0, 0, 72], lettre: [2, 1, 1, 95] };   // lettre : enveloppe avec une photo, puis le papier
   if (pano != null) on.pano = [2, 1, 1, 85];
   for (let c = 1; c < C; c++) on['chap' + c] = [1, 0, 1, 60 - c];
   if (miles.length >= 2) on.etapes = [1, 0, 0, 66];
@@ -5963,16 +6156,19 @@ function planMagazine(nPages, story, info) {
   // trouvent encore leur place (4 au plus par page photo) et s'il reste au moins minK pages photo
   const big = nPages >= 36, huge = nPages >= 50, lovesAll = (story.love || []).filter(Boolean), reuse = new Set();
   {
-    const opt = [['moments', 6, big ? 71 : 35], ['dico', 1, big ? 69 : 33], ['bingo', 0, big ? 53 : 30]];
+    const opt = [['moments', 6, big ? 71 : 35], ['dico', 1, big ? 69 : 33], ['bingo', 0, big ? 62 : 30]];
     if (lovesAll.length >= (on.raisons ? 11 : 6)) opt.push(['aime', 1, big ? 74 : 36]);
     if (big) opt.push(['souvenir', 5, huge ? 58 : 43], ['voeux', 3, 55], ['musee', 3, 51]);
     if (huge) opt.push(['profil', 6, 47]);
+    if (trips.length && big) opt.push(['postale', 2, 57]);
+    opt.push(['bouquet', 1, big ? 61 : 34]);
     const st = () => { const P = sum(0), R0 = N - 1 - sum(2), K0 = Math.max(0, Math.min(R0, I - P)); return { R: R0, K: K0, fill: I - P - K0, over: R0 - 4 * K0 }; };
+    const soft = huge ? 2 : big ? 1 : 0;   // une ou deux pages de mots doux valent mieux qu'une rubrique en moins
     opt.sort((a, b) => b[2] - a[2]).forEach(([k, n, pr]) => {
       if (on[k]) return;
       const a = st(); on[k] = [1, 0, n, pr]; const b = st();
       // trop de photos pour les pages photo (au-delà de 4 par page) : une rubrique qui en montre plusieurs aide à toutes les placer
-      const ok = b.R >= 0 && b.fill >= 0 && b.fill <= a.fill && b.K >= Math.min(b.R, minK) && (b.over <= 0 || b.over < a.over);
+      const ok = b.R >= 0 && b.fill >= 0 && b.fill <= Math.max(a.fill, soft) && b.K >= Math.min(b.R, minK) && (b.over <= 0 || b.over < a.over);
       if (!ok) delete on[k];
     });
     // album aux pages nombreuses pour ses photos : passé quelques mots doux, une page « best of » reprend des photos déjà placées
@@ -5995,7 +6191,7 @@ function planMagazine(nPages, story, info) {
   if (C > 1) { unit('chap1'); phUnits(1); }
   own('moments'); unit('annee'); unit('playlist');
   if (C > 2) { unit('chap2'); phUnits(2); }
-  unit('aime'); unit('adresses'); unit('voyages'); unit('souvenir'); unit('pano'); unit('memory'); unit('interview'); unit('raisons'); own('musee');
+  unit('aime'); unit('adresses'); unit('voyages'); unit('postale'); unit('souvenir'); unit('pano'); unit('memory'); unit('interview'); unit('raisons'); unit('bouquet'); own('musee');
   if (C > 3) { unit('chap3'); phUnits(3); }
   own('profil'); unit('quiz'); unit('mots'); unit('bingo'); own('voeux'); unit('bucket');
   if (C > 4) { unit('chap4'); phUnits(4); }
@@ -6095,7 +6291,15 @@ function planMagazine(nPages, story, info) {
       return [mk('mmots', [], { h1: lm('mots1'), h2: lm('mots2'), words: [...new Set(cand)].slice(0, 10).join('\n'), seed: names }, 'mots')];
     },
     bucket: () => [mk('mbucket', bucketPh ? fresh(1) : [], { h1: lm('bucket1'), h2: lm('bucket2'), items: (story.wishlist || []).slice(0, 8).join('\n') }, 'bucket')],
-    lettre: () => [mk('mlettre_a', [], { h1: lm('lettre1'), h2: lm('lettre2') }, 'lettre'), mk('mlettre_b', [], { hello: lm('hello'), text: info.letter || mag.loveLetter || story.letter || '', sign: lm('sign') + (n1 ? '\n' + n1 : '') })],
+    // la lettre : l'enveloppe ouverte avec une photo, roses et nœud de dentelle, puis le papier à la plume et son cachet de cire
+    lettre: () => [mk('mlettre_c', freshOr(1, 20), {}, 'lettre'), mk('mlettre_d', [], { title: n2 ? lm('lettreTo').replace('{n}', n2) : `${lm('lettre1')} ${lm('lettre2')}`, hello: lm('hello'),
+      text: info.letter || mag.loveLetter || story.letter || '', sign: lm('signAlways') + (n1 ? '\n' + n1 : '') })],
+    postale: () => {
+      const x = trips.find(t => t.year) || trips[0], dest = String(x.dest || '').split(',')[0].trim(), a = freshOr(2, 19);
+      return [mk('mpostale', a, { kiss: lm('kiss'), dest, text: mag.trips || lm('voy_def'), sign: n1, to1: names, to2: lm('together'),
+        mark: `${dest.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().slice(0, 14)}${x.year ? ' · ' + x.year : ''}`, val: lm('stampVal'), lab: lm('postaleLab') }, 'postale')];
+    },
+    bouquet: () => { const a = freshOr(1, 21); return [mk('mbouquet', a, { cap: cap(a[0]), h: lm('motdoux'), text: notes.length ? notes.pop() : (story.quote || (story.love || [])[0] || '') }, 'bouquet')]; },
     pano: () => { const c = cap(pano); return [mk('spreadL', [pano], {}, 'pano'), mk('spreadR', [pano], c ? { cap: c } : {})]; },
     // Rubriques Magazine v2
     dico: () => {
@@ -8720,7 +8924,7 @@ NA.albumPanel = function () {
 /* ── Remettre les textes (y compris modifiés à la main) dans l'histoire avant de recomposer ── */
 // Style Magazine : textes modifiés à la main (pg.e) repris tels quels ; le reste (couverture, sommaire…) se recalcule
 const MAG_KEEP = new Set(['mcover', 'medito', 'mdebut', 'mcarte', 'mvilles', 'metapes', 'mplay_a', 'mplay_b', 'madresses', 'mvoyages', 'minterview', 'mraisons', 'mquiz', 'mmots', 'mbucket', 'mlettre_a', 'mlettre_b', 'mback',
-  'mdico', 'mmoments', 'maime', 'msouvenir', 'mvoeux', 'mbingo', 'mmusee', 'mprofil', 'mdest', 'mfilm', 'mmeteo', 'mduel']);
+  'mdico', 'mmoments', 'maime', 'msouvenir', 'mvoeux', 'mbingo', 'mmusee', 'mprofil', 'mdest', 'mfilm', 'mmeteo', 'mduel', 'mlettre_c', 'mlettre_d', 'mpostale', 'mbouquet']);
 function syncStory() {
   const s = JSON.parse(JSON.stringify(S.story || {})), P = NA.pages, info = NA.info || E.coupleInfo();
   s.titles = s.titles || {};
@@ -8751,7 +8955,7 @@ function syncStory() {
   });
   info.captions = info.captions || {};
   // légende → photo : sur les pages « photo sur photo », la légende principale est celle de la photo posée par-dessus
-  const CAPS = { pover: { cap: 1, cap2: 0 }, pbooth: { cap: 1, cap2: 0 }, pscrap: { cap: 0, cap2: 1 }, pscrap4: { cap: 0, cap2: 1, cap3: 2, cap4: 3 }, msouvenir: { cap: 4 }, mmusee: { t1: 0, t2: 1, t3: 2 } };
+  const CAPS = { pover: { cap: 1, cap2: 0 }, pbooth: { cap: 1, cap2: 0 }, pscrap: { cap: 0, cap2: 1 }, pscrap4: { cap: 0, cap2: 1, cap3: 2, cap4: 3 }, msouvenir: { cap: 4 }, mmusee: { t1: 0, t2: 1, t3: 2 }, mpostale: {}, mlettre_c: {} };
   P.forEach(p => { Object.entries(CAPS[p.layout] || { cap: 0 }).forEach(([k, si]) => { if (p.slots[si] && p.t[k]) info.captions[p.slots[si].p] = p.t[k]; }); });
   S.story = s; NA.info = info;
 }
@@ -8883,7 +9087,7 @@ if (strip) {
 /* ── Recevoir le lien de l'album par email ── */
 /* ── « Corriger mes textes » : orthographe et ponctuation seulement, à la demande du client, annulable ── */
 // Textes du client tapés au téléphone (accents oubliés, fautes, ponctuation) : l'IA corrige sans réécrire ; le client relit.
-const FIX_SKIP = new Set(['ans', 'seed', 'words', 'coord', 'mast', 'num', 'issue']);
+const FIX_SKIP = new Set(['ans', 'seed', 'words', 'coord', 'mast', 'num', 'issue', 'mark', 'val']);
 async function fixTexts(btn) {
   const msg = $('nstFixMsg'), P = NA.pages, items = [];
   P.forEach((pg, i) => Object.keys(pg.t || {}).forEach(k => {
@@ -9060,11 +9264,11 @@ window.addEventListener('hashchange', () => { if (location.hash === '#suivi') tr
 
 /* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
 Object.entries({
-  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_km: "Distance", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_cell: 'Case', ek_c: 'Case du milieu', ek_wish: 'Vœu', ek_love: 'Ce que j’aime', ek_end: 'Dernière ligne', ek_work: 'Œuvre', ek_yr: 'Année', ek_legend: 'Légende', ek_handle: 'Nom du profil', ek_stat: 'Chiffre', ek_statl: 'Libellé', ek_bio: 'Présentation', ek_story: 'Story', ek_word: 'Mot', ek_phon: 'Prononciation', ek_gram: 'Nature', ek_sense: 'Sens', ek_syn: 'Synonymes', ek_see: 'Voir aussi', ek_big: 'Grand numéro', ek_sel: 'Distinction', ek_kicker: 'Accroche', ek_bill: 'Générique', ek_temp: 'Température', ek_dispute: 'Désaccord', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
-  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_km: "Distance", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_cell: 'Square', ek_c: 'Centre square', ek_wish: 'Wish', ek_love: 'What I love', ek_end: 'Last line', ek_work: 'Artwork', ek_yr: 'Year', ek_legend: 'Caption', ek_handle: 'Profile name', ek_stat: 'Number', ek_statl: 'Label', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Word', ek_phon: 'Pronunciation', ek_gram: 'Part of speech', ek_sense: 'Meaning', ek_syn: 'Synonyms', ek_see: 'See also', ek_big: 'Big number', ek_sel: 'Award', ek_kicker: 'Tagline', ek_bill: 'Credits', ek_temp: 'Temperature', ek_dispute: 'Disagreement', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
-  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_km: "Entfernung", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_cell: 'Feld', ek_c: 'Mittleres Feld', ek_wish: 'Wunsch', ek_love: 'Was ich liebe', ek_end: 'Letzte Zeile', ek_work: 'Werk', ek_yr: 'Jahr', ek_legend: 'Bildunterschrift', ek_handle: 'Profilname', ek_stat: 'Zahl', ek_statl: 'Bezeichnung', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Wort', ek_phon: 'Aussprache', ek_gram: 'Wortart', ek_sense: 'Bedeutung', ek_syn: 'Synonyme', ek_see: 'Siehe auch', ek_big: 'Große Zahl', ek_sel: 'Auszeichnung', ek_kicker: 'Aufhänger', ek_bill: 'Abspann', ek_temp: 'Temperatur', ek_dispute: 'Streitpunkt', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
-  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_km: "Distancia", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_cell: 'Casilla', ek_c: 'Casilla central', ek_wish: 'Deseo', ek_love: 'Lo que amo', ek_end: 'Última línea', ek_work: 'Obra', ek_yr: 'Año', ek_legend: 'Pie de foto', ek_handle: 'Nombre del perfil', ek_stat: 'Cifra', ek_statl: 'Etiqueta', ek_bio: 'Biografía', ek_story: 'Historia destacada', ek_word: 'Palabra', ek_phon: 'Pronunciación', ek_gram: 'Categoría', ek_sense: 'Acepción', ek_syn: 'Sinónimos', ek_see: 'Véase también', ek_big: 'Número grande', ek_sel: 'Premio', ek_kicker: 'Entradilla', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacuerdo', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
-  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_km: "Distância", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_cell: 'Casa', ek_c: 'Casa central', ek_wish: 'Desejo', ek_love: 'O que amo', ek_end: 'Última linha', ek_work: 'Obra', ek_yr: 'Ano', ek_legend: 'Legenda', ek_handle: 'Nome do perfil', ek_stat: 'Número', ek_statl: 'Rótulo', ek_bio: 'Biografia', ek_story: 'Destaque', ek_word: 'Palavra', ek_phon: 'Pronúncia', ek_gram: 'Classe', ek_sense: 'Aceção', ek_syn: 'Sinónimos', ek_see: 'Ver também', ek_big: 'Número grande', ek_sel: 'Prémio', ek_kicker: 'Chamada', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacordo', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
+  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_km: "Distance", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_cell: 'Case', ek_c: 'Case du milieu', ek_wish: 'Vœu', ek_love: 'Ce que j’aime', ek_end: 'Dernière ligne', ek_work: 'Œuvre', ek_yr: 'Année', ek_legend: 'Légende', ek_handle: 'Nom du profil', ek_stat: 'Chiffre', ek_statl: 'Libellé', ek_bio: 'Présentation', ek_story: 'Story', ek_word: 'Mot', ek_phon: 'Prononciation', ek_gram: 'Nature', ek_sense: 'Sens', ek_syn: 'Synonymes', ek_see: 'Voir aussi', ek_big: 'Grand numéro', ek_sel: 'Distinction', ek_kicker: 'Accroche', ek_bill: 'Générique', ek_temp: 'Température', ek_dispute: 'Désaccord', ek_mark: 'Tampon', ek_val: 'Timbre', ek_addr: 'Adresse', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
+  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_km: "Distance", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_cell: 'Square', ek_c: 'Centre square', ek_wish: 'Wish', ek_love: 'What I love', ek_end: 'Last line', ek_work: 'Artwork', ek_yr: 'Year', ek_legend: 'Caption', ek_handle: 'Profile name', ek_stat: 'Number', ek_statl: 'Label', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Word', ek_phon: 'Pronunciation', ek_gram: 'Part of speech', ek_sense: 'Meaning', ek_syn: 'Synonyms', ek_see: 'See also', ek_big: 'Big number', ek_sel: 'Award', ek_kicker: 'Tagline', ek_bill: 'Credits', ek_temp: 'Temperature', ek_dispute: 'Disagreement', ek_mark: 'Postmark', ek_val: 'Stamp', ek_addr: 'Address', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
+  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_km: "Entfernung", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_cell: 'Feld', ek_c: 'Mittleres Feld', ek_wish: 'Wunsch', ek_love: 'Was ich liebe', ek_end: 'Letzte Zeile', ek_work: 'Werk', ek_yr: 'Jahr', ek_legend: 'Bildunterschrift', ek_handle: 'Profilname', ek_stat: 'Zahl', ek_statl: 'Bezeichnung', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Wort', ek_phon: 'Aussprache', ek_gram: 'Wortart', ek_sense: 'Bedeutung', ek_syn: 'Synonyme', ek_see: 'Siehe auch', ek_big: 'Große Zahl', ek_sel: 'Auszeichnung', ek_kicker: 'Aufhänger', ek_bill: 'Abspann', ek_temp: 'Temperatur', ek_dispute: 'Streitpunkt', ek_mark: 'Poststempel', ek_val: 'Briefmarke', ek_addr: 'Adresse', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
+  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_km: "Distancia", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_cell: 'Casilla', ek_c: 'Casilla central', ek_wish: 'Deseo', ek_love: 'Lo que amo', ek_end: 'Última línea', ek_work: 'Obra', ek_yr: 'Año', ek_legend: 'Pie de foto', ek_handle: 'Nombre del perfil', ek_stat: 'Cifra', ek_statl: 'Etiqueta', ek_bio: 'Biografía', ek_story: 'Historia destacada', ek_word: 'Palabra', ek_phon: 'Pronunciación', ek_gram: 'Categoría', ek_sense: 'Acepción', ek_syn: 'Sinónimos', ek_see: 'Véase también', ek_big: 'Número grande', ek_sel: 'Premio', ek_kicker: 'Entradilla', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacuerdo', ek_mark: 'Matasellos', ek_val: 'Sello', ek_addr: 'Dirección', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
+  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_km: "Distância", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_cell: 'Casa', ek_c: 'Casa central', ek_wish: 'Desejo', ek_love: 'O que amo', ek_end: 'Última linha', ek_work: 'Obra', ek_yr: 'Ano', ek_legend: 'Legenda', ek_handle: 'Nome do perfil', ek_stat: 'Número', ek_statl: 'Rótulo', ek_bio: 'Biografia', ek_story: 'Destaque', ek_word: 'Palavra', ek_phon: 'Pronúncia', ek_gram: 'Classe', ek_sense: 'Aceção', ek_syn: 'Sinónimos', ek_see: 'Ver também', ek_big: 'Número grande', ek_sel: 'Prémio', ek_kicker: 'Chamada', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacordo', ek_mark: 'Carimbo', ek_val: 'Selo', ek_addr: 'Morada', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 const stageWrap = document.querySelector('.nst-stagewrap');
 let ebar = null;
@@ -9081,7 +9285,8 @@ if (stageWrap) {
 const EK_BASE = { h: 'title', d: 'date', e: 'step', x: 'text', m: 'month', s: 'song', q: 'question', r: 'reason', k: 'kline', c: 'cap', n: 'name', a: 'answer' };
 // Pages Magazine v2 : nom des champs selon la page (« b5 » du bingo = « Case 5 », « d1 » du dictionnaire = « Sens 1 »…)
 const EK_OV = { mbingo: { b: 'cell', c: 'c' }, mvoeux: { w: 'wish' }, maime: { i: 'love' }, mmusee: { t: 'work', y: 'yr', foot: 'legend' },
-  mprofil: { n: 'stat', l: 'statl', name: 'names', hl: 'story' }, mdico: { d: 'sense' }, mduel: { x: 'dispute' } };
+  mprofil: { n: 'stat', l: 'statl', name: 'names', hl: 'story' }, mdico: { d: 'sense' }, mduel: { x: 'dispute' },
+  mpostale: { kiss: 'kicker', dest: 'place', mark: 'mark', val: 'val', to: 'addr', lab: 'label' } };
 function ekLabel(layout, key) {
   const ov = EK_OV[layout] || {};
   if (ov[key]) { const v = t('ek_' + ov[key]); if (v !== 'ek_' + ov[key]) return v; }
