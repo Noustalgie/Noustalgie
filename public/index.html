@@ -5137,22 +5137,21 @@ Object.assign(LAYOUTS, {
       + col(0, '01', 'k1', 'k1s') + col(1, '02', 'k2', 'k2s') + col3();
   } },
   medito: { n: 0, text: true, mag: 'edito', render(pg) {
-    const T = MT(), d = pg.t.text || '';
-    const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
-    const RH = toc.length > 13 ? 35 : toc.length > 9 ? 42 : 52, sm = RH < 40;
-    const rows = toc.slice(0, 16).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
-      + `<div style="position:absolute;left:0;top:${RH > 42 ? 10 : sm ? 6 : 7}px;width:58px;color:${T.accent};font:400 ${RH > 42 ? 30 : sm ? 23 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
-      + `<div style="position:absolute;left:62px;top:${RH > 42 ? 17 : sm ? 11 : 13}px;right:0;color:${T.ink};font:400 ${sm ? 12.5 : 13.5}px/1.25 ${T.body};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(lm('toc')[k] || '')}</div></div>`).join('');
-    return tx(pg, 'h', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 112px/.86 ${T.disp};text-transform:uppercase;`, lm('edito'))
-      + `<div style="position:absolute;left:${M}px;top:176px;width:46px;height:2px;background:${T.accent};"></div>`
-      + tx(pg, 'text', `position:absolute;left:${M}px;top:206px;width:282px;color:${T.ink};font:italic 400 ${fit(d, 30, 15, 50, 520)}px/1.5 ${T.disp};`, 'Votre dédicace…')
-      + `<div style="position:absolute;left:${M}px;top:600px;width:46px;height:1px;background:${T.accent};"></div>`
-      + (pg.t.sign || CTX.editing ? tx(pg, 'sign', `position:absolute;left:${M - 2}px;top:618px;width:300px;color:${T.ink};font:400 ${fit(pg.t.sign, 44, 30, 6, 24)}px/1.15 ${T.script};white-space:nowrap;`, '')
-        : `<div style="position:absolute;left:${M - 2}px;top:618px;width:300px;color:${T.ink};font:400 ${fit(edNames(), 44, 30, 6, 24)}px/1.15 ${T.script};white-space:nowrap;">${esc(edNames())}</div>`)
-      + svgHeart(M + 268, 586, 26, T.accent, 12) + svgHeartLine(M + 296, 566, 18, T.accent, -14)
-      + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${T.rule};"></div>`
-      + tx(pg, 'toc', `position:absolute;left:430px;top:64px;width:300px;color:${T.ink};font:400 34px/1 ${T.disp};`, lm('sommaire'))
-      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(16, toc.length) * RH}px;">${rows}</div>`;
+    // fond de la couleur de l'album (choix de Gabin, 16 novembre), « Édito » à la main, signature, sommaire à droite
+    const T = MT(), ink = onCol(T.accent), num = lumi(T.accent) < .5 ? T.rose : mixc(ink, T.accent, .3), toc = edToc(), d = pg.t.text || '';
+    const RH = toc.length > 13 ? 34 : toc.length > 11 ? 38 : 46, sign = pg.t.sign || edNames();
+    const rows = toc.slice(0, 16).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${rgba(ink, .22)};">`
+      + `<div style="position:absolute;left:0;top:${RH / 2 - 12}px;color:${num};font:400 ${RH < 40 ? 22 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
+      + `<div style="position:absolute;left:56px;top:${RH / 2 - 8}px;right:0;color:${ink};font:400 13.5px/1.2 ${T.body};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(lm('toc')[k] || '')}</div></div>`).join('');
+    const sst = `position:absolute;left:${M - 2}px;top:618px;width:300px;color:${ink};font:400 ${fit(sign, 40, 28, 8, 24)}px/1.15 ${T.script};white-space:nowrap;`;
+    return VEIL(T.accent)
+      + tx(pg, 'h', `position:absolute;left:${M - 8}px;top:34px;color:${ink};font:400 120px/1.1 ${T.script};white-space:nowrap;`, lm('edito'))
+      + tx(pg, 'text', `position:absolute;left:${M}px;top:230px;width:290px;color:${ink};font:italic 400 ${fit(d, 26, 15, 50, 520)}px/1.5 ${T.disp};`, 'Votre dédicace…')
+      + `<div style="position:absolute;left:${M}px;top:600px;width:46px;height:1px;background:${num};"></div>`
+      + (pg.t.sign || CTX.editing ? tx(pg, 'sign', sst, '') : `<div style="${sst}">${esc(sign)}</div>`)
+      + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${rgba(ink, .22)};"></div>`
+      + tx(pg, 'toc', `position:absolute;left:430px;top:72px;width:300px;color:${num};font:600 10px/1 ${T.ui};letter-spacing:.3em;text-transform:uppercase;`, lm('sommaire'))
+      + `<div style="position:absolute;left:430px;top:110px;width:300px;">${rows}</div>` + svgHeart(690, 690, 40, num, 12);
   } },
   mdebut: { n: 2, text: true, mag: 'debut', render(pg) {
     const T = MT(), txt = pg.t.text || '';
