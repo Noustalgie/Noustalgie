@@ -106,15 +106,17 @@ module.exports = async (req, res) => {
   if (email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email))) {
     out.sent = !!(await sendEmail({ to: email, subject: L.s1, html: mail(L.h1, L.p1, out.link, L.b, L.f) }));
     if (remind) {
-      // Heure arrondie : un même album renvoyé dans l'heure donne la même demande, que Resend ne programme qu'une fois
-      const h = Math.floor(Date.now() / 3600000) * 3600000;
-      const rid = await sendEmail({ to: email, subject: L.s2, html: mail(L.h2, L.p2, out.link, L.b, L.f), scheduled_at: new Date(h + 24 * 3600000).toISOString() }, `rappel1-${id}`);
+      // Heure arrondie : un même album renvoyé dans l'heure donne la même demande, que Resend ne programme qu'une fois.
+      // L'adresse entre dans la clé : un client qui corrige une faute de frappe (15 novembre, première adresse rejetée)
+      // reçoit ses rappels à la bonne adresse ; avec la même clé, Resend refusait la nouvelle demande.
+      const h = Math.floor(Date.now() / 3600000) * 3600000, qui = crypto.createHash('sha256').update(String(email).trim().toLowerCase()).digest('hex').slice(0, 8);
+      const rid = await sendEmail({ to: email, subject: L.s2, html: mail(L.h2, L.p2, out.link, L.b, L.f), scheduled_at: new Date(h + 24 * 3600000).toISOString() }, `rappel1-${id}-${qui}`);
       // 3 jours après (71 h : sous la limite de programmation de Resend), code personnel de RELANCE_PCT % valable 7 jours
       const quand = h + 71 * 3600000, code = codeRelance(id, h);
       // Date limite de Noël 2026 (comme NOEL dans index.html) : à revoir chaque année, sinon la ligne disparaît d'elle-même
       const noel = L.noel && quand < Date.UTC(2026, 11, 10, 22) ? `<br><br>${L.noel}` : '';
       const rid3 = await sendEmail({ to: email, subject: L.s3, scheduled_at: new Date(quand).toISOString(),
-        html: mail(L.h3, `${L.p3.replace('{pct}', RELANCE_PCT)}</p>${boiteCode(code)}<p style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#5f5a54">${L.c3}${noel}`, out.link, L.b, `${L.f3} ${L.f}`) }, `rappel3-${id}`);
+        html: mail(L.h3, `${L.p3.replace('{pct}', RELANCE_PCT)}</p>${boiteCode(code)}<p style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#5f5a54">${L.c3}${noel}`, out.link, L.b, `${L.f3} ${L.f}`) }, `rappel3-${id}-${qui}`);
       const ids = [rid, rid3].filter(Boolean).join(',');
       if (ids) out.reminder = { id: ids, sig: pdfProof(ids, 'reminder') };
     }
