@@ -5107,7 +5107,7 @@ const TOC_KEYS = ['debut', 'dico', 'etapes', 'moments', 'annee', 'playlist', 'ai
 Object.assign(LAYOUTS, {
   mcover: { n: 1, text: true, mag: 'cover', render(pg) {
     // Couverture « collector » : titre du magazine en italique à gauche, photo dégagée au centre,
-    // prénoms en lettres anglaises, sommaire en trois colonnes au pied, sceau « édition limitée »
+    // prénoms en lettres anglaises, sommaire en trois colonnes au pied
     const T = MT(), mast = String(pg.t.mast || ''), names = pg.t.names || '', W = PX - 2 * M;
     const ms = clamp(Math.floor(540 / (0.5 * Math.max(3, mast.length)) * (T.mastScale || 1)), 80, 204);
     const base = Math.round(22 + ms * 0.9), sh = 'text-shadow:0 1px 14px rgba(0,0,0,.34);';
@@ -5116,25 +5116,26 @@ Object.assign(LAYOUTS, {
       + `<div style="display:flex;align-items:center;gap:10px;font:italic 400 19px/1 ${T.mast};font-variation-settings:'opsz' 96;">${n}<span style="flex:1;height:1px;background:rgba(255,255,255,.55);"></span></div>`
       + (kt ? tx(pg, kt, `position:relative;margin-top:9px;font:600 9.5px/1.45 ${T.ui};letter-spacing:.18em;text-transform:uppercase;`, '') : '')
       + tx(pg, ks, `position:relative;margin-top:${kt ? 3 : 9}px;font:italic 400 ${kt ? 14 : 13}px/1.3 ${T.disp};`, '') + `</div>`;
-    const seal = (x, y, r) => {                                  // sceau : « édition limitée · année » tout autour, un cœur au centre
-      const id = 'nstS' + (++MAGID), q = r - 11, txt = `${lm('back1')} · ${new Date().getFullYear()} · `.toUpperCase();
-      return `<svg style="position:absolute;left:${x - r}px;top:${y - r}px;width:${2 * r}px;height:${2 * r}px;overflow:visible" viewBox="0 0 ${2 * r} ${2 * r}"><defs><path id="${id}" d="M${r} ${r}m-${q} 0a${q} ${q} 0 1 1 ${2 * q} 0a${q} ${q} 0 1 1 -${2 * q} 0"/></defs>`
-        + `<circle cx="${r}" cy="${r}" r="${r - 1}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1"/><circle cx="${r}" cy="${r}" r="${q - 9}" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".8"/>`
-        + `<text fill="#fff" font-family="Inter,Arial,sans-serif" font-size="7.6" font-weight="600" letter-spacing="1.6"><textPath href="#${id}" textLength="${Math.floor(2 * Math.PI * q - 3)}" lengthAdjust="spacing">${esc(txt)}</textPath></text>`
-        + `<path transform="translate(${r - 12} ${r - 11}) scale(.24)" d="M50 88C18 64 6 44 12 28 18 12 38 10 50 26 62 10 82 12 88 28 94 44 82 64 50 88Z" fill="${T.rose}"/></svg>`;
-    };
+    // 3e accroche « Leurs adresses… : ils vous disent tout » : partie avant les deux-points en capitales, la suite en italique,
+    // comme 01 et 02 (dans l'éditeur, un seul champ pour la modifier)
+    const k3 = String(pg.t.k3 || ''), cut = k3.search(/\s*:\s*/);
+    const col3 = () => CTX.editing || cut < 1 ? col(2, '03', null, 'k3')
+      : `<div style="position:absolute;left:${M + 2 * (cw + 24)}px;top:648px;width:${cw}px;color:#fff;${sh}">`
+        + `<div style="display:flex;align-items:center;gap:10px;font:italic 400 19px/1 ${T.mast};font-variation-settings:'opsz' 96;">03<span style="flex:1;height:1px;background:rgba(255,255,255,.55);"></span></div>`
+        + `<div style="margin-top:9px;font:600 9.5px/1.45 ${T.ui};letter-spacing:.18em;text-transform:uppercase;">${esc(joli(k3.slice(0, cut)))}</div>`
+        + `<div style="margin-top:3px;font:italic 400 14px/1.3 ${T.disp};">${esc(joli(k3.slice(cut).replace(/^\s*:\s*/, '')))}</div></div>`;
     return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
       + `<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,8,6,.40),rgba(10,8,6,0) 30%,rgba(10,8,6,0) 48%,rgba(10,8,6,.30) 64%,rgba(10,8,6,.72));pointer-events:none;"></div>`
       + `<div style="position:absolute;inset:26px;border:1px solid rgba(255,255,255,.42);pointer-events:none;"></div>`
       + tx(pg, 'mast', `position:absolute;left:${M - 10}px;top:22px;color:#fff;font:italic 400 ${ms}px/.9 ${T.mast};font-variation-settings:'opsz' 96;letter-spacing:-.01em;white-space:nowrap;${sh}`, lm('mast'))
       + `<div style="position:absolute;left:${M}px;top:${base + 14}px;width:34px;height:1px;background:rgba(255,255,255,.8);"></div>`
       + tx(pg, 'issue', `position:absolute;left:${M + 46}px;top:${base + 9}px;color:#fff;font:600 9.5px/1 ${T.ui};letter-spacing:.28em;text-transform:uppercase;white-space:nowrap;`, '')
-      + seal(PX - M - 28, 88, 48)
       + tx(pg, 'title', `position:absolute;left:${M}px;right:${M}px;top:494px;text-align:center;color:#fff;font:italic 400 ${fit(pg.t.title, 26, 19, 18, 46)}px/1.2 ${T.disp};${sh}`, '')
       + tx(pg, 'names', `position:absolute;left:${M - 24}px;right:${M - 24}px;top:${Math.round(626 - fit(names, 100, 50, 10, 34) * 1.08)}px;text-align:center;color:#fff;font:400 ${fit(names, 100, 50, 10, 34)}px/1.3 ${T.script};white-space:nowrap;text-shadow:0 2px 22px rgba(0,0,0,.35);`, 'Vos prénoms')
-      + col(0, '01', 'k1', 'k1s') + col(1, '02', 'k2', 'k2s') + col(2, '03', null, 'k3');
+      + col(0, '01', 'k1', 'k1s') + col(1, '02', 'k2', 'k2s') + col3();
   } },
   medito: { n: 0, text: true, mag: 'edito', render(pg) {
+    const edNames = () => joli(String((typeof NA !== 'undefined' && NA.pages && NA.pages[0] && NA.pages[0].t && NA.pages[0].t.names) || ''));
     const T = MT(), d = pg.t.text || '';
     const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
     const RH = toc.length > 13 ? 35 : toc.length > 9 ? 42 : 52, sm = RH < 40;
@@ -5144,7 +5145,10 @@ Object.assign(LAYOUTS, {
     return tx(pg, 'h', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 112px/.86 ${T.disp};text-transform:uppercase;`, lm('edito'))
       + `<div style="position:absolute;left:${M}px;top:176px;width:46px;height:2px;background:${T.accent};"></div>`
       + tx(pg, 'text', `position:absolute;left:${M}px;top:206px;width:282px;color:${T.ink};font:italic 400 ${fit(d, 30, 15, 50, 520)}px/1.5 ${T.disp};`, 'Votre dédicace…')
-      + tx(pg, 'sign', `position:absolute;left:${M}px;bottom:${M + 28}px;width:282px;color:${T.ink};font:400 17px/1.3 ${T.hand};`, '')
+      + `<div style="position:absolute;left:${M}px;top:600px;width:46px;height:1px;background:${T.accent};"></div>`
+      + (pg.t.sign || CTX.editing ? tx(pg, 'sign', `position:absolute;left:${M - 2}px;top:618px;width:300px;color:${T.ink};font:400 ${fit(pg.t.sign, 44, 30, 6, 24)}px/1.15 ${T.script};white-space:nowrap;`, '')
+        : `<div style="position:absolute;left:${M - 2}px;top:618px;width:300px;color:${T.ink};font:400 ${fit(edNames(), 44, 30, 6, 24)}px/1.15 ${T.script};white-space:nowrap;">${esc(edNames())}</div>`)
+      + svgHeart(M + 268, 586, 26, T.accent, 12) + svgHeartLine(M + 296, 566, 18, T.accent, -14)
       + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${T.rule};"></div>`
       + tx(pg, 'toc', `position:absolute;left:430px;top:64px;width:300px;color:${T.ink};font:400 34px/1 ${T.disp};`, lm('sommaire'))
       + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(16, toc.length) * RH}px;">${rows}</div>`;
@@ -5307,25 +5311,32 @@ Object.assign(LAYOUTS, {
   } },
   mmots: { n: 0, text: true, mag: 'mots', render(pg) {
     const T = MT(), words = String(pg.t.words || '').split(/[,\n]/).map(plain).filter(w => w.length >= 3 && w.length <= 12).slice(0, 12);
-    const N = 12, cell = 37, gx = 286, gy = 254;
+    const N = 12, cell = 37, gx = 286, gy = 254, lh = clamp(Math.floor(N * cell / Math.max(1, words.length)), 30, 46);
     const { grid } = wordGrid(words, N, (pg.t.seed || '') + words.join(''));
     const letters = grid.map((row, y) => row.map((c, x) => `<div style="position:absolute;left:${x * cell}px;top:${y * cell}px;width:${cell}px;height:${cell}px;line-height:${cell}px;text-align:center;">${c}</div>`).join('')).join('');
     return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('mots1'))
       + tx(pg, 'h2', `position:absolute;left:${M + 196}px;top:146px;color:${T.ink};font:400 58px/1.1 ${T.script};white-space:nowrap;`, lm('mots2'))
-      + tx(pg, 'words', `position:absolute;left:${M}px;top:262px;width:190px;color:${T.ink};font:600 11.5px/24px ${T.ui};letter-spacing:.14em;text-transform:uppercase;`, 'Un mot par ligne')
+      + (CTX.editing ? tx(pg, 'words', `position:absolute;left:${M}px;top:${gy}px;width:190px;color:${T.ink};font:600 13px/${lh}px ${T.ui};letter-spacing:.14em;text-transform:uppercase;`, 'Un mot par ligne')
+        : words.map((w, k) => `<div style="position:absolute;left:${M}px;top:${gy + k * lh + (lh - 13) / 2}px;width:13px;height:13px;border:1.4px solid ${T.accent};border-radius:50%;box-sizing:border-box;"></div>`
+          + `<div style="position:absolute;left:${M + 26}px;top:${gy + k * lh}px;width:180px;color:${T.ink};font:600 13px/${lh}px ${T.ui};letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;">${esc(w)}</div>`).join(''))
       + `<div style="position:absolute;left:${gx - 18}px;top:${gy - 18}px;width:${N * cell + 36}px;height:${N * cell + 36}px;background:${T.rose};opacity:.35;"></div>`
       + `<div style="position:absolute;left:${gx}px;top:${gy}px;width:${N * cell}px;height:${N * cell}px;background:#fff;color:${T.cardInk};font:500 17px/1 ${T.ui};${folioShadow}">${letters}</div>`
       + svgHeartLine(gx + N * cell - 6, gy - 40, 40, T.accent, 14) + folio(pg, T);
   } },
   mraisons: { n: 0, text: true, mag: 'raisons', render(pg) {
-    const T = MT();
-    const POS = [[M + 250, 70], [M + 330, 210], [M, 360], [M + 300, 470], [M + 30, 600]];
-    const items = POS.map(([x, y], k) => `<div style="position:absolute;left:${x}px;top:${y}px;color:${T.accent};font:400 54px/1 ${T.disp};">${k + 1}</div>`
-      + tx(pg, 'r' + (k + 1), `position:absolute;left:${x + 50}px;top:${y + 12}px;width:${k === 2 || k === 4 ? 290 : 260}px;color:${T.ink};font:italic 400 19px/1.3 ${T.disp};`, '')).join('');
-    return `<div style="position:absolute;left:${M - 8}px;top:40px;color:${T.ink};font:400 260px/.8 ${T.disp};">5</div>`
-      + tx(pg, 'h1', `position:absolute;left:${M + 6}px;top:256px;color:${T.ink};font:400 50px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('rai1'))
-      + tx(pg, 'h2', `position:absolute;left:${M + 40}px;top:296px;color:${T.ink};font:400 40px/1.1 ${T.script};white-space:nowrap;`, lm('rai2'))
-      + items + svgHeart(640, 640, 50, T.accent, 10) + svgHeartLine(690, 600, 30, T.accent, -16) + folio(pg, T);
+    // en-tête : grand 5, « RAISONS » et « de t'aimer » à côté ; dessous, cinq lignes séparées par des filets, sur toute la largeur
+    const T = MT(), W = PX - 2 * M, y0 = 316, RH = 82;
+    const items = Array.from({ length: 5 }, (_, k) => {
+      const y = y0 + k * RH, t = pg.t['r' + (k + 1)] || '';
+      return `<div style="position:absolute;left:${M}px;top:${y}px;width:${W}px;height:1px;background:${T.rule};"></div>`
+        + `<div style="position:absolute;left:${M}px;top:${y + 14}px;width:56px;color:${T.accent};font:400 52px/1 ${T.disp};">${k + 1}</div>`
+        + tx(pg, 'r' + (k + 1), `position:absolute;left:${M + 72}px;top:${y + 12}px;width:${W - 72}px;height:${RH - 16}px;display:flex;align-items:center;color:${T.ink};font:italic 400 ${fit(t, 23, 17, 60, 150)}px/1.28 ${T.disp};`, '');
+    }).join('');
+    return `<div style="position:absolute;left:${M - 10}px;top:38px;color:${T.ink};font:400 260px/.8 ${T.disp};">5</div>`
+      + tx(pg, 'h1', `position:absolute;left:${M + 160}px;top:104px;color:${T.ink};font:400 72px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('rai1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 230}px;top:174px;color:${T.accent};font:400 52px/1.1 ${T.script};white-space:nowrap;`, lm('rai2'))
+      + items + `<div style="position:absolute;left:${M}px;top:${y0 + 5 * RH}px;width:${W}px;height:1px;background:${T.rule};"></div>`
+      + svgHeart(668, 70, 44, T.accent, 10) + svgHeartLine(626, 128, 26, T.accent, -16) + folio(pg, T);
   } },
   mbucket: { n: 0, text: true, mag: 'bucket', render(pg) {
     // page de carnet lignée, scotchée, cases à cocher au stylo ; une photo instantanée à côté quand la page en a une
@@ -5906,26 +5917,26 @@ function feuille(x, y, len, rot) {
     + `<path d="M0 21C22-2 70-4 100 21C70 46 22 44 0 21Z" fill="url(#${id})"/><path d="M2 21C34 18 66 19 97 21" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/>`
     + [20, 36, 52, 68].map(t => `<path d="M${t} 20.5L${t + 10} 11M${t} 21.5L${t + 10} 31" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/>`).join('') + `</svg>`;
 }
-// Nœud de dentelle argentée : boucles en ruban évidé, longs pans coupés en V, jours en pointillés, reflet satiné.
-// Pas de motif SVG répété (pattern) : Chrome le convertit en image dans le PDF (1,4 Mo par nœud) ; ici, rien que du vectoriel.
-function noeud(x, y, w, rot) {
-  const id = 'nNo' + (++MAGID);
-  const defs = `<linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3F4F6"/><stop offset="1" stop-color="#DCDEE3"/></linearGradient>`
-    + `<linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".7" stop-color="#8F939C" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient>`;
+// Nœud de ruban de satin à la couleur de l'album : boucles creusées, longs pans coupés en V, reflet satiné, ombre douce.
+// (Le premier nœud, en dentelle argentée, se perdait sur l'enveloppe blanche et paraissait gris.)
+// Pas de motif SVG répété (pattern) ni de filtre : Chrome les convertit en image dans le PDF ; ici, rien que du vectoriel.
+function noeud(x, y, w, rot, col) {
+  const id = 'nNo' + (++MAGID), c = col || '#7A1D2E', hi = mixc(c, '#ffffff', .38), lo = mixc(c, '#000000', .38);
+  const defs = `<linearGradient id="${id}f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${lo}"/></linearGradient>`
+    + `<linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset=".38" stop-color="#fff" stop-opacity="0"/><stop offset=".72" stop-color="#000" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>`;
   const loopL = 'M100 70C76 40 34 22 14 38C-2 52 18 86 62 84C76 83 90 78 100 74ZM92 70C72 52 44 44 32 52C24 58 34 72 60 73C72 73 84 72 92 70Z';
   const loopR = 'M100 70C124 40 166 22 186 38C202 52 182 86 138 84C124 83 110 78 100 74ZM108 70C128 52 156 44 168 52C176 58 166 72 140 73C128 73 116 72 108 70Z';
   const tailL = 'M95 76C86 110 62 150 40 196L58 186L64 204C88 160 104 116 106 80Z', tailR = 'M105 76C118 112 134 152 146 200L130 190L122 206C112 160 100 118 96 80Z';
   const knot = 'M86 62C92 54 108 54 114 62C118 70 116 82 108 86C100 89 92 87 88 81C84 75 83 68 86 62Z';
-  // lignes médianes des rubans : la dentelle (jours et fleurettes) suit le ruban
+  // lignes médianes des rubans : le reflet du satin suit le ruban
   const mids = ['M97 71C78 50 40 30 22 44C10 54 28 79 62 79C78 79 90 76 97 72', 'M103 71C122 50 160 30 178 44C190 54 172 79 138 79C122 79 110 76 103 72',
     'M100 78C93 112 70 152 52 192', 'M100 78C110 114 126 154 138 196'];
-  const edge = d => `<path d="${d}" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="0.1 4" stroke-linecap="round" opacity=".95"/><path d="${d}" fill="none" stroke="#9DA1AA" stroke-width=".7" opacity=".55"/>`;
-  const part = d => `<path d="${d}" fill="url(#${id}f)" fill-rule="evenodd"/><path d="${d}" fill="url(#${id}g)" fill-rule="evenodd"/>${edge(d)}`;
-  const lace = d => `<path d="${d}" fill="none" stroke="#C4C7CE" stroke-width="3.4" stroke-dasharray="0.1 7" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#fff" stroke-width="1.8" stroke-dasharray="0.1 7" stroke-dashoffset="3.5" stroke-linecap="round"/>`;
+  const part = d => `<path d="${d}" fill="url(#${id}f)" fill-rule="evenodd"/><path d="${d}" fill="url(#${id}g)" fill-rule="evenodd"/><path d="${d}" fill="none" stroke="${lo}" stroke-width=".8" stroke-opacity=".55"/>`;
+  const sheen = d => `<path d="${d}" fill="none" stroke="#fff" stroke-width="2.2" stroke-opacity=".22" stroke-linecap="round"/>`;
   const shadow = [3, 6, 9].map(o => `<g transform="translate(${o * .6} ${o})" opacity=".07"><path d="${loopL}" fill-rule="evenodd"/><path d="${loopR}" fill-rule="evenodd"/><path d="${tailL}"/><path d="${tailR}"/><path d="${knot}"/></g>`).join('');
   return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${(w * 1.05).toFixed(1)}px;transform:rotate(${rot}deg);overflow:visible;pointer-events:none" viewBox="0 0 200 210"><defs>${defs}</defs>${shadow}`
-    + part(tailR) + lace(mids[3]) + part(tailL) + lace(mids[2]) + part(loopL) + lace(mids[0]) + part(loopR) + lace(mids[1]) + part(knot)
-    + `<path d="M90 64C97 60 104 60 110 64" fill="none" stroke="#8F939C" stroke-width="1.4" opacity=".5"/><path d="M92 82C98 85 104 85 108 82" fill="none" stroke="#8F939C" stroke-width="1.2" opacity=".45"/></svg>`;
+    + part(tailR) + sheen(mids[3]) + part(tailL) + sheen(mids[2]) + part(loopL) + sheen(mids[0]) + part(loopR) + sheen(mids[1]) + part(knot)
+    + `<path d="M90 64C97 60 104 60 110 64" fill="none" stroke="#fff" stroke-width="1.6" stroke-opacity=".35"/><path d="M92 82C98 85 104 85 108 82" fill="none" stroke="${lo}" stroke-width="1.4" opacity=".6"/></svg>`;
 }
 // Cachet de cire à la couleur de l'album : bord irrégulier, anneau en relief, cœur en creux
 function cachet(x, y, d, col, seed) {
@@ -5948,17 +5959,17 @@ function envDos(x, y, w, h) {
   const id = 'nEd' + (++MAGID), H = h * 1.62;
   return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-shadow:0 26px 40px -26px rgba(40,30,20,.45);"></div>`
     + `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${(y - h * .62).toFixed(1)}px;width:${w}px;height:${H.toFixed(1)}px;overflow:visible;pointer-events:none" viewBox="0 0 ${w} ${H.toFixed(1)}">`
-    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DEDCD7"/><stop offset="1" stop-color="#EEEDE9"/></linearGradient><linearGradient id="${id}b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E7E5E0"/><stop offset="1" stop-color="#F7F6F3"/></linearGradient></defs>`
-    + `<path d="M0 ${h * .62}L${w / 2} 0L${w} ${h * .62}Z" fill="url(#${id}b)" stroke="#CFCCC6" stroke-width="1.2"/><path d="M14 ${h * .6}L${w / 2} ${h * .05}L${w - 14} ${h * .6}" fill="none" stroke="#000" stroke-opacity=".05" stroke-width="10"/>`
-    + `<rect x="0" y="${h * .62}" width="${w}" height="${h}" fill="url(#${id}a)" stroke="#CFCCC6" stroke-width="1.2"/><rect x="0" y="${h * .62}" width="${w}" height="${h * .35}" fill="#000" opacity=".045"/></svg>`;
+    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EADFCC"/><stop offset="1" stop-color="#F4ECDF"/></linearGradient><linearGradient id="${id}b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#EFE6D6"/><stop offset="1" stop-color="#FBF6EC"/></linearGradient></defs>`
+    + `<path d="M0 ${h * .62}L${w / 2} 0L${w} ${h * .62}Z" fill="url(#${id}b)" stroke="#D9CBB3" stroke-width="1.2"/><path d="M14 ${h * .6}L${w / 2} ${h * .05}L${w - 14} ${h * .6}" fill="none" stroke="#000" stroke-opacity=".05" stroke-width="10"/>`
+    + `<rect x="0" y="${h * .62}" width="${w}" height="${h}" fill="url(#${id}a)" stroke="#D9CBB3" stroke-width="1.2"/><rect x="0" y="${h * .62}" width="${w}" height="${h * .35}" fill="#000" opacity=".045"/></svg>`;
 }
 function envFace(x, y, w, h) {
   const id = 'nEf' + (++MAGID);
   return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;overflow:visible;pointer-events:none" viewBox="0 0 ${w} ${h}">`
-    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7F6F3"/><stop offset="1" stop-color="#ECEBE7"/></linearGradient><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`
-    + `<path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}L${w} ${h}L0 ${h}Z" fill="url(#${id}a)" stroke="#D3D1CC" stroke-width="1"/>`
+    + `<defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBF6EC"/><stop offset="1" stop-color="#F2E9DA"/></linearGradient><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`
+    + `<path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}L${w} ${h}L0 ${h}Z" fill="url(#${id}a)" stroke="#DCCFB9" stroke-width="1"/>`
     + `<path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}" fill="none" stroke="url(#${id}s)" stroke-width="10" opacity=".6"/>`
-    + `<path d="M0 ${h}L${w * .43} ${h * .55}M${w} ${h}L${w * .57} ${h * .55}" stroke="#D9D7D2" stroke-width="1.2"/><path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}" fill="none" stroke="#C9C7C1" stroke-width="1"/></svg>`;
+    + `<path d="M0 ${h}L${w * .43} ${h * .55}M${w} ${h}L${w * .57} ${h * .55}" stroke="#E0D4C0" stroke-width="1.2"/><path d="M0 ${h * .2}L${w * .5} ${h * .62}L${w} ${h * .2}" fill="none" stroke="#D3C4AB" stroke-width="1"/></svg>`;
 }
 // Timbre : photo, bord blanc dentelé (pastilles de la couleur de la carte), valeur ; tampon de la poste
 function timbre(pg, i, x, y, w, h, rot, card, valKey) {
@@ -5992,14 +6003,15 @@ const lettrePlume = s => {
 Object.assign(LAYOUTS, {
   // Lettre, page de gauche : l'enveloppe ouverte, une photo qui en sort, des roses, un nœud de dentelle
   mlettre_c: { n: 1, text: true, mag: 'lettre', render(pg) {
-    const T = MT(), ew = 560, eh = 330, ex = 117, ey = 420, [w, h] = boxFor(pg, 0, 304, 354);
-    const px = 400 - (w + 26) / 2, py = 154 + (354 - h) / 2;
-    return envDos(ex, ey, ew, eh)
-      + feuille(150, 250, 120, -150) + feuille(600, 205, 110, -20) + feuille(640, 360, 100, 25) + feuille(120, 330, 90, 160)
-      + rose(112, 138, 210, 10, rosePal(), 'a') + rose(500, 104, 180, 40, rosePal(true), 'b') + rose(566, 296, 150, -20, rosePal(), 'c') + rose(206, 96, 120, 70, rosePal(true), 'e')
+    // fond rosé (l'enveloppe ivoire s'en détache), composition centrée dans la page, nœud de satin à la couleur de l'album
+    const T = MT(), ew = 560, eh = 330, ex = 117, ey = 386, d = -34, [w, h] = boxFor(pg, 0, 304, 354);
+    const px = 400 - (w + 26) / 2, py = 154 + d + (354 - h) / 2;
+    return VEIL(mixc(T.rose, T.paper, .82)) + envDos(ex, ey, ew, eh)
+      + feuille(150, 250 + d, 120, -150) + feuille(600, 205 + d, 110, -20) + feuille(640, 360 + d, 100, 25) + feuille(120, 330 + d, 90, 160)
+      + rose(112, 138 + d, 210, 10, rosePal(), 'a') + rose(500, 104 + d, 180, 40, rosePal(true), 'b') + rose(566, 296 + d, 150, -20, rosePal(), 'c') + rose(206, 96 + d, 120, 70, rosePal(true), 'e')
       + `<div style="position:absolute;left:${px}px;top:${py}px;width:${w + 26}px;height:${h + 26}px;background:${T.card || '#fff'};transform:rotate(-5deg);${SHADOW}"><div style="position:absolute;left:13px;top:13px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div></div>`
       + envFace(ex, ey, ew, eh)
-      + rose(92, 380, 120, -30, rosePal(true), 'd') + noeud(118, 430, 330, -6) + folio(pg, T);
+      + rose(92, 380 + d, 120, -30, rosePal(true), 'd') + noeud(150, 420 + d, 250, -6, T.accent) + folio(pg, T);
   } },
   // Lettre, page de droite : le papier, l'écriture à la plume, la signature et le cachet de cire
   mlettre_d: { n: 0, text: true, mag: 'lettre', render(pg) {
@@ -6041,14 +6053,14 @@ Object.assign(LAYOUTS, {
     const T = MT(), [w, h] = boxFor(pg, 0, 384, 384);
     const tige = (a, b, c, d) => `<path d="M${a} ${b}Q${(a + c) / 2 + 20} ${(b + d) / 2} ${c} ${d}" stroke="${themeKey() === 'seventies' ? '#6F6A5C' : '#6E8B6A'}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
     return VEIL(mixc(T.rose, T.paper, .78))
-      + `<div style="position:absolute;left:${70 + (384 - w) / 2}px;top:64px;width:${w + 36}px;height:${h + 104}px;background:${T.card || '#fff'};transform:rotate(-3deg);${SHADOW}">`
+      + `<div style="position:absolute;left:${70 + (384 - w) / 2}px;top:${Math.round((PX - h - 104) / 2) - 6}px;width:${w + 36}px;height:${h + 104}px;background:${T.card || '#fff'};transform:rotate(-3deg);${SHADOW}">`
       + `<div style="position:absolute;left:18px;top:18px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div>`
       + tx(pg, 'cap', `position:absolute;left:12px;right:12px;bottom:28px;text-align:center;color:${T.cardInk};font:400 15px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, '') + `</div>`
       + `<svg aria-hidden="true" style="position:absolute;left:0;top:0;width:${PX}px;height:${PX}px;overflow:visible;pointer-events:none" viewBox="0 0 ${PX} ${PX}">`
       + tige(540, 470, 690, 760) + tige(600, 450, 700, 770) + tige(470, 520, 680, 770) + tige(560, 560, 690, 775) + tige(640, 520, 705, 772) + `</svg>`
       + feuille(470, 470, 120, -150) + feuille(620, 430, 110, -60) + feuille(560, 600, 100, 40) + feuille(650, 560, 90, -10) + feuille(420, 560, 100, 170)
       + rose(470, 400, 170, 0, rosePal(), 'f') + rose(580, 380, 150, 30, rosePal(true), 'g') + rose(520, 500, 150, 60, rosePal(true), 'h') + rose(410, 470, 130, 20, rosePal(), 'i') + rose(620, 480, 120, -20, rosePal(), 'j')
-      + noeud(600, 600, 170, -30)
+      + noeud(612, 604, 140, -24, T.accent)
       + `<svg aria-hidden="true" style="position:absolute;left:520px;top:40px;width:220px;height:240px;overflow:visible;pointer-events:none" viewBox="0 0 220 240"><path d="M30 6C90 40 150 60 170 120" fill="none" stroke="#B9A88F" stroke-width="1.6"/></svg>`
       + `<div style="position:absolute;left:540px;top:110px;width:200px;height:220px;background:#FBF7EF;transform:rotate(7deg);clip-path:polygon(18% 0,82% 0,100% 14%,100% 100%,0 100%,0 14%);box-shadow:0 10px 20px -10px rgba(0,0,0,.35);">`
       + `<div style="position:absolute;left:93px;top:18px;width:14px;height:14px;border-radius:50%;background:${mixc(T.rose, T.paper, .78)};box-shadow:inset 0 0 0 2px #D8CBB6;"></div>`
