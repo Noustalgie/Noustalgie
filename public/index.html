@@ -5101,7 +5101,7 @@ function folio(pg, T) {
   const left = i % 2 === 0, mast = (NA.pages[0] && NA.pages[0].t && NA.pages[0].t.mast) || lm('mast');
   return `<div style="position:absolute;bottom:30px;${left ? `left:${M}px` : `right:${M}px`};color:${T.muted};font:600 9px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;pointer-events:none;">${left ? `${String(i + 1).padStart(2, '0')} · ${esc(mast)}` : `${esc(mast)} · ${String(i + 1).padStart(2, '0')}`}</div>`;
 }
-const TOC_KEYS = ['debut', 'etapes', 'annee', 'playlist', 'adresses', 'voyages', 'memory', 'interview', 'raisons', 'quiz', 'mots', 'bucket', 'lettre'];
+const TOC_KEYS = ['debut', 'dico', 'etapes', 'moments', 'annee', 'playlist', 'aime', 'adresses', 'voyages', 'souvenir', 'memory', 'interview', 'raisons', 'musee', 'profil', 'quiz', 'mots', 'bingo', 'voeux', 'bucket', 'lettre'];
 
 /* Rubriques */
 Object.assign(LAYOUTS, {
@@ -5137,17 +5137,17 @@ Object.assign(LAYOUTS, {
   medito: { n: 0, text: true, mag: 'edito', render(pg) {
     const T = MT(), d = pg.t.text || '';
     const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
-    const RH = toc.length > 9 ? 42 : 52;
-    const rows = toc.slice(0, 13).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
-      + `<div style="position:absolute;left:0;top:${RH > 42 ? 10 : 7}px;width:58px;color:${T.accent};font:400 ${RH > 42 ? 30 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
-      + `<div style="position:absolute;left:62px;top:${RH > 42 ? 17 : 13}px;right:0;color:${T.ink};font:400 13.5px/1.25 ${T.body};">${esc(lm('toc')[k] || '')}</div></div>`).join('');
+    const RH = toc.length > 13 ? 35 : toc.length > 9 ? 42 : 52, sm = RH < 40;
+    const rows = toc.slice(0, 16).map(([k, i], j) => `<div style="position:absolute;left:0;top:${j * RH}px;width:300px;height:${RH}px;border-top:1px solid ${T.rule};">`
+      + `<div style="position:absolute;left:0;top:${RH > 42 ? 10 : sm ? 6 : 7}px;width:58px;color:${T.accent};font:400 ${RH > 42 ? 30 : sm ? 23 : 26}px/1 ${T.disp};">${String(i + 1).padStart(2, '0')}</div>`
+      + `<div style="position:absolute;left:62px;top:${RH > 42 ? 17 : sm ? 11 : 13}px;right:0;color:${T.ink};font:400 ${sm ? 12.5 : 13.5}px/1.25 ${T.body};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(lm('toc')[k] || '')}</div></div>`).join('');
     return tx(pg, 'h', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 112px/.86 ${T.disp};text-transform:uppercase;`, lm('edito'))
       + `<div style="position:absolute;left:${M}px;top:176px;width:46px;height:2px;background:${T.accent};"></div>`
       + tx(pg, 'text', `position:absolute;left:${M}px;top:206px;width:282px;color:${T.ink};font:italic 400 ${fit(d, 30, 15, 50, 520)}px/1.5 ${T.disp};`, 'Votre dédicace…')
       + tx(pg, 'sign', `position:absolute;left:${M}px;bottom:${M + 28}px;width:282px;color:${T.ink};font:400 17px/1.3 ${T.hand};`, '')
       + `<div style="position:absolute;left:397px;top:${M}px;bottom:${M}px;width:1px;background:${T.rule};"></div>`
       + tx(pg, 'toc', `position:absolute;left:430px;top:64px;width:300px;color:${T.ink};font:400 34px/1 ${T.disp};`, lm('sommaire'))
-      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(13, toc.length) * RH}px;">${rows}</div>`;
+      + `<div style="position:absolute;left:430px;top:128px;width:300px;height:${Math.min(16, toc.length) * RH}px;">${rows}</div>`;
   } },
   mdebut: { n: 2, text: true, mag: 'debut', render(pg) {
     const T = MT(), txt = pg.t.text || '';
@@ -5328,12 +5328,21 @@ Object.assign(LAYOUTS, {
       + items + svgHeart(640, 640, 50, T.accent, 10) + svgHeartLine(690, 600, 30, T.accent, -16) + folio(pg, T);
   } },
   mbucket: { n: 0, text: true, mag: 'bucket', render(pg) {
-    const T = MT(), n = Math.min(8, String(pg.t.items || '').split('\n').filter(x => x.trim()).length || 6);
-    const boxes = Array.from({ length: n }, (_, k) => `<div style="position:absolute;left:${M + 70}px;top:${276 + k * 54}px;width:17px;height:17px;border:1.6px solid ${T.ink};"></div>`).join('');
-    return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 100px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('bucket1'))
-      + tx(pg, 'h2', `position:absolute;left:${M + 300}px;top:140px;color:${T.ink};font:400 54px/1.1 ${T.script};white-space:nowrap;`, lm('bucket2'))
-      + boxes + tx(pg, 'items', `position:absolute;left:${M + 104}px;top:262px;width:520px;color:${T.ink};font:400 15px/54px ${T.hand};white-space:nowrap;`, 'Une envie par ligne')
-      + svgHeart(660, 116, 40, T.accent, 12) + svgCurl(560, 640, 70, T.accent, -20) + folio(pg, T);
+    // page de carnet lignée, scotchée, cases à cocher au stylo ; une photo instantanée à côté quand la page en a une
+    const T = MT(), n = clamp(String(pg.t.items || '').split('\n').filter(x => x.trim()).length || 6, 3, 8), ph = pg.slots.length > 0, lh = 50;
+    const cw = ph ? 430 : 560, cx = ph ? 52 : 117, cy = 236, chh = 74 + n * lh + 26, ink = '#2A2420';
+    const boxes = CTX.editing ? '' : Array.from({ length: n }, (_, k) => `<div style="position:absolute;left:24px;top:${74 + k * lh + lh - 30}px;width:17px;height:17px;border:1.6px solid ${ink};opacity:.75;"></div>`).join('');
+    const [w, h] = boxFor(pg, 0, 250, 300);
+    return tx(pg, 'h1', `position:absolute;left:${M}px;top:54px;color:${T.ink};font:400 100px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('bucket1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 300}px;top:136px;color:${T.accent};font:400 56px/1.1 ${T.script};white-space:nowrap;`, lm('bucket2'))
+      + `<div style="position:absolute;left:${cx}px;top:${cy}px;width:${cw}px;height:${chh}px;background:#FBF6EF;transform:rotate(-1.6deg);${SHADOW}">`
+      + `<div style="position:absolute;left:0;right:0;top:74px;height:${n * lh}px;background:repeating-linear-gradient(to bottom,transparent 0 ${lh - 1}px,rgba(42,36,32,.13) ${lh - 1}px ${lh}px);"></div>`
+      + `<div style="position:absolute;left:56px;top:0;bottom:0;width:1.5px;background:${rgba(T.accent, 0.45)};"></div>` + boxes
+      + tx(pg, 'items', `position:absolute;left:${CTX.editing ? 24 : 72}px;top:${74 + lh - 38}px;width:${cw - 92}px;color:${ink};font:400 15px/${lh}px ${T.hand};white-space:nowrap;overflow:hidden;`, 'Une envie par ligne')
+      + `</div>` + tape(cx + cw / 2 - 45, cy - 12, 90, -4)
+      + (ph ? pola(pg, 0, 500 + (250 - w) / 2, 250, w, h, 4, { tape: -6, strong: true }) + svgHeart(704, 600, 40, T.accent, 12) + svgCurl(520, 650, 80, T.accent, -16)
+        : svgHeart(660, 116, 40, T.accent, 12) + svgCurl(560, 660, 70, T.accent, -20))
+      + folio(pg, T);
   } },
   mlettre_a: { n: 0, text: true, mag: 'lettre', render(pg) {
     const T = MT();
@@ -5359,10 +5368,12 @@ Object.assign(LAYOUTS, {
     if ((pg.v || 0) % 2) return svgHeartLine(PX / 2 - 230, 160, 460, T.rose, 0)
       + `<div style="position:absolute;left:150px;right:150px;top:150px;bottom:190px;display:flex;align-items:center;justify-content:center;">`
       + tx(pg, 'text', `position:relative;width:100%;text-align:center;color:${T.ink};font:italic 400 ${fit(txt, 44, 26, 30, 200)}px/1.18 ${T.disp};`, 'Une phrase…') + `</div>` + folio(pg, T);
-    return tx(pg, 'h', `position:absolute;left:${M}px;top:${M + 64}px;color:${T.accent};font:400 64px/1.1 ${T.script};`, '')
-      + tx(pg, 'text', `position:absolute;left:${M}px;right:${M + 30}px;top:${M + 176}px;color:${T.ink};font:400 ${fit(txt, 54, 30, 30, 220)}px/1.1 ${T.disp};`, 'Un mot doux…')
+    return `<div aria-hidden="true" style="position:absolute;left:${M - 34}px;top:-70px;color:${T.accent};opacity:.13;font:400 460px/1 ${T.disp};pointer-events:none;">${curLang() === 'fr' ? '«' : '“'}</div>`
+      + svgHeartLine(PX - 360, PX - 330, 420, T.rose, 10)
+      + tx(pg, 'h', `position:absolute;left:${M}px;top:${M + 50}px;color:${T.accent};font:400 64px/1.1 ${T.script};`, '')
+      + tx(pg, 'text', `position:absolute;left:${M}px;right:${M + 20}px;top:${M + 160}px;color:${T.ink};font:400 ${fit(txt, 62, 32, 30, 220)}px/1.08 ${T.disp};`, 'Un mot doux…')
       + `<div style="position:absolute;left:${M}px;bottom:${M + 76}px;width:46px;height:2px;background:${T.accent};"></div>`
-      + svgHeart(PX - M - 58, PX - M - 112, 38, T.accent, -10) + folio(pg, T);
+      + svgHeart(M + 60, PX - M - 96, 34, T.accent, -10) + folio(pg, T);
   } },
   mprose: { n: 1, text: true, mag: 'prose', render(pg) {
     const T = MT(), txt = pg.t.text || '', ttl = String(pg.t.title || ''), photo = pg.slots.length > 0;
@@ -5411,6 +5422,447 @@ Object.assign(LAYOUTS, {
       + barcode(PX - M - 100, PX - M - 66, 100, 66, txt);
   } },
 });
+// Libellés des pages Magazine v2 (5 langues), ajoutés à LMAG
+const LMAG2 = {
+  fr: { jtm: 'je t’aime', geant: ['toi & moi', 'pour toujours', 'je t’aime'], moments1: 'Nos plus beaux', moments2: 'moments', souv1: 'notre souvenir', souv2: 'préféré', voeux: 'je nous souhaite…',
+    voeuxW: ['Des fous rires', 'Des voyages', 'Toujours nous'], dest1: 'nos', dest2: 'escales', bingo2: 'édition couple',
+    bingo3: 'Cochez tout ce que vous avez déjà vécu à deux', bingoC: 'nous',
+    bingoL: ['Se voler des frites', 'Rire jusqu’aux larmes', 'S’endormir devant un film', 'Danser dans la cuisine', 'Se perdre en voiture', 'Un fou rire en public',
+      'Le petit-déjeuner au lit', 'Chanter faux à tue-tête', 'Un week-end improvisé', 'Voir le soleil se lever', 'Se disputer la couverture', 'Rater une recette',
+      'Un slow dans le salon', 'Partager un dessert', 'Finir une série en une nuit', 'Une bataille de chatouilles', 'Se tenir la main sans y penser', 'Un pique-nique au soleil',
+      'Un surnom ridicule', 'Un selfie complètement raté', 'Un baiser sous la pluie', 'Des messages à 2\u00a0h du matin', 'Finir les phrases de l’autre', 'Une surprise réussie'],
+    word: 'nous', phon: '[nu]', gram: 'pronom personnel', dico1: '{names}, depuis {meet}.', dico1b: '{names}, tout simplement.',
+    dicoDef: 'Deux personnes qui se choisissent encore, chaque matin, sans jamais s’en lasser.', syn: 'Syn.\u00a0: toi et moi, à deux, ensemble.', see: 'Voir aussi\u00a0: ',
+    aime1: 'Ce que j’aime', aime2: 'chez toi', aimeEnd: 'et tout le reste', musee0: 'Collection privée', musee1: 'Musée', musee2: 'de nous', oeuvre: 'Œuvre n°',
+    museeFoot: 'Exposition permanente', since: 'Ensemble depuis {meet}', pSouv: 'souvenirs', pJours: 'jours', pAmour: 'amour', hl: ['Voyages', 'Soirées', 'Chez nous', 'Nous deux'],
+    filmSel: 'Sélection officielle', filmFest: 'Festival de nos cœurs', filmBill: '{a} · Scénario\u00a0: le hasard · Musique\u00a0: nos chansons · Suite au prochain épisode',
+    meteo1: 'Météo', meteo2: 'de notre amour', temp: '37,2°', days: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'], duelWin: 'Qui gagne\u00a0?',
+    toc2: { dico: 'Nous, définition', moments: 'Nos plus beaux moments', aime: 'Ce que j’aime chez toi', souvenir: 'Notre souvenir préféré', musee: 'Le musée de nous',
+      profil: 'Notre profil', bingo: 'Bingo spécial couple', voeux: 'Ce que je nous souhaite' } },
+  en: { jtm: 'I love you', geant: ['you & me', 'forever', 'I love you'], moments1: 'Our most iconic', moments2: 'moments', souv1: 'our favourite', souv2: 'memory', voeux: 'here’s to us…',
+    voeuxW: ['Laughter', 'Adventures', 'Always us'], dest1: 'our', dest2: 'getaways', bingo2: 'couple edition',
+    bingo3: 'Tick off everything you have already done together', bingoC: 'us',
+    bingoL: ['Steal each other’s fries', 'Laugh until we cried', 'Fall asleep during a film', 'Dance in the kitchen', 'Get lost on the road', 'Giggle fit in public',
+      'Breakfast in bed', 'Sing loudly, out of tune', 'A last-minute weekend away', 'Watch the sunrise', 'Fight over the duvet', 'Ruin a recipe',
+      'Slow dance in the living room', 'Share a dessert', 'Binge a whole series', 'Tickle fight', 'Hold hands without thinking', 'Picnic in the sun',
+      'A ridiculous nickname', 'A totally failed selfie', 'Kiss in the rain', 'Texting at 2 a.m.', 'Finish each other’s sentences', 'A surprise that worked'],
+    word: 'us', phon: '/ʌs/', gram: 'pronoun', dico1: '{names}, since {meet}.', dico1b: '{names}, simply.',
+    dicoDef: 'Two people who still choose each other, every morning, without ever tiring of it.', syn: 'Syn.: you and me, the two of us, together.', see: 'See also: ',
+    aime1: 'What I love', aime2: 'about you', aimeEnd: 'and everything else', musee0: 'Private collection', musee1: 'Museum', musee2: 'of us', oeuvre: 'Artwork no.',
+    museeFoot: 'Permanent exhibition', since: 'Together since {meet}', pSouv: 'memories', pJours: 'days', pAmour: 'love', hl: ['Trips', 'Nights out', 'Home', 'Just us'],
+    filmSel: 'Official selection', filmFest: 'Festival of our hearts', filmBill: '{a} · Written by chance · Music: our songs · To be continued',
+    meteo1: 'Forecast', meteo2: 'for our love', temp: '37.2°', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], duelWin: 'Who wins?',
+    toc2: { dico: 'Us, defined', moments: 'Our most iconic moments', aime: 'What I love about you', souvenir: 'Our favourite memory', musee: 'The museum of us',
+      profil: 'Our profile', bingo: 'Couples bingo', voeux: 'What I wish for us' } },
+  de: { jtm: 'ich liebe dich', geant: ['du & ich', 'für immer', 'ich liebe dich'], moments1: 'Unsere schönsten', moments2: 'Momente', souv1: 'unsere liebste', souv2: 'Erinnerung', voeux: 'ich wünsche uns…',
+    voeuxW: ['Viel Lachen', 'Reisen', 'Immer wir'], dest1: 'unsere', dest2: 'Reiseziele', bingo2: 'Paar-Edition',
+    bingo3: 'Kreuzt an, was ihr schon zu zweit erlebt habt', bingoC: 'wir',
+    bingoL: ['Sich Pommes klauen', 'Lachen bis zu Tränen', 'Beim Film einschlafen', 'In der Küche tanzen', 'Sich verfahren', 'Lachanfall in der Öffentlichkeit',
+      'Frühstück im Bett', 'Laut und schief singen', 'Spontanes Wochenende', 'Den Sonnenaufgang sehen', 'Um die Decke streiten', 'Ein Rezept verpatzen',
+      'Engtanz im Wohnzimmer', 'Ein Dessert teilen', 'Eine Serie am Stück schauen', 'Kitzelschlacht', 'Händchen halten, ohne nachzudenken', 'Picknick in der Sonne',
+      'Ein alberner Spitzname', 'Ein total misslungenes Selfie', 'Ein Kuss im Regen', 'Nachrichten um 2 Uhr nachts', 'Die Sätze des anderen beenden', 'Eine gelungene Überraschung'],
+    word: 'wir', phon: '[viːɐ̯]', gram: 'Personalpronomen', dico1: '{names}, seit {meet}.', dico1b: '{names}, ganz einfach.',
+    dicoDef: 'Zwei Menschen, die sich jeden Morgen wieder füreinander entscheiden, ohne dessen je müde zu werden.', syn: 'Syn.: du und ich, zu zweit, zusammen.', see: 'Siehe auch: ',
+    aime1: 'Was ich liebe', aime2: 'an dir', aimeEnd: 'und alles andere', musee0: 'Privatsammlung', musee1: 'Museum', musee2: 'von uns', oeuvre: 'Werk Nr.',
+    museeFoot: 'Dauerausstellung', since: 'Zusammen seit {meet}', pSouv: 'Erinnerungen', pJours: 'Tage', pAmour: 'Liebe', hl: ['Reisen', 'Abende', 'Zuhause', 'Wir zwei'],
+    filmSel: 'Offizielle Auswahl', filmFest: 'Festival unserer Herzen', filmBill: '{a} · Drehbuch: der Zufall · Musik: unsere Lieder · Fortsetzung folgt',
+    meteo1: 'Wetter', meteo2: 'unserer Liebe', temp: '37,2°', days: ['Mo', 'Di', 'Mi', 'Do', 'Fr'], duelWin: 'Wer gewinnt?',
+    toc2: { dico: 'Wir, die Definition', moments: 'Unsere schönsten Momente', aime: 'Was ich an dir liebe', souvenir: 'Unsere liebste Erinnerung', musee: 'Das Museum von uns',
+      profil: 'Unser Profil', bingo: 'Paar-Bingo', voeux: 'Was ich uns wünsche' } },
+  es: { jtm: 'te quiero', geant: ['tú y yo', 'para siempre', 'te quiero'], moments1: 'Nuestros mejores', moments2: 'momentos', souv1: 'nuestro recuerdo', souv2: 'favorito', voeux: 'nos deseo…',
+    voeuxW: ['Risas', 'Viajes', 'Siempre nosotros'], dest1: 'nuestras', dest2: 'escapadas', bingo2: 'edición pareja',
+    bingo3: 'Marcad todo lo que ya habéis vivido juntos', bingoC: 'nosotros',
+    bingoL: ['Robarse las patatas fritas', 'Reír hasta llorar', 'Dormirse viendo una peli', 'Bailar en la cocina', 'Perderse en el coche', 'Ataque de risa en público',
+      'Desayuno en la cama', 'Cantar a gritos y desafinando', 'Un fin de semana improvisado', 'Ver amanecer', 'Pelearse por la manta', 'Arruinar una receta',
+      'Un baile lento en el salón', 'Compartir un postre', 'Terminar una serie en una noche', 'Guerra de cosquillas', 'Darse la mano sin pensar', 'Un pícnic al sol',
+      'Un apodo ridículo', 'Un selfie totalmente fallido', 'Un beso bajo la lluvia', 'Mensajes a las 2 de la mañana', 'Terminar las frases del otro', 'Una sorpresa bien hecha'],
+    word: 'nosotros', phon: '[noˈsotɾos]', gram: 'pronombre personal', dico1: '{names}, desde {meet}.', dico1b: '{names}, sin más.',
+    dicoDef: 'Dos personas que se siguen eligiendo cada mañana, sin cansarse nunca.', syn: 'Sin.: tú y yo, los dos, juntos.', see: 'Véase también: ',
+    aime1: 'Lo que amo', aime2: 'de ti', aimeEnd: 'y todo lo demás', musee0: 'Colección privada', musee1: 'Museo', musee2: 'de nosotros', oeuvre: 'Obra n.º',
+    museeFoot: 'Exposición permanente', since: 'Juntos desde {meet}', pSouv: 'recuerdos', pJours: 'días', pAmour: 'amor', hl: ['Viajes', 'Noches', 'En casa', 'Los dos'],
+    filmSel: 'Selección oficial', filmFest: 'Festival de nuestros corazones', filmBill: '{a} · Guion: el azar · Música: nuestras canciones · Continuará',
+    meteo1: 'El tiempo', meteo2: 'de nuestro amor', temp: '37,2°', days: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'], duelWin: '¿Quién gana?',
+    toc2: { dico: 'Nosotros, definición', moments: 'Nuestros mejores momentos', aime: 'Lo que amo de ti', souvenir: 'Nuestro recuerdo favorito', musee: 'El museo de nosotros',
+      profil: 'Nuestro perfil', bingo: 'Bingo de pareja', voeux: 'Lo que nos deseo' } },
+  pt: { jtm: 'amo-te', geant: ['tu e eu', 'para sempre', 'amo-te'], moments1: 'Os nossos melhores', moments2: 'momentos', souv1: 'a nossa memória', souv2: 'favorita', voeux: 'desejo-nos…',
+    voeuxW: ['Gargalhadas', 'Viagens', 'Sempre nós'], dest1: 'as nossas', dest2: 'escapadinhas', bingo2: 'edição casal',
+    bingo3: 'Marquem tudo o que já viveram a dois', bingoC: 'nós',
+    bingoL: ['Roubar batatas fritas um ao outro', 'Rir até chorar', 'Adormecer a ver um filme', 'Dançar na cozinha', 'Perder-se de carro', 'Ataque de riso em público',
+      'Pequeno-almoço na cama', 'Cantar alto e desafinado', 'Um fim de semana improvisado', 'Ver o nascer do sol', 'Discutir pelo cobertor', 'Estragar uma receita',
+      'Um slow na sala', 'Partilhar uma sobremesa', 'Ver uma série inteira numa noite', 'Guerra de cócegas', 'Dar as mãos sem pensar', 'Um piquenique ao sol',
+      'Uma alcunha ridícula', 'Uma selfie totalmente falhada', 'Um beijo à chuva', 'Mensagens às 2 da manhã', 'Acabar as frases um do outro', 'Uma surpresa bem feita'],
+    word: 'nós', phon: '[nɔʃ]', gram: 'pronome pessoal', dico1: '{names}, desde {meet}.', dico1b: '{names}, simplesmente.',
+    dicoDef: 'Duas pessoas que continuam a escolher-se todas as manhãs, sem nunca se cansarem.', syn: 'Sin.: tu e eu, a dois, juntos.', see: 'Ver também: ',
+    aime1: 'O que amo', aime2: 'em ti', aimeEnd: 'e tudo o resto', musee0: 'Coleção privada', musee1: 'Museu', musee2: 'de nós', oeuvre: 'Obra n.º',
+    museeFoot: 'Exposição permanente', since: 'Juntos desde {meet}', pSouv: 'memórias', pJours: 'dias', pAmour: 'amor', hl: ['Viagens', 'Noites', 'Em casa', 'Nós dois'],
+    filmSel: 'Seleção oficial', filmFest: 'Festival dos nossos corações', filmBill: '{a} · Argumento: o acaso · Música: as nossas canções · Continua',
+    meteo1: 'Meteorologia', meteo2: 'do nosso amor', temp: '37,2°', days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'], duelWin: 'Quem ganha?',
+    toc2: { dico: 'Nós, definição', moments: 'Os nossos melhores momentos', aime: 'O que amo em ti', souvenir: 'A nossa memória favorita', musee: 'O museu de nós',
+      profil: 'O nosso perfil', bingo: 'Bingo de casal', voeux: 'O que nos desejo' } },
+};
+Object.keys(LMAG2).forEach(l => { const d = LMAG[l]; Object.assign(d, LMAG2[l]); d.toc = Object.assign({}, d.toc, LMAG2[l].toc2); });
+
+/* ══ Magazine v2 : pages pleine page, photos posées sur des photos, fonds de couleur ═════════════════
+   D'après les magazines de couple qui tournent sur TikTok (novembre 2026) : grande photo en fond avec photos
+   instantanées et bande photo par-dessus, mosaïques bord à bord, page bordeaux au motif « je t’aime », bingo,
+   définition du dictionnaire, musée, profil, vœux en trois bandes, destinations en grandes lettres.
+   Aucun filtre CSS sur les photos (PDF léger, cf. nstBake) : voiles et dégradés sont des calques à part. */
+const hex2 = c => { let h = String(c || '#000').replace('#', ''); if (h.length === 3) h = h.replace(/./g, x => x + x); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) || 0); };
+const mixc = (a, b, k) => '#' + hex2(a).map((v, i) => Math.round(v * (1 - k) + hex2(b)[i] * k).toString(16).padStart(2, '0')).join('');
+const rgba = (c, a) => `rgba(${hex2(c).join(',')},${a})`;
+const lumi = c => { const [r, g, b] = hex2(c).map(v => v / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const onCol = bg => (lumi(bg) < 0.5 ? '#FBF6EF' : '#1C1A18');      // texte lisible sur un fond de couleur
+const SHADOW = 'box-shadow:0 24px 40px -20px rgba(0,0,0,.6),0 2px 7px rgba(0,0,0,.2);';
+const TSH = 'text-shadow:0 2px 20px rgba(0,0,0,.4);';
+const VEIL = (css) => `<div style="position:absolute;inset:0;background:${css};pointer-events:none;"></div>`;
+// Rapport largeur/hauteur de la photo d'un emplacement, et cadre qui la montre presque entière (entre 3:4 et 4:3)
+const ratioOf = (pg, i) => { const s = pg.slots[i], p = s && photos()[s.p]; return p ? (p.ratio || (p.w && p.h ? p.w / p.h : 1)) : 1; };
+const boxFor = (pg, i, w0, h0) => { const r = clamp(ratioOf(pg, i), 0.75, 1.34); return r >= w0 / h0 ? [w0, Math.round(w0 / r)] : [Math.round(h0 * r), h0]; };
+// Photo instantanée à la taille voulue, bords proportionnés ; o : { cap (clé de légende), ph, tape (angle), strong (ombre portée sur photo) }
+const polaDims = (w, h, cap) => { const b = Math.max(9, Math.round(w * 0.045)), bb = cap ? Math.round(Math.max(44, w * 0.16)) : b; return [w + 2 * b, h + b + bb, b, bb]; };
+function pola(pg, i, x, y, w, h, rot, o = {}) {
+  const T = MT(), [W0, H0, b, bb] = polaDims(w, h, o.cap != null);
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${W0}px;height:${H0}px;background:${T.card || '#fff'};${o.strong ? SHADOW : folioShadow}transform:rotate(${rot}deg);">`
+    + `<div style="position:absolute;left:${b}px;top:${b}px;width:${w}px;height:${h}px;">${slot(pg, i, 0, 0, w, h, { border: 0 })}</div>`
+    + (o.cap != null ? tx(pg, o.cap, `position:absolute;left:${b}px;right:${b}px;bottom:${Math.round(bb * 0.28)}px;text-align:center;color:${T.cardInk};font:400 ${clamp(Math.round(w * 0.043), 12, 18)}px/1.25 ${T.hand};white-space:nowrap;overflow:hidden;`, o.ph || '') : '')
+    + (o.tape != null ? `<div style="position:absolute;left:${W0 / 2 - 46}px;top:-13px;width:92px;height:26px;background:rgba(234,222,200,.88);transform:rotate(${o.tape}deg);box-shadow:0 1px 2px rgba(60,40,20,.16);clip-path:polygon(3% 0,97% 8%,100% 100%,0 92%);"></div>` : '')
+    + `</div>`;
+}
+// Bande photo verticale (photomaton) : 3 ou 4 vues, une légende manuscrite au pied
+function booth(pg, idxs, x, y, w, rot, capKey) {
+  const T = MT(), pad = Math.round(w * 0.085), pw = w - 2 * pad, ph = Math.round(pw * 1.02), gap = Math.round(pad * 0.8), foot = capKey ? 44 : pad;
+  const h = pad + idxs.length * ph + (idxs.length - 1) * gap + foot;
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${T.card || '#fff'};${SHADOW}transform:rotate(${rot}deg);">`
+    + idxs.map((si, k) => `<div style="position:absolute;left:${pad}px;top:${pad + k * (ph + gap)}px;width:${pw}px;height:${ph}px;">${slot(pg, si, 0, 0, pw, ph, { border: 0 })}</div>`).join('')
+    + (capKey ? tx(pg, capKey, `position:absolute;left:6px;right:6px;bottom:13px;text-align:center;color:${T.cardInk};font:400 12px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, '') : '')
+    + `</div>`;
+}
+// Mot répété en écriture anglaise sur toute une surface (pages bordeaux « je t’aime »)
+function motif(word, color, op, fs, rot) {
+  const w = esc(word), line = Array(16).fill(w).join(' &nbsp; '), rows = Math.ceil(PX * 1.7 / (fs * 1.5));
+  return `<div aria-hidden="true" style="position:absolute;left:-50%;top:-35%;width:200%;height:170%;transform:rotate(${rot}deg);color:${color};opacity:${op};font:400 ${fs}px/${Math.round(fs * 1.5)}px ${MT().script};white-space:nowrap;overflow:hidden;pointer-events:none;">`
+    + Array.from({ length: rows }, (_, r) => `<div style="margin-left:${Math.round((r % 3) * fs * 1.7)}px">${line}</div>`).join('') + `</div>`;
+}
+// Petite étiquette de papier posée sur une mosaïque (légende manuscrite)
+function sticker(pg, key, cx, cy, rot) {
+  if (!pg.t[key] && !CTX.editing) return '';
+  const T = MT();
+  return `<div style="position:absolute;left:${cx - 150}px;top:${cy - 30}px;width:300px;padding:13px 16px 14px;box-sizing:border-box;background:${T.card || '#fff'};${SHADOW}transform:rotate(${rot}deg);text-align:center;">`
+    + tx(pg, key, `position:relative;color:${T.cardInk};font:400 15px/1.4 ${T.hand};`, 'Une légende…') + `</div>`;
+}
+// Texte modifiable avec une mise en forme par ligne : relu ligne à ligne (innerText) comme un champ « une chose par ligne »
+function txh(pg, key, css, html, ph) {
+  const v = pg.t[key] == null ? '' : String(pg.t[key]);
+  if (!v && !CTX.editing) return '';
+  const ce = CTX.inline ? ' contenteditable="true" spellcheck="true"' : '';
+  return `<div class="nst-t" data-t="${key}" data-ph="${esc(ph || '')}"${ce} style="${css}">${v ? html : ''}</div>`;
+}
+// Cadre doré mouluré avec passe-partout (page « musée ») ; plaque gravée sous chaque œuvre
+function cadreOr(pg, i, x, y, w, h) {
+  const f = 12, r2 = 5, mat = Math.round(Math.min(w, h) * 0.075), pw = w - 2 * (f + r2 + mat), ph = h - 2 * (f + r2 + mat);
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;padding:${f}px;background:linear-gradient(135deg,#6b4c18 0%,#d6b464 15%,#9a7431 32%,#f1db96 50%,#9a7431 68%,#d6b464 85%,#6b4c18 100%);${SHADOW}">`
+    + `<div style="width:100%;height:100%;box-sizing:border-box;padding:${r2}px;background:linear-gradient(315deg,#5a3f12,#c7a252 28%,#f3e2a4 50%,#ad873b 72%,#5a3f12);">`
+    + `<div style="position:relative;width:100%;height:100%;background:#F5EFE0;box-shadow:inset 2px 2px 7px rgba(0,0,0,.3);">`
+    + `<div style="position:absolute;left:${mat}px;top:${mat}px;width:${pw}px;height:${ph}px;box-shadow:0 0 0 1px rgba(110,80,30,.35);">${slot(pg, i, 0, 0, pw, ph, { border: 0 })}</div>`
+    + `</div></div></div>`;
+}
+function plaque(pg, k, x, y, w) {
+  const T = MT();
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;padding:8px 10px 9px;box-sizing:border-box;background:#FBF7EC;border:1px solid #C3A86A;box-shadow:0 4px 9px -5px rgba(60,40,10,.45);text-align:center;color:#3A2E1C;">`
+    + `<div style="font:600 7px/1 ${T.ui};letter-spacing:.26em;text-transform:uppercase;opacity:.72;">${esc(lm('oeuvre'))} ${String(k).padStart(2, '0')}</div>`
+    + tx(pg, 't' + k, `position:relative;margin-top:5px;font:italic 400 14px/1.15 ${T.disp};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`, '')
+    + tx(pg, 'y' + k, `position:relative;margin-top:4px;font:500 8px/1 ${T.ui};letter-spacing:.16em;`, '')
+    + `</div>`;
+}
+// Cercle (photo de profil, « stories » à la une) : anneau de couleur, photo ronde
+function rond(pg, i, x, y, d, ring) {
+  const T = MT(), r = ring ? 3 : 0, gap = ring ? 3 : 0, inner = d - 2 * (r + gap);
+  return `<div style="position:absolute;left:${x}px;top:${y}px;width:${d}px;height:${d}px;border-radius:50%;background:${ring || T.rule};">`
+    + `<div style="position:absolute;left:${r}px;top:${r}px;width:${d - 2 * r}px;height:${d - 2 * r}px;border-radius:50%;background:${T.paper};"></div>`
+    + `<div style="position:absolute;left:${r + gap}px;top:${r + gap}px;width:${inner}px;height:${inner}px;border-radius:50%;overflow:hidden;">${slot(pg, i, 0, 0, inner, inner, { border: 0 })}</div></div>`;
+}
+
+Object.assign(LAYOUTS, {
+  /* ── Pages photo (proposées dans « Mise en page » de l'éditeur) ── */
+  // Une photo : grand tirage instantané posé sur un fond rose poudré, scotché, légende manuscrite
+  ppola: { n: 1, name: 'Photo instantanée', render(pg) {
+    const T = MT(), v = pg.v || 0, [w, h] = boxFor(pg, 0, 556, 590), [W0, H0] = polaDims(w, h, true);
+    const x = Math.round((PX - W0) / 2 + (v % 2 ? 16 : -16)), y = Math.round((PX - H0) / 2 - 8);
+    return VEIL(mixc(T.rose, T.paper, 0.72))
+      + pola(pg, 0, x, y, w, h, v % 2 ? 2.4 : -2.2, { cap: 'cap', tape: v % 2 ? -4 : 3, strong: true })
+      + svgHeart(v % 2 ? x - 46 : x + W0 + 2, y + 24, 38, T.accent, v % 2 ? -14 : 12)
+      + svgCurl(v % 2 ? x + W0 - 40 : x - 70, y + H0 + 4, 76, T.accent, v % 2 ? 10 : 170);
+  } },
+  // Deux photos : une en fond, plein cadre ; l'autre en photo instantanée posée dessus
+  pover: { n: 2, name: 'Photo sur photo', render(pg) {
+    const T = MT(), right = !((pg.v || 0) % 2), [w, h] = boxFor(pg, 1, 350, 380), [W0, H0] = polaDims(w, h, true);
+    const x = right ? PX - W0 - 64 : 64, y = PX - H0 - 72;
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL(`linear-gradient(to bottom,rgba(0,0,0,.34),rgba(0,0,0,0) 36%),linear-gradient(${right ? 'to left' : 'to right'},rgba(0,0,0,.26),rgba(0,0,0,0) 60%)`)
+      + tx(pg, 'cap2', `position:absolute;${right ? `left:${M}px` : `right:${M}px;text-align:right`};top:44px;width:540px;color:#fff;font:400 46px/1.12 ${T.script};${TSH}`, '')
+      + pola(pg, 1, x, y, w, h, right ? 4 : -4, { cap: 'cap', tape: right ? -5 : 6, strong: true });
+  } },
+  // Deux photos instantanées scotchées sur papier rose (ou papier quadrillé), petits dessins à la main
+  pscrap: { n: 2, name: 'Photos instantanées', render(pg) {
+    const T = MT(), v = pg.v || 0, [w1, h1] = boxFor(pg, 0, 392, 352), [w2, h2] = boxFor(pg, 1, 372, 340);
+    const [A1, B1] = polaDims(w1, h1, true), [A2, B2] = polaDims(w2, h2, true);
+    const bg = v % 2 ? mixc('#E6D8BE', T.paper, 0.3) : mixc(T.rose, T.paper, 0.55);
+    const grid = v % 2 ? VEIL(`linear-gradient(${rgba(T.ink, 0.07)} 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,${rgba(T.ink, 0.07)} 1px,transparent 1px) 0 0/28px 28px`) : '';
+    const y2 = PX - B2 - 66;
+    return VEIL(bg) + grid
+      + pola(pg, 1, PX - A2 - 60, y2, w2, h2, 4, { cap: 'cap2', tape: -6, strong: true })
+      + pola(pg, 0, 64, 58, w1, h1, -5, { cap: 'cap', tape: 4, strong: true })
+      + svgHeart(PX - 150, 92, 44, T.accent, 14) + svgHeartLine(PX - 104, 150, 30, T.accent, -10)
+      + svgCurl(110, Math.max(B1 + 92, y2 + 40), 96, T.accent, 24);
+  } },
+  // Quatre photos : une en fond, trois en bande photo posée dessus
+  pbooth: { n: 4, name: 'Bande photo', render(pg) {
+    const T = MT(), left = !((pg.v || 0) % 2), bw = 190;
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL(`linear-gradient(${left ? 'to right' : 'to left'},rgba(0,0,0,.30),rgba(0,0,0,0) 55%),linear-gradient(to top,rgba(0,0,0,.34),rgba(0,0,0,0) 34%)`)
+      + booth(pg, [1, 2, 3], left ? 60 : PX - 60 - bw, 66, bw, left ? -3.5 : 3.5, 'cap')
+      + tx(pg, 'cap2', `position:absolute;${left ? `right:${M}px;text-align:right` : `left:${M}px`};bottom:56px;width:420px;color:#fff;font:400 46px/1.12 ${T.script};${TSH}`, '');
+  } },
+  // Mosaïques bord à bord (fins joints couleur papier), légende sur une étiquette
+  pmosaic3: { n: 3, name: 'Mosaïque', render(pg) {
+    const v = pg.v || 0, R = v % 2 ? [[0, 0, PX, 486], [0, 492, 394, 302], [400, 492, 394, 302]] : [[0, 0, 488, PX], [494, 0, 300, 394], [494, 400, 300, 394]];
+    return VEIL(MT().paper) + R.map(([x, y, w, h], i) => slot(pg, i, x, y, w, h, { border: 0 })).join('')
+      + (v % 2 ? sticker(pg, 'cap', PX / 2, 489, -2) : sticker(pg, 'cap', 491, 640, 3));
+  } },
+  pmosaic4: { n: 4, name: 'Mosaïque', render(pg) {
+    const v = pg.v || 0, R = v % 2 ? [[0, 0, PX, 430], [0, 436, 260, 358], [266, 436, 262, 358], [534, 436, 260, 358]]
+      : [[0, 0, 472, 466], [478, 0, 316, 466], [0, 472, 316, 322], [322, 472, 472, 322]];
+    return VEIL(MT().paper) + R.map(([x, y, w, h], i) => slot(pg, i, x, y, w, h, { border: 0 })).join('')
+      + (v % 2 ? sticker(pg, 'cap', PX / 2, 433, -2) : sticker(pg, 'cap', 475, 469, -3));
+  } },
+
+  /* ── Rubriques ── */
+  // Chapitre plein cadre : grand numéro en creux, titre et texte en blanc sur la photo
+  mchapf: { n: 1, text: true, hybrid: 'chapter', mag: 'chap', render(pg) {
+    const T = MT(), ttl = pg.t.title || '', txt = pg.t.text || '', fs = fit(ttl, 78, 46, 10, 34);
+    const tl = clamp(Math.ceil(String(ttl).length * fs * 0.5 / 600), 1, 3);
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL('linear-gradient(to top,rgba(0,0,0,.8),rgba(0,0,0,.2) 58%,rgba(0,0,0,.08) 72%,rgba(0,0,0,.34))')
+      + tx(pg, 'big', `position:absolute;left:${M - 10}px;top:30px;color:transparent;-webkit-text-stroke:1.6px rgba(255,255,255,.92);font:400 230px/.8 ${T.disp};letter-spacing:-.02em;white-space:nowrap;`, '')
+      + tx(pg, 'num', `position:absolute;left:${M}px;bottom:${Math.round(M + 194 + tl * fs * 0.9 + 16)}px;color:rgba(255,255,255,.86);font:600 10.5px/1 ${T.ui};letter-spacing:.32em;text-transform:uppercase;white-space:nowrap;`, '')
+      + tx(pg, 'title', `position:absolute;left:${M}px;bottom:${M + 194}px;width:600px;color:#fff;font:400 ${fs}px/.9 ${T.disp};text-transform:uppercase;${TSH}`, 'Titre du chapitre')
+      + `<div style="position:absolute;left:${M}px;bottom:${M + 170}px;width:44px;height:2px;background:${T.rose};"></div>`
+      + tx(pg, 'text', `position:absolute;left:${M}px;bottom:${M}px;width:470px;max-height:150px;color:rgba(255,255,255,.94);font:400 ${fit(txt, 14.5, 12, 160, 420)}px/1.72 ${T.body};`, 'Quelques lignes…');
+  } },
+  // Nos plus beaux moments : mosaïque bord à bord, une case bordeaux « je t’aime », une photo instantanée par-dessus
+  mmoments: { n: 6, text: true, mag: 'moments', render(pg) {
+    const T = MT(), bg = T.accent, ink = onCol(bg);
+    const R = [[470, 0, 324, 250], [0, 256, 300, 304], [306, 256, 488, 304], [0, 566, 300, 228], [526, 566, 268, 228]];
+    return VEIL(T.paper) + R.map(([x, y, w, h], i) => slot(pg, i, x, y, w, h, { border: 0 })).join('')
+      + `<div style="position:absolute;left:306px;top:566px;width:214px;height:228px;background:${bg};overflow:hidden;">${motif(lm('jtm'), ink, 0.34, 19, -14)}${svgHeart(83, 90, 48, ink, -8)}</div>`
+      + tx(pg, 'h1', `position:absolute;left:${M - 2}px;top:58px;color:${T.ink};font:400 ${fit(pg.t.h1, 60, 38, 12, 22)}px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('moments1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 92}px;top:102px;color:${T.accent};font:400 92px/1.1 ${T.script};white-space:nowrap;`, lm('moments2'))
+      + pola(pg, 5, 560, 430, 160, 160, 6, { strong: true, tape: -4 });
+  } },
+  // Notre souvenir préféré : grande photo en fond, bande photo et photo instantanée posées dessus
+  msouvenir: { n: 5, text: true, mag: 'souvenir', render(pg) {
+    const T = MT(), [w, h] = boxFor(pg, 4, 300, 330), [W0, H0] = polaDims(w, h, true);
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL('linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.12) 34%,rgba(0,0,0,0) 56%,rgba(0,0,0,.22))')
+      + tx(pg, 'h1', `position:absolute;left:${M}px;top:38px;color:#fff;font:400 58px/1.1 ${T.script};white-space:nowrap;${TSH}`, lm('souv1'))
+      + tx(pg, 'h2', `position:absolute;left:${M - 4}px;top:110px;color:#fff;font:400 ${fit(pg.t.h2, 112, 70, 7, 12)}px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;${TSH}`, lm('souv2'))
+      + booth(pg, [1, 2, 3], 56, 262, 168, -4, null)
+      + pola(pg, 4, PX - W0 - 70, PX - H0 - 78, w, h, 5, { cap: 'cap', tape: -6, strong: true })
+      + svgHeartLine(PX - 150, 86, 46, '#fff', 12);
+  } },
+  // Je nous souhaite… : trois bandes de photo bord à bord, un mot en grand sur chacune
+  mvoeux: { n: 3, text: true, mag: 'voeux', render(pg) {
+    const T = MT(), Y = [0, 268, 536], H = [262, 262, 258];
+    return VEIL(T.paper) + Y.map((y, i) => {
+      const k = 'w' + (i + 1), fs = fit(pg.t[k], 84, 46, 8, 24);
+      return slot(pg, i, 0, y, PX, H[i], { border: 0 }) + `<div style="position:absolute;left:0;top:${y}px;width:${PX}px;height:${H[i]}px;background:radial-gradient(70% 90% at 50% 50%,rgba(0,0,0,.42),rgba(0,0,0,.14));pointer-events:none;"></div>`
+        + tx(pg, k, `position:absolute;left:${M - 20}px;right:${M - 20}px;top:${Math.round(y + H[i] / 2 - fs * 0.5)}px;text-align:center;color:#fff;font:400 ${fs}px/1 ${T.disp};text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;${TSH}`, '');
+    }).join('')
+      + tx(pg, 'h', `position:absolute;left:${M - 14}px;top:16px;color:#fff;font:400 44px/1.15 ${T.script};white-space:nowrap;${TSH}`, lm('voeux'));
+  } },
+  // Nos escales : les destinations en très grandes lettres sur une photo, une ligne sur deux en creux
+  mdest: { n: 1, text: true, mag: 'voyages', render(pg) {
+    const T = MT(), L0 = String(pg.t.dest || '').split('\n').map(s => s.trim()).filter(Boolean).slice(0, 5);
+    const names = L0.map(l => { const m = l.split(/\s+·\s+/); return [m[0], m.slice(1).join(' · ')]; });
+    const longest = Math.max(4, ...names.map(n => n[0].length)), fs = clamp(Math.floor(620 / (0.56 * longest)), 54, 142);
+    const lh = Math.round(fs * 0.96), top = Math.max(232, Math.round((PX - names.length * lh) / 2) + 50);
+    const lines = names.map(([n, y], k) => `<div style="height:${lh}px;white-space:nowrap;${k % 2 ? 'color:transparent;-webkit-text-stroke:1.6px #fff;text-shadow:none;' : 'color:#fff;'}">${esc(n)}`
+      + (y ? `<span style="color:#fff;-webkit-text-stroke:0;text-shadow:none;font:600 11px/1 ${T.ui};letter-spacing:.2em;vertical-align:top;position:relative;top:${Math.round(fs * 0.16)}px;margin-left:10px;"> · ${esc(y)}</span>` : '') + `</div>`).join('');
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL('linear-gradient(to right,rgba(0,0,0,.6),rgba(0,0,0,.24) 58%,rgba(0,0,0,.12)),linear-gradient(to bottom,rgba(0,0,0,.3),rgba(0,0,0,0) 30%)')
+      + tx(pg, 'h1', `position:absolute;right:${M}px;top:40px;text-align:right;color:#fff;font:400 46px/1.1 ${T.script};white-space:nowrap;${TSH}`, lm('dest1'))
+      + tx(pg, 'h2', `position:absolute;right:${M}px;top:96px;text-align:right;color:#fff;font:400 60px/.9 ${T.disp};text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;${TSH}`, lm('dest2'))
+      + txh(pg, 'dest', `position:absolute;left:${M - 12}px;top:${top}px;width:${PX}px;font:400 ${fs}px/${lh}px ${T.disp};text-transform:uppercase;${TSH}`, lines, 'Une destination par ligne');
+  } },
+  // Bingo spécial couple : grille de 25 cases sur fond bordeaux, à cocher au stylo
+  mbingo: { n: 0, text: true, mag: 'bingo', render(pg) {
+    const T = MT(), bg = T.accent, ink = onCol(bg), card = lumi(bg) < 0.5 ? '#FBF6EF' : '#FFFFFF', x0 = 64, y0 = 268, cw = 126, ch = 90, g = 9;
+    let k = 0, cells = '';
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) {
+      const x = x0 + c * (cw + g), y = y0 + r * (ch + g);
+      if (r === 2 && c === 2) {
+        cells += `<div style="position:absolute;left:${x}px;top:${y}px;width:${cw}px;height:${ch}px;background:${mixc(T.rose, card, 0.25)};">${svgHeart(cw / 2 - 17, 12, 34, T.accent, 0)}`
+          + tx(pg, 'c', `position:absolute;left:0;right:0;bottom:12px;text-align:center;color:${T.accent};font:400 26px/1 ${T.script};`, '') + `</div>`;
+        continue;
+      }
+      k++;
+      cells += `<div style="position:absolute;left:${x}px;top:${y}px;width:${cw}px;height:${ch}px;background:${card};display:flex;align-items:center;justify-content:center;padding:7px 9px;box-sizing:border-box;">`
+        + tx(pg, 'b' + k, `position:relative;width:100%;text-align:center;color:#2A2420;font:400 ${fit(pg.t['b' + k], 16, 12.5, 14, 40)}px/1.16 ${T.disp};`, '') + `</div>`;
+    }
+    return VEIL(bg)
+      + tx(pg, 'h1', `position:absolute;left:${M - 8}px;top:36px;color:${ink};font:400 156px/.84 ${T.disp};text-transform:uppercase;white-space:nowrap;`, 'Bingo')
+      + tx(pg, 'h2', `position:absolute;left:${M + 300}px;top:122px;color:${lumi(bg) < 0.5 ? mixc(T.rose, '#ffffff', 0.25) : rgba(ink, 0.78)};font:400 52px/1.1 ${T.script};white-space:nowrap;`, lm('bingo2'))
+      + tx(pg, 'sub', `position:absolute;left:${M}px;top:228px;width:${W}px;color:${ink};opacity:.82;font:600 9.5px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;`, '')
+      + cells + folio(pg, Object.assign({}, T, { muted: rgba(ink, 0.7) }));
+  } },
+  // Nous, définition : l'article de dictionnaire du couple, une photo bord à bord
+  mdico: { n: 1, text: true, mag: 'dico', render(pg) {
+    const T = MT(), side = orientOf(pg, 0) === 'portrait', tw = side ? 318 : W, ws = side ? 136 : 168;
+    const row = (n, key, fs) => `<div style="display:flex;gap:10px;align-items:baseline;"><span style="flex:none;color:${T.accent};font:600 12px/1 ${T.ui};">${n}</span>`
+      + tx(pg, key, `position:relative;flex:1;color:${T.ink};font:400 ${fs}px/1.6 ${T.body};`, '') + `</div>`;
+    return (side ? slot(pg, 0, 432, 0, PX - 432, PX, { border: 0 }) : slot(pg, 0, 0, 452, PX, PX - 452, { border: 0 }))
+      + tx(pg, 'word', `position:absolute;left:${M - 8}px;top:${side ? 52 : 14}px;color:${T.ink};font:400 ${ws}px/1 ${T.disp};white-space:nowrap;letter-spacing:-.01em;`, '')
+      + `<div style="position:absolute;left:${M}px;top:${side ? 200 : 178}px;width:${tw}px;display:flex;align-items:baseline;gap:14px;">`
+      + tx(pg, 'phon', `position:relative;color:${T.muted};font:italic 400 28px/1 ${T.disp};white-space:nowrap;`, '')
+      + tx(pg, 'gram', `position:relative;color:${T.accent};font:600 9.5px/1.3 ${T.ui};letter-spacing:.2em;text-transform:uppercase;`, '') + `</div>`
+      + `<div style="position:absolute;left:${M}px;top:${side ? 250 : 222}px;width:${tw}px;height:4px;border-top:1px solid ${rgba(T.ink, 0.55)};border-bottom:1px solid ${rgba(T.ink, 0.55)};"></div>`
+      + `<div style="position:absolute;left:${M}px;top:${side ? 274 : 242}px;width:${tw}px;display:flex;flex-direction:column;gap:${side ? 16 : 9}px;">`
+      + row('1.', 'd1', side ? 15 : 14) + row('2.', 'd2', side ? 15 : 14)
+      + tx(pg, 'syn', `position:relative;color:${T.muted};font:italic 400 ${side ? 15 : 14}px/1.5 ${T.body};`, '')
+      + tx(pg, 'see', `position:relative;color:${T.ink};font:400 ${side ? 12 : 11.5}px/1.5 ${T.ui};letter-spacing:.02em;`, '') + `</div>`
+      + (side ? folio(pg, T) : '');
+  } },
+  // Ce que j'aime chez toi : huit choses numérotées autour d'une photo
+  maime: { n: 1, text: true, mag: 'aime', render(pg) {
+    const T = MT(), items = [1, 2, 3, 4, 5, 6, 7, 8].filter(i => CTX.editing || pg.t['i' + i]);
+    const half = Math.ceil(items.length / 2), rowH = half > 3 ? 112 : 140;
+    const cell = (i, k) => {
+      const left = k < half, x = left ? M : 552, y = 236 + (left ? k : k - half) * rowH;
+      return `<div style="position:absolute;left:${x}px;top:${y}px;width:178px;${left ? '' : 'text-align:left;'}">`
+        + `<div style="color:${T.accent};font:400 40px/1 ${T.disp};">${String(k + 1).padStart(2, '0')}</div>`
+        + tx(pg, 'i' + i, `position:relative;margin-top:6px;color:${T.ink};font:italic 400 ${fit(pg.t['i' + i], 17, 14, 40, 80)}px/1.26 ${T.disp};`, '') + `</div>`;
+    };
+    return tx(pg, 'h1', `position:absolute;left:${M}px;right:${M}px;top:52px;text-align:center;color:${T.ink};font:400 ${fit(pg.t.h1, 76, 50, 12, 22)}px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('aime1'))
+      + tx(pg, 'h2', `position:absolute;left:${M}px;right:${M}px;top:110px;text-align:center;color:${T.accent};font:400 58px/1.1 ${T.script};white-space:nowrap;`, lm('aime2'))
+      + `<div style="position:absolute;left:262px;top:226px;width:270px;height:364px;background:${T.card || '#fff'};padding:9px;box-sizing:border-box;${folioShadow}"><div style="position:relative;width:252px;height:346px;">${slot(pg, 0, 0, 0, 252, 346, { border: 0 })}</div></div>`
+      + items.map(cell).join('')
+      + tx(pg, 'end', `position:absolute;left:${M}px;right:${M}px;top:632px;text-align:center;color:${T.accent};font:400 40px/1.2 ${T.script};white-space:nowrap;`, '')
+      + svgHeart(PX / 2 - 15, 700, 30, T.accent, -8) + folio(pg, T);
+  } },
+  // Le musée de nous : trois œuvres dans des cadres dorés, une plaque gravée sous chacune
+  mmusee: { n: 3, text: true, mag: 'musee', render(pg) {
+    const T = MT();
+    return `<div style="position:absolute;inset:22px;border:1px solid ${T.rule};pointer-events:none;"></div><div style="position:absolute;inset:27px;border:1px solid ${T.rule};pointer-events:none;"></div>`
+      + tx(pg, 'h0', `position:absolute;left:${M}px;top:54px;color:${T.muted};font:600 8.5px/1 ${T.ui};letter-spacing:.34em;text-transform:uppercase;`, '')
+      + tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:70px;color:${T.ink};font:400 ${fit(pg.t.h1, 104, 64, 5, 10)}px/.9 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('musee1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 120}px;top:144px;color:${T.accent};font:400 58px/1.1 ${T.script};white-space:nowrap;`, lm('musee2'))
+      + cadreOr(pg, 0, 70, 248, 292, 384) + plaque(pg, 1, 118, 650, 196)
+      + cadreOr(pg, 1, 424, 120, 300, 236) + plaque(pg, 2, 476, 372, 196)
+      + cadreOr(pg, 2, 440, 456, 268, 214) + plaque(pg, 3, 476, 686, 196)
+      + tx(pg, 'foot', `position:absolute;left:${M}px;bottom:44px;color:${T.muted};font:600 8px/1 ${T.ui};letter-spacing:.3em;text-transform:uppercase;white-space:nowrap;`, '');
+  } },
+  // Notre profil : la page d'un réseau social à leur nom (photo ronde, chiffres, stories à la une, grille de photos)
+  mprofil: { n: 11, text: true, mag: 'profil', render(pg) {
+    const T = MT(), ring = `linear-gradient(45deg,${T.accent},${T.rose} 55%,${mixc(T.rose, '#F6C27A', 0.5)})`;
+    const stat = (k, x) => `<div style="position:absolute;left:${x}px;top:118px;width:150px;text-align:center;">`
+      + tx(pg, 'n' + k, `position:relative;color:${T.ink};font:600 25px/1 ${T.ui};`, '') + tx(pg, 'l' + k, `position:relative;margin-top:7px;color:${T.muted};font:400 13px/1 ${T.ui};`, '') + `</div>`;
+    const hl = k => { const x = M + (k - 1) * 118; return rond(pg, k, x, 330, 84, rgba(T.ink, 0.18))
+      + tx(pg, 'hl' + k, `position:absolute;left:${x - 14}px;top:424px;width:112px;text-align:center;color:${T.ink};font:500 11.5px/1.2 ${T.ui};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`, ''); };
+    const G = [0, 1, 2, 3, 4, 5].map(i => { const c = i % 3, r = Math.floor(i / 3); return slot(pg, 5 + i, c * 266, 472 + r * 164, 262, 160, { border: 0 }); }).join('');
+    return tx(pg, 'handle', `position:absolute;left:${M}px;top:40px;color:${T.ink};font:600 21px/1 ${T.ui};letter-spacing:-.01em;white-space:nowrap;`, '')
+      + `<div style="position:absolute;right:${M}px;top:36px;color:${T.ink};font:600 22px/1 ${T.ui};letter-spacing:.1em;">···</div>`
+      + rond(pg, 0, M - 4, 84, 148, ring)
+      + stat(1, 250) + stat(2, 400) + stat(3, 550)
+      + tx(pg, 'name', `position:absolute;left:250px;top:184px;width:460px;color:${T.ink};font:600 15px/1.2 ${T.ui};`, '')
+      + tx(pg, 'bio', `position:absolute;left:250px;top:208px;width:470px;color:${T.ink};font:400 13.5px/1.5 ${T.ui};`, '')
+      + [1, 2, 3, 4].map(hl).join('')
+      + `<div style="position:absolute;left:0;right:0;top:452px;height:1px;background:${T.rule};"></div>`
+      + `<svg style="position:absolute;left:${PX / 2 - 9}px;top:458px;width:18px;height:10px" viewBox="0 0 18 10"><rect x="0" y="0" width="5" height="4" fill="${T.ink}"/><rect x="6.5" y="0" width="5" height="4" fill="${T.ink}"/><rect x="13" y="0" width="5" height="4" fill="${T.ink}"/><rect x="0" y="5.5" width="5" height="4" fill="${T.ink}"/><rect x="6.5" y="5.5" width="5" height="4" fill="${T.ink}"/><rect x="13" y="5.5" width="5" height="4" fill="${T.ink}"/></svg>`
+      + G;
+  } },
+  // Mot doux sur fond bordeaux au motif « je t’aime » : une photo instantanée et un billet manuscrit
+  mmotif: { n: 1, text: true, mag: 'quote', render(pg) {
+    const T = MT(), bg = T.accent, ink = onCol(bg), txt = pg.t.text || '', ph = pg.slots.length > 0, [w, h] = boxFor(pg, 0, 290, 300);
+    const top = ph ? Math.max(320, h + 150) : 150, nx = ph ? 66 : 132, nw = ph ? 470 : 530, nh = ph ? PX - top - 88 : 470;
+    return VEIL(bg) + motif(lm('jtm'), ink, 0.13, 30, -12)
+      + (ph ? pola(pg, 0, PX - w - 92, 64, w, h, 6, { strong: true, tape: -4 }) : '')
+      + `<div style="position:absolute;left:${nx}px;top:${top}px;width:${nw}px;height:${nh}px;background:#FBF6EF;transform:rotate(-2.5deg);${SHADOW}"></div>`
+      + tape(nx + nw / 2 - 45, top - 12, 90, -4)
+      + tx(pg, 'h', `position:absolute;left:${nx + 38}px;top:${top + 30}px;color:${T.accent};font:400 ${ph ? 34 : 42}px/1.1 ${T.script};transform:rotate(-2.5deg);white-space:nowrap;`, lm('motdoux'))
+      + tx(pg, 'text', `position:absolute;left:${nx + 38}px;top:${top + (ph ? 92 : 110)}px;width:${nw - 76}px;color:#2A2420;font:400 ${ph ? fit(txt, 21, 15, 40, 200) : fit(txt, 25, 17, 40, 220)}px/1.85 ${T.hand};transform:rotate(-2.5deg);`, 'Un mot doux…')
+      + svgHeart(nx + nw - 76, top + nh - 70, 40, T.accent, 12);
+  } },
+  // Quatre photos instantanées scotchées sur papier rose ou quadrillé
+  pscrap4: { n: 4, name: 'Photos instantanées', render(pg) {
+    const T = MT(), v = pg.v || 0, bg = v % 2 ? mixc('#E6D8BE', T.paper, 0.3) : mixc(T.rose, T.paper, 0.55);
+    const grid = v % 2 ? VEIL(`linear-gradient(${rgba(T.ink, 0.07)} 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,${rgba(T.ink, 0.07)} 1px,transparent 1px) 0 0/28px 28px`) : '';
+    const P = [[50, 40, -4, 'cap', 3], [404, 58, 3.5, 'cap2', -5], [66, 396, 3, 'cap3', -3], [414, 404, -3, 'cap4', 4]];
+    return VEIL(bg) + grid + P.map(([x, y, r, k, tp], i) => { const [w, h] = boxFor(pg, i, 272, 262); return [i, pola(pg, i, Math.round(x + (272 - w) / 2), Math.round(y + (262 - h) / 2), w, h, r, { cap: k, tape: tp, strong: true })]; })
+      .reverse().map(x => x[1]).join('')                                   // la première photo par-dessus : les légendes restent lisibles
+      + svgHeart(372, 360, 48, T.accent, -8) + svgHeartLine(720, 22, 34, T.accent, 12);
+  } },
+  // Si notre histoire était un film : l'affiche (étoiles, lauriers, titre, synopsis, générique)
+  mfilm: { n: 0, text: true, mag: 'film', render(pg) {
+    const T = MT(), gold = '#D8BD78', ph = pg.slots.length > 0, ttl = String(pg.t.title || '');
+    const laurel = (x, flip) => `<svg style="position:absolute;left:${x}px;top:104px;width:60px;height:96px;${flip ? 'transform:scaleX(-1);' : ''}" viewBox="0 0 60 96"><path d="M44 92C18 78 8 52 14 8" fill="none" stroke="${gold}" stroke-width="2"/>`
+      + [10, 22, 34, 46, 58, 70].map((y, k) => `<ellipse cx="${16 + k * 2.6}" cy="${y}" rx="9" ry="3.6" fill="${gold}" transform="rotate(${-58 + k * 6} ${16 + k * 2.6} ${y})"/><ellipse cx="${5 + k * 3.6}" cy="${y + 7}" rx="8" ry="3.2" fill="${gold}" opacity=".85" transform="rotate(${32 + k * 4} ${5 + k * 3.6} ${y + 7})"/>`).join('') + `</svg>`;
+    return (ph ? slot(pg, 0, 0, 0, PX, PX, { border: 0 }) + VEIL('linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.25) 40%,rgba(0,0,0,.82))')
+      : VEIL(`radial-gradient(110% 80% at 50% 28%,${mixc(T.accent, '#000000', 0.25)},${mixc(T.accent, '#000000', 0.7)})`))
+      + `<div style="position:absolute;left:0;right:0;top:58px;text-align:center;color:${gold};font:400 22px/1 ${T.ui};letter-spacing:.42em;">★★★★★</div>`
+      + laurel(PX / 2 - 166, false) + laurel(PX / 2 + 106, true)
+      + tx(pg, 'sel', `position:absolute;left:${PX / 2 - 110}px;width:220px;top:120px;text-align:center;color:${gold};font:600 9.5px/1.6 ${T.ui};letter-spacing:.22em;text-transform:uppercase;`, '')
+      + tx(pg, 'kicker', `position:absolute;left:${M}px;right:${M}px;top:236px;text-align:center;color:${mixc(T.rose, '#ffffff', 0.4)};font:italic 400 24px/1.2 ${T.disp};`, '')
+      + tx(pg, 'title', `position:absolute;left:${M - 20}px;right:${M - 20}px;top:282px;text-align:center;color:#fff;font:400 ${fit(ttl, 100, 54, 8, 26)}px/.92 ${T.disp};text-transform:uppercase;letter-spacing:.02em;${TSH}`, 'Titre')
+      + tx(pg, 'text', `position:absolute;left:150px;right:150px;top:${282 + Math.round(fit(ttl, 100, 54, 8, 26) * (ttl.length > 14 ? 1.9 : 1)) + 40}px;text-align:center;color:rgba(255,255,255,.86);font:italic 400 ${fit(pg.t.text, 19, 15, 120, 360)}px/1.55 ${T.disp};`, '')
+      + `<div style="position:absolute;left:${PX / 2 - 22}px;bottom:150px;width:44px;height:1px;background:${gold};"></div>`
+      + tx(pg, 'bill', `position:absolute;left:${M + 30}px;right:${M + 30}px;bottom:76px;text-align:center;color:rgba(255,255,255,.72);font:600 9px/1.9 ${T.ui};letter-spacing:.2em;text-transform:uppercase;`, '');
+  } },
+  // Météo de notre amour : la température du jour, cinq jours de prévisions, le bulletin
+  mmeteo: { n: 0, text: true, mag: 'meteo', render(pg) {
+    const T = MT(), a = T.accent, r = T.rose;
+    const sun = (s, c) => `<circle cx="${s / 2}" cy="${s / 2}" r="${s * 0.2}" fill="${c}"/>` + Array.from({ length: 8 }, (_, k) => { const t = k * Math.PI / 4, c1 = s / 2 + Math.cos(t) * s * 0.29, s1 = s / 2 + Math.sin(t) * s * 0.29, c2 = s / 2 + Math.cos(t) * s * 0.41, s2 = s / 2 + Math.sin(t) * s * 0.41; return `<line x1="${c1}" y1="${s1}" x2="${c2}" y2="${s2}" stroke="${c}" stroke-width="${s * 0.05}" stroke-linecap="round"/>`; }).join('');
+    const cloud = (s, c) => `<path d="M${s * .22} ${s * .7}h${s * .56}a${s * .15} ${s * .15} 0 0 0 0-${s * .3}a${s * .2} ${s * .2} 0 0 0-${s * .38}-${s * .06}a${s * .14} ${s * .14} 0 0 0-${s * .18} ${s * .36}z" fill="${c}"/>`;
+    const heart = (s, c, y = 0.5) => `<path transform="translate(${s * .25} ${s * (y - .25)}) scale(${s / 200})" d="M50 88C18 64 6 44 12 28 18 12 38 10 50 26 62 10 82 12 88 28 94 44 82 64 50 88Z" fill="${c}"/>`;
+    const ICONS = [s => sun(s, a), s => sun(s, a) + cloud(s, r), s => heart(s, a), s => cloud(s, r) + [0.3, 0.5, 0.7].map(x => `<path transform="translate(${s * x - s * .06} ${s * .74}) scale(${s / 900})" d="M50 88C18 64 6 44 12 28 18 12 38 10 50 26 62 10 82 12 88 28 94 44 82 64 50 88Z" fill="${a}"/>`).join(''), s => sun(s, a) + heart(s, r, 0.52)];
+    const TEMPS = ['24°', '26°', '31°', '28°', '35°'], D = lm('days');
+    const card = k => `<div style="position:absolute;left:${M + k * 136}px;top:410px;width:122px;height:166px;background:${T.card || '#fff'};${folioShadow}text-align:center;">`
+      + `<div style="margin-top:16px;color:${T.cardInk};font:600 10px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;">${esc(D[k] || '')}</div>`
+      + `<svg style="display:block;margin:12px auto 0;width:64px;height:64px" viewBox="0 0 64 64">${ICONS[k](64)}</svg>`
+      + `<div style="margin-top:10px;color:${T.cardInk};font:400 32px/1 ${T.disp};">${TEMPS[k]}</div></div>`;
+    return VEIL(`linear-gradient(to bottom,${mixc(r, T.paper, 0.45)},${T.paper} 72%)`)
+      + tx(pg, 'h1', `position:absolute;left:${M - 4}px;top:52px;color:${T.ink};font:400 ${fit(pg.t.h1, 124, 80, 5, 12)}px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('meteo1'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 40}px;top:144px;color:${a};font:400 54px/1.1 ${T.script};white-space:nowrap;`, lm('meteo2'))
+      + `<svg style="position:absolute;left:470px;top:40px;width:150px;height:150px" viewBox="0 0 150 150">${sun(150, a)}${heart(150, r, 0.52)}</svg>`
+      + tx(pg, 'temp', `position:absolute;right:${M}px;top:206px;color:${a};font:400 150px/1 ${T.disp};white-space:nowrap;`, '')
+      + [0, 1, 2, 3, 4].map(card).join('')
+      + tx(pg, 'text', `position:absolute;left:${M}px;right:${M}px;top:612px;color:${T.ink};font:italic 400 ${fit(pg.t.text, 24, 17, 80, 260)}px/1.45 ${T.disp};`, '')
+      + folio(pg, T);
+  } },
+  // Nos désaccords préférés : chaque petite dispute sur un papier scotché, une case par prénom pour le vainqueur
+  mduel: { n: 0, text: true, mag: 'duel', render(pg) {
+    const T = MT(), items = [1, 2, 3, 4, 5, 6].filter(i => CTX.editing || pg.t['x' + i]).slice(0, 6), n1 = String(pg.t.n1 || ''), n2 = String(pg.t.n2 || '');
+    const PAP = ['#FBF6EF', '#F3E3D3', '#FFFFFF', '#EFE4D0', '#FBF6EF', '#F6E2E5'], ROT = [-2.5, 2, 1.5, -2, -1.5, 2.5];
+    const few = items.length <= 4, nh = few ? 214 : 160, gap = few ? 250 : 182, y0 = few ? 250 : 222;   // quatre désaccords ou moins : de plus grands papiers
+    const notes = items.map((i, k) => { const c = k % 2, r = Math.floor(k / 2), x = M + c * 340, y = y0 + r * gap;
+      return `<div style="position:absolute;left:${x}px;top:${y}px;width:316px;height:${nh}px;background:${PAP[k]};transform:rotate(${ROT[k]}deg);${SHADOW}">`
+        + tx(pg, 'x' + i, `position:absolute;left:22px;right:22px;top:${few ? 34 : 24}px;color:#2A2420;font:400 ${fit(pg.t['x' + i], few ? 19 : 16, 13, 30, 70)}px/1.6 ${T.hand};`, '')
+        + `<div style="position:absolute;left:22px;right:22px;bottom:16px;display:flex;gap:18px;align-items:center;color:#2A2420;font:600 9.5px/1 ${T.ui};letter-spacing:.14em;text-transform:uppercase;">`
+        + [n1, n2].filter(Boolean).map(nm => `<span style="display:flex;align-items:center;gap:7px;"><span style="width:13px;height:13px;border:1.4px solid #2A2420;"></span>${esc(nm)}</span>`).join('') + `</div></div>`
+        + tape(x + 113 + (c ? 8 : -8), y - 10, 90, c ? 5 : -4); }).join('');
+    return VEIL(mixc(T.rose, T.paper, 0.5))
+      + tx(pg, 'title', `position:absolute;left:${M}px;top:52px;width:${W}px;color:${T.ink};font:400 ${fit(pg.t.title, 74, 46, 14, 34)}px/.92 ${T.disp};text-transform:uppercase;`, 'Titre')
+      + tx(pg, 'h2', `position:absolute;right:${M}px;top:150px;color:${T.accent};font:400 40px/1.1 ${T.script};white-space:nowrap;`, '')
+      + notes + svgHeart(PX - 110, PX - 92, 36, T.accent, 12);
+  } },
+  // Mot doux en très grand sur une photo plein cadre
+  mgeant: { n: 1, text: true, mag: 'quote', render(pg) {
+    const T = MT(), txt = pg.t.text || '', word = String(pg.t.word || ''), fs = fit(word, 176, 110, 8, 16);
+    return slot(pg, 0, 0, 0, PX, PX, { border: 0 })
+      + VEIL('linear-gradient(to top,rgba(0,0,0,.66),rgba(0,0,0,.1) 52%,rgba(0,0,0,0) 70%)')
+      + tx(pg, 'word', `position:absolute;left:30px;right:30px;top:${PX - 236 - Math.round(fs * 0.9)}px;text-align:center;color:${mixc(T.rose, '#ffffff', 0.35)};font:400 ${fs}px/1.1 ${T.script};white-space:nowrap;transform:rotate(-6deg);${TSH}`, '')
+      + tx(pg, 'text', `position:absolute;left:${M + 20}px;right:${M + 20}px;bottom:${M + 6}px;text-align:center;color:#fff;font:italic 400 ${fit(txt, 25, 18, 40, 200)}px/1.4 ${T.disp};${TSH}`, 'Un mot doux…');
+  } },
+});
 /* ── Planificateur Magazine ─────────────────────────────────────────
    Les rubriques n'apparaissent que si le couple a donné de quoi les remplir (étapes, playlist, adresses,
    voyages, photos datées) ; les pages restantes vont aux photos, puis aux mots doux. Les doubles pages
@@ -5434,7 +5886,17 @@ function yearPhotos(order) {
   for (let r = 0; pick.length < 12 && r < 12; r++) keys.forEach(k => { const l = byMonth.get(k); if (pick.length < 12 && l[r] != null) pick.push(l[r]); });
   return pick.length < 12 ? null : pick.sort((a, b) => ph[a].date - ph[b].date);
 }
-const MIN_PH_PAGES = { 24: 6, 36: 10, 50: 15 };
+const MIN_PH_PAGES = { 24: 6, 36: 6, 50: 8 };   // les rubriques à photos (moments, souvenir, musée…) comptent aussi comme pages photo
+// Date de rencontre tapée librement (« 21/06/2023 », « 21 juin 2023 », « juin 2023 ») : date complète ou null
+function parseMeet(s) {
+  s = String(s || '').trim().toLowerCase(); if (!s) return null;
+  let m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/); if (m) return new Date(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2] - 1, +m[1]);
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  const y = (s.match(/\b(?:19|20)\d{2}\b/) || [])[0], d = (s.match(/^(\d{1,2})(?:er|\.)?\s/) || [])[1];
+  const mi = ['jan', 'f[ée]v|feb', 'mar|mär', 'avr|apr|abr', 'mai|may|maio', 'juin|jun', 'juil|jul', 'ao[uû]|aug|ago', 'sep|set', 'oct|okt|out', 'nov', 'd[ée]c|dez|dic'].findIndex(p => new RegExp(`(?:^|[^a-zà-ÿ])(?:${p})`).test(s));
+  return y && d && mi >= 0 ? new Date(+y, mi, +d) : null;
+}
+const slugN = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 
 // Distance à vol d'oiseau entre deux villes (km) et textes de la page « nos villes »
 function kmBetween(a, b) {
@@ -5475,16 +5937,17 @@ function planMagazine(nPages, story, info) {
   if (miles.length >= 2) on.etapes = [1, 0, 0, 66];
   if (songs.length >= 3) on.playlist = [2, 1, 1, 64];
   if (places.length >= 2) on.adresses = [1, 0, Math.min(places.length, 4), 62];
-  if (trips.length) on.voyages = [1, 0, 3, 54];
+  if (trips.length) on.voyages = trips.length >= 2 && nPages >= 36 ? [2, 1, 4, 54] : [1, 0, 3, 54];   // grand album : « nos escales » en face des voyages
   if (story.memory && story.memory.text) on.memory = [1, 0, 1, 57];
   if (annee) on.annee = [2, 1, 12, 40];
   on.mots = [1, 0, 0, 30]; on.bucket = [1, 0, 0, 20];
   const sum = j => Object.values(on).reduce((a, b) => a + b[j], 0);
   const minK = MIN_PH_PAGES[nPages] || Math.round(I / 3);
   // l'année en photos seulement s'il reste ensuite de quoi faire de vraies pages photo
-  if (on.annee && N - 1 - sum(2) < Math.ceil(minK * 1.5)) delete on.annee;
+  const minOld = { 24: 6, 36: 10, 50: 15 }[nPages] || minK;   // seuils d'avant Magazine v2 : peu de photos, elles restent en grand
+  if (on.annee && N - 1 - sum(2) < Math.ceil(minOld * 1.5)) delete on.annee;
   // peu de photos : les rubriques reprennent des photos déjà placées plutôt que de vider les pages photo
-  const share = N - 1 - sum(2) < minK;
+  const share = N - 1 - sum(2) < minOld;
   if (share) ['adresses', 'voyages', 'playlist', 'interview', 'memory'].forEach(k => { if (on[k]) on[k][2] = 0; });
   let K, R;
   for (;;) {
@@ -5496,20 +5959,46 @@ function planMagazine(nPages, story, info) {
     delete on[drop[0]];
   }
   let fill = I - sum(0) - K;
+  // 1 bis) rubriques Magazine v2, par priorité : gardées si elles n'ajoutent pas de page de remplissage, si toutes les photos
+  // trouvent encore leur place (4 au plus par page photo) et s'il reste au moins minK pages photo
+  const big = nPages >= 36, huge = nPages >= 50, lovesAll = (story.love || []).filter(Boolean), reuse = new Set();
+  {
+    const opt = [['moments', 6, big ? 71 : 35], ['dico', 1, big ? 69 : 33], ['bingo', 0, big ? 53 : 30]];
+    if (lovesAll.length >= (on.raisons ? 11 : 6)) opt.push(['aime', 1, big ? 74 : 36]);
+    if (big) opt.push(['souvenir', 5, huge ? 58 : 43], ['voeux', 3, 55], ['musee', 3, 51]);
+    if (huge) opt.push(['profil', 6, 47]);
+    const st = () => { const P = sum(0), R0 = N - 1 - sum(2), K0 = Math.max(0, Math.min(R0, I - P)); return { R: R0, K: K0, fill: I - P - K0, over: R0 - 4 * K0 }; };
+    opt.sort((a, b) => b[2] - a[2]).forEach(([k, n, pr]) => {
+      if (on[k]) return;
+      const a = st(); on[k] = [1, 0, n, pr]; const b = st();
+      // trop de photos pour les pages photo (au-delà de 4 par page) : une rubrique qui en montre plusieurs aide à toutes les placer
+      const ok = b.R >= 0 && b.fill >= 0 && b.fill <= a.fill && b.K >= Math.min(b.R, minK) && (b.over <= 0 || b.over < a.over);
+      if (!ok) delete on[k];
+    });
+    // album aux pages nombreuses pour ses photos : passé quelques mots doux, une page « best of » reprend des photos déjà placées
+    const fmax = huge ? 5 : big ? 3 : 2;
+    ['moments', 'musee', 'voeux', 'profil'].forEach(k => {
+      if (on[k] || st().fill <= fmax || (k === 'profil' && !huge)) return;
+      on[k] = [1, 0, 0, 10]; reuse.add(k);
+    });
+    R = Math.max(0, N - 1 - sum(2)); K = Math.min(R, I - sum(0)); fill = I - sum(0) - K;
+  }
 
   // 2) ordre des rubriques ; les pages photo de chaque chapitre s'intercalent
   const per = Array.from({ length: C }, (_, c) => Math.floor((c + 1) * K / C) - Math.floor(c * K / C));
   const units = [], unit = k => { if (on[k]) units.push({ k, n: on[k][0], spread: !!on[k][1] }); };
-  const phUnits = c => { for (let j = 0; j < per[c]; j++) units.push({ k: 'ph', n: 1 }); if (fill > 0 && c < C - 1) { units.push({ k: 'note', n: 1 }); fill--; } };
-  unit('edito'); unit('debut'); phUnits(0); unit('etapes');
+  // pages de remplissage (mots doux, film, météo…) réparties dans les chapitres, entre les pages photo
+  const perF = Array.from({ length: C }, (_, c) => Math.floor((c + 1) * fill / C) - Math.floor(c * fill / C));
+  const phUnits = c => { const a = per[c], b = perF[c], n = a + b; let nb = 0; for (let j = 0; j < n; j++) { if (Math.round((j + 1) * b / n) > nb) { units.push({ k: 'note', n: 1 }); nb++; } else units.push({ k: 'ph', n: 1 }); } };
+  const own = unit;
+  unit('edito'); unit('debut'); phUnits(0); unit('dico'); unit('etapes');
   if (C > 1) { unit('chap1'); phUnits(1); }
-  unit('annee'); unit('playlist');
+  own('moments'); unit('annee'); unit('playlist');
   if (C > 2) { unit('chap2'); phUnits(2); }
-  unit('adresses'); unit('voyages'); unit('pano'); unit('memory'); unit('interview'); unit('raisons');
+  unit('aime'); unit('adresses'); unit('voyages'); unit('souvenir'); unit('pano'); unit('memory'); unit('interview'); unit('raisons'); own('musee');
   if (C > 3) { unit('chap3'); phUnits(3); }
-  unit('quiz'); unit('mots'); unit('bucket');
+  own('profil'); unit('quiz'); unit('mots'); unit('bingo'); own('voeux'); unit('bucket');
   if (C > 4) { unit('chap4'); phUnits(4); }
-  while (fill-- > 0) units.push({ k: 'note', n: 1 });
   unit('lettre');
   // la dernière page intérieure est seule (face à la 4e de couverture) : une page simple passe après la lettre
   const li = units.length - 1;
@@ -5534,7 +6023,8 @@ function planMagazine(nPages, story, info) {
   const again = (k, seed) => { const src = order.length ? order : [0]; return Array.from({ length: k }, (_, j) => src[(Math.floor(j * src.length / k) + seed) % src.length]); };
   const freshOr = (k, seed) => { const a = fresh(k); return a.length >= k ? a : a.concat(again(k - a.length, seed)); };
   const pick = (k, seed) => (share ? again(k, seed) : freshOr(k, seed));
-  const counts = K > 0 ? distribute(Math.min(R, K * 4), K) : [];
+  const bucketPh = on.bucket && R > K ? 1 : 0;   // photos en surnombre : la bucket list en prend une
+  const counts = K > 0 ? distribute(Math.min(R - bucketPh, K * 4), K) : [];
   const notes = (story.notes || []).filter(Boolean).slice();
   const pages = [], tag = (pg, k) => { if (k) pg.k = k; return pg; };
   const mk = (layout, idxs, tt, k, v) => {
@@ -5542,9 +6032,15 @@ function planMagazine(nPages, story, info) {
     if (Object.keys(e).length) pg.e = Object.fromEntries(Object.keys(e).map(x => [x, 1]));
     if (v != null) pg.v = v; return tag(pg, k);
   };
-  let pj = 0, single = 0, journal = false;
-  const extra = ['quote', 'film', 'disputes', 'weather'].filter(k => story[k] && (!Array.isArray(story[k]) || story[k].length));
-  const loves = (story.love || []).filter(Boolean).slice(on.raisons ? 5 : 0);   // les cinq premières vont dans « 5 raisons »
+  let pj = 0, single = 0, journal = false, noteV = 0, noteM = 0, geantN = 0;
+  const extra = ['film', 'weather', 'disputes', 'quote'].filter(k => story[k] && (!Array.isArray(story[k]) || story[k].length));
+  const aimeFrom = on.raisons ? 5 : 0, aimeL = on.aime ? lovesAll.slice(aimeFrom, aimeFrom + 8) : [];
+  const loves = lovesAll.slice(aimeFrom + aimeL.length);   // les cinq premières vont dans « 5 raisons », les huit suivantes dans « ce que j’aime chez toi »
+  // mots doux en trop pour les pages de remplissage : ils vont sur des pages photo (« je t’aime » en grand sur la photo)
+  let spare = notes.length - seq.filter(u => u.k === 'note').length - 1;
+  const meetTxt = () => { const m = String(info.meet || '').trim(); return m && curLang() === 'fr' && /^\d{1,2}(?:er)?[\s\/.-]/.test(m) ? 'le ' + m : m; };
+  const q = t => (curLang() === 'fr' ? `«\u00a0${t}\u00a0»` : `“${t}”`);
+  const yr0 = (String(info.meet || '').match(/\b(?:19|20)\d{2}\b/) || [])[0];
   const L = (k, s) => { const v = lm('toc'); return (v && v[k]) || s || ''; };
   pages.push(mk('mcover', [0], { mast: lm('mast'), issue: lm('issue').replace('{y}', `${MONTHS()[now.getMonth()]} ${year}`), k1: lm('k1'), k1s: lm('k1s'), k2: lm('k2'), k2s: lm('k2s'), k3: k3Line(on), title: story.title && story.title !== names ? story.title : '', names }));   // texte de secours : titre = prénoms, déjà en grand
   const build = {
@@ -5580,7 +6076,9 @@ function planMagazine(nPages, story, info) {
     },
     voyages: () => {
       const ys = trips.map(x => +x.year).filter(Boolean), yr = ys.length ? (Math.min(...ys) === Math.max(...ys) ? String(ys[0]) : `${Math.min(...ys)} · ${Math.max(...ys)}`) : '';
-      return [mk('mvoyages', pick(3, 4), { h1: lm('voy1'), h2: lm('voy2'), year: yr, text: mag.trips || lm('voy_def'), dest: trips.map(x => x.dest + (x.year ? ' · ' + x.year : '')).join('\n'), c2: (trips[0] || {}).dest || '', c3: (trips[1] || {}).dest || '' }, 'voyages')];
+      const dest = trips.map(x => x.dest + (x.year ? ' · ' + x.year : '')).join('\n'), two = on.voyages[0] === 2;
+      const v = mk('mvoyages', pick(3, 4), { h1: lm('voy1'), h2: lm('voy2'), year: yr, text: mag.trips || lm('voy_def'), dest, c2: (trips[0] || {}).dest || '', c3: (trips[1] || {}).dest || '' }, two ? null : 'voyages');
+      return two ? [mk('mdest', pick(1, 10), { h1: lm('dest1'), h2: lm('dest2'), dest }, 'voyages'), v] : [v];
     },
     memory: () => { const a = pick(1, 8); return [mk('mprose', a, { h: lm('souvenir'), title: story.memory.title || L('memory'), text: story.memory.text, cap: cap(a[0]) }, 'memory')]; },
     interview: () => {
@@ -5596,31 +6094,69 @@ function planMagazine(nPages, story, info) {
       const cand = [n1, n2, city, ...villes.map(v => v.name), ...places.map(p => p.name), ...trips.map(x => x.dest)].map(keyWord).concat(lm('words')).map(plain).filter(w => w.length >= 3 && w.length <= 12);
       return [mk('mmots', [], { h1: lm('mots1'), h2: lm('mots2'), words: [...new Set(cand)].slice(0, 10).join('\n'), seed: names }, 'mots')];
     },
-    bucket: () => [mk('mbucket', [], { h1: lm('bucket1'), h2: lm('bucket2'), items: (story.wishlist || []).slice(0, 8).join('\n') }, 'bucket')],
+    bucket: () => [mk('mbucket', bucketPh ? fresh(1) : [], { h1: lm('bucket1'), h2: lm('bucket2'), items: (story.wishlist || []).slice(0, 8).join('\n') }, 'bucket')],
     lettre: () => [mk('mlettre_a', [], { h1: lm('lettre1'), h2: lm('lettre2') }, 'lettre'), mk('mlettre_b', [], { hello: lm('hello'), text: info.letter || mag.loveLetter || story.letter || '', sign: lm('sign') + (n1 ? '\n' + n1 : '') })],
     pano: () => { const c = cap(pano); return [mk('spreadL', [pano], {}, 'pano'), mk('spreadR', [pano], c ? { cap: c } : {})]; },
+    // Rubriques Magazine v2
+    dico: () => {
+      const a = freshOr(1, 9), m = meetTxt(), see = [city, ...trips.map(x => x.dest)].filter(Boolean).slice(0, 2).concat(songs[0] ? [q(songs[0].title)] : []);
+      return [mk('mdico', a, { word: lm('word'), phon: lm('phon'), gram: lm('gram'), d1: (m ? lm('dico1') : lm('dico1b')).replace('{names}', names || n1).replace('{meet}', m),
+        d2: story.definition || lm('dicoDef'), syn: lm('syn'), see: see.length ? lm('see') + see.join(', ') + '.' : '' }, 'dico')];
+    },
+    moments: () => [mk('mmoments', reuse.has('moments') ? again(6, 11) : freshOr(6, 11), { h1: lm('moments1'), h2: lm('moments2') }, 'moments')],
+    aime: () => { const tt = { h1: lm('aime1'), h2: lm('aime2'), end: lm('aimeEnd') }; aimeL.forEach((x, i) => { tt['i' + (i + 1)] = x; }); return [mk('maime', freshOr(1, 12), tt, 'aime')]; },
+    souvenir: () => { const a = freshOr(5, 13); return [mk('msouvenir', a, { h1: lm('souv1'), h2: lm('souv2'), cap: cap(a[4]) }, 'souvenir')]; },
+    voeux: () => {
+      const w = Array.isArray(story.wishes) && story.wishes.filter(Boolean).length >= 3 ? story.wishes.filter(Boolean) : lm('voeuxW');
+      return [mk('mvoeux', reuse.has('voeux') ? again(3, 14) : freshOr(3, 14), { h: lm('voeux'), w1: w[0], w2: w[1], w3: w[2] }, 'voeux')];
+    },
+    bingo: () => { const tt = { h1: 'Bingo', h2: lm('bingo2'), sub: lm('bingo3'), c: lm('bingoC') }; lm('bingoL').forEach((b, i) => { tt['b' + (i + 1)] = b; }); return [mk('mbingo', [], tt, 'bingo')]; },
+    musee: () => {
+      const a = (reuse.has('musee') ? again(3, 15) : freshOr(3, 15)).sort((x, y) => (ph[x].ratio || 1) - (ph[y].ratio || 1));   // la plus verticale dans le grand cadre
+      const yy = i => (ph[i] && ph[i].date ? String(new Date(ph[i].date).getFullYear()) : '');
+      const tt = { h0: lm('musee0'), h1: lm('musee1'), h2: lm('musee2'), foot: `${lm('museeFoot')} · ${yr0 && +yr0 < year ? yr0 + ' – ' : ''}${year}` };
+      a.forEach((i, k) => { tt['t' + (k + 1)] = cap(i); tt['y' + (k + 1)] = yy(i); });
+      return [mk('mmusee', a, tt, 'musee')];
+    },
+    profil: () => {
+      const a = reuse.has('profil') ? again(11, 16) : again(5, 17).concat(freshOr(6, 16)), d = parseMeet(info.meet), days = d ? Math.floor((now - d) / 864e5) : -1;
+      const hl = [...new Set([...trips.map(x => x.dest), ...lm('hl')])].slice(0, 4), m = meetTxt();
+      const tt = { handle: [n1, n2].filter(Boolean).map(slugN).join(`.${slugN(lm('and'))}.`) || 'nous', n1: String(N), l1: lm('pSouv'), n2: days > 0 ? days.toLocaleString(curLang()) : '∞', l2: lm('pJours'), n3: '1', l3: lm('pAmour'),
+        name: names, bio: [m ? lm('since').replace('{meet}', m) : '', [city, ...trips.map(x => x.dest)].filter(Boolean).slice(0, 4).join(' · ')].filter(Boolean).join('\n') };
+      hl.forEach((x, i) => { tt['hl' + (i + 1)] = x; });
+      return [mk('mprofil', a, tt, 'profil')];
+    },
     ph: () => {
       const idxs = fresh(counts[pj] || 1); pj++;
       if (!idxs.length) return build.note();
-      const pick = pickLayout(idxs, pj), pg = mkPage(pick.layout, pick.idxs, {});
-      if (pg.layout === 'frame') pg.v = (single++) % 3;
-      const c = pick.idxs.map(cap).find(Boolean); if (c) pg.t.cap = c;
+      const m = pickMag(idxs, pj);
+      if (m.idxs.length === 1 && spare > 0 && geantN < 3 && pj % 3 === 2) { spare--; return [mkPage('mgeant', m.idxs, { word: lm('geant')[geantN++], text: notes.shift() })]; }
+      const pg = mkPage(m.layout, m.idxs, {}); pg.v = m.v;
+      const c0 = cap(m.idxs[0]), c1 = m.idxs[1] != null ? cap(m.idxs[1]) : '';
+      if (m.layout === 'pover' || m.layout === 'pbooth') { if (c1) pg.t.cap = c1; if (c0) pg.t.cap2 = c0; }
+      else if (m.layout === 'pscrap' || m.layout === 'pscrap4') m.idxs.forEach((i, k) => { const c = cap(i); if (c) pg.t[k ? 'cap' + (k + 1) : 'cap'] = c; });
+      else { const c = m.idxs.map(cap).find(Boolean); if (c) pg.t.cap = c; }
       return [pg];
     },
     note: () => {
-      if (notes.length) return [mkPage('mquote', [], { h: lm('motdoux'), text: notes.shift() })];
+      const ex = extra.length && (!notes.length || noteV++ % 2 === 1);   // mots doux et pages « film », « météo », « désaccords » en alternance
+      if (!ex && notes.length) return [mkPage(noteM++ % 2 ? 'mquote' : 'mmotif', [], { h: lm('motdoux'), text: notes.shift() })];
       const k = extra.shift(), ttl = x => (story.titles && story.titles[x]) || lab(x);
       if (k === 'quote') { const q = mkPage('mquote', [], { text: story.quote }); q.v = 1; return [tag(q, 'quote')]; }
-      if (k === 'film') return [tag(mkPage('mprose', [], { title: ttl('film'), text: story.film, foot: `${lab('starring')} ${n1}${n2 ? ' ' + lab('and') + ' ' + n2 : ''}` }), 'film')];
-      if (k === 'disputes') return [tag(mkPage('mlist', [], { title: ttl('disputes'), items: story.disputes.slice(0, 6).join('\n') }), 'disputes')];
-      if (k === 'weather') return [tag(mkPage('mprose', [], { title: ttl('weather'), text: story.weather }), 'weather')];
+      if (k === 'film') return [tag(mkPage('mfilm', [], { sel: `${lm('filmSel')}\n${lm('filmFest')}`, kicker: ttl('film'), title: story.title || names, text: story.film,
+        bill: lm('filmBill').replace('{a}', `${lab('starring')} ${n1}${n2 ? ' ' + lab('and') + ' ' + n2 : ''}`) }), 'film')];
+      if (k === 'disputes') { const tt = { title: ttl('disputes'), h2: lm('duelWin'), n1, n2 }; story.disputes.slice(0, 6).forEach((x, i) => { tt['x' + (i + 1)] = x; }); return [tag(mkPage('mduel', [], tt), 'disputes')]; }
+      if (k === 'weather') return [tag(mkPage('mmeteo', [], { h1: lm('meteo1'), h2: lm('meteo2'), temp: lm('temp'), text: story.weather }), 'weather')];
       // la page à écrire une seule fois ; ensuite ce qu'on aime chez l'autre, puis une photo déjà placée plutôt qu'une page répétée
       if (!journal) { journal = true; return [tag(mkPage('mjournal', [], { title: ttl('journal'), text: story.journal_prompt || '' }), 'journal')]; }
       if (loves.length) return [tag(mkPage('mquote', [], { h: lm('motdoux'), text: loves.shift() }), 'aime')];
       return [mkPage('full', again(1, pages.length), {})];
     },
   };
-  for (let c = 1; c < 5; c++) build['chap' + c] = () => { const a = freshOr(1, 6 + c), x = ch[c] || {}; return [mk('mchap', a, { num: `${lm('chap')} ${ROMAN[c]}`, title: x.title || '', text: x.text || '' }, null, c)]; };
+  for (let c = 1; c < 5; c++) build['chap' + c] = () => {
+    const a = freshOr(1, 6 + c), x = ch[c] || {}, tt = { num: `${lm('chap')} ${ROMAN[c]}`, title: x.title || '', text: x.text || '' };
+    return [c % 2 ? mk('mchapf', a, Object.assign({ big: String(c + 1).padStart(2, '0') }, tt), null, c) : mk('mchap', a, tt, null, c)];   // un chapitre sur deux en plein cadre
+  };
   const made = {};
   seq.forEach(u => {
     if (u.half != null) { made[u.k] = made[u.k] || build[u.k](); pages.push(made[u.k][u.half]); return; }
@@ -5634,7 +6170,7 @@ function planMagazine(nPages, story, info) {
 
 const PHOTO_LAYOUTS = n => Object.keys(LAYOUTS).filter(k => !LAYOUTS[k].text && !LAYOUTS[k].spread && LAYOUTS[k].n === n);
 
-const FOLIO_PH = new Set(['frame', 'duo', 'stack', 'trio', 'strip', 'grid']);
+const FOLIO_PH = new Set(['frame', 'duo', 'stack', 'trio', 'strip', 'grid', 'ppola', 'pscrap']);
 function renderPage(pg, opts = {}) {
   const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, thumb: false, photos: null, theme: null }, opts);
   const T = theme(), Ly = LAYOUTS[pg.layout] || LAYOUTS.frame;
@@ -5692,6 +6228,29 @@ function pickLayout(idxs, counter) {
       if (sc < best.score) best = { layout: l, idxs: o, score: sc };
     });
   });
+  return best;
+}
+// Pages photo du style Magazine : mises en page pleine page qui tournent ; pour chacune, la variante et l'ordre des photos
+// qui coupent le moins les sujets (une photo en hauteur seule devient une photo instantanée, montrée presque entière)
+const MAG_ROT = { 1: ['full', 'ppola', 'full'], 2: ['pover', 'pscrap'], 3: ['pmosaic3'], 4: ['pmosaic4', 'pscrap4', 'pbooth'] };
+const MAG_A = {   // rapports largeur/hauteur des cadres, par variante (null : cadre à la mesure de la photo)
+  full: [[1]], ppola: [[null], [null]], pover: [[1, null], [1, null]], pscrap: [[null, null], [null, null]],
+  pbooth: [[1, 0.98, 0.98, 0.98], [1, 0.98, 0.98, 0.98]], pscrap4: [[null, null, null, null], [null, null, null, null]],
+  pmosaic3: [[488 / 794, 300 / 394, 300 / 394], [794 / 486, 394 / 302, 394 / 302]],
+  pmosaic4: [[472 / 466, 316 / 466, 316 / 322, 472 / 322], [794 / 430, 260 / 358, 262 / 358, 260 / 358]],
+};
+const perms = a => (a.length <= 1 ? [a] : a.flatMap((x, i) => perms(a.filter((_, j) => j !== i)).map(r => [x, ...r])));
+function pickMag(idxs, counter) {
+  const ph = photos(), list = MAG_ROT[idxs.length] || MAG_ROT[4];
+  const layout = idxs.length === 1 && (ph[idxs[0]] || {}).orient === 'portrait' ? 'ppola' : list[counter % list.length];
+  const VA = MAG_A[layout], want = Math.floor(counter / list.length) % VA.length;
+  let best = { layout, idxs, v: 0, score: Infinity };
+  VA.forEach((A, v) => perms(idxs).forEach(o => {
+    let sc = o.reduce((s, pi, k) => s + (A[k] == null ? 0 : cropCost(ph[pi] || {}, A[k])), 0);
+    if (v !== want) sc += 0.12;                                 // alterner les variantes à coût égal
+    if (o.some((x, k) => x !== idxs[k])) sc += 0.02;            // garder l'ordre chronologique à coût égal
+    if (sc < best.score) best = { layout, idxs: o, v, score: sc };
+  }));
   return best;
 }
 function chooseLayout(idxs, counter) {
@@ -5823,10 +6382,11 @@ const spreadOf = pg => (pg && LAYOUTS[pg.layout] && LAYOUTS[pg.layout].spread) |
 const isPhotoPage = pg => !!(pg && LAYOUTS[pg.layout] && !LAYOUTS[pg.layout].text && !spreadOf(pg));
 const pairOf = (pages, i) => { const l = i % 2 === 0 ? i : i - 1; return (l >= 2 && l + 1 <= pages.length - 3) ? [l, l + 1] : null; };
 const cleanSlot = s => ({ p: s.p, x: null, y: null, z: 1, f: s.f || 'none' });
+const magAlbum = () => typeof NA !== 'undefined' && Array.isArray(NA.pages) && !!NA.pages[0] && NA.pages[0].layout === 'mcover';
 function relayout(pg) {
-  const pick = pickLayout(pg.slots.map(s => s.p), pg.slots.length);
+  const mag = magAlbum(), pick = mag ? pickMag(pg.slots.map(s => s.p), pg.slots.length) : pickLayout(pg.slots.map(s => s.p), pg.slots.length);
   const by = new Map(pg.slots.map(s => [s.p, s]));
-  pg.layout = pick.layout; pg.slots = pick.idxs.map(p => by.get(p)); if (pg.layout === 'frame') pg.v = 0;
+  pg.layout = pick.layout; pg.slots = pick.idxs.map(p => by.get(p)); pg.v = mag ? pick.v : 0;
 }
 // Étale la photo (page i, emplacement si) sur la double page. Renvoie { pages } ou { error }.
 function makeSpread(pages, i, si) {
@@ -5856,7 +6416,7 @@ function unmakeSpread(pages, i) {
     .sort((a, b) => (b.pg.slots.length - a.pg.slots.length) || (Math.abs(a.k - r) - Math.abs(b.k - r)))[0];
   if (donor) {
     const s = donor.pg.slots.pop(); relayout(donor.pg);
-    P[r] = { id: P[r].id, layout: 'frame', v: 0, slots: [cleanSlot(s)], t: {} };
+    P[r] = { id: P[r].id, layout: magAlbum() ? 'ppola' : 'frame', v: 0, slots: [cleanSlot(s)], t: {} };
   } else {
     P[r] = { id: P[r].id, layout: LAYOUTS.mjournal ? 'mjournal' : 'journal', slots: [], t: { title: lab('journal'), text: '' } };
   }
@@ -6034,7 +6594,7 @@ fr: {
   swap_mobile: 'Faites glisser la photo avec le doigt pour la recadrer, pincez pour zoomer.',
   used: 'Déjà utilisée page {0}', ph_import: 'Importer une nouvelle photo', photo_n: 'Photo {0}', current: '(actuelle)',
   text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA\u00a0:', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
-  layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
+  layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_ppola: 'Photo instantanée', ly_pover: 'Photo sur photo', ly_pscrap: 'Photos instantanées', ly_pscrap4: 'Photos instantanées', ly_pbooth: 'Bande photo', ly_pmosaic3: 'Mosaïque', ly_pmosaic4: 'Mosaïque', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
   move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
   old_txt: 'Cet album a été créé avec notre ancienne mise en page. Le passer au nouveau style Magazine ? Vos photos et vos légendes sont gardées.', old_go: 'Passer au Magazine', old_keep: 'Garder l\'ancienne',
   resume_txt: 'Vous avez un album en cours\u00a0:', resume_yes: 'Reprendre', resume_no: 'Plus tard',
@@ -6066,7 +6626,7 @@ en: {
   swap_mobile: 'Drag the photo with your finger to crop it, pinch to zoom.',
   used: 'Already used on page {0}', ph_import: 'Upload a new photo', photo_n: 'Photo {0}', current: '(current)',
   text: 'Text', text_list: ' (one item per line)', ai_alt: 'Another wording by AI:', rw_short: 'Shorter', rw_tender: 'More tender', rw_funny: 'Funnier', rw_again: 'Another version', writing: 'Writing…', rw_fail: 'Rewriting is unavailable right now.',
-  layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid', ly_spread: 'Double page', sp_make: 'Spread across both pages', sp_undo: 'Back to a single page', sp_note: 'The photo spans both facing pages. The middle falls into the binding, so avoid placing a face there.', sp_edge: 'A double page is possible from pages 3 and 4 up to the second-to-last pair of pages.', sp_text: 'The facing page contains text. Move it first, then try again.', sp_full: 'Not enough room to move the other photos from these two pages.', sp_move: 'A double page cannot be moved: go back to a single page first.',
+  layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid', ly_ppola: 'Instant photo', ly_pover: 'Photo on photo', ly_pscrap: 'Instant photos', ly_pscrap4: 'Instant photos', ly_pbooth: 'Photo strip', ly_pmosaic3: 'Mosaic', ly_pmosaic4: 'Mosaic', ly_spread: 'Double page', sp_make: 'Spread across both pages', sp_undo: 'Back to a single page', sp_note: 'The photo spans both facing pages. The middle falls into the binding, so avoid placing a face there.', sp_edge: 'A double page is possible from pages 3 and 4 up to the second-to-last pair of pages.', sp_text: 'The facing page contains text. Move it first, then try again.', sp_full: 'Not enough room to move the other photos from these two pages.', sp_move: 'A double page cannot be moved: go back to a single page first.',
   move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
   old_txt: 'This album was made with our old layout. Switch it to the new Magazine style? Your photos and captions are kept.', old_go: 'Switch to Magazine', old_keep: 'Keep the old one',
   resume_txt: 'You have an album in progress:', resume_yes: 'Resume', resume_no: 'Later',
@@ -6098,7 +6658,7 @@ de: {
   swap_mobile: 'Mit dem Finger ziehen zum Zuschneiden, zwei Finger zum Zoomen.',
   used: 'Schon auf Seite {0}', ph_import: 'Neues Foto hochladen', photo_n: 'Foto {0}', current: '(aktuell)',
   text: 'Text', text_list: ' (ein Eintrag pro Zeile)', ai_alt: 'Andere Formulierung per KI:', rw_short: 'Kürzer', rw_tender: 'Zärtlicher', rw_funny: 'Lustiger', rw_again: 'Andere Version', writing: 'Schreibt…', rw_fail: 'Umschreiben gerade nicht verfügbar.',
-  layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster', ly_spread: 'Doppelseite', sp_make: 'Über die Doppelseite ziehen', sp_undo: 'Zurück zu einer Seite', sp_note: 'Das Foto erstreckt sich über beide gegenüberliegenden Seiten. Die Mitte liegt in der Bindung, platziert dort also kein Gesicht.', sp_edge: 'Eine Doppelseite ist ab den Seiten 3 und 4 bis zum vorletzten Seitenpaar möglich.', sp_text: 'Die gegenüberliegende Seite enthält Text. Verschiebt sie zuerst und versucht es dann erneut.', sp_full: 'Nicht genug Platz, um die anderen Fotos dieser beiden Seiten unterzubringen.', sp_move: 'Eine Doppelseite lässt sich nicht verschieben: Wechselt zuerst zurück zu einer Seite.',
+  layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster', ly_ppola: 'Sofortbild', ly_pover: 'Foto auf Foto', ly_pscrap: 'Sofortbilder', ly_pscrap4: 'Sofortbilder', ly_pbooth: 'Fotostreifen', ly_pmosaic3: 'Mosaik', ly_pmosaic4: 'Mosaik', ly_spread: 'Doppelseite', sp_make: 'Über die Doppelseite ziehen', sp_undo: 'Zurück zu einer Seite', sp_note: 'Das Foto erstreckt sich über beide gegenüberliegenden Seiten. Die Mitte liegt in der Bindung, platziert dort also kein Gesicht.', sp_edge: 'Eine Doppelseite ist ab den Seiten 3 und 4 bis zum vorletzten Seitenpaar möglich.', sp_text: 'Die gegenüberliegende Seite enthält Text. Verschiebt sie zuerst und versucht es dann erneut.', sp_full: 'Nicht genug Platz, um die anderen Fotos dieser beiden Seiten unterzubringen.', sp_move: 'Eine Doppelseite lässt sich nicht verschieben: Wechselt zuerst zurück zu einer Seite.',
   move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
   old_txt: 'Dieses Album wurde mit unserem alten Layout erstellt. Auf den neuen Magazin-Stil umstellen? Eure Fotos und Bildunterschriften bleiben erhalten.', old_go: 'Zum Magazin-Stil', old_keep: 'Altes behalten',
   resume_txt: 'Ihr habt ein angefangenes Album:', resume_yes: 'Fortsetzen', resume_no: 'Später',
@@ -6130,7 +6690,7 @@ es: {
   swap_mobile: 'Arrastra con el dedo para recortarla, pellizca para ampliar.',
   used: 'Ya usada en la página {0}', ph_import: 'Subir una foto nueva', photo_n: 'Foto {0}', current: '(actual)',
   text: 'Texto', text_list: ' (un elemento por línea)', ai_alt: 'Otra redacción con IA:', rw_short: 'Más corto', rw_tender: 'Más tierno', rw_funny: 'Más divertido', rw_again: 'Otra versión', writing: 'Escribiendo…', rw_fail: 'Reescritura no disponible por ahora.',
-  layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula', ly_spread: 'Doble página', sp_make: 'Extender a doble página', sp_undo: 'Volver a una sola página', sp_note: 'La foto ocupa las dos páginas enfrentadas. El centro queda en la encuadernación: evitad colocar ahí una cara.', sp_edge: 'La doble página es posible desde las páginas 3 y 4 hasta el penúltimo par de páginas.', sp_text: 'La página de enfrente contiene texto. Movedla primero y volved a intentarlo.', sp_full: 'No hay sitio suficiente para recolocar las demás fotos de estas dos páginas.', sp_move: 'Una doble página no se puede mover: volved primero a una sola página.',
+  layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula', ly_ppola: 'Foto instantánea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantáneas', ly_pscrap4: 'Fotos instantáneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Doble página', sp_make: 'Extender a doble página', sp_undo: 'Volver a una sola página', sp_note: 'La foto ocupa las dos páginas enfrentadas. El centro queda en la encuadernación: evitad colocar ahí una cara.', sp_edge: 'La doble página es posible desde las páginas 3 y 4 hasta el penúltimo par de páginas.', sp_text: 'La página de enfrente contiene texto. Movedla primero y volved a intentarlo.', sp_full: 'No hay sitio suficiente para recolocar las demás fotos de estas dos páginas.', sp_move: 'Una doble página no se puede mover: volved primero a una sola página.',
   move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
   old_txt: 'Este álbum se creó con nuestro diseño antiguo. ¿Pasarlo al nuevo estilo Magazine? Tus fotos y textos de las fotos se conservan.', old_go: 'Pasar a Magazine', old_keep: 'Mantener el antiguo',
   resume_txt: 'Tienes un álbum en curso:', resume_yes: 'Retomar', resume_no: 'Más tarde',
@@ -6162,7 +6722,7 @@ pt: {
   swap_mobile: 'Arrasta com o dedo para recortar, aperta para ampliar.',
   used: 'Já usada na página {0}', ph_import: 'Carregar uma foto nova', photo_n: 'Foto {0}', current: '(atual)',
   text: 'Texto', text_list: ' (um item por linha)', ai_alt: 'Outra redação com IA:', rw_short: 'Mais curto', rw_tender: 'Mais terno', rw_funny: 'Mais divertido', rw_again: 'Outra versão', writing: 'A escrever…', rw_fail: 'Reescrita indisponível de momento.',
-  layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha', ly_spread: 'Página dupla', sp_make: 'Estender à página dupla', sp_undo: 'Voltar a uma só página', sp_note: 'A foto ocupa as duas páginas frente a frente. O centro fica na encadernação: evitem colocar aí um rosto.', sp_edge: 'A página dupla é possível a partir das páginas 3 e 4 até ao penúltimo par de páginas.', sp_text: 'A página da frente contém texto. Movam-na primeiro e tentem de novo.', sp_full: 'Não há espaço suficiente para recolocar as outras fotos destas duas páginas.', sp_move: 'Uma página dupla não pode ser movida: voltem primeiro a uma só página.',
+  layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha', ly_ppola: 'Foto instantânea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantâneas', ly_pscrap4: 'Fotos instantâneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Página dupla', sp_make: 'Estender à página dupla', sp_undo: 'Voltar a uma só página', sp_note: 'A foto ocupa as duas páginas frente a frente. O centro fica na encadernação: evitem colocar aí um rosto.', sp_edge: 'A página dupla é possível a partir das páginas 3 e 4 até ao penúltimo par de páginas.', sp_text: 'A página da frente contém texto. Movam-na primeiro e tentem de novo.', sp_full: 'Não há espaço suficiente para recolocar as outras fotos destas duas páginas.', sp_move: 'Uma página dupla não pode ser movida: voltem primeiro a uma só página.',
   move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
   old_txt: 'Este álbum foi criado com o nosso antigo layout. Passá-lo para o novo estilo Magazine? As tuas fotos e legendas são mantidas.', old_go: 'Passar a Magazine', old_keep: 'Manter o antigo',
   resume_txt: 'Tens um álbum em curso:', resume_yes: 'Retomar', resume_no: 'Mais tarde',
@@ -6644,7 +7204,9 @@ Return ONLY a JSON object with exactly these keys:
  "title": "album title, 2-6 words, original, ideally drawn from their answers",
  "chapters": [${t[0]} items {"title": "2-5 words", "text": "2-4 sentences"}],
  "notes": [${t[1]} short love notes, 1-2 sentences each, each a different tone],
- "love": [8 specific things one loves about the other, max 12 words each],
+ "love": [12 specific things one loves about the other, max 12 words each, all different],
+ "definition": "the second sense of a playful dictionary entry for the word 'us' that defines this couple: 1 sentence, max 20 words, concrete, no names",
+ "wishes": [3 wishes for their future together, 1 to 3 words each, e.g. "More sunsets"],
  "quote": "one original line about love, max 22 words",
  "film": "their story as a film, 3 sentences: genre, atmosphere, ending",
  "disputes": [4 funny, gentle recurring little disagreements, max 14 words each],
@@ -6735,7 +7297,8 @@ function defaultStory(info) {
       { title: 'What comes next', text: 'Nothing is written yet. That might be our favourite part.' },
       { title: 'Always', text: 'Page after page, the same certainty.' }],
     notes: ['You make ordinary days feel like something worth remembering.', 'I still look for you first in every room.', 'Thank you for all the small things nobody else sees.', 'With you, even waiting is a good moment.'],
-    love: ['Your laugh', 'The way you say my name', 'Your patience', 'Your hands', 'Our late conversations', 'How you make coffee', 'Your stubbornness', 'Everything else'],
+    love: ['Your laugh', 'The way you say my name', 'Your patience', 'Your hands', 'Our late conversations', 'How you make coffee', 'Your stubbornness', 'The way you look at me', 'Your terrible jokes', 'How you hold my hand in a crowd', 'Your sleepy Sunday face', 'Everything else'],
+    definition: 'Two people who still laugh at the same silly things, years later.', wishes: ['More sunsets', 'Adventures', 'Always us'],
     quote: 'Love is not one moment. It is every morning we choose each other again.',
     film: 'A quiet, sunlit story with a lot of laughter and very few arguments. The best scenes happen at the kitchen table. Nobody leaves at the end.',
     disputes: ['Who finished the milk', 'The perfect room temperature', 'Which series to watch next', 'Who is the better driver'],
@@ -6750,7 +7313,8 @@ function defaultStory(info) {
       { title: 'Et maintenant', text: 'La suite n’est écrite nulle part. C’est peut-être ce qu’on préfère.' },
       { title: 'Toujours', text: 'Page après page, la même évidence.' }],
     notes: ['Tu rends les jours ordinaires dignes d’être racontés.', 'Dans chaque pièce, c’est toujours toi que je cherche en premier.', 'Merci pour toutes les petites choses que personne d’autre ne voit.', 'Avec toi, même attendre devient un bon moment.'],
-    love: ['Ton rire', 'Ta façon de dire mon prénom', 'Ta patience', 'Tes mains', 'Nos conversations tard le soir', 'Ta façon de faire le café', 'Ton entêtement', 'Tout le reste'],
+    love: ['Ton rire', 'Ta façon de dire mon prénom', 'Ta patience', 'Tes mains', 'Nos conversations tard le soir', 'Ta façon de faire le café', 'Ton entêtement', 'Ta façon de me regarder', 'Tes blagues nulles', 'Ta main qui cherche la mienne dans la foule', 'Ta tête du dimanche matin', 'Tout le reste'],
+    definition: 'Deux personnes qui rient encore des mêmes bêtises, des années plus tard.', wishes: ['Des fous rires', 'Des voyages', 'Toujours nous'],
     quote: 'L’amour n’est pas un instant : c’est chaque matin où l’on se choisit encore.',
     film: 'Une histoire douce tournée en lumière naturelle, avec beaucoup de rires et très peu de disputes. Les meilleures scènes se passent autour de la table de la cuisine. À la fin, personne ne part.',
     disputes: ['Qui a fini le lait', 'La température idéale de la chambre', 'Quelle série regarder ensuite', 'Qui conduit le mieux'],
@@ -8155,22 +8719,23 @@ NA.albumPanel = function () {
 
 /* ── Remettre les textes (y compris modifiés à la main) dans l'histoire avant de recomposer ── */
 // Style Magazine : textes modifiés à la main (pg.e) repris tels quels ; le reste (couverture, sommaire…) se recalcule
-const MAG_KEEP = new Set(['mcover', 'medito', 'mdebut', 'mcarte', 'mvilles', 'metapes', 'mplay_a', 'mplay_b', 'madresses', 'mvoyages', 'minterview', 'mraisons', 'mquiz', 'mmots', 'mbucket', 'mlettre_a', 'mlettre_b', 'mback']);
+const MAG_KEEP = new Set(['mcover', 'medito', 'mdebut', 'mcarte', 'mvilles', 'metapes', 'mplay_a', 'mplay_b', 'madresses', 'mvoyages', 'minterview', 'mraisons', 'mquiz', 'mmots', 'mbucket', 'mlettre_a', 'mlettre_b', 'mback',
+  'mdico', 'mmoments', 'maime', 'msouvenir', 'mvoeux', 'mbingo', 'mmusee', 'mprofil', 'mdest', 'mfilm', 'mmeteo', 'mduel']);
 function syncStory() {
   const s = JSON.parse(JSON.stringify(S.story || {})), P = NA.pages, info = NA.info || E.coupleInfo();
   s.titles = s.titles || {};
   if (P[0] && P[0].t.title) s.title = P[0].t.title;
   const ch = P.filter(p => p.layout === 'chapter' || p.layout === 'chapterp');
   s.chapters = s.chapters || []; ch.forEach((p, i) => { s.chapters[i] = { title: p.t.title || '', text: p.t.text || '' }; });
-  const notes = P.filter(p => p.layout === 'note' || p.layout === 'notep' || (p.layout === 'mquote' && !p.k)).map(p => p.t.text || '');
+  const notes = P.filter(p => p.layout === 'note' || p.layout === 'notep' || (['mquote', 'mmotif', 'mgeant'].includes(p.layout) && !p.k)).map(p => p.t.text || '');
   s.notes = notes.concat((s.notes || []).slice(notes.length));
   const lines = v => String(v || '').split('\n').map(x => x.trim()).filter(Boolean);
   s.magEdits = s.magEdits || {};
   P.forEach(p => {
-    if (!p.k && !MAG_KEEP.has(p.layout) && p.layout !== 'mchap') return;
+    if (!p.k && !MAG_KEEP.has(p.layout) && p.layout !== 'mchap' && p.layout !== 'mchapf') return;
     if (p.t.title != null && ['love', 'disputes', 'wish', 'film', 'weather', 'letter', 'journal'].includes(p.k)) s.titles[p.k] = p.t.title;
     if (p.k === 'love') s.love = lines(p.t.items);
-    if (p.k === 'disputes') s.disputes = lines(p.t.items);
+    if (p.k === 'disputes') s.disputes = p.layout === 'mduel' ? [1, 2, 3, 4, 5, 6].map(i => p.t['x' + i]).filter(Boolean) : lines(p.t.items);
     if (p.k === 'wish') s.wishlist = lines(p.t.items);
     if (p.k === 'quote') s.quote = p.t.text;
     if (p.k === 'film') s.film = p.t.text;
@@ -8182,10 +8747,12 @@ function syncStory() {
     if (p.layout === 'dedication') info.dedication = p.t.text;
     if (MAG_KEEP.has(p.layout) && p.e) { const o = s.magEdits[p.layout + ':' + (p.v || 0)] = {}; Object.keys(p.e).forEach(k => { o[k] = p.t[k]; }); }
     if (p.layout === 'mdebut') s.chapters[0] = Object.assign({}, s.chapters[0], { text: p.t.text || '' });
-    if (p.layout === 'mchap' && p.v) s.chapters[p.v] = { title: p.t.title || '', text: p.t.text || '' };
+    if ((p.layout === 'mchap' || p.layout === 'mchapf') && p.v) s.chapters[p.v] = { title: p.t.title || '', text: p.t.text || '' };
   });
   info.captions = info.captions || {};
-  P.forEach(p => { if (p.slots.length && p.t.cap) info.captions[p.slots[0].p] = p.t.cap; });
+  // légende → photo : sur les pages « photo sur photo », la légende principale est celle de la photo posée par-dessus
+  const CAPS = { pover: { cap: 1, cap2: 0 }, pbooth: { cap: 1, cap2: 0 }, pscrap: { cap: 0, cap2: 1 }, pscrap4: { cap: 0, cap2: 1, cap3: 2, cap4: 3 }, msouvenir: { cap: 4 }, mmusee: { t1: 0, t2: 1, t3: 2 } };
+  P.forEach(p => { Object.entries(CAPS[p.layout] || { cap: 0 }).forEach(([k, si]) => { if (p.slots[si] && p.t[k]) info.captions[p.slots[si].p] = p.t[k]; }); });
   S.story = s; NA.info = info;
 }
 // Nombre de chapitres / mots doux attendus par format
@@ -8493,11 +9060,11 @@ window.addEventListener('hashchange', () => { if (location.hash === '#suivi') tr
 
 /* ── Barre « Modifier cette page » : chaque élément modifiable devient un bouton ── */
 Object.entries({
-  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_km: "Distance", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
-  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_km: "Distance", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
-  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_km: "Entfernung", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
-  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_km: "Distancia", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
-  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_km: "Distância", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
+  fr: { eb_lbl: 'Modifier cette page :', ek_title: 'Titre', ek_text: 'Texte', ek_cap: 'Légende', ek_items: 'Liste', ek_names: 'Prénoms', ek_label: 'Intitulé', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Nom du magazine", ek_issue: "Numéro", ek_kline: "Titre d’appel", ek_ksub: "Sous-titre", ek_toc: "Sommaire", ek_num: "Petit titre", ek_song: "Chanson", ek_artist: "Artiste", ek_side: "Face", ek_year: "Années", ek_dest: "Destinations", ek_sub: "Sous-titre", ek_hello: "Première ligne", ek_city: "Ville", ek_date: "Date", ek_coord: "Coordonnées", ek_km: "Distance", ek_note: "Petit mot", ek_words: "Mots", ek_step: "Étape", ek_month: "Mois", ek_question: "Question", ek_answer: "Réponse", ek_reason: "Raison", ek_place: "Lieu", ek_name: "Prénom", ek_cell: 'Case', ek_c: 'Case du milieu', ek_wish: 'Vœu', ek_love: 'Ce que j’aime', ek_end: 'Dernière ligne', ek_work: 'Œuvre', ek_yr: 'Année', ek_legend: 'Légende', ek_handle: 'Nom du profil', ek_stat: 'Chiffre', ek_statl: 'Libellé', ek_bio: 'Présentation', ek_story: 'Story', ek_word: 'Mot', ek_phon: 'Prononciation', ek_gram: 'Nature', ek_sense: 'Sens', ek_syn: 'Synonymes', ek_see: 'Voir aussi', ek_big: 'Grand numéro', ek_sel: 'Distinction', ek_kicker: 'Accroche', ek_bill: 'Générique', ek_temp: 'Température', ek_dispute: 'Désaccord', ek_photo: 'Photo', coach: 'Touchez une photo ou un texte pour le modifier, ou utilisez les boutons sous la page. Glissez pour tourner les pages.', coach_wide: 'Cliquez sur une photo ou un texte pour le modifier, ou utilisez les boutons sous la page.', coach_ok: 'Compris' },
+  en: { eb_lbl: 'Edit this page:', ek_title: 'Title', ek_text: 'Text', ek_cap: 'Caption', ek_items: 'List', ek_names: 'Names', ek_label: 'Heading', ek_sign: 'Signature', ek_foot: 'Signature', ek_mast: "Magazine name", ek_issue: "Issue line", ek_kline: "Cover line", ek_ksub: "Subtitle", ek_toc: "Contents", ek_num: "Small heading", ek_song: "Song", ek_artist: "Artist", ek_side: "Side", ek_year: "Years", ek_dest: "Destinations", ek_sub: "Subtitle", ek_hello: "Greeting", ek_city: "City", ek_date: "Date", ek_coord: "Coordinates", ek_km: "Distance", ek_note: "Little note", ek_words: "Words", ek_step: "Milestone", ek_month: "Month", ek_question: "Question", ek_answer: "Answer", ek_reason: "Reason", ek_place: "Place", ek_name: "First name", ek_cell: 'Square', ek_c: 'Centre square', ek_wish: 'Wish', ek_love: 'What I love', ek_end: 'Last line', ek_work: 'Artwork', ek_yr: 'Year', ek_legend: 'Caption', ek_handle: 'Profile name', ek_stat: 'Number', ek_statl: 'Label', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Word', ek_phon: 'Pronunciation', ek_gram: 'Part of speech', ek_sense: 'Meaning', ek_syn: 'Synonyms', ek_see: 'See also', ek_big: 'Big number', ek_sel: 'Award', ek_kicker: 'Tagline', ek_bill: 'Credits', ek_temp: 'Temperature', ek_dispute: 'Disagreement', ek_photo: 'Photo', coach: 'Tap a photo or a text to edit it, or use the buttons below the page. Swipe to turn pages.', coach_wide: 'Click a photo or a text to edit it, or use the buttons below the page.', coach_ok: 'Got it' },
+  de: { eb_lbl: 'Diese Seite bearbeiten:', ek_title: 'Titel', ek_text: 'Text', ek_cap: 'Bildunterschrift', ek_items: 'Liste', ek_names: 'Namen', ek_label: 'Überschrift', ek_sign: 'Unterschrift', ek_foot: 'Unterschrift', ek_mast: "Magazinname", ek_issue: "Ausgabe", ek_kline: "Titelzeile", ek_ksub: "Untertitel", ek_toc: "Inhalt", ek_num: "Kleine Überschrift", ek_song: "Song", ek_artist: "Interpret", ek_side: "Seite", ek_year: "Jahre", ek_dest: "Reiseziele", ek_sub: "Untertitel", ek_hello: "Anrede", ek_city: "Stadt", ek_date: "Datum", ek_coord: "Koordinaten", ek_km: "Entfernung", ek_note: "Kleine Notiz", ek_words: "Wörter", ek_step: "Meilenstein", ek_month: "Monat", ek_question: "Frage", ek_answer: "Antwort", ek_reason: "Grund", ek_place: "Ort", ek_name: "Vorname", ek_cell: 'Feld', ek_c: 'Mittleres Feld', ek_wish: 'Wunsch', ek_love: 'Was ich liebe', ek_end: 'Letzte Zeile', ek_work: 'Werk', ek_yr: 'Jahr', ek_legend: 'Bildunterschrift', ek_handle: 'Profilname', ek_stat: 'Zahl', ek_statl: 'Bezeichnung', ek_bio: 'Bio', ek_story: 'Story', ek_word: 'Wort', ek_phon: 'Aussprache', ek_gram: 'Wortart', ek_sense: 'Bedeutung', ek_syn: 'Synonyme', ek_see: 'Siehe auch', ek_big: 'Große Zahl', ek_sel: 'Auszeichnung', ek_kicker: 'Aufhänger', ek_bill: 'Abspann', ek_temp: 'Temperatur', ek_dispute: 'Streitpunkt', ek_photo: 'Foto', coach: 'Tippt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite. Wischen zum Umblättern.', coach_wide: 'Klickt auf ein Foto oder einen Text, um es zu bearbeiten, oder nutzt die Knöpfe unter der Seite.', coach_ok: 'Verstanden' },
+  es: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Pie de foto', ek_items: 'Lista', ek_names: 'Nombres', ek_label: 'Encabezado', ek_sign: 'Firma', ek_foot: 'Firma', ek_mast: "Nombre de la revista", ek_issue: "Número", ek_kline: "Titular", ek_ksub: "Subtítulo", ek_toc: "Sumario", ek_num: "Antetítulo", ek_song: "Canción", ek_artist: "Artista", ek_side: "Cara", ek_year: "Años", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saludo", ek_city: "Ciudad", ek_date: "Fecha", ek_coord: "Coordenadas", ek_km: "Distancia", ek_note: "Notita", ek_words: "Palabras", ek_step: "Etapa", ek_month: "Mes", ek_question: "Pregunta", ek_answer: "Respuesta", ek_reason: "Razón", ek_place: "Lugar", ek_name: "Nombre", ek_cell: 'Casilla', ek_c: 'Casilla central', ek_wish: 'Deseo', ek_love: 'Lo que amo', ek_end: 'Última línea', ek_work: 'Obra', ek_yr: 'Año', ek_legend: 'Pie de foto', ek_handle: 'Nombre del perfil', ek_stat: 'Cifra', ek_statl: 'Etiqueta', ek_bio: 'Biografía', ek_story: 'Historia destacada', ek_word: 'Palabra', ek_phon: 'Pronunciación', ek_gram: 'Categoría', ek_sense: 'Acepción', ek_syn: 'Sinónimos', ek_see: 'Véase también', ek_big: 'Número grande', ek_sel: 'Premio', ek_kicker: 'Entradilla', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacuerdo', ek_photo: 'Foto', coach: 'Toca una foto o un texto para editarlo, o usa los botones bajo la página. Desliza para pasar las páginas.', coach_wide: 'Haz clic en una foto o un texto para editarlo, o usa los botones bajo la página.', coach_ok: 'Entendido' },
+  pt: { eb_lbl: 'Editar esta página:', ek_title: 'Título', ek_text: 'Texto', ek_cap: 'Legenda', ek_items: 'Lista', ek_names: 'Nomes', ek_label: 'Cabeçalho', ek_sign: 'Assinatura', ek_foot: 'Assinatura', ek_mast: "Nome da revista", ek_issue: "Número", ek_kline: "Chamada", ek_ksub: "Subtítulo", ek_toc: "Sumário", ek_num: "Antetítulo", ek_song: "Canção", ek_artist: "Artista", ek_side: "Lado", ek_year: "Anos", ek_dest: "Destinos", ek_sub: "Subtítulo", ek_hello: "Saudação", ek_city: "Cidade", ek_date: "Data", ek_coord: "Coordenadas", ek_km: "Distância", ek_note: "Recadinho", ek_words: "Palavras", ek_step: "Etapa", ek_month: "Mês", ek_question: "Pergunta", ek_answer: "Resposta", ek_reason: "Razão", ek_place: "Local", ek_name: "Nome", ek_cell: 'Casa', ek_c: 'Casa central', ek_wish: 'Desejo', ek_love: 'O que amo', ek_end: 'Última linha', ek_work: 'Obra', ek_yr: 'Ano', ek_legend: 'Legenda', ek_handle: 'Nome do perfil', ek_stat: 'Número', ek_statl: 'Rótulo', ek_bio: 'Biografia', ek_story: 'Destaque', ek_word: 'Palavra', ek_phon: 'Pronúncia', ek_gram: 'Classe', ek_sense: 'Aceção', ek_syn: 'Sinónimos', ek_see: 'Ver também', ek_big: 'Número grande', ek_sel: 'Prémio', ek_kicker: 'Chamada', ek_bill: 'Créditos', ek_temp: 'Temperatura', ek_dispute: 'Desacordo', ek_photo: 'Foto', coach: 'Toca numa foto ou num texto para o editar, ou usa os botões por baixo da página. Desliza para virar as páginas.', coach_wide: 'Clica numa foto ou num texto para o editar, ou usa os botões por baixo da página.', coach_ok: 'Percebi' },
 }).forEach(([l, d]) => Object.assign(NA.UI[l], d));
 const stageWrap = document.querySelector('.nst-stagewrap');
 let ebar = null;
@@ -8512,10 +9079,15 @@ if (stageWrap) {
 }
 // Libellé lisible d'un champ : nom connu (ek_city…), sinon style Magazine « lettre + numéro » (h1 → Titre 1, q3 → Question 3)
 const EK_BASE = { h: 'title', d: 'date', e: 'step', x: 'text', m: 'month', s: 'song', q: 'question', r: 'reason', k: 'kline', c: 'cap', n: 'name', a: 'answer' };
+// Pages Magazine v2 : nom des champs selon la page (« b5 » du bingo = « Case 5 », « d1 » du dictionnaire = « Sens 1 »…)
+const EK_OV = { mbingo: { b: 'cell', c: 'c' }, mvoeux: { w: 'wish' }, maime: { i: 'love' }, mmusee: { t: 'work', y: 'yr', foot: 'legend' },
+  mprofil: { n: 'stat', l: 'statl', name: 'names', hl: 'story' }, mdico: { d: 'sense' }, mduel: { x: 'dispute' } };
 function ekLabel(layout, key) {
+  const ov = EK_OV[layout] || {};
+  if (ov[key]) { const v = t('ek_' + ov[key]); if (v !== 'ek_' + ov[key]) return v; }
   const own = t('ek_' + key); if (own !== 'ek_' + key) return own;
-  const m = /^([a-z])(\d+)(s?)$/.exec(key) || (key === 'h' ? [key, 'h', '', ''] : null); if (!m) return key;
-  let base = m[3] ? 'ksub' : EK_BASE[m[1]];
+  const m = /^([a-z]+?)(\d+)(s?)$/.exec(key) || (key === 'h' ? [key, 'h', '', ''] : null); if (!m) return key;
+  let base = m[3] ? 'ksub' : (ov[m[1]] || EK_BASE[m[1]] || (m[1] === 'cap' ? 'cap' : ''));
   if (m[1] === 'a' && layout === 'mplay_b') base = 'artist';
   if (m[1] === 'n' && layout === 'madresses') base = 'place';
   if (m[1] === 'c' && layout === 'madresses') base = 'city';

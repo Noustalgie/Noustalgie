@@ -286,7 +286,7 @@
   },
   {
    "id": "chapitre",
-   "layout": "mchap",
+   "layout": "mchapf",
    "v": 0,
    "ph": [
     "allee"
@@ -294,12 +294,13 @@
    "t": {
     "num": "Chapitre II",
     "title": "Le grand jour",
-    "text": "Un samedi de juin, sous un ciel hésitant. Les invités ont lancé des pétales, la mariée a ri trop fort, et le marié a oublié son discours. Personne ne s’en souvient ; tout le monde se souvient de ce rire."
+    "text": "Un samedi de juin, sous un ciel hésitant. Les invités ont lancé des pétales, la mariée a ri trop fort, et le marié a oublié son discours. Personne ne s’en souvient ; tout le monde se souvient de ce rire.",
+    "big": "02"
    }
   },
   {
-   "id": "duo",
-   "layout": "duo",
+   "id": "photo-sur-photo",
+   "layout": "pover",
    "ph": [
     "sortie",
     "invites"
@@ -353,12 +354,13 @@
   },
   {
    "id": "photo-mains",
-   "layout": "full",
+   "layout": "mgeant",
    "ph": [
     "photo-mains"
    ],
    "t": {
-    "cap": "Ta main dans la mienne, toujours"
+    "word": "toi & moi",
+    "text": "Ta main dans la mienne, toujours."
    }
   },
   {
