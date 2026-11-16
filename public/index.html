@@ -5102,6 +5102,8 @@ function folio(pg, T) {
   return `<div style="position:absolute;bottom:30px;${left ? `left:${M}px` : `right:${M}px`};color:${T.muted};font:600 9px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;pointer-events:none;">${left ? `${String(i + 1).padStart(2, '0')} · ${esc(mast)}` : `${esc(mast)} · ${String(i + 1).padStart(2, '0')}`}</div>`;
 }
 const TOC_KEYS = ['debut', 'dico', 'etapes', 'moments', 'annee', 'playlist', 'aime', 'adresses', 'voyages', 'postale', 'souvenir', 'memory', 'interview', 'raisons', 'bouquet', 'musee', 'profil', 'quiz', 'mots', 'bingo', 'voeux', 'bucket', 'lettre'];
+const edToc = () => (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
+const edNames = () => joli(String((typeof NA !== 'undefined' && NA.pages && NA.pages[0] && NA.pages[0].t && NA.pages[0].t.names) || ''));
 
 /* Rubriques */
 Object.assign(LAYOUTS, {
@@ -5135,7 +5137,6 @@ Object.assign(LAYOUTS, {
       + col(0, '01', 'k1', 'k1s') + col(1, '02', 'k2', 'k2s') + col3();
   } },
   medito: { n: 0, text: true, mag: 'edito', render(pg) {
-    const edNames = () => joli(String((typeof NA !== 'undefined' && NA.pages && NA.pages[0] && NA.pages[0].t && NA.pages[0].t.names) || ''));
     const T = MT(), d = pg.t.text || '';
     const toc = (typeof NA !== 'undefined' && Array.isArray(NA.pages)) ? TOC_KEYS.map(k => [k, NA.pages.findIndex(p => p && p.k === k)]).filter(([, i]) => i > 0).sort((a, b) => a[1] - b[1]) : [];
     const RH = toc.length > 13 ? 35 : toc.length > 9 ? 42 : 52, sm = RH < 40;
@@ -5314,29 +5315,31 @@ Object.assign(LAYOUTS, {
     const N = 12, cell = 37, gx = 286, gy = 254, lh = clamp(Math.floor(N * cell / Math.max(1, words.length)), 30, 46);
     const { grid } = wordGrid(words, N, (pg.t.seed || '') + words.join(''));
     const letters = grid.map((row, y) => row.map((c, x) => `<div style="position:absolute;left:${x * cell}px;top:${y * cell}px;width:${cell}px;height:${cell}px;line-height:${cell}px;text-align:center;">${c}</div>`).join('')).join('');
-    return tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('mots1'))
+    return VEIL(mixc(T.rose, T.paper, .55)) + tx(pg, 'h1', `position:absolute;left:${M}px;top:58px;color:${T.ink};font:400 96px/.86 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('mots1'))
       + tx(pg, 'h2', `position:absolute;left:${M + 196}px;top:146px;color:${T.ink};font:400 58px/1.1 ${T.script};white-space:nowrap;`, lm('mots2'))
       + (CTX.editing ? tx(pg, 'words', `position:absolute;left:${M}px;top:${gy}px;width:190px;color:${T.ink};font:600 13px/${lh}px ${T.ui};letter-spacing:.14em;text-transform:uppercase;`, 'Un mot par ligne')
         : words.map((w, k) => `<div style="position:absolute;left:${M}px;top:${gy + k * lh + (lh - 13) / 2}px;width:13px;height:13px;border:1.4px solid ${T.accent};border-radius:50%;box-sizing:border-box;"></div>`
           + `<div style="position:absolute;left:${M + 26}px;top:${gy + k * lh}px;width:180px;color:${T.ink};font:600 13px/${lh}px ${T.ui};letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;">${esc(w)}</div>`).join(''))
-      + `<div style="position:absolute;left:${gx - 18}px;top:${gy - 18}px;width:${N * cell + 36}px;height:${N * cell + 36}px;background:${T.rose};opacity:.35;"></div>`
-      + `<div style="position:absolute;left:${gx}px;top:${gy}px;width:${N * cell}px;height:${N * cell}px;background:#fff;color:${T.cardInk};font:500 17px/1 ${T.ui};${folioShadow}">${letters}</div>`
+      + `<div style="position:absolute;left:${gx - 18}px;top:${gy - 18}px;width:${N * cell + 36}px;height:${N * cell + 36}px;background:#fff;transform:rotate(1.2deg);${SHADOW}"></div>`
+      + `<div style="position:absolute;left:${gx}px;top:${gy}px;width:${N * cell}px;height:${N * cell}px;color:${T.cardInk};font:500 17px/1 ${T.ui};transform:rotate(1.2deg);">${letters}</div>`
+      + tape(gx + N * cell / 2 - 50, gy - 30, 100, -3)
       + svgHeartLine(gx + N * cell - 6, gy - 40, 40, T.accent, 14) + folio(pg, T);
   } },
   mraisons: { n: 0, text: true, mag: 'raisons', render(pg) {
     // en-tête : grand 5, « RAISONS » et « de t'aimer » à côté ; dessous, cinq lignes séparées par des filets, sur toute la largeur
-    const T = MT(), W = PX - 2 * M, y0 = 316, RH = 82;
+    const T0 = MT(), ink = onCol(T0.accent), W = PX - 2 * M, y0 = 316, RH = 82, num = lumi(T0.accent) < .5 ? T0.rose : mixc(ink, T0.accent, .3);
+    const T = Object.assign({}, T0, { ink, rule: rgba(ink, .26), muted: rgba(ink, .62) });   // texte clair sur fond foncé (ou l'inverse)
     const items = Array.from({ length: 5 }, (_, k) => {
       const y = y0 + k * RH, t = pg.t['r' + (k + 1)] || '';
       return `<div style="position:absolute;left:${M}px;top:${y}px;width:${W}px;height:1px;background:${T.rule};"></div>`
-        + `<div style="position:absolute;left:${M}px;top:${y + 14}px;width:56px;color:${T.accent};font:400 52px/1 ${T.disp};">${k + 1}</div>`
+        + `<div style="position:absolute;left:${M}px;top:${y + 14}px;width:56px;color:${num};font:400 52px/1 ${T.disp};">${k + 1}</div>`
         + tx(pg, 'r' + (k + 1), `position:absolute;left:${M + 72}px;top:${y + 12}px;width:${W - 72}px;height:${RH - 16}px;display:flex;align-items:center;color:${T.ink};font:italic 400 ${fit(t, 23, 17, 60, 150)}px/1.28 ${T.disp};`, '');
     }).join('');
-    return `<div style="position:absolute;left:${M - 10}px;top:38px;color:${T.ink};font:400 260px/.8 ${T.disp};">5</div>`
+    return VEIL(T0.accent) + `<div style="position:absolute;left:${M - 10}px;top:38px;color:${T.ink};font:400 260px/.8 ${T.disp};">5</div>`
       + tx(pg, 'h1', `position:absolute;left:${M + 160}px;top:104px;color:${T.ink};font:400 72px/1 ${T.disp};text-transform:uppercase;white-space:nowrap;`, lm('rai1'))
-      + tx(pg, 'h2', `position:absolute;left:${M + 230}px;top:174px;color:${T.accent};font:400 52px/1.1 ${T.script};white-space:nowrap;`, lm('rai2'))
+      + tx(pg, 'h2', `position:absolute;left:${M + 230}px;top:174px;color:${num};font:400 52px/1.1 ${T.script};white-space:nowrap;`, lm('rai2'))
       + items + `<div style="position:absolute;left:${M}px;top:${y0 + 5 * RH}px;width:${W}px;height:1px;background:${T.rule};"></div>`
-      + svgHeart(668, 70, 44, T.accent, 10) + svgHeartLine(626, 128, 26, T.accent, -16) + folio(pg, T);
+      + svgHeart(668, 70, 44, num, 10) + svgHeartLine(626, 128, 26, num, -16) + folio(pg, T);
   } },
   mbucket: { n: 0, text: true, mag: 'bucket', render(pg) {
     // page de carnet lignée, scotchée, cases à cocher au stylo ; une photo instantanée à côté quand la page en a une
@@ -5449,7 +5452,7 @@ const LMAG2 = {
     filmSel: 'Sélection officielle', filmFest: 'Festival de nos cœurs', filmBill: '{a} · Scénario\u00a0: le hasard · Musique\u00a0: nos chansons · Suite au prochain épisode',
     meteo1: 'Météo', meteo2: 'de notre amour', temp: '37,2°', days: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'], duelWin: 'Qui gagne\u00a0?',
     lettreTo: 'Une lettre pour {n}', signAlways: 'Avec amour, pour toujours', kiss: 'Bons baisers de', together: 'Toujours ensemble', stampVal: 'Par avion', postaleLab: 'Carte postale',
-    toc2: { postale: 'Une carte postale', bouquet: 'Un bouquet pour toi', dico: 'Nous, définition', moments: 'Nos plus beaux moments', aime: 'Ce que j’aime chez toi', souvenir: 'Notre souvenir préféré', musee: 'Le musée de nous',
+    toc2: { postale: 'Une carte postale', bouquet: 'Un mot doux pour toi', dico: 'Nous, définition', moments: 'Nos plus beaux moments', aime: 'Ce que j’aime chez toi', souvenir: 'Notre souvenir préféré', musee: 'Le musée de nous',
       profil: 'Notre profil', bingo: 'Bingo spécial couple', voeux: 'Ce que je nous souhaite' } },
   en: { jtm: 'I love you', geant: ['you & me', 'forever', 'I love you'], moments1: 'Our most iconic', moments2: 'moments', souv1: 'our favourite', souv2: 'memory', voeux: 'here’s to us…',
     voeuxW: ['Laughter', 'Adventures', 'Always us'], dest1: 'our', dest2: 'getaways', bingo2: 'couple edition',
@@ -5465,7 +5468,7 @@ const LMAG2 = {
     filmSel: 'Official selection', filmFest: 'Festival of our hearts', filmBill: '{a} · Written by chance · Music: our songs · To be continued',
     meteo1: 'Forecast', meteo2: 'for our love', temp: '37.2°', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], duelWin: 'Who wins?',
     lettreTo: 'A love letter to {n}', signAlways: 'With love, always', kiss: 'Greetings from', together: 'Always together', stampVal: 'Par avion', postaleLab: 'Postcard',
-    toc2: { postale: 'A postcard', bouquet: 'A bouquet for you', dico: 'Us, defined', moments: 'Our most iconic moments', aime: 'What I love about you', souvenir: 'Our favourite memory', musee: 'The museum of us',
+    toc2: { postale: 'A postcard', bouquet: 'A love note for you', dico: 'Us, defined', moments: 'Our most iconic moments', aime: 'What I love about you', souvenir: 'Our favourite memory', musee: 'The museum of us',
       profil: 'Our profile', bingo: 'Couples bingo', voeux: 'What I wish for us' } },
   de: { jtm: 'ich liebe dich', geant: ['du & ich', 'für immer', 'ich liebe dich'], moments1: 'Unsere schönsten', moments2: 'Momente', souv1: 'unsere liebste', souv2: 'Erinnerung', voeux: 'ich wünsche uns…',
     voeuxW: ['Viel Lachen', 'Reisen', 'Immer wir'], dest1: 'unsere', dest2: 'Reiseziele', bingo2: 'Paar-Edition',
@@ -5481,7 +5484,7 @@ const LMAG2 = {
     filmSel: 'Offizielle Auswahl', filmFest: 'Festival unserer Herzen', filmBill: '{a} · Drehbuch: der Zufall · Musik: unsere Lieder · Fortsetzung folgt',
     meteo1: 'Wetter', meteo2: 'unserer Liebe', temp: '37,2°', days: ['Mo', 'Di', 'Mi', 'Do', 'Fr'], duelWin: 'Wer gewinnt?',
     lettreTo: 'Ein Liebesbrief an {n}', signAlways: 'In Liebe, für immer', kiss: 'Grüße aus', together: 'Für immer zusammen', stampVal: 'Luftpost', postaleLab: 'Postkarte',
-    toc2: { postale: 'Eine Postkarte', bouquet: 'Ein Strauß für dich', dico: 'Wir, die Definition', moments: 'Unsere schönsten Momente', aime: 'Was ich an dir liebe', souvenir: 'Unsere liebste Erinnerung', musee: 'Das Museum von uns',
+    toc2: { postale: 'Eine Postkarte', bouquet: 'Ein Liebesgruß für dich', dico: 'Wir, die Definition', moments: 'Unsere schönsten Momente', aime: 'Was ich an dir liebe', souvenir: 'Unsere liebste Erinnerung', musee: 'Das Museum von uns',
       profil: 'Unser Profil', bingo: 'Paar-Bingo', voeux: 'Was ich uns wünsche' } },
   es: { jtm: 'te quiero', geant: ['tú y yo', 'para siempre', 'te quiero'], moments1: 'Nuestros mejores', moments2: 'momentos', souv1: 'nuestro recuerdo', souv2: 'favorito', voeux: 'nos deseo…',
     voeuxW: ['Risas', 'Viajes', 'Siempre nosotros'], dest1: 'nuestras', dest2: 'escapadas', bingo2: 'edición pareja',
@@ -5497,7 +5500,7 @@ const LMAG2 = {
     filmSel: 'Selección oficial', filmFest: 'Festival de nuestros corazones', filmBill: '{a} · Guion: el azar · Música: nuestras canciones · Continuará',
     meteo1: 'El tiempo', meteo2: 'de nuestro amor', temp: '37,2°', days: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'], duelWin: '¿Quién gana?',
     lettreTo: 'Una carta de amor para {n}', signAlways: 'Con amor, siempre', kiss: 'Recuerdos de', together: 'Siempre juntos', stampVal: 'Por avión', postaleLab: 'Tarjeta postal',
-    toc2: { postale: 'Una postal', bouquet: 'Un ramo para ti', dico: 'Nosotros, definición', moments: 'Nuestros mejores momentos', aime: 'Lo que amo de ti', souvenir: 'Nuestro recuerdo favorito', musee: 'El museo de nosotros',
+    toc2: { postale: 'Una postal', bouquet: 'Una nota de amor para ti', dico: 'Nosotros, definición', moments: 'Nuestros mejores momentos', aime: 'Lo que amo de ti', souvenir: 'Nuestro recuerdo favorito', musee: 'El museo de nosotros',
       profil: 'Nuestro perfil', bingo: 'Bingo de pareja', voeux: 'Lo que nos deseo' } },
   pt: { jtm: 'amo-te', geant: ['tu e eu', 'para sempre', 'amo-te'], moments1: 'Os nossos melhores', moments2: 'momentos', souv1: 'a nossa memória', souv2: 'favorita', voeux: 'desejo-nos…',
     voeuxW: ['Gargalhadas', 'Viagens', 'Sempre nós'], dest1: 'as nossas', dest2: 'escapadinhas', bingo2: 'edição casal',
@@ -5513,7 +5516,7 @@ const LMAG2 = {
     filmSel: 'Seleção oficial', filmFest: 'Festival dos nossos corações', filmBill: '{a} · Argumento: o acaso · Música: as nossas canções · Continua',
     meteo1: 'Meteorologia', meteo2: 'do nosso amor', temp: '37,2°', days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'], duelWin: 'Quem ganha?',
     lettreTo: 'Uma carta de amor para {n}', signAlways: 'Com amor, sempre', kiss: 'Saudações de', together: 'Sempre juntos', stampVal: 'Por avião', postaleLab: 'Postal',
-    toc2: { postale: 'Um postal', bouquet: 'Um ramo para ti', dico: 'Nós, definição', moments: 'Os nossos melhores momentos', aime: 'O que amo em ti', souvenir: 'A nossa memória favorita', musee: 'O museu de nós',
+    toc2: { postale: 'Um postal', bouquet: 'Um bilhete de amor para ti', dico: 'Nós, definição', moments: 'Os nossos melhores momentos', aime: 'O que amo em ti', souvenir: 'A nossa memória favorita', musee: 'O museu de nós',
       profil: 'O nosso perfil', bingo: 'Bingo de casal', voeux: 'O que nos desejo' } },
 };
 Object.keys(LMAG2).forEach(l => { const d = LMAG[l]; Object.assign(d, LMAG2[l]); d.toc = Object.assign({}, d.toc, LMAG2[l].toc2); });
@@ -5879,44 +5882,10 @@ Object.assign(LAYOUTS, {
       + tx(pg, 'text', `position:absolute;left:${M + 20}px;right:${M + 20}px;bottom:${M + 6}px;text-align:center;color:#fff;font:italic 400 ${fit(txt, 25, 18, 40, 200)}px/1.4 ${T.disp};${TSH}`, 'Un mot doux…');
   } },
 });
-/* ══ Pages « objets » : roses, nœud de dentelle, enveloppe, cachet de cire, carte postale ═════════════════
+/* ══ Pages « objets » : nœud de satin, enveloppe, cachet de cire, carte postale ═════════════════
    D'après une lettre d'amour vue sur TikTok (16 novembre 2026) : objets dessinés en SVG (rien à télécharger, net
    à l'impression). Aucune ombre floutée (filtre SVG) : les ombres sont des copies décalées et translucides. */
 const objRng = seed => { let s = 2166136261; for (const c of String(seed)) s = Math.imul(s ^ c.charCodeAt(0), 16777619) >>> 0; return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; };
-// Teintes des roses : rose poudré, ivoire ; au style Années 70, des roses sépia comme les photos
-const ROSE_PAL = { rose: { light: '#FFF5F6', mid: '#F3C2CB', deep: '#DC8597', core: '#A94862', shade: '#5E1F31' },
-  ivoire: { light: '#FFFDFB', mid: '#F6E4E1', deep: '#E9B9BF', core: '#B96A7C', shade: '#5E1F31' },
-  sepia: { light: '#FBF7EF', mid: '#E6DCCB', deep: '#C7B59A', core: '#8C7658', shade: '#3B2F22' } };
-const rosePal = alt => themeKey() === 'seventies' ? ROSE_PAL.sepia : alt ? ROSE_PAL.ivoire : ROSE_PAL.rose;
-// Rose vue de dessus : anneaux de pétales, chacun foncé à la base et clair au bord, liseré de lumière
-function rose(x, y, size, rot, P, seed) {
-  const id = 'nRo' + (++MAGID), r = objRng(seed || id);
-  const RINGS = [[8, 41, 68, 52], [7, 31, 58, 44], [6, 22, 47, 36], [5, 14, 37, 28], [4, 7, 27, 20], [3, 3, 18, 14]];
-  let defs = `<radialGradient id="${id}h" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${P.mid}" stop-opacity=".5"/><stop offset="1" stop-color="${P.mid}" stop-opacity="0"/></radialGradient>`;
-  RINGS.forEach((_, k) => {
-    const t = k / (RINGS.length - 1);
-    defs += `<linearGradient id="${id}r${k}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${t > .5 ? P.core : P.deep}"/><stop offset="${(.42 - t * .12).toFixed(2)}" stop-color="${t > .6 ? P.deep : P.mid}"/><stop offset="1" stop-color="${t > .75 ? P.mid : P.light}"/></linearGradient>`;
-  });
-  const petal = (ang, dist, w, h, k) => {
-    const a = ang * Math.PI / 180, t = `translate(${(100 + Math.cos(a) * dist).toFixed(1)} ${(100 + Math.sin(a) * dist).toFixed(1)}) rotate(${(ang + 90).toFixed(1)})`;
-    const d = `M0 4C${(-w * .62).toFixed(1)} ${(-h * .1).toFixed(1)} ${(-w * .64).toFixed(1)} ${(-h * .82).toFixed(1)} ${(-w * .26).toFixed(1)} ${-h.toFixed(1)}Q0 ${(-h * 1.1).toFixed(1)} ${(w * .26).toFixed(1)} ${-h.toFixed(1)}C${(w * .64).toFixed(1)} ${(-h * .82).toFixed(1)} ${(w * .62).toFixed(1)} ${(-h * .1).toFixed(1)} 0 4Z`;
-    return `<g transform="${t}"><path transform="translate(0 2.5)" d="${d}" fill="${P.shade}" opacity=".14"/><path d="${d}" fill="url(#${id}r${k})"/>`
-      + `<path d="M${(-w * .3).toFixed(1)} ${(-h * .97).toFixed(1)}Q0 ${(-h * 1.1).toFixed(1)} ${(w * .3).toFixed(1)} ${(-h * .97).toFixed(1)}" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"/>`
-      + `<path d="M${(-w * .4).toFixed(1)} ${(-h * .22).toFixed(1)}C${(-w * .2).toFixed(1)} ${(-h * .5).toFixed(1)} ${(w * .2).toFixed(1)} ${(-h * .5).toFixed(1)} ${(w * .4).toFixed(1)} ${(-h * .22).toFixed(1)}" fill="none" stroke="${P.shade}" stroke-width="1" opacity=".16"/></g>`;
-  };
-  let out = `<circle cx="100" cy="100" r="98" fill="url(#${id}h)"/>`;
-  RINGS.forEach(([n, d, w, h], k) => { const off = r() * 360; for (let i = 0; i < n; i++) out += petal(off + i * 360 / n + (r() - .5) * 16, d + (r() - .5) * 3, w * (.9 + r() * .2), h * (.9 + r() * .2), k); });
-  for (let i = 0; i < 3; i++) { const a = r() * 6.28, rr = 2.5 + i * 2.6; out += `<path d="M${(100 + Math.cos(a) * rr).toFixed(1)} ${(100 + Math.sin(a) * rr).toFixed(1)}A${rr} ${rr} 0 0 1 ${(100 + Math.cos(a + 2.6) * rr).toFixed(1)} ${(100 + Math.sin(a + 2.6) * rr).toFixed(1)}" fill="none" stroke="${P.shade}" stroke-width="${(1.8 - i * .3).toFixed(1)}" stroke-linecap="round" opacity=".55"/>`; }
-  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${size}px;height:${size}px;transform:rotate(${rot}deg);overflow:visible;pointer-events:none" viewBox="0 0 200 200"><defs>${defs}</defs>${out}</svg>`;
-}
-// Feuille de rosier : ovale pointu vert sauge, nervures claires
-function feuille(x, y, len, rot) {
-  const id = 'nFe' + (++MAGID), c = themeKey() === 'seventies' ? ['#6F6A5C', '#A9A391'] : ['#6E8B6A', '#A7BF9E'];
-  return `<svg aria-hidden="true" style="position:absolute;left:${x}px;top:${y}px;width:${len}px;height:${(len * .42).toFixed(1)}px;transform:rotate(${rot}deg);transform-origin:0 50%;overflow:visible;pointer-events:none" viewBox="0 0 100 42">`
-    + `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs>`
-    + `<path d="M0 21C22-2 70-4 100 21C70 46 22 44 0 21Z" fill="url(#${id})"/><path d="M2 21C34 18 66 19 97 21" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/>`
-    + [20, 36, 52, 68].map(t => `<path d="M${t} 20.5L${t + 10} 11M${t} 21.5L${t + 10} 31" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/>`).join('') + `</svg>`;
-}
 // Nœud de ruban de satin à la couleur de l'album : boucles creusées, longs pans coupés en V, reflet satiné, ombre douce.
 // (Le premier nœud, en dentelle argentée, se perdait sur l'enveloppe blanche et paraissait gris.)
 // Pas de motif SVG répété (pattern) ni de filtre : Chrome les convertit en image dans le PDF ; ici, rien que du vectoriel.
@@ -6001,17 +5970,17 @@ const lettrePlume = s => {
 };
 
 Object.assign(LAYOUTS, {
-  // Lettre, page de gauche : l'enveloppe ouverte, une photo qui en sort, des roses, un nœud de dentelle
+  // Lettre, page de gauche : l'enveloppe ouverte, une photo qui en sort, ruban de satin, cachet de cire
   mlettre_c: { n: 1, text: true, mag: 'lettre', render(pg) {
-    // fond rosé (l'enveloppe ivoire s'en détache), composition centrée dans la page, nœud de satin à la couleur de l'album
-    const T = MT(), ew = 560, eh = 330, ex = 117, ey = 386, d = -34, [w, h] = boxFor(pg, 0, 304, 354);
-    const px = 400 - (w + 26) / 2, py = 154 + d + (354 - h) / 2;
-    return VEIL(mixc(T.rose, T.paper, .82)) + envDos(ex, ey, ew, eh)
-      + feuille(150, 250 + d, 120, -150) + feuille(600, 205 + d, 110, -20) + feuille(640, 360 + d, 100, 25) + feuille(120, 330 + d, 90, 160)
-      + rose(112, 138 + d, 210, 10, rosePal(), 'a') + rose(500, 104 + d, 180, 40, rosePal(true), 'b') + rose(566, 296 + d, 150, -20, rosePal(), 'c') + rose(206, 96 + d, 120, 70, rosePal(true), 'e')
-      + `<div style="position:absolute;left:${px}px;top:${py}px;width:${w + 26}px;height:${h + 26}px;background:${T.card || '#fff'};transform:rotate(-5deg);${SHADOW}"><div style="position:absolute;left:13px;top:13px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div></div>`
+    // fond rosé, grande photo qui sort de l'enveloppe ivoire, ruban de satin et cachet de cire à la couleur de l'album, cœurs de papier
+    const T = MT(), ew = 600, eh = 310, ex = 97, ey = 424, [w, h] = boxFor(pg, 0, 360, 410);
+    const px = 397 - (w + 28) / 2, py = 58 + (410 - h) / 2;
+    return VEIL(mixc(T.rose, T.paper, .8)) + envDos(ex, ey, ew, eh)
+      + svgHeart(86, 96, 54, T.accent, -14, .9) + svgHeart(668, 74, 34, mixc(T.rose, T.accent, .3), 16) + svgHeartLine(640, 300, 40, T.accent, 12) + svgHeart(72, 300, 28, mixc(T.rose, T.accent, .3), -8)
+      + `<div style="position:absolute;left:${px}px;top:${py}px;width:${w + 28}px;height:${h + 28}px;background:${T.card || '#fff'};transform:rotate(-4deg);${SHADOW}"><div style="position:absolute;left:14px;top:14px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div></div>`
       + envFace(ex, ey, ew, eh)
-      + rose(92, 380 + d, 120, -30, rosePal(true), 'd') + noeud(150, 420 + d, 250, -6, T.accent) + folio(pg, T);
+      + cachet(397 - 44, ey + eh * .62 - 50, 88, T.accent, (pg.id || 'c') + 'e')
+      + noeud(112, 392, 210, -10, T.accent) + folio(pg, T);
   } },
   // Lettre, page de droite : le papier, l'écriture à la plume, la signature et le cachet de cire
   mlettre_d: { n: 0, text: true, mag: 'lettre', render(pg) {
@@ -6048,24 +6017,21 @@ Object.assign(LAYOUTS, {
       + tx(pg, 'lab', `position:absolute;left:28px;bottom:16px;color:#9A8F80;font:600 8px/1 ${T.ui};letter-spacing:.28em;text-transform:uppercase;`, '')
       + `</div>` + folio(pg, T);
   } },
-  // Mot doux au bouquet : photo instantanée, bouquet de roses noué de dentelle, étiquette manuscrite au bout d'un fil
+  // Mot doux : grande photo instantanée scotchée, ruban de satin, étiquette manuscrite au bout d'un fil, cœurs de papier
   mbouquet: { n: 1, text: true, mag: 'quote', render(pg) {
-    const T = MT(), [w, h] = boxFor(pg, 0, 384, 384);
-    const tige = (a, b, c, d) => `<path d="M${a} ${b}Q${(a + c) / 2 + 20} ${(b + d) / 2} ${c} ${d}" stroke="${themeKey() === 'seventies' ? '#6F6A5C' : '#6E8B6A'}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    const T = MT(), [w, h] = boxFor(pg, 0, 400, 430), cw = w + 36, ch = h + 104, cx = 54 + (400 - w) / 2, cy = Math.round((PX - ch) / 2) + 6;
     return VEIL(mixc(T.rose, T.paper, .78))
-      + `<div style="position:absolute;left:${70 + (384 - w) / 2}px;top:${Math.round((PX - h - 104) / 2) - 6}px;width:${w + 36}px;height:${h + 104}px;background:${T.card || '#fff'};transform:rotate(-3deg);${SHADOW}">`
+      + svgHeart(640, 600, 70, T.accent, 12) + svgHeartLine(700, 560, 34, T.accent, -14) + svgHeart(560, 690, 30, mixc(T.rose, T.accent, .3), -10)
+      + `<div style="position:absolute;left:${cx}px;top:${cy}px;width:${cw}px;height:${ch}px;background:${T.card || '#fff'};transform:rotate(-3deg);${SHADOW}">`
       + `<div style="position:absolute;left:18px;top:18px;width:${w}px;height:${h}px;">${slot(pg, 0, 0, 0, w, h, { border: 0 })}</div>`
-      + tx(pg, 'cap', `position:absolute;left:12px;right:12px;bottom:28px;text-align:center;color:${T.cardInk};font:400 15px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, '') + `</div>`
-      + `<svg aria-hidden="true" style="position:absolute;left:0;top:0;width:${PX}px;height:${PX}px;overflow:visible;pointer-events:none" viewBox="0 0 ${PX} ${PX}">`
-      + tige(540, 470, 690, 760) + tige(600, 450, 700, 770) + tige(470, 520, 680, 770) + tige(560, 560, 690, 775) + tige(640, 520, 705, 772) + `</svg>`
-      + feuille(470, 470, 120, -150) + feuille(620, 430, 110, -60) + feuille(560, 600, 100, 40) + feuille(650, 560, 90, -10) + feuille(420, 560, 100, 170)
-      + rose(470, 400, 170, 0, rosePal(), 'f') + rose(580, 380, 150, 30, rosePal(true), 'g') + rose(520, 500, 150, 60, rosePal(true), 'h') + rose(410, 470, 130, 20, rosePal(), 'i') + rose(620, 480, 120, -20, rosePal(), 'j')
-      + noeud(612, 604, 140, -24, T.accent)
-      + `<svg aria-hidden="true" style="position:absolute;left:520px;top:40px;width:220px;height:240px;overflow:visible;pointer-events:none" viewBox="0 0 220 240"><path d="M30 6C90 40 150 60 170 120" fill="none" stroke="#B9A88F" stroke-width="1.6"/></svg>`
-      + `<div style="position:absolute;left:540px;top:110px;width:200px;height:220px;background:#FBF7EF;transform:rotate(7deg);clip-path:polygon(18% 0,82% 0,100% 14%,100% 100%,0 100%,0 14%);box-shadow:0 10px 20px -10px rgba(0,0,0,.35);">`
-      + `<div style="position:absolute;left:93px;top:18px;width:14px;height:14px;border-radius:50%;background:${mixc(T.rose, T.paper, .78)};box-shadow:inset 0 0 0 2px #D8CBB6;"></div>`
-      + tx(pg, 'h', `position:absolute;left:16px;right:16px;top:44px;color:${T.accent};font:400 24px/1 ${T.script};text-align:center;white-space:nowrap;`, '')
-      + tx(pg, 'text', `position:absolute;left:18px;right:18px;top:84px;color:#2A2420;font:400 ${fit(pg.t.text, 13.5, 10.5, 50, 140)}px/1.85 ${T.hand};text-align:center;`, 'Un mot doux…') + `</div>`;
+      + tx(pg, 'cap', `position:absolute;left:12px;right:12px;bottom:30px;text-align:center;color:${T.cardInk};font:400 16px/1.2 ${T.hand};white-space:nowrap;overflow:hidden;`, '') + `</div>`
+      + tape(cx + cw / 2 - 50, cy - 14, 100, 4) + noeud(cx - 52, cy + ch - 150, 150, 14, T.accent)
+      + `<svg aria-hidden="true" style="position:absolute;left:0;top:0;width:${PX}px;height:${PX}px;overflow:visible;pointer-events:none" viewBox="0 0 ${PX} ${PX}"><path d="M640 0C650 70 630 130 640 196" fill="none" stroke="#B9A88F" stroke-width="1.6"/></svg>`
+      + `<div style="position:absolute;left:520px;top:180px;width:236px;height:300px;background:#FBF7EF;transform:rotate(5deg);clip-path:polygon(18% 0,82% 0,100% 13%,100% 100%,0 100%,0 13%);box-shadow:0 10px 20px -10px rgba(0,0,0,.35);">`
+      + `<div style="position:absolute;left:111px;top:18px;width:14px;height:14px;border-radius:50%;background:${mixc(T.rose, T.paper, .78)};box-shadow:inset 0 0 0 2px #D8CBB6;"></div>`
+      + tx(pg, 'h', `position:absolute;left:16px;right:16px;top:50px;color:${T.accent};font:400 30px/1 ${T.script};text-align:center;white-space:nowrap;`, '')
+      + tx(pg, 'text', `position:absolute;left:22px;right:22px;top:100px;color:#2A2420;font:400 ${fit(pg.t.text, 15, 11.5, 50, 160)}px/1.9 ${T.hand};text-align:center;`, 'Un mot doux…') + `</div>`
+      + folio(pg, T);
   } },
 });
 /* ── Planificateur Magazine ─────────────────────────────────────────
@@ -6303,7 +6269,7 @@ function planMagazine(nPages, story, info) {
       return [mk('mmots', [], { h1: lm('mots1'), h2: lm('mots2'), words: [...new Set(cand)].slice(0, 10).join('\n'), seed: names }, 'mots')];
     },
     bucket: () => [mk('mbucket', bucketPh ? fresh(1) : [], { h1: lm('bucket1'), h2: lm('bucket2'), items: (story.wishlist || []).slice(0, 8).join('\n') }, 'bucket')],
-    // la lettre : l'enveloppe ouverte avec une photo, roses et nœud de dentelle, puis le papier à la plume et son cachet de cire
+    // la lettre : l'enveloppe ouverte avec une photo, ruban de satin et cachet, puis le papier à la plume et son cachet de cire
     lettre: () => [mk('mlettre_c', freshOr(1, 20), {}, 'lettre'), mk('mlettre_d', [], { title: n2 ? lm('lettreTo').replace('{n}', n2) : `${lm('lettre1')} ${lm('lettre2')}`, hello: lm('hello'),
       text: info.letter || mag.loveLetter || story.letter || '', sign: lm('signAlways') + (n1 ? '\n' + n1 : '') })],
     postale: () => {
