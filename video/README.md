@@ -151,3 +151,7 @@ node tools/og.js out/mag/site/og-exemple-fond.jpg ../public/img/exemple/og-exemp
 ```
 
 Quand une de ces images change, changer aussi son `alt` et ses légendes (`figcaption`) dans toutes les pages de `public/`.
+
+## Roses et nœud de la lettre de l'album
+
+`~/blender-venv/bin/python tools/lettre-objets.py [--draft] [--only rose-a,noeud]` modélise et rend en 3D (Cycles) les trois roses et le nœud de dentelle argentée de la double page « lettre », fond transparent et ombre portée, en WebP dans `public/img/album/`. Les variantes `-sepia` (style Années 70) sont tirées des roses avec Pillow ; les roses et le nœud ont ensuite été un peu saturés et éclaircis (Pillow, `ImageEnhance`).

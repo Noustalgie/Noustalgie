@@ -21,6 +21,8 @@ POLICES = {  # nom Google Fonts -> (paquet npm, nom de famille déclaré par le 
     # style Années 70
     'Special Elite': ('@fontsource/special-elite', None), 'Caprasimo': ('@fontsource/caprasimo', None),
     'Jost': ('@fontsource/jost', None), 'Yellowtail': ('@fontsource/yellowtail', None),
+    # lettre de l'album (écriture à la main)
+    'Whisper': ('@fontsource/whisper', None),
 }
 CACHE = os.path.expanduser('~/.cache/noustalgie-polices')
 NM = os.path.join(CACHE, 'node_modules')
@@ -87,6 +89,10 @@ def serveur(dossier):
 
 async def routage(route):
     u = route.request.url
+    if '/img/album/' in u and (u.startswith('http://127.0.0.1') or 'noustalgie.fr/' in u):   # roses et nœud de la lettre
+        f = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public', 'img', 'album', u.split('/img/album/')[1].split('?')[0])
+        if os.path.exists(f):
+            return await route.fulfill(status=200, content_type='image/webp', body=open(f, 'rb').read())
     if u.startswith('http://127.0.0.1'):
         return await route.continue_()
     if 'fonts.googleapis.com/css' in u:
