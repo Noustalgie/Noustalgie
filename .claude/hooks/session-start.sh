@@ -10,10 +10,12 @@ fi
 
 cd "$CLAUDE_PROJECT_DIR"
 
-# Python. Playwright reste en 1.56 : c'est la version du Chromium préinstallé (/opt/pw-browsers/chromium-1194).
+# Python. Playwright suit la version du Playwright Node préinstallé, qui correspond au Chromium de /opt/pw-browsers
+# (fixer 1.56 a cassé les contrôles le 20 novembre 2026 quand l'environnement est passé à chromium-1243).
 # Les autres paquets servent aux captures (Pillow) et à la musique des films (video/tools/audio*.py).
+PW=$(cd / && node -e "console.log(require('playwright/package.json').version)" 2>/dev/null || echo 1.56.0)
 python3 -m pip install --quiet --disable-pip-version-check --root-user-action=ignore \
-  'playwright==1.56.0' pillow numpy scipy soundfile pedalboard pyloudnorm
+  "playwright==$PW" pillow numpy scipy soundfile pedalboard pyloudnorm
 
 # Node : esbuild (minimise le CSS et le JavaScript de la construction de production), puis le moteur
 # des films et des visuels du site (gsap, three)

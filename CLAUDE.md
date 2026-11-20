@@ -128,7 +128,7 @@ Utiliser le skill `/mise-en-ligne` (branche → vérifications → PR → aperç
 Crochets (`.claude/settings.json`) :
 - `verifier-syntaxe.mjs` vérifie la syntaxe de `index.html` et des fichiers `api/` après chaque modification, et remet la carte du code à jour ;
 - `garde-fous.mjs` refuse les modifications à la main des pages légales générées ;
-- `session-start.sh` installe, au début de chaque session web, ce qu'il faut pour les contrôles et les films (Playwright 1.56 pour le Chromium préinstallé, Pillow, paquets audio, esbuild par `npm install` à la racine, `video/node_modules`, polices).
+- `session-start.sh` installe, au début de chaque session web, ce qu'il faut pour les contrôles et les films (Playwright Python à la version du Playwright Node préinstallé, donc du Chromium de `/opt/pw-browsers`, Pillow, paquets audio, esbuild par `npm install` à la racine, `video/node_modules`, polices).
 
 Aperçus Vercel depuis une session web : `curl` est bloqué, lire les pages avec l'outil `web_fetch_vercel_url` du connecteur Vercel. Jamais un gros fichier (vidéo) avec cet outil, il fait planter le connecteur : vérifier l'affiche ou un petit fichier du même dossier.
 
