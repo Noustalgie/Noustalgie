@@ -40,26 +40,23 @@
   {
    "id": "debut",
    "k": "debut",
-   "layout": "mdebut",
+   "layout": "mrecit",
    "ph": [
-    "photo-champ",
-    "photo-bouquet"
+    "photo-champ"
    ],
    "t": {
-    "h1": "Là où tout a",
-    "h2": "commencé",
-    "text": "C’était un mardi de novembre, sous une pluie fine. Hugo cherchait ses clés, Léa cherchait un taxi. Ils ont partagé le même parapluie, puis un café qui devait durer trente minutes et en a duré trois heures. En sortant, la pluie s’était arrêtée ; eux, non. Le lendemain, à 8 h 02, un message : « Tu as encore mon parapluie. » Elle l’a gardé.",
-    "c0": "Le soir où tout a commencé",
-    "note": "J’ai hâte de te revoir !"
+    "h1": "L’histoire de",
+    "h2": "notre rencontre",
+    "text": "C’était un mardi de novembre, sous une pluie fine. Hugo cherchait ses clés, Léa cherchait un taxi. Ils ont partagé le même parapluie, puis un café qui devait durer trente minutes et en a duré trois heures. En sortant, la pluie s’était arrêtée ; eux, non. Le lendemain, à 8 h 02, un message : « Tu as encore mon parapluie. » Elle l’a gardé."
    }
   },
   {
    "id": "carte",
-   "layout": "mcarte",
+   "k": "cal",
+   "layout": "mcal",
    "t": {
-    "city": "Lille",
-    "date": "12 novembre 2019",
-    "coord": "50.6366° N, 3.0635° E"
+    "h1": "Fous amoureux depuis",
+    "date": "12 novembre 2019"
    }
   },
   {
@@ -96,13 +93,17 @@
    }
   },
   {
-   "id": "photo",
-   "layout": "full",
+   "id": "ville",
+   "k": "carte",
+   "layout": "mcarte3",
    "ph": [
-    "montagne"
+    "photo-lumieres"
    ],
    "t": {
-    "cap": "Et devant nous, toute la vue"
+    "h": "Là où tout a commencé",
+    "city": "Lille",
+    "date": "12 novembre 2019",
+    "coord": "50.6366° N, 3.0635° E"
    }
   },
   {
@@ -154,65 +155,61 @@
   {
    "id": "playlist-a",
    "k": "playlist",
-   "layout": "mplay_a",
-   "ph": [
-    "photo-mains"
-   ],
+   "layout": "mplay_c",
    "t": {
     "h1": "notre",
     "h2": "playlist",
-    "num": "Morceau 01",
-    "song": "La Vie en rose · Louis Armstrong"
+    "text": "Les chansons de nos trajets, de nos soirées et de nos fous rires, à écouter en boucle.",
+    "quote": "De la bonne musique, mon amour, des souvenirs à l’infini."
    }
   },
   {
    "id": "playlist-b",
-   "layout": "mplay_b",
+   "layout": "mplay_d",
    "ph": [
+    "photo-mains",
     "photo-champ",
     "allee",
     "invites",
     "montagne",
     "photo-bouquet",
     "arche",
-    "sortie",
-    "photo-lumieres",
-    "assis"
+    "sortie"
    ],
    "t": {
-    "side": "Face A",
-    "a1": "Louis Armstrong",
+    "lab": "Playlist",
+    "title": "Toutes nos premières fois",
+    "sub": "Nos chansons, nos souvenirs, en boucle.",
+    "who": "Léa + 1 autre",
+    "count": "9 titres",
+    "alb": "Léa & Hugo",
     "s1": "La Vie en rose",
-    "a2": "Angèle",
+    "a1": "Louis Armstrong",
     "s2": "Ta reine",
-    "a3": "Coldplay",
+    "a2": "Angèle",
     "s3": "Yellow",
-    "a4": "Clara Luciani",
+    "a3": "Coldplay",
     "s4": "La grenade",
-    "a5": "Adele",
+    "a4": "Clara Luciani",
     "s5": "Make You Feel My Love",
-    "a6": "Phoenix",
+    "a5": "Adele",
     "s6": "1901",
-    "a7": "Etta James",
+    "a6": "Phoenix",
     "s7": "At Last",
-    "a8": "Stromae",
-    "s8": "Alors on danse",
-    "a9": "Christine and the Queens",
-    "s9": "Saint Claude"
+    "a7": "Etta James"
    }
   },
   {
    "id": "adresses",
    "k": "adresses",
-   "layout": "madresses",
+   "layout": "madresses2",
    "ph": [
     "arche",
-    "photo-champ",
-    "sortie",
-    "photo-lumieres"
+    "photo-lumieres",
+    "sortie"
    ],
    "t": {
-    "h1": "nos adresses",
+    "h1": "Nos adresses",
     "h2": "préférées",
     "n1": "Le Café des Arts",
     "c1": "Lille",
@@ -250,9 +247,11 @@
   {
    "id": "interview",
    "k": "interview",
-   "layout": "minterview",
+   "layout": "minterview2",
    "ph": [
-    "assis"
+    "assis",
+    "invites",
+    "photo-bouquet"
    ],
    "t": {
     "h1": "Interview",
@@ -384,10 +383,19 @@
   },
   {
    "id": "citation",
-   "layout": "mquote",
-   "v": 1,
+   "k": "dico",
+   "layout": "mdico3",
+   "ph": [
+    "photo-montagne"
+   ],
    "t": {
-    "text": "On s’est trouvés sous un parapluie, on ne s’est plus quittés."
+    "word": "nous",
+    "phon": "[nu]",
+    "gram": "pronom personnel",
+    "d1": "Léa & Hugo, depuis le 12 novembre 2019.",
+    "d2": "Deux personnes qui se choisissent encore, chaque matin, sans jamais s’en lasser.",
+    "syn": "Syn. : toi et moi, à deux, ensemble.",
+    "see": "Voir aussi : Lille, la dune du Pyla, « La Vie en rose »."
    }
   },
   {
