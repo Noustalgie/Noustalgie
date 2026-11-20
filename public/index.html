@@ -1711,6 +1711,13 @@ html body .nst-later-box .nst-input::placeholder{font:400 16px var(--v6-ui)!impo
 .nst-bgrow{margin-top:10px;gap:6px;justify-content:flex-start;}
 .nst-bgpick{position:relative;cursor:pointer;display:inline-flex;align-items:center;}
 .nst-bgpick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;}
+.nst-bgdot{width:16px;height:16px;border-radius:50%;margin-right:8px;border:1px solid rgba(28,26,24,.2);flex:none;}
+.nst-bgok{background:#1c1a18;color:#fff;border-color:#1c1a18;}
+.nst-r-book{position:relative;display:flex;width:min(94vw,164vh);aspect-ratio:2/1;box-shadow:0 30px 80px rgba(0,0,0,.5);}
+.nst-r-half{position:relative;flex:1;overflow:hidden;background:#fff;}
+.nst-r-half .nst-canvas{position:absolute;left:0;top:0;}
+.nst-r-half:first-child{box-shadow:inset -18px 0 22px -18px rgba(0,0,0,.28);}
+.nst-r-blank{background:#f4f1ec;}
 </style>
 <script type="application/ld+json">
 {
@@ -6315,9 +6322,9 @@ Object.assign(LAYOUTS, {
     const lines = [1, 2, 3, 4].map(k => pg.t['d' + k] ? `<div>${esc(lm('moment'))} · ${esc(pg.t['d' + k])}</div>` : '').join('');
     return VEIL(mixc(T.paper, '#e9e7e3', 0.5))
       + `<div style="position:absolute;left:36px;top:48px;width:360px;height:170px;background:${T.paper};"></div>`
-      + `<div style="position:absolute;left:36px;top:62px;width:360px;text-align:center;color:${T.ink};font:400 84px/.8 ${BOD};">“</div>`
+      + `<div style="position:absolute;left:36px;top:62px;width:360px;text-align:center;color:${T.ink};font:700 84px/.8 'Playfair Display',serif;">“</div>`
       + tx(pg, 'quote', `position:absolute;left:76px;top:116px;width:280px;text-align:center;color:${T.ink};font:600 ${fit(qte, 12.5, 10.5, 30, 90)}px/1.45 ${T.ui};letter-spacing:.08em;text-transform:uppercase;`, 'Une citation…')
-      + `<div style="position:absolute;left:36px;top:160px;width:360px;text-align:center;color:${T.ink};font:400 84px/.8 ${BOD};">”</div>`
+      + `<div style="position:absolute;left:36px;top:160px;width:360px;text-align:center;color:${T.ink};font:700 84px/.8 'Playfair Display',serif;">”</div>`
       + flat(pg, 0, 414, 30, 344, 150) + flat(pg, 1, 414, 194, 344, 210) + flat(pg, 2, 36, 234, 360, 196)
       + flat(pg, 3, 414, 418, 344, 168) + flat(pg, 4, 36, 446, 360, 186) + flat(pg, 5, 36, 646, 260, 120)
       + `<div style="position:absolute;left:414px;top:602px;width:344px;color:${T.ink};font:400 11px/1.5 'Libre Baskerville',serif;text-transform:uppercase;letter-spacing:.04em;">${lines}</div>`
@@ -7329,7 +7336,7 @@ fr: {
   used: 'Déjà utilisée page {0}', ph_import: 'Importer une nouvelle photo', photo_n: 'Photo {0}', current: '(actuelle)',
   text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA\u00a0:', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
   layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_ppola: 'Photo instantanée', ly_pover: 'Photo sur photo', ly_pscrap: 'Photos instantanées', ly_pscrap4: 'Photos instantanées', ly_pbooth: 'Bande photo', ly_pmosaic3: 'Mosaïque', ly_pmosaic4: 'Mosaïque', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
-  pg_col: 'Couleur de la page', pg_col_def: 'Par défaut', pg_col_other: 'Autre couleur', move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
+  pg_col: 'Couleur de la page', pg_col_def: 'Par défaut', pg_col_other: 'Autre couleur', pg_col_apply: 'Appliquer cette couleur', move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
   old_txt: 'Cet album a été créé avec notre ancienne mise en page. Le passer au nouveau style Magazine ? Vos photos et vos légendes sont gardées.', old_go: 'Passer au Magazine', old_keep: 'Garder l\'ancienne',
   resume_txt: 'Vous avez un album en cours\u00a0:', resume_yes: 'Reprendre', resume_no: 'Plus tard',
   issue_txt: 'L’écriture automatique n’a pas répondu\u00a0: votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
@@ -7361,7 +7368,7 @@ en: {
   used: 'Already used on page {0}', ph_import: 'Upload a new photo', photo_n: 'Photo {0}', current: '(current)',
   text: 'Text', text_list: ' (one item per line)', ai_alt: 'Another wording by AI:', rw_short: 'Shorter', rw_tender: 'More tender', rw_funny: 'Funnier', rw_again: 'Another version', writing: 'Writing…', rw_fail: 'Rewriting is unavailable right now.',
   layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid', ly_ppola: 'Instant photo', ly_pover: 'Photo on photo', ly_pscrap: 'Instant photos', ly_pscrap4: 'Instant photos', ly_pbooth: 'Photo strip', ly_pmosaic3: 'Mosaic', ly_pmosaic4: 'Mosaic', ly_spread: 'Double page', sp_make: 'Spread across both pages', sp_undo: 'Back to a single page', sp_note: 'The photo spans both facing pages. The middle falls into the binding, so avoid placing a face there.', sp_edge: 'A double page is possible from pages 3 and 4 up to the second-to-last pair of pages.', sp_text: 'The facing page contains text. Move it first, then try again.', sp_full: 'Not enough room to move the other photos from these two pages.', sp_move: 'A double page cannot be moved: go back to a single page first.',
-  pg_col: 'Page colour', pg_col_def: 'Default', pg_col_other: 'Other colour', move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
+  pg_col: 'Page colour', pg_col_def: 'Default', pg_col_other: 'Other colour', pg_col_apply: 'Apply this colour', move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
   old_txt: 'This album was made with our old layout. Switch it to the new Magazine style? Your photos and captions are kept.', old_go: 'Switch to Magazine', old_keep: 'Keep the old one',
   resume_txt: 'You have an album in progress:', resume_yes: 'Resume', resume_no: 'Later',
   issue_txt: 'Automatic writing did not respond: your album uses default texts. Tap a text to write it, or try the writing again.', issue_retry: 'Retry writing',
@@ -7393,7 +7400,7 @@ de: {
   used: 'Schon auf Seite {0}', ph_import: 'Neues Foto hochladen', photo_n: 'Foto {0}', current: '(aktuell)',
   text: 'Text', text_list: ' (ein Eintrag pro Zeile)', ai_alt: 'Andere Formulierung per KI:', rw_short: 'Kürzer', rw_tender: 'Zärtlicher', rw_funny: 'Lustiger', rw_again: 'Andere Version', writing: 'Schreibt…', rw_fail: 'Umschreiben gerade nicht verfügbar.',
   layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster', ly_ppola: 'Sofortbild', ly_pover: 'Foto auf Foto', ly_pscrap: 'Sofortbilder', ly_pscrap4: 'Sofortbilder', ly_pbooth: 'Fotostreifen', ly_pmosaic3: 'Mosaik', ly_pmosaic4: 'Mosaik', ly_spread: 'Doppelseite', sp_make: 'Über die Doppelseite ziehen', sp_undo: 'Zurück zu einer Seite', sp_note: 'Das Foto erstreckt sich über beide gegenüberliegenden Seiten. Die Mitte liegt in der Bindung, platziert dort also kein Gesicht.', sp_edge: 'Eine Doppelseite ist ab den Seiten 3 und 4 bis zum vorletzten Seitenpaar möglich.', sp_text: 'Die gegenüberliegende Seite enthält Text. Verschiebt sie zuerst und versucht es dann erneut.', sp_full: 'Nicht genug Platz, um die anderen Fotos dieser beiden Seiten unterzubringen.', sp_move: 'Eine Doppelseite lässt sich nicht verschieben: Wechselt zuerst zurück zu einer Seite.',
-  pg_col: 'Seitenfarbe', pg_col_def: 'Standard', pg_col_other: 'Andere Farbe', move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
+  pg_col: 'Seitenfarbe', pg_col_def: 'Standard', pg_col_other: 'Andere Farbe', pg_col_apply: 'Diese Farbe übernehmen', move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
   old_txt: 'Dieses Album wurde mit unserem alten Layout erstellt. Auf den neuen Magazin-Stil umstellen? Eure Fotos und Bildunterschriften bleiben erhalten.', old_go: 'Zum Magazin-Stil', old_keep: 'Altes behalten',
   resume_txt: 'Ihr habt ein angefangenes Album:', resume_yes: 'Fortsetzen', resume_no: 'Später',
   issue_txt: 'Das automatische Schreiben hat nicht geantwortet: euer Album nutzt Standardtexte. Tippt auf einen Text, um ihn zu schreiben, oder versucht es erneut.', issue_retry: 'Erneut schreiben',
@@ -7425,7 +7432,7 @@ es: {
   used: 'Ya usada en la página {0}', ph_import: 'Subir una foto nueva', photo_n: 'Foto {0}', current: '(actual)',
   text: 'Texto', text_list: ' (un elemento por línea)', ai_alt: 'Otra redacción con IA:', rw_short: 'Más corto', rw_tender: 'Más tierno', rw_funny: 'Más divertido', rw_again: 'Otra versión', writing: 'Escribiendo…', rw_fail: 'Reescritura no disponible por ahora.',
   layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula', ly_ppola: 'Foto instantánea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantáneas', ly_pscrap4: 'Fotos instantáneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Doble página', sp_make: 'Extender a doble página', sp_undo: 'Volver a una sola página', sp_note: 'La foto ocupa las dos páginas enfrentadas. El centro queda en la encuadernación: evitad colocar ahí una cara.', sp_edge: 'La doble página es posible desde las páginas 3 y 4 hasta el penúltimo par de páginas.', sp_text: 'La página de enfrente contiene texto. Movedla primero y volved a intentarlo.', sp_full: 'No hay sitio suficiente para recolocar las demás fotos de estas dos páginas.', sp_move: 'Una doble página no se puede mover: volved primero a una sola página.',
-  pg_col: 'Color de la página', pg_col_def: 'Por defecto', pg_col_other: 'Otro color', move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
+  pg_col: 'Color de la página', pg_col_def: 'Por defecto', pg_col_other: 'Otro color', pg_col_apply: 'Aplicar este color', move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
   old_txt: 'Este álbum se creó con nuestro diseño antiguo. ¿Pasarlo al nuevo estilo Magazine? Tus fotos y textos de las fotos se conservan.', old_go: 'Pasar a Magazine', old_keep: 'Mantener el antiguo',
   resume_txt: 'Tienes un álbum en curso:', resume_yes: 'Retomar', resume_no: 'Más tarde',
   issue_txt: 'La escritura automática no respondió: tu álbum usa textos por defecto. Toca un texto para escribirlo o vuelve a intentarlo.', issue_retry: 'Volver a escribir',
@@ -7457,7 +7464,7 @@ pt: {
   used: 'Já usada na página {0}', ph_import: 'Carregar uma foto nova', photo_n: 'Foto {0}', current: '(atual)',
   text: 'Texto', text_list: ' (um item por linha)', ai_alt: 'Outra redação com IA:', rw_short: 'Mais curto', rw_tender: 'Mais terno', rw_funny: 'Mais divertido', rw_again: 'Outra versão', writing: 'A escrever…', rw_fail: 'Reescrita indisponível de momento.',
   layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha', ly_ppola: 'Foto instantânea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantâneas', ly_pscrap4: 'Fotos instantâneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Página dupla', sp_make: 'Estender à página dupla', sp_undo: 'Voltar a uma só página', sp_note: 'A foto ocupa as duas páginas frente a frente. O centro fica na encadernação: evitem colocar aí um rosto.', sp_edge: 'A página dupla é possível a partir das páginas 3 e 4 até ao penúltimo par de páginas.', sp_text: 'A página da frente contém texto. Movam-na primeiro e tentem de novo.', sp_full: 'Não há espaço suficiente para recolocar as outras fotos destas duas páginas.', sp_move: 'Uma página dupla não pode ser movida: voltem primeiro a uma só página.',
-  pg_col: 'Cor da página', pg_col_def: 'Predefinida', pg_col_other: 'Outra cor', move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
+  pg_col: 'Cor da página', pg_col_def: 'Predefinida', pg_col_other: 'Outra cor', pg_col_apply: 'Aplicar esta cor', move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
   old_txt: 'Este álbum foi criado com o nosso antigo layout. Passá-lo para o novo estilo Magazine? As tuas fotos e legendas são mantidas.', old_go: 'Passar a Magazine', old_keep: 'Manter o antigo',
   resume_txt: 'Tens um álbum em curso:', resume_yes: 'Retomar', resume_no: 'Mais tarde',
   issue_txt: 'A escrita automática não respondeu: o teu álbum usa textos por defeito. Toca num texto para o escrever, ou tenta de novo.', issue_retry: 'Escrever de novo',
@@ -8152,9 +8159,11 @@ function updUndo() { H(); const u = $('nstUndo'), r = $('nstRedo'); if (u) u.dis
 // Pages visibles : couverture seule, puis doubles pages (2-3, 4-5…) sur grand écran
 // Comme le livre imprimé : couverture seule ; page 2 seule à droite (face à la feuille de garde) ;
 // puis 3-4, 5-6… ; la dernière page intérieure seule à gauche si besoin ; 4e de couverture seule.
+// livre ouvert (deux pages) dès qu'il y a la place : fenêtre étroite d'ordinateur, tablette, téléphone à l'horizontale
+const twoUp = () => window.matchMedia('(min-width: 640px)').matches;
 function visible() {
   const c = NA.cur, last = NA.pages.length - 1;
-  if (!isWide() || c === 0 || c === last) return [c];
+  if (!twoUp() || c === 0 || c === last) return [c];
   if (c === 1) return [null, 1];
   const l = c % 2 === 0 ? c : c - 1, r = l + 1;
   return [l, r < last ? r : null];
@@ -8298,7 +8307,7 @@ function drawTools() {
   if (!(L && L.spread)) {   // couleur de la page : toutes les teintes, du plus clair au plus foncé, et une couleur libre
     const cur = (pg.bg || '').toLowerCase();
     html += `<div class="nst-sec"><label>${NA.t('pg_col')}</label><div class="nst-bgs">${BG_SWATCHES.map(c => `<button class="nst-bg${cur === c ? ' on' : ''}" data-bg="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')}</div>
-      <div class="nst-row nst-bgrow"><button class="nst-chip${cur ? '' : ' on'}" data-bg="">${NA.t('pg_col_def')}</button><label class="nst-chip nst-bgpick">${NA.t('pg_col_other')}<input type="color" id="nstBgPick" value="${cur || '#f3e6dc'}"/></label></div></div>`;
+      <div class="nst-row nst-bgrow"><button class="nst-chip${cur ? '' : ' on'}" data-bg="">${NA.t('pg_col_def')}</button><label class="nst-chip nst-bgpick"><span class="nst-bgdot" id="nstBgDot" style="background:${cur || '#f3e6dc'}"></span>${NA.t('pg_col_other')}<input type="color" id="nstBgPick" value="${cur || '#f3e6dc'}"/></label><button class="nst-chip nst-bgok" data-act="bg-apply" type="button">${NA.t('pg_col_apply')}</button></div></div>`;
   }
   if (sel.page > 0 && sel.page < NA.pages.length - 1 && !(L && L.spread)) {
     html += `<div class="nst-sec nst-row"><button class="nst-link" data-act="left" ${sel.page <= 1 ? 'disabled' : ''}>${NA.t('move_left')}</button><button class="nst-link" data-act="right" ${sel.page >= NA.pages.length - 1 ? 'disabled' : ''}>${NA.t('move_right')}</button></div>`;
@@ -8454,6 +8463,7 @@ function bindEditor() {
     if (b.dataset.photo) return swapPhoto(+b.dataset.photo);
     if (b.dataset.filter) { commit(); pg.slots[ED.sel.slot].f = b.dataset.filter; return refreshPage(ED.sel.page); }
     if (b.dataset.layout) { if (NA.spreadOf(pg)) return; commit(); pg.layout = b.dataset.layout; return refreshPage(ED.sel.page); }
+    if (b.dataset.act === 'bg-apply') { const c = String(($('nstBgPick') || {}).value || '').toLowerCase(); if (!/^#[0-9a-f]{6}$/.test(c) || pg.bg === c) return; commit(); pg.bg = c; return refreshPage(ED.sel.page); }
     if (b.dataset.bg != null) { if ((pg.bg || '') === b.dataset.bg) return; commit(); if (b.dataset.bg) pg.bg = b.dataset.bg; else delete pg.bg; return refreshPage(ED.sel.page); }
     if (b.dataset.act === 'spread' || b.dataset.act === 'unspread') {
       const i = ED.sel.page, r = b.dataset.act === 'spread' ? NA.makeSpread(NA.pages, i, ED.sel.slot || 0) : NA.unmakeSpread(NA.pages, i);
@@ -8479,12 +8489,8 @@ function bindEditor() {
     ED.textBefore = null;
     if (ED.sel) { const i = ED.sel.page; drawStage(); drawThumb(i); }
   });
-  $('nstTools').addEventListener('change', e => {
-    if (e.target.id !== 'nstBgPick' || !ED.sel) return;
-    const pg = NA.pages[ED.sel.page], c = String(e.target.value).toLowerCase();
-    if (!/^#[0-9a-f]{6}$/.test(c) || pg.bg === c) return;
-    commit(); pg.bg = c; refreshPage(ED.sel.page);
-  });
+  // couleur libre : la pastille suit le sélecteur, « Appliquer » pose la couleur sur la page
+  $('nstTools').addEventListener('input', e => { if (e.target.id === 'nstBgPick' && $('nstBgDot')) $('nstBgDot').style.background = e.target.value; });
   $('nstTools').addEventListener('input', e => {
     if (e.target.id === 'nstTxt' && ED.sel && ED.sel.text) {
       const i = ED.sel.page, key = ED.sel.text;
@@ -8526,18 +8532,27 @@ function bindEditor() {
 function openReader() {
   const ov = document.createElement('div'); ov.className = 'nst-reader'; ov.tabIndex = -1;
   let i = NA.cur;
+  // livre ouvert sur un écran assez large : couverture seule, page 2 seule à droite, puis 3-4, 5-6…, 4e de couverture seule
+  const duo = () => window.matchMedia('(min-width: 640px)').matches && innerWidth > innerHeight * 0.8;
+  const last = () => NA.pages.length - 1;
+  const pair = k => { if (!duo() || k === 0 || k === last()) return [k]; if (k === 1) return [null, 1]; const l = k % 2 ? k - 1 : k; return [l, l + 1 < last() ? l + 1 : null]; };
   const draw = () => {
-    ov.innerHTML = `<button class="nst-r-x" aria-label="${NA.t('close')}">×</button><button class="nst-r-p" aria-label="${NA.t('prev')}">‹</button><div class="nst-r-page"></div><button class="nst-r-n" aria-label="${NA.t('next')}">›</button><div class="nst-r-c">${i + 1} / ${NA.pages.length}</div>`;
-    const h = ov.querySelector('.nst-r-page'); h.innerHTML = NA.renderPage(NA.pages[i]); requestAnimationFrame(() => scaleHost(h));
+    ov.innerHTML = `<button class="nst-r-x" aria-label="${NA.t('close')}">×</button><button class="nst-r-p" aria-label="${NA.t('prev')}">‹</button><div class="nst-r-page"></div><button class="nst-r-n" aria-label="${NA.t('next')}">›</button><div class="nst-r-c">${pair(i).filter(x => x != null).map(x => x + 1).join('-')} / ${NA.pages.length}</div>`;
+    const h = ov.querySelector('.nst-r-page'), P = pair(i);
+    if (P.length === 1) { h.innerHTML = NA.renderPage(NA.pages[i]); requestAnimationFrame(() => scaleHost(h)); return; }
+    h.className = 'nst-r-book';
+    h.innerHTML = P.map(k => `<div class="nst-r-half${k == null ? ' nst-r-blank' : ''}">${k == null ? '' : NA.renderPage(NA.pages[k])}</div>`).join('');
+    requestAnimationFrame(() => h.querySelectorAll('.nst-r-half').forEach(scaleHost));
   };
   const close = () => { ov.remove(); document.removeEventListener('keydown', key); };
-  const key = e => { if (e.key === 'Escape') close(); if (e.key === 'ArrowRight' && i < NA.pages.length - 1) { i++; draw(); } if (e.key === 'ArrowLeft' && i > 0) { i--; draw(); } };
-  const next = () => { if (i < NA.pages.length - 1) { i++; draw(); } }, prev = () => { if (i > 0) { i--; draw(); } };
+  const next = () => { const v = pair(i).filter(x => x != null), m = Math.max(...v); if (m < last()) { i = m + 1; draw(); } };
+  const prev = () => { const v = pair(i).filter(x => x != null), m = Math.min(...v); if (m > 0) { i = m - 1; draw(); } };
+  const key = e => { if (e.key === 'Escape') close(); if (e.key === 'ArrowRight') next(); if (e.key === 'ArrowLeft') prev(); };
   ov.addEventListener('click', e => {
     if (e.target.closest('.nst-r-x') || e.target === ov) return close();
     if (e.target.closest('.nst-r-n')) return next();
     if (e.target.closest('.nst-r-p')) return prev();
-    const pg = e.target.closest('.nst-r-page');                         // toucher le bord droit / gauche de la page
+    const pg = e.target.closest('.nst-r-page,.nst-r-book');                         // toucher le bord droit / gauche de la page
     if (pg) { const r = pg.getBoundingClientRect(); (e.clientX - r.left > r.width / 2) ? next() : prev(); }
   });
   let sx = null, sy = null;                                             // glisser le doigt pour tourner
