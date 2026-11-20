@@ -1705,6 +1705,12 @@ html body .nst-later-box .nst-input::placeholder{font:400 16px var(--v6-ui)!impo
 #app:has(#panel3.active)>.app-wrap>.reveal:first-child,#app:has(#panel4.active)>.app-wrap>.reveal:first-child{display:none;}
 .nst-later-box .nst-check{margin:12px 0 16px!important;align-items:flex-start;}
 .nst-later-box .nst-note{margin:10px 0 0;text-align:center;}
+.nst-bgs{display:grid;grid-template-columns:repeat(16,1fr);gap:3px;margin-top:2px;}
+.nst-bg{aspect-ratio:1;min-width:0;padding:0;border:1px solid rgba(28,26,24,.12);border-radius:4px;cursor:pointer;}
+.nst-bg.on{outline:2px solid #1c1a18;outline-offset:1px;}
+.nst-bgrow{margin-top:10px;gap:6px;justify-content:flex-start;}
+.nst-bgpick{position:relative;cursor:pointer;display:inline-flex;align-items:center;}
+.nst-bgpick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;}
 </style>
 <script type="application/ld+json">
 {
@@ -4721,7 +4727,19 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 // print=true → images servies par Cloudinary en haute définition
 let CTX = { print: false, editing: false, inline: false, thumb: false, photos: null, theme: null };
 const themeKey = () => CTX.theme || NA.theme;
-const theme = () => THEMES[themeKey()] || THEMES.galerie;
+const theme = () => { const T = THEMES[themeKey()] || THEMES.galerie; return CTX.bg ? pageTheme(T, CTX.bg, CTX.accBg) : T; };
+// Couleur de page choisie dans l'éditeur (pg.bg) : le papier prend cette couleur, le texte passe en clair ou en foncé selon le fond.
+// accBg : mise en page dont le fond est la couleur de l'album (édito, raisons…) : la couleur choisie la remplace, ses textes suivent.
+const PT_CACHE = new Map();
+function pageTheme(T, bg, accBg) {
+  const k = themeKey() + bg + (accBg ? 1 : 0); if (PT_CACHE.has(k)) return PT_CACHE.get(k);
+  const dark = lumi(bg) < 0.45, ink = dark ? '#FBF6EF' : (lumi(T.ink) < 0.5 ? T.ink : '#1C1A18');
+  const near = Math.abs(lumi(T.accent) - lumi(bg)) < 0.16;
+  const r = Object.assign({}, T, { paper: bg, ink, muted: mixc(ink, bg, 0.36), rule: mixc(ink, bg, 0.8), paperTex: false,
+    accent: accBg ? bg : near ? (dark ? mixc(T.rose || '#E7B3BC', '#ffffff', 0.3) : mixc(T.accent, '#000000', 0.45)) : T.accent });
+  PT_CACHE.set(k, r); return r;
+}
+const BG_ACC = new Set(['medito', 'mraisons', 'mmotif', 'mbingo']);
 const photos = () => CTX.photos || (typeof S !== 'undefined' && S.photos) || [];
 
 // Impression : PDFShift refuse un PDF de plus de 15 Mo. PRINT.area cumule la surface des photos imprimées pour choisir
@@ -6337,7 +6355,7 @@ Object.assign(LAYOUTS, {
   } },
   // … page de droite : la playlist comme dans une application de musique (pochette, bouton lecture, liste des titres)
   mplay_d: { n: 8, text: true, mag: 'playlist', render(pg) {
-    const T = MT(), top = mixc(T.rose, '#3a2a2a', 0.45), n = clamp((pg.slots.length || 8) - 1, 1, 7), wh = '#F4F1EC', mu = 'rgba(244,241,236,.62)';
+    const T = MT(), top = mixc(T.rose, '#3a2a2a', 0.45), n = clamp((pg.slots.length || 8) - 1, 1, 7), wh = CTX.bg && lumi(CTX.bg) >= 0.45 ? '#1C1A18' : '#F4F1EC', mu = rgba(wh, .62);
     const dur = k => { let s = 0; for (const c of String(pg.t['s' + k] || k)) s = (s * 31 + c.charCodeAt(0)) >>> 0; return `${2 + s % 2}:${String(10 + s % 49).padStart(2, '0')}`; };
     const rows = Array.from({ length: n }, (_, j) => { const k = j + 1, y = 470 + j * 44;
       return `<div style="position:absolute;left:60px;top:${y + 12}px;width:20px;color:${mu};font:500 12px/1 ${T.ui};">${k}</div>`
@@ -6366,7 +6384,7 @@ Object.assign(LAYOUTS, {
   } },
   // Ensemble : le nom du numéro en très grand, une photo vue par des fenêtres arrondies, la date et trois mots
   mtogether: { n: 1, text: true, mag: 'together', render(pg) {
-    const T = MT(), ink = T.cardInk, R = 26;
+    const T = MT(), ink = CTX.bg ? T.ink : T.cardInk, R = 26;
     return VEIL(T.card || '#fff')
       + tx(pg, 'news', `position:absolute;left:44px;top:40px;color:${ink};font:600 11px/1 ${T.ui};letter-spacing:.24em;text-transform:uppercase;white-space:nowrap;`, '')
       + tx(pg, 'vol', `position:absolute;right:44px;top:40px;color:${ink};font:600 11px/1 ${T.ui};letter-spacing:.2em;text-transform:uppercase;`, '')
@@ -6407,7 +6425,7 @@ Object.assign(LAYOUTS, {
   } },
   // … page de droite : le récit, deux photos scotchées, une carte d'embarquement, une photo au pied
   msouv_d: { n: 3, text: true, mag: 'memory', render(pg) {
-    const T = MT(), txt = pg.t.text || '', ink = T.cardInk;
+    const T = MT(), txt = pg.t.text || '', ink = CTX.bg ? T.ink : T.cardInk;
     const bp = `<div style="position:absolute;left:600px;top:500px;width:150px;height:250px;background:#FBF8EF;transform:rotate(3deg);${folioShadow}">`
       + `<div style="position:absolute;left:0;right:0;top:0;height:34px;background:${mixc('#D9C690', T.accent, 0.25)};"></div>`
       + tx(pg, 'co', `position:absolute;left:10px;right:8px;top:7px;color:#2A2420;font:700 9px/1.15 ${T.ui};letter-spacing:.14em;text-transform:uppercase;`, '')
@@ -6797,9 +6815,14 @@ const PHOTO_LAYOUTS = n => Object.keys(LAYOUTS).filter(k => !LAYOUTS[k].text && 
 const FOLIO_PH = new Set(['frame', 'duo', 'stack', 'trio', 'strip', 'grid', 'ppola', 'pscrap']);
 function renderPage(pg, opts = {}) {
   const prev = CTX; CTX = Object.assign({ print: false, editing: false, inline: false, thumb: false, photos: null, theme: null }, opts);
+  const bg = /^#[0-9a-f]{6}$/i.test(pg.bg || '') ? pg.bg : null;
+  if (bg) { CTX.bg = bg; CTX.accBg = BG_ACC.has(pg.layout); }
   const T = theme(), Ly = LAYOUTS[pg.layout] || LAYOUTS.frame;
   let html;
   try { html = Ly.render(pg, T); if (T.mast && FOLIO_PH.has(pg.layout)) html += folio(pg, MT()); } catch (e) { console.error('render', pg.layout, e); html = ''; }
+  // fond propre à la mise en page (premier voile pleine page) : remplacé par la couleur choisie
+  const V0 = '<div style="position:absolute;inset:0;background:';
+  if (bg && html.startsWith(V0)) html = V0 + bg + html.slice(html.indexOf(';pointer-events:none;"></div>'));
   CTX = prev;
   // Impression : le bruit SVG du papier serait refait en grande image sur chaque page ; une tuile commune le remplace (nstBake)
   const tex = !T.paperTex ? '' : opts.print ? `background-image:${PAPER.slice(0, PAPER.indexOf(',url('))},var(--nst-paper,none);background-size:auto,240px 240px;` : `background-image:${PAPER};`;
@@ -7219,7 +7242,7 @@ fr: {
   used: 'Déjà utilisée page {0}', ph_import: 'Importer une nouvelle photo', photo_n: 'Photo {0}', current: '(actuelle)',
   text: 'Texte', text_list: ' (une ligne par élément)', ai_alt: 'Autre formulation par l’IA\u00a0:', rw_short: 'Plus court', rw_tender: 'Plus tendre', rw_funny: 'Plus drôle', rw_again: 'Autre version', writing: 'Écriture…', rw_fail: 'Réécriture indisponible pour le moment.',
   layout: 'Mise en page', ly_full: 'Pleine page', ly_frame: 'Encadrée', ly_duo: 'Deux photos', ly_stack: 'Superposées', ly_bleed2: 'Plein cadre', ly_trio: 'Une grande, deux petites', ly_strip: 'Trois portraits', ly_grid: 'Grille', ly_ppola: 'Photo instantanée', ly_pover: 'Photo sur photo', ly_pscrap: 'Photos instantanées', ly_pscrap4: 'Photos instantanées', ly_pbooth: 'Bande photo', ly_pmosaic3: 'Mosaïque', ly_pmosaic4: 'Mosaïque', ly_spread: 'Double page', sp_make: 'Étaler sur la double page', sp_undo: 'Revenir à une seule page', sp_note: 'La photo s’étend sur les deux pages face à face. Le milieu passe dans la reliure\u00a0: évitez d’y placer un visage.', sp_edge: 'La double page est possible à partir des pages 3 et 4, et jusqu’à l’avant-dernière paire de pages.', sp_text: 'La page d’en face contient du texte. Déplacez-la d’abord, puis réessayez.', sp_full: 'Pas assez de place pour reloger les autres photos de ces deux pages.', sp_move: 'Une double page ne se déplace pas\u00a0: revenez d’abord à une seule page.',
-  move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
+  pg_col: 'Couleur de la page', pg_col_def: 'Par défaut', pg_col_other: 'Autre couleur', move_left: '← Avancer la page', move_right: 'Reculer la page →', spine_lbl: 'Texte de la tranche', spine_note: 'Imprimé sur la tranche du livre, lisible de bas en haut.',
   old_txt: 'Cet album a été créé avec notre ancienne mise en page. Le passer au nouveau style Magazine ? Vos photos et vos légendes sont gardées.', old_go: 'Passer au Magazine', old_keep: 'Garder l\'ancienne',
   resume_txt: 'Vous avez un album en cours\u00a0:', resume_yes: 'Reprendre', resume_no: 'Plus tard',
   issue_txt: 'L’écriture automatique n’a pas répondu\u00a0: votre album utilise des textes par défaut. Touchez un texte pour l’écrire, ou relancez l’écriture.', issue_retry: 'Relancer l’écriture',
@@ -7251,7 +7274,7 @@ en: {
   used: 'Already used on page {0}', ph_import: 'Upload a new photo', photo_n: 'Photo {0}', current: '(current)',
   text: 'Text', text_list: ' (one item per line)', ai_alt: 'Another wording by AI:', rw_short: 'Shorter', rw_tender: 'More tender', rw_funny: 'Funnier', rw_again: 'Another version', writing: 'Writing…', rw_fail: 'Rewriting is unavailable right now.',
   layout: 'Layout', ly_full: 'Full page', ly_frame: 'Framed', ly_duo: 'Two photos', ly_stack: 'Stacked', ly_bleed2: 'Full bleed', ly_trio: 'One large, two small', ly_strip: 'Three portraits', ly_grid: 'Grid', ly_ppola: 'Instant photo', ly_pover: 'Photo on photo', ly_pscrap: 'Instant photos', ly_pscrap4: 'Instant photos', ly_pbooth: 'Photo strip', ly_pmosaic3: 'Mosaic', ly_pmosaic4: 'Mosaic', ly_spread: 'Double page', sp_make: 'Spread across both pages', sp_undo: 'Back to a single page', sp_note: 'The photo spans both facing pages. The middle falls into the binding, so avoid placing a face there.', sp_edge: 'A double page is possible from pages 3 and 4 up to the second-to-last pair of pages.', sp_text: 'The facing page contains text. Move it first, then try again.', sp_full: 'Not enough room to move the other photos from these two pages.', sp_move: 'A double page cannot be moved: go back to a single page first.',
-  move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
+  pg_col: 'Page colour', pg_col_def: 'Default', pg_col_other: 'Other colour', move_left: '← Move page earlier', move_right: 'Move page later →', spine_lbl: 'Spine text', spine_note: 'Printed on the spine of the book.',
   old_txt: 'This album was made with our old layout. Switch it to the new Magazine style? Your photos and captions are kept.', old_go: 'Switch to Magazine', old_keep: 'Keep the old one',
   resume_txt: 'You have an album in progress:', resume_yes: 'Resume', resume_no: 'Later',
   issue_txt: 'Automatic writing did not respond: your album uses default texts. Tap a text to write it, or try the writing again.', issue_retry: 'Retry writing',
@@ -7283,7 +7306,7 @@ de: {
   used: 'Schon auf Seite {0}', ph_import: 'Neues Foto hochladen', photo_n: 'Foto {0}', current: '(aktuell)',
   text: 'Text', text_list: ' (ein Eintrag pro Zeile)', ai_alt: 'Andere Formulierung per KI:', rw_short: 'Kürzer', rw_tender: 'Zärtlicher', rw_funny: 'Lustiger', rw_again: 'Andere Version', writing: 'Schreibt…', rw_fail: 'Umschreiben gerade nicht verfügbar.',
   layout: 'Layout', ly_full: 'Ganze Seite', ly_frame: 'Gerahmt', ly_duo: 'Zwei Fotos', ly_stack: 'Übereinander', ly_bleed2: 'Randlos', ly_trio: 'Ein großes, zwei kleine', ly_strip: 'Drei Porträts', ly_grid: 'Raster', ly_ppola: 'Sofortbild', ly_pover: 'Foto auf Foto', ly_pscrap: 'Sofortbilder', ly_pscrap4: 'Sofortbilder', ly_pbooth: 'Fotostreifen', ly_pmosaic3: 'Mosaik', ly_pmosaic4: 'Mosaik', ly_spread: 'Doppelseite', sp_make: 'Über die Doppelseite ziehen', sp_undo: 'Zurück zu einer Seite', sp_note: 'Das Foto erstreckt sich über beide gegenüberliegenden Seiten. Die Mitte liegt in der Bindung, platziert dort also kein Gesicht.', sp_edge: 'Eine Doppelseite ist ab den Seiten 3 und 4 bis zum vorletzten Seitenpaar möglich.', sp_text: 'Die gegenüberliegende Seite enthält Text. Verschiebt sie zuerst und versucht es dann erneut.', sp_full: 'Nicht genug Platz, um die anderen Fotos dieser beiden Seiten unterzubringen.', sp_move: 'Eine Doppelseite lässt sich nicht verschieben: Wechselt zuerst zurück zu einer Seite.',
-  move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
+  pg_col: 'Seitenfarbe', pg_col_def: 'Standard', pg_col_other: 'Andere Farbe', move_left: '← Seite nach vorn', move_right: 'Seite nach hinten →', spine_lbl: 'Text auf dem Buchrücken', spine_note: 'Wird auf den Buchrücken gedruckt.',
   old_txt: 'Dieses Album wurde mit unserem alten Layout erstellt. Auf den neuen Magazin-Stil umstellen? Eure Fotos und Bildunterschriften bleiben erhalten.', old_go: 'Zum Magazin-Stil', old_keep: 'Altes behalten',
   resume_txt: 'Ihr habt ein angefangenes Album:', resume_yes: 'Fortsetzen', resume_no: 'Später',
   issue_txt: 'Das automatische Schreiben hat nicht geantwortet: euer Album nutzt Standardtexte. Tippt auf einen Text, um ihn zu schreiben, oder versucht es erneut.', issue_retry: 'Erneut schreiben',
@@ -7315,7 +7338,7 @@ es: {
   used: 'Ya usada en la página {0}', ph_import: 'Subir una foto nueva', photo_n: 'Foto {0}', current: '(actual)',
   text: 'Texto', text_list: ' (un elemento por línea)', ai_alt: 'Otra redacción con IA:', rw_short: 'Más corto', rw_tender: 'Más tierno', rw_funny: 'Más divertido', rw_again: 'Otra versión', writing: 'Escribiendo…', rw_fail: 'Reescritura no disponible por ahora.',
   layout: 'Maquetación', ly_full: 'Página completa', ly_frame: 'Enmarcada', ly_duo: 'Dos fotos', ly_stack: 'Superpuestas', ly_bleed2: 'A sangre', ly_trio: 'Una grande, dos pequeñas', ly_strip: 'Tres retratos', ly_grid: 'Cuadrícula', ly_ppola: 'Foto instantánea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantáneas', ly_pscrap4: 'Fotos instantáneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Doble página', sp_make: 'Extender a doble página', sp_undo: 'Volver a una sola página', sp_note: 'La foto ocupa las dos páginas enfrentadas. El centro queda en la encuadernación: evitad colocar ahí una cara.', sp_edge: 'La doble página es posible desde las páginas 3 y 4 hasta el penúltimo par de páginas.', sp_text: 'La página de enfrente contiene texto. Movedla primero y volved a intentarlo.', sp_full: 'No hay sitio suficiente para recolocar las demás fotos de estas dos páginas.', sp_move: 'Una doble página no se puede mover: volved primero a una sola página.',
-  move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
+  pg_col: 'Color de la página', pg_col_def: 'Por defecto', pg_col_other: 'Otro color', move_left: '← Adelantar la página', move_right: 'Retrasar la página →', spine_lbl: 'Texto del lomo', spine_note: 'Impreso en el lomo del libro.',
   old_txt: 'Este álbum se creó con nuestro diseño antiguo. ¿Pasarlo al nuevo estilo Magazine? Tus fotos y textos de las fotos se conservan.', old_go: 'Pasar a Magazine', old_keep: 'Mantener el antiguo',
   resume_txt: 'Tienes un álbum en curso:', resume_yes: 'Retomar', resume_no: 'Más tarde',
   issue_txt: 'La escritura automática no respondió: tu álbum usa textos por defecto. Toca un texto para escribirlo o vuelve a intentarlo.', issue_retry: 'Volver a escribir',
@@ -7347,7 +7370,7 @@ pt: {
   used: 'Já usada na página {0}', ph_import: 'Carregar uma foto nova', photo_n: 'Foto {0}', current: '(atual)',
   text: 'Texto', text_list: ' (um item por linha)', ai_alt: 'Outra redação com IA:', rw_short: 'Mais curto', rw_tender: 'Mais terno', rw_funny: 'Mais divertido', rw_again: 'Outra versão', writing: 'A escrever…', rw_fail: 'Reescrita indisponível de momento.',
   layout: 'Paginação', ly_full: 'Página inteira', ly_frame: 'Emoldurada', ly_duo: 'Duas fotos', ly_stack: 'Sobrepostas', ly_bleed2: 'Sem margens', ly_trio: 'Uma grande, duas pequenas', ly_strip: 'Três retratos', ly_grid: 'Grelha', ly_ppola: 'Foto instantânea', ly_pover: 'Foto sobre foto', ly_pscrap: 'Fotos instantâneas', ly_pscrap4: 'Fotos instantâneas', ly_pbooth: 'Tira de fotos', ly_pmosaic3: 'Mosaico', ly_pmosaic4: 'Mosaico', ly_spread: 'Página dupla', sp_make: 'Estender à página dupla', sp_undo: 'Voltar a uma só página', sp_note: 'A foto ocupa as duas páginas frente a frente. O centro fica na encadernação: evitem colocar aí um rosto.', sp_edge: 'A página dupla é possível a partir das páginas 3 e 4 até ao penúltimo par de páginas.', sp_text: 'A página da frente contém texto. Movam-na primeiro e tentem de novo.', sp_full: 'Não há espaço suficiente para recolocar as outras fotos destas duas páginas.', sp_move: 'Uma página dupla não pode ser movida: voltem primeiro a uma só página.',
-  move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
+  pg_col: 'Cor da página', pg_col_def: 'Predefinida', pg_col_other: 'Outra cor', move_left: '← Adiantar a página', move_right: 'Atrasar a página →', spine_lbl: 'Texto da lombada', spine_note: 'Impresso na lombada do livro.',
   old_txt: 'Este álbum foi criado com o nosso antigo layout. Passá-lo para o novo estilo Magazine? As tuas fotos e legendas são mantidas.', old_go: 'Passar a Magazine', old_keep: 'Manter o antigo',
   resume_txt: 'Tens um álbum em curso:', resume_yes: 'Retomar', resume_no: 'Mais tarde',
   issue_txt: 'A escrita automática não respondeu: o teu álbum usa textos por defeito. Toca num texto para o escrever, ou tenta de novo.', issue_retry: 'Escrever de novo',
@@ -8131,6 +8154,15 @@ function highlightSel() {
   if (ED.sel.slot != null) { const s = host.querySelector(`.nst-slot[data-slot="${ED.sel.slot}"]`); if (s) s.classList.add('sel'); }
 }
 
+/* Nuancier de la couleur de page : 14 teintes et 2 neutres (colonnes) × 6 tons, du plus clair au plus foncé (lignes) */
+const BG_SWATCHES = (() => {
+  const hsl = (h, s, l) => { s /= 100; l /= 100; const f = n => { const k = (n + h / 30) % 12, c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1)); return Math.round(c * 255).toString(16).padStart(2, '0'); }; return '#' + f(0) + f(8) + f(4); };
+  const H = [[0, 0], [30, 25], [355, 70], [12, 75], [28, 80], [44, 80], [62, 55], [95, 40], [140, 35], [168, 45], [192, 55], [212, 60], [232, 50], [258, 45], [285, 40], [322, 50]];
+  const Lt = [94, 85, 72, 55, 38, 20], out = [];
+  Lt.forEach((l, r) => H.forEach(([h, sat]) => out.push(hsl(h, sat ? Math.max(sat - (r === 0 ? 5 : 0), 0) : 0, sat === 0 && r === 0 ? 98 : l))));
+  return out;
+})();
+
 /* Panneau d'outils contextuel */
 function drawTools() {
   const box = $('nstTools'); if (!box) return;
@@ -8175,6 +8207,11 @@ function drawTools() {
   const alts = L && !L.text && !L.spread ? NA.PHOTO_LAYOUTS(L.n) : [];
   if (alts.length > 1) {
     html += `<div class="nst-sec"><label>${NA.t('layout')}</label><div class="nst-chips">${alts.map(k => `<button class="nst-chip${pg.layout === k ? ' on' : ''}" data-layout="${k}">${NA.t('ly_' + k)}</button>`).join('')}</div></div>`;
+  }
+  if (!(L && L.spread)) {   // couleur de la page : toutes les teintes, du plus clair au plus foncé, et une couleur libre
+    const cur = (pg.bg || '').toLowerCase();
+    html += `<div class="nst-sec"><label>${NA.t('pg_col')}</label><div class="nst-bgs">${BG_SWATCHES.map(c => `<button class="nst-bg${cur === c ? ' on' : ''}" data-bg="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')}</div>
+      <div class="nst-row nst-bgrow"><button class="nst-chip${cur ? '' : ' on'}" data-bg="">${NA.t('pg_col_def')}</button><label class="nst-chip nst-bgpick">${NA.t('pg_col_other')}<input type="color" id="nstBgPick" value="${cur || '#f3e6dc'}"/></label></div></div>`;
   }
   if (sel.page > 0 && sel.page < NA.pages.length - 1 && !(L && L.spread)) {
     html += `<div class="nst-sec nst-row"><button class="nst-link" data-act="left" ${sel.page <= 1 ? 'disabled' : ''}>${NA.t('move_left')}</button><button class="nst-link" data-act="right" ${sel.page >= NA.pages.length - 1 ? 'disabled' : ''}>${NA.t('move_right')}</button></div>`;
@@ -8330,6 +8367,7 @@ function bindEditor() {
     if (b.dataset.photo) return swapPhoto(+b.dataset.photo);
     if (b.dataset.filter) { commit(); pg.slots[ED.sel.slot].f = b.dataset.filter; return refreshPage(ED.sel.page); }
     if (b.dataset.layout) { if (NA.spreadOf(pg)) return; commit(); pg.layout = b.dataset.layout; return refreshPage(ED.sel.page); }
+    if (b.dataset.bg != null) { if ((pg.bg || '') === b.dataset.bg) return; commit(); if (b.dataset.bg) pg.bg = b.dataset.bg; else delete pg.bg; return refreshPage(ED.sel.page); }
     if (b.dataset.act === 'spread' || b.dataset.act === 'unspread') {
       const i = ED.sel.page, r = b.dataset.act === 'spread' ? NA.makeSpread(NA.pages, i, ED.sel.slot || 0) : NA.unmakeSpread(NA.pages, i);
       if (r.error) { NA.toast(NA.t('sp_' + r.error)); return; }
@@ -8353,6 +8391,12 @@ function bindEditor() {
     if (ED.textBefore && ED.textBefore !== snap()) { H(); NA.hist.push(ED.textBefore); NA.fut = []; updUndo(); }
     ED.textBefore = null;
     if (ED.sel) { const i = ED.sel.page; drawStage(); drawThumb(i); }
+  });
+  $('nstTools').addEventListener('change', e => {
+    if (e.target.id !== 'nstBgPick' || !ED.sel) return;
+    const pg = NA.pages[ED.sel.page], c = String(e.target.value).toLowerCase();
+    if (!/^#[0-9a-f]{6}$/.test(c) || pg.bg === c) return;
+    commit(); pg.bg = c; refreshPage(ED.sel.page);
   });
   $('nstTools').addEventListener('input', e => {
     if (e.target.id === 'nstTxt' && ED.sel && ED.sel.text) {
