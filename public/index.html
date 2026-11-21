@@ -8781,7 +8781,108 @@ function nstBake(done) {
       load(u, false).then(ok, ok);
     }, 'image/png'); });
   }).catch(function () {}));
-  Promise.all(jobs).then(function () { requestAnimationFrame(function () { requestAnimationFrame(end); }); });
+  // Dégradés CSS transparents (voiles sur les photos, lignes à écrire, vignettes) : Chrome les écrit dans le PDF en ombrage à fonction
+  // PostScript (type 4), qu'Aperçu et l'iPhone affichent en rose. Chaque couche transparente devient une image SVG qui porte le même
+  // dégradé : Chrome l'écrit en ombrage axial ou radial ordinaire, lu partout. Fait après la texture du papier (sa variable est figée ici).
+  var grads = function () {
+    var top = function (v) { var o = [], d = 0, c = ''; for (var i = 0; i < v.length; i++) { var ch = v[i]; if (ch === '(') d++; if (ch === ')') d--; if (ch === ',' && !d) { o.push(c.trim()); c = ''; } else c += ch; } if (c.trim()) o.push(c.trim()); return o; };
+    var f3 = function (n) { return (+n).toFixed(3).replace(/0+$/, '').replace(/\.$/, ''); };
+    var svg = function (L, w, h) {
+      var m = /^(repeating-)?(linear|radial)-gradient\((.*)\)$/.exec(L); if (!m) return null;
+      var rep = !!m[1], rad = m[2] === 'radial', parts = top(m[3]), conf = /^rgba?\(/.test(parts[0]) ? '' : parts.shift(), st = [];
+      parts.forEach(function (p) {
+        var c = /^rgba?\(([^)]*)\)\s*(.*)$/.exec(p); if (!c) return;
+        var v = c[1].split(',').map(Number), pos = c[2] ? c[2].split(/\s+/) : [];
+        if (!pos.length) pos = [null];
+        pos.forEach(function (q) { st.push({ col: 'rgb(' + v[0] + ',' + v[1] + ',' + v[2] + ')', a: v.length > 3 ? v[3] : 1, q: q }); });
+      });
+      if (st.length < 2) return null;
+      var len, g;
+      if (!rad) {
+        var ang = 180, k = /^to (top|bottom|left|right)$/.exec(conf), dg = /^(-?[\d.]+)deg$/.exec(conf);
+        if (k) ang = { top: 0, right: 90, bottom: 180, left: 270 }[k[1]]; else if (dg) ang = +dg[1]; else if (conf) return null;
+        var t = ang * Math.PI / 180, dx = Math.sin(t), dy = -Math.cos(t); len = Math.abs(w * dx) + Math.abs(h * dy);
+        g = '<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="' + f3(w / 2 - dx * len / 2) + '" y1="' + f3(h / 2 - dy * len / 2) + '" x2="' + f3(w / 2 + dx * len / 2) + '" y2="' + f3(h / 2 + dy * len / 2) + '">';
+      } else {
+        if (rep) return null;
+        var at = /(?:^|\s)at\s+(\S+)\s+(\S+)$/.exec(conf), size = conf.replace(/(?:^|\s)at\s+\S+\s+\S+$/, '').trim();
+        var P = function (q, full) { return /%$/.test(q) ? parseFloat(q) / 100 * full : /px$/.test(q) ? parseFloat(q) : ({ left: 0, top: 0, center: full / 2, right: full, bottom: full })[q]; };
+        var cx = at ? P(at[1], w) : w / 2, cy = at ? P(at[2], h) : h / 2, circ = /circle/.test(size), sz = size.replace(/circle|ellipse/, '').trim(), rx, ry;
+        var nx = Math.min(cx, w - cx), ny = Math.min(cy, h - cy), fx = Math.max(cx, w - cx), fy = Math.max(cy, h - cy);
+        var ex = /^(\S+)\s+(\S+)$/.exec(sz);
+        if (ex && !/side|corner/.test(sz)) { rx = P(ex[1], w); ry = P(ex[2], h); }
+        else if (/^[\d.]+px$/.test(sz)) { rx = ry = parseFloat(sz); }
+        else {
+          var kw = sz || 'farthest-corner';
+          if (circ) rx = ry = kw === 'closest-side' ? Math.min(nx, ny) : kw === 'farthest-side' ? Math.max(fx, fy) : kw === 'closest-corner' ? Math.hypot(nx, ny) : Math.hypot(fx, fy);
+          else if (kw === 'closest-side') { rx = nx; ry = ny; } else if (kw === 'farthest-side') { rx = fx; ry = fy; }
+          else if (kw === 'closest-corner') { rx = nx * Math.SQRT2; ry = ny * Math.SQRT2; } else { rx = fx * Math.SQRT2; ry = fy * Math.SQRT2; }
+        }
+        if (!(rx > 0 && ry > 0) || cx == null || cy == null) return null;
+        len = rx;
+        g = '<radialGradient id="g" gradientUnits="userSpaceOnUse" cx="' + f3(cx) + '" cy="' + f3(cy) + '" r="' + f3(rx) + '" gradientTransform="translate(' + f3(cx) + ' ' + f3(cy) + ') scale(1 ' + f3(ry / rx) + ') translate(' + f3(-cx) + ' ' + f3(-cy) + ')">';
+      }
+      // positions en px le long du dégradé ; les arrêts sans position se répartissent entre leurs voisins
+      st.forEach(function (s) { s.p = s.q == null ? null : /%$/.test(s.q) ? parseFloat(s.q) / 100 * len : parseFloat(s.q); });
+      if (st[0].p == null) st[0].p = 0; if (st[st.length - 1].p == null) st[st.length - 1].p = len;
+      for (var i = 1; i < st.length; i++) {
+        if (st[i].p == null) { var j = i; while (st[j].p == null) j++; for (var u = i; u < j; u++) st[u].p = st[i - 1].p + (st[j].p - st[i - 1].p) * (u - i + 1) / (j - i + 1); }
+        if (st[i].p < st[i - 1].p) st[i].p = st[i - 1].p;
+      }
+      if (rep) {                                   // motif répété : déroulé sur toute la longueur
+        var per = st[st.length - 1].p - st[0].p; if (!(per > 0.5)) return null;
+        var all = [], k0 = Math.floor((0 - st[st.length - 1].p) / per), k1 = Math.ceil((len - st[0].p) / per);
+        if (k1 - k0 > 400) return null;
+        for (var r = k0; r <= k1; r++) st.forEach(function (s) { all.push({ col: s.col, a: s.a, p: s.p + r * per }); });
+        st = all;
+      }
+      var mixAt = function (A, B, x) {             // couleur exacte entre deux arrêts (interpolation prémultipliée, comme CSS)
+        var f = B.p > A.p ? Math.max(0, Math.min(1, (x - A.p) / (B.p - A.p))) : 1, ca = A.col.match(/\d+/g).map(Number), cb = B.col.match(/\d+/g).map(Number), aa = A.a + (B.a - A.a) * f;
+        return { col: 'rgb(' + ca.map(function (v, k) { var pa = v * A.a, pb = cb[k] * B.a; return aa ? Math.round((pa + (pb - pa) * f) / aa) : v; }).join(',') + ')', a: aa, p: x };
+      };
+      var debut = function (x) {                   // couleur juste après x (bord de départ : le dernier arrêt posé en x l'emporte)
+        var i = -1; for (var k = 0; k < st.length; k++) if (st[k].p <= x) i = k;
+        if (i < 0) return { col: st[0].col, a: st[0].a, p: x };
+        if (st[i].p === x || i === st.length - 1) return { col: st[i].col, a: st[i].a, p: x };
+        return mixAt(st[i], st[i + 1], x);
+      };
+      var fin = function (x) {                     // couleur juste avant x (bord d'arrivée : le premier arrêt posé en x l'emporte)
+        for (var k = 0; k < st.length; k++) if (st[k].p >= x) return st[k].p === x || !k ? { col: st[k].col, a: st[k].a, p: x } : mixAt(st[k - 1], st[k], x);
+        return { col: st[st.length - 1].col, a: st[st.length - 1].a, p: x };
+      };
+      var inside = st.filter(function (s) { return s.p > 0 && s.p < len; });
+      var list = [debut(0)].concat(inside, st[st.length - 1].p < len ? [] : [fin(len)]);
+      // un arrêt transparent prend la couleur de ses voisins : CSS mélange en couleurs prémultipliées, SVG non (le noir déteindrait)
+      list = list.reduce(function (o, s, i) {
+        if (s.a) { o.push(s); return o; }
+        var pv = null, nx = null, k;
+        for (k = i - 1; k >= 0 && !pv; k--) if (list[k].a) pv = list[k];
+        for (k = i + 1; k < list.length && !nx; k++) if (list[k].a) nx = list[k];
+        var c1 = (pv || nx || s).col, c2 = (nx || pv || s).col;
+        o.push({ col: c1, a: 0, p: s.p }); if (c2 !== c1) o.push({ col: c2, a: 0, p: s.p });
+        return o;
+      }, []);
+      g += list.map(function (s) { return '<stop offset="' + f3(len ? s.p / len : 0) + '" stop-color="' + s.col + '" stop-opacity="' + f3(s.a) + '"/>'; }).join('') + (rad ? '</radialGradient>' : '</linearGradient>');
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="' + f3(w) + '" height="' + f3(h) + '" viewBox="0 0 ' + f3(w) + ' ' + f3(h) + '" preserveAspectRatio="none"><defs>' + g + '</defs><rect width="' + f3(w) + '" height="' + f3(h) + '" fill="url(#g)"/></svg>';
+    };
+    var urls = [];
+    [].slice.call(document.querySelectorAll('.page [style*="gradient"], .page[style*="gradient"]')).forEach(function (el) {
+      var cs = getComputedStyle(el), L = top(cs.backgroundImage), Z = top(cs.backgroundSize), W = el.clientWidth, H = el.clientHeight, chg = false;
+      var out = L.map(function (l, i) {
+        if (!/gradient\(/.test(l) || !/repeating-|rgba\(/.test(l)) return l;      // dégradé opaque : ombrage simple, gardé tel quel
+        var z = (Z[i] || Z[Z.length - 1] || 'auto').trim(), tw = W, th = H, m = /^([\d.]+)px(?:\s+([\d.]+)px)?$/.exec(z);
+        if (m) { tw = +m[1]; th = m[2] ? +m[2] : tw; } else if (z !== 'auto' && z !== 'auto auto') return l;
+        if (!(tw > 0 && th > 0)) return l;
+        var x = svg(l, tw, th); if (!x) return l;
+        chg = true; var u = 'data:image/svg+xml,' + encodeURIComponent(x); urls.push(u); return 'url("' + u + '")';
+      });
+      if (!chg) return;
+      el.style.backgroundImage = out.join(', ');
+      el.style.backgroundSize = L.map(function (l, i) { var z = (Z[i] || Z[Z.length - 1] || 'auto').trim(); return z === 'auto' || z === 'auto auto' ? '100% 100%' : z; }).join(', ');
+    });
+    return Promise.all(urls.map(function (u) { return load(u, false).catch(function () {}); }));
+  };
+  Promise.all(jobs).then(grads).catch(function () {}).then(function () { requestAnimationFrame(function () { requestAnimationFrame(end); }); });
 }
 const READY = '<script>window.__r=false;window.addEventListener("load",function(){var im=[].slice.call(document.images).map(function(i){return i.complete?Promise.resolve():new Promise(function(r){i.onload=i.onerror=r})});Promise.all([document.fonts?document.fonts.ready:0].concat(im)).then(function(){(' + nstBake.toString() + ')(function(){window.__r=true})})});function nstReady(){return window.__r}<\/script>';
 const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Pinyon+Script&family=Homemade+Apple&family=Whisper&family=Special+Elite&family=Caprasimo&family=Jost:wght@400;500;600&family=Yellowtail&display=block" rel="stylesheet"/>';
