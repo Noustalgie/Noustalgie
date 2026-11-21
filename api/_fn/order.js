@@ -37,6 +37,7 @@ module.exports = async (req, res) => {
     pages: String(m.pages || '').slice(0, 3),
     price: typeof s.amount_total === 'number' ? (s.amount_total / 100).toFixed(2).replace('.', ',') : '',
     format: m.format === 'pdf' ? 'pdf' : 'print',
+    book: m.book === 'a4' ? 'a4' : 'carre',          // format du livre imprimé (create-checkout.js)
     email: String((s.customer_details && s.customer_details.email) || s.customer_email || '').slice(0, 120),
     order: `NOUST-${ymd}-${crypto.createHash('sha1').update(s.id).digest('hex').slice(0, 5).toUpperCase()}`,
     country: /^[A-Z]{2}$/.test(m.addr_country || '') ? m.addr_country : '',
