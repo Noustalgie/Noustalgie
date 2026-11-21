@@ -9526,7 +9526,7 @@ NA.albumPanel = function () {
   const n = E.nPagesSel();
   const opts = [24, 36, 50].map(v => `<option value="${v}"${v === n ? ' selected' : ''}>${t('format_opt', v)}</option>`).join('');
   return `<div class="nst-sec"><label for="nstFormat">${t('format_lbl')}</label><select id="nstFormat" class="nst-input">${opts}</select></div>
-  <div class="nst-sec"><label for="nstLivre">${t('fmt_t')}</label><select id="nstLivre" class="nst-input">${['carre', 'a4'].map(f => `<option value="${f}"${NA.format === f ? ' selected' : ''}>${t('fmt_' + f)} · ${t('fmt_' + f + '_d', NA.plusEur ? NA.plusEur(PRIX_A4) : '')}</option>`).join('')}</select></div>
+  <div class="nst-sec"><label for="nstLivre">${t('fmt_t')}</label><select id="nstLivre" class="nst-input">${['carre', 'a4'].map(f => `<option value="${f}"${NA.format === f ? ' selected' : ''}>${t('fmt_' + f)}${f === 'a4' && NA.plusEur ? ' · ' + NA.plusEur(PRIX_A4) : ''}</option>`).join('')}</select></div>
   <div class="nst-sec"><label>${t('photos_lbl')} · ${S.photos.length}</label><button class="nst-btn" data-act="add-photos" type="button">+ ${t('add_photos')}</button>
     ${E.isWide() ? `<p class="nst-note">${t('drag_hint')}</p>` : ''}</div>
   <div class="nst-sec"><label>${t('fix_lbl')}</label><button class="nst-btn" data-act="fix-texts" type="button">${t('fix_btn')}</button>
