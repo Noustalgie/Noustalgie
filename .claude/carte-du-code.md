@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (10716 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (10817 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (10716 lignes). Ouvrir une zone : Read avec offset = 
 - lignes 1819-1922 : <script type="application/ld+json"> (6 Ko)
 - lignes 2522-4698 : <script> (191 Ko)
 - lignes 4699-7363 : <script> (278 Ko)
-- lignes 7364-10675 : <script> (299 Ko)
-- lignes 10676-10713 : <script> (3 Ko)
+- lignes 7364-10776 : <script> (307 Ko)
+- lignes 10777-10814 : <script> (3 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -66,13 +66,13 @@ Générée automatiquement (10716 lignes). Ouvrir une zone : Read avec offset = 
  8190  3. Éditeur
  8626  4. Sauvegarde locale (IndexedDB : photos comprises)
  8700  5. Impression : photos en pleine résolution + PDF hébergé
- 8982  6. Paiement
-10144  1. Livre 3D réutilisable
-10265  2. Aperçu en direct pendant la création (ordinateur)
-10299  3. Photos : date de prise de vue, couverture, glisser-déposer
-10401  4. Génération vivante : leurs photos se posent dans un livre
-10427  5. Récapitulatif de commande avec LEUR couverture
-10527  6. Finitions : apparition au défilement, page tournée
+ 9083  6. Paiement
+10245  1. Livre 3D réutilisable
+10366  2. Aperçu en direct pendant la création (ordinateur)
+10400  3. Photos : date de prise de vue, couverture, glisser-déposer
+10502  4. Génération vivante : leurs photos se posent dans un livre
+10528  5. Récapitulatif de commande avec LEUR couverture
+10628  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -426,127 +426,127 @@ Générée automatiquement (10716 lignes). Ouvrir une zone : Read avec offset = 
  8751  todo
  8758  worker
  8790  nstBake
- 8848  docHtml
- 8857  A4
- 8859  paFmt
- 8861  printHtml
- 8862  innerHtml
- 8864  spineStyle
- 8868  spineText
- 8869  defaultSpine
- 8870  coverHtml
- 8886  paInnerHtml
- 8895  paSheet
- 8903  paCoverHtml
- 8913  optSlot
- 8919  afficheHtml
- 8927  cadreHtml
- 8931  aimantHtml
- 8932  generateAlbumPDF
- 8943  gen
- 8950  doc
- 8951  tries
- 8994  processPayment
- 9000  vers
- 9053  goTab
- 9080  lang
- 9090  img
- 9115  stop
- 9146  upd
- 9174  apply
- 9193  T
- 9194  nm
- 9195  renderQuiz
- 9201  mark
- 9207  save
- 9254  mail
- 9419  backLbl
- 9424  toc
- 9431  show
- 9438  openLegal
- 9446  hideLegal
- 9447  closeLegal
- 9475  cur
- 9484  paint
- 9509  lang
- 9514  applyUI
- 9521  setLang
- 9545  syncStory
- 9581  ensureStoryFor
- 9597  recompose
- 9611  addInput
- 9640  removePhoto
- 9657  selectPricing
- 9709  fixTexts
- 9742  saveLink
- 9743  q
- 9781  fermer
- 9801  openFromLink
- 9811  set
- 9829  trHide
- 9831  trackOverlay
- 9839  close
- 9878  ouvrir
- 9908  ekLabel
- 9921  drawEbar
- 9946  coach
- 9952  done
- 9958  goTab
- 9967  draw
- 9998  payLabel
-10040  optTotal
-10042  drawOpts
-10067  fillOptImgs
-10080  pickOptPhoto
-10103  selectFormat
-10112  highlightPal
-10117  setLang
-10132  lang
-10145  spineColors
-10172  sampleCover
-10191  auto
-10192  build
-10199  name
-10215  words
-10222  apply
-10249  build
-10258  nst70
-10278  names
-10279  renderLive
-10292  flowMode
-10301  exifDate
-10311  readAscii
-10312  scan
-10329  addPhotos
-10338  remap
-10339  applyOrder
-10352  movePhoto
-10355  sortByDate
-10364  renderPhotosPlus
-10403  startGenAnim
-10415  tick
-10423  stopGenAnim
-10425  runGeneration
-10430  noel
-10433  noelApres
-10438  fill
-10441  renderSummary
-10454  syncPrice
-10479  drawFmt
-10487  palPrix
-10492  fmtUI
-10514  cadeauLien
-10523  goTab
-10545  setLang
-10562  lang
-10593  applyText
-10602  fromFrance
-10610  fromOSM
-10629  close
-10630  render
-10638  pick
-10646  search
-10691  etape
+ 8949  docHtml
+ 8958  A4
+ 8960  paFmt
+ 8962  printHtml
+ 8963  innerHtml
+ 8965  spineStyle
+ 8969  spineText
+ 8970  defaultSpine
+ 8971  coverHtml
+ 8987  paInnerHtml
+ 8996  paSheet
+ 9004  paCoverHtml
+ 9014  optSlot
+ 9020  afficheHtml
+ 9028  cadreHtml
+ 9032  aimantHtml
+ 9033  generateAlbumPDF
+ 9044  gen
+ 9051  doc
+ 9052  tries
+ 9095  processPayment
+ 9101  vers
+ 9154  goTab
+ 9181  lang
+ 9191  img
+ 9216  stop
+ 9247  upd
+ 9275  apply
+ 9294  T
+ 9295  nm
+ 9296  renderQuiz
+ 9302  mark
+ 9308  save
+ 9355  mail
+ 9520  backLbl
+ 9525  toc
+ 9532  show
+ 9539  openLegal
+ 9547  hideLegal
+ 9548  closeLegal
+ 9576  cur
+ 9585  paint
+ 9610  lang
+ 9615  applyUI
+ 9622  setLang
+ 9646  syncStory
+ 9682  ensureStoryFor
+ 9698  recompose
+ 9712  addInput
+ 9741  removePhoto
+ 9758  selectPricing
+ 9810  fixTexts
+ 9843  saveLink
+ 9844  q
+ 9882  fermer
+ 9902  openFromLink
+ 9912  set
+ 9930  trHide
+ 9932  trackOverlay
+ 9940  close
+ 9979  ouvrir
+10009  ekLabel
+10022  drawEbar
+10047  coach
+10053  done
+10059  goTab
+10068  draw
+10099  payLabel
+10141  optTotal
+10143  drawOpts
+10168  fillOptImgs
+10181  pickOptPhoto
+10204  selectFormat
+10213  highlightPal
+10218  setLang
+10233  lang
+10246  spineColors
+10273  sampleCover
+10292  auto
+10293  build
+10300  name
+10316  words
+10323  apply
+10350  build
+10359  nst70
+10379  names
+10380  renderLive
+10393  flowMode
+10402  exifDate
+10412  readAscii
+10413  scan
+10430  addPhotos
+10439  remap
+10440  applyOrder
+10453  movePhoto
+10456  sortByDate
+10465  renderPhotosPlus
+10504  startGenAnim
+10516  tick
+10524  stopGenAnim
+10526  runGeneration
+10531  noel
+10534  noelApres
+10539  fill
+10542  renderSummary
+10555  syncPrice
+10580  drawFmt
+10588  palPrix
+10593  fmtUI
+10615  cadeauLien
+10624  goTab
+10646  setLang
+10663  lang
+10694  applyText
+10703  fromFrance
+10711  fromOSM
+10730  close
+10731  render
+10739  pick
+10747  search
+10792  etape
 
 ## api/
 
