@@ -1,4 +1,4 @@
-// api/generate-pdf.js — HTML de l'album → PDF 21×21 cm via PDFShift
+// api/generate-pdf.js — HTML de l'album → PDF 21×21 cm (ou A4 portrait 21×29,7 cm) via PDFShift
 // Mode "url" (v2) : PDFShift héberge le PDF, puis Cloudinary en garde une copie.
 // Aucun fichier lourd ne transite par Vercel → plus de limite de 4,5 Mo, photos en pleine qualité.
 const https = require('https');
@@ -9,8 +9,8 @@ const PA = require('./_lib/printapi');
 
 // Fichiers Print API (fond perdu compris) : pages intérieures, couverture d'un seul tenant, affiche 30 × 40, cadre 15 × 15, aimant 5 × 5
 const PA_KINDS = {
-  'pa-inner': album => ({ pages: PA.innerCount(album), format: '216mmx216mm' }),
-  'pa-cover': album => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album))}mmx254mm` }),
+  'pa-inner': (album, book) => ({ pages: PA.innerCount(album), format: PA.INNER_MM[book] }),
+  'pa-cover': (album, book) => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album))}mmx${PA.COVER_H[book]}mm` }),
   affiche: () => ({ pages: 1, format: '300mmx400mm' }),
   cadre: () => ({ pages: 1, format: '156mmx156mm' }),
   aimant: () => ({ pages: 1, format: '56mmx56mm' }),
@@ -44,13 +44,14 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'pdf', 18, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de demandes, réessayez dans quelques minutes.' });
 
   try {
-    const { html, mode, kind, albumPages, spineMm } = parseBody(req);
+    const { html, mode, kind, albumPages, spineMm, book: livre } = parseBody(req);
+    const book = PA.bookOf(livre);   // 'a4' : livre A4 portrait, sinon carré
     if (!html || typeof html !== 'string') return res.status(400).json({ error: 'HTML manquant' });
     if (html.length > MAX_HTML) return res.status(413).json({ error: 'Album trop lourd.' });
     const KEY = process.env.PDFSHIFT_API_KEY;
     if (!KEY) return res.status(500).json({ error: 'Configuration PDF incomplète.' });
 
-    const base = { source: html, format: '210mmx210mm', margin: '0', use_print: true, sandbox: false };
+    const base = { source: html, format: book === 'a4' ? '210mmx297mm' : '210mmx210mm', margin: '0', use_print: true, sandbox: false };
 
     if (mode === 'url') {
       const pages = (html.match(/class="page"/g) || []).length;
@@ -61,12 +62,15 @@ module.exports = async (req, res) => {
       let format = base.format, tag = pages;
       if (pa) {
         if (![24, 36, 50].includes(album)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
-        const want = PA_KINDS[K](album);
+        const want = PA_KINDS[K](album, book);
         if (pages !== want.pages) return res.status(400).json({ error: 'Fichier d’impression invalide.' });
-        format = want.format; tag = `${K}:${album}`;
+        // La preuve porte le format du livre : un fichier A4 ne passe pas pour un carré (ni l'inverse) au paiement
+        format = want.format; tag = `${K}:${album}` + (book === 'a4' && (K === 'pa-inner' || K === 'pa-cover') ? ':a4' : '');
       } else if (K === 'full') {
         if (![24, 36, 50].includes(pages)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
+        if (book === 'a4') tag = `a4:${pages}`;
       } else {
+        if (book === 'a4') return res.status(400).json({ error: 'Fichier d’impression invalide.' });   // ancienne version à tranche (Prodigi) : carré seulement
         if (![24, 36, 50].includes(album)) return res.status(400).json({ error: 'Nombre de pages invalide.' });
         if (K === 'inner' && pages !== album - 2) return res.status(400).json({ error: 'Pages intérieures invalides.' });
         if (K === 'cover') {

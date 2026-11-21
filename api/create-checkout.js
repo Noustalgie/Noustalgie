@@ -34,6 +34,8 @@ const PRICES = {
   36: { pdf: 19.99, print: 49.99 },
   50: { pdf: 24.99, print: 69.99 },
 };
+// Livre A4 portrait (21 × 29,7 cm) : supplément sur le livre imprimé, même valeur que PRIX_A4 de index.html ; le PDF garde son prix
+const PRIX_A4 = 10;
 // Options du livre imprimé (Print API), mêmes prix que sur le site. L'affiche, le cadre et l'aimant ont chacun leur fichier d'impression.
 const OPTIONS = {
   coffret: { price: 9.99, name: 'Coffret cadeau', desc: 'Le livre livré dans une boîte cadeau rigide' },
@@ -57,7 +59,8 @@ module.exports = async (req, res) => {
   if (!rateLimit(req, 'checkout', 20, 10 * 60 * 1000)) return res.status(429).json({ error: 'Trop de tentatives, réessayez dans quelques minutes.' });
   if (!process.env.STRIPE_SECRET_KEY) return res.status(500).json({ error: 'Configuration de paiement incomplète.' });
 
-  const { name, firstName, lastName, phone, email, address, addr, pages, names, style, pdfUrl, pdfProof, format, promoCode, spine, album, options, files, basse } = parseBody(req);
+  const { name, firstName, lastName, phone, email, address, addr, pages, book: livre, names, style, pdfUrl, pdfProof, format, promoCode, spine, album, options, files, basse } = parseBody(req);
+  const a4 = livre === 'a4';   // livre A4 portrait : fichiers A4 prouvés, prix du livre + PRIX_A4
   const rem = album && album.reminder && album.reminder.id && checkProof(String(album.reminder.id), 'reminder', album.reminder.sig) ? String(album.reminder.id) : '';
 
   if (!email || !EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'Email invalide.' });
@@ -68,15 +71,15 @@ module.exports = async (req, res) => {
 
   const fmt = format === 'pdf' ? 'pdf' : 'print';
   // Le PDF doit avoir été généré par notre serveur, avec exactement le nombre de pages payé
-  if (!pdfUrl || !checkProof(String(pdfUrl), pagesNum, pdfProof)) return res.status(400).json({ error: 'Le fichier de votre album n’est pas valide. Rechargez l’aperçu et réessayez.' });
+  if (!pdfUrl || !checkProof(String(pdfUrl), a4 ? `a4:${pagesNum}` : pagesNum, pdfProof)) return res.status(400).json({ error: 'Le fichier de votre album n’est pas valide. Rechargez l’aperçu et réessayez.' });
   // Version avec tranche imprimée : facultative, retenue seulement si les deux fichiers sont prouvés
   let S = null;
-  if (spine && spine.coverUrl && spine.innerUrl && checkProof(String(spine.coverUrl), `cover:${pagesNum}`, spine.coverProof) && checkProof(String(spine.innerUrl), `inner:${pagesNum}`, spine.innerProof)) {
+  if (!a4 && spine && spine.coverUrl && spine.innerUrl && checkProof(String(spine.coverUrl), `cover:${pagesNum}`, spine.coverProof) && checkProof(String(spine.innerUrl), `inner:${pagesNum}`, spine.innerProof)) {
     S = { cover: String(spine.coverUrl), inner: String(spine.innerUrl), mm: Number(spine.widthMm) || '' };
   }
   // Fichiers Print API (couverture d'un seul tenant + pages intérieures, affiche, cadre) : retenus seulement s'ils sont prouvés
   const F = files && typeof files === 'object' ? files : {};
-  const proved = k => F[k] && F[k].url && checkProof(String(F[k].url), `${k}:${pagesNum}`, F[k].proof) ? String(F[k].url) : '';
+  const proved = k => F[k] && F[k].url && checkProof(String(F[k].url), `${k}:${pagesNum}` + (a4 && (k === 'pa-cover' || k === 'pa-inner') ? ':a4' : ''), F[k].proof) ? String(F[k].url) : '';
   const paCover = proved('pa-cover'), paInner = proved('pa-inner');
   // Sans ces deux fichiers, le livre part chez Prodigi (plus cher) : garder la trace de ce qui manquait
   if (format !== 'pdf' && !(paCover && paInner)) console.error('create-checkout: fichiers Print API absents', JSON.stringify(Object.fromEntries(['pa-cover', 'pa-inner'].map(k => [k, !F[k] ? 'non envoyé' : F[k].url ? 'preuve invalide' : 'sans url']))));
@@ -109,7 +112,7 @@ module.exports = async (req, res) => {
     if (!COUNTRIES.includes(A.country)) return res.status(400).json({ error: 'Nous ne livrons pas encore ce pays.' });
   }
 
-  let priceEuros = PRICES[pagesNum][fmt];
+  let priceEuros = +(PRICES[pagesNum][fmt] + (a4 && fmt === 'print' ? PRIX_A4 : 0)).toFixed(2);
   let appliedPromo = '', carte = '';
   if (promoCode) {
     const promo = await checkPromo(promoCode);
@@ -133,7 +136,7 @@ module.exports = async (req, res) => {
   const priceStr = total.toFixed(2);
   const meta = {
     name: cut(fullName, 200), first_name: first, last_name: last, phone: fmt === 'print' && telOk ? tel : '',
-    email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum),
+    email: cut(email, 200), address: cut(address, 480), pages: String(pagesNum), book: a4 ? 'a4' : 'carre',
     reminder_id: cut(rem, 100),
     basse_def: Math.min(99, parseInt(basse, 10) || 0) > 0 ? String(Math.min(99, parseInt(basse, 10))) : '',   // photos parties en version écran (1200 px)
     cover_url: S ? cut(S.cover, 480) : '', inner_url: S ? cut(S.inner, 480) : '', spine_mm: S ? String(S.mm) : '',
@@ -145,8 +148,8 @@ module.exports = async (req, res) => {
   // fois Klarna…), que Stripe filtre selon le montant et le pays. Un paiement confirmé plus tard passe par async_payment_succeeded (webhook).
   const params = {
     'line_items[0][price_data][currency]': 'eur',
-    'line_items[0][price_data][product_data][name]': `Album Noustalgie · ${pagesNum} pages`,
-    'line_items[0][price_data][product_data][description]': `${fmt === 'pdf' ? 'Album numérique (PDF)' : 'Livre imprimé 21×21 cm, couverture rigide, livraison incluse'}${names ? ' · ' + cut(names, 120) : ''}`,
+    'line_items[0][price_data][product_data][name]': `Album Noustalgie${a4 ? ' A4' : ''} · ${pagesNum} pages`,
+    'line_items[0][price_data][product_data][description]': `${fmt === 'pdf' ? 'Album numérique (PDF)' : `Livre imprimé ${a4 ? '21×29,7 cm (A4)' : '21×21 cm'}, couverture rigide, livraison incluse`}${names ? ' · ' + cut(names, 120) : ''}`,
     'line_items[0][price_data][unit_amount]': cents,
     'line_items[0][quantity]': '1',
     mode: 'payment',
@@ -158,6 +161,7 @@ module.exports = async (req, res) => {
     'payment_intent_data[metadata][promo]': appliedPromo,
     'payment_intent_data[metadata][pages]': String(pagesNum),
     'payment_intent_data[metadata][format]': fmt,
+    'payment_intent_data[metadata][book]': a4 ? 'a4' : 'carre',
   };
   opts.forEach((k, i) => {
     const L = `line_items[${i + 1}]`;
