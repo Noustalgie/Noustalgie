@@ -7,8 +7,14 @@ const host = () => (process.env.PRINTAPI_ENV === 'live' ? 'live.printapi.nl' : '
 const configured = () => !!(process.env.PRINTAPI_CLIENT_ID && process.env.PRINTAPI_SECRET)
   && (process.env.VERCEL_ENV !== 'production' || process.env.PRINTAPI_ENV === 'live');
 
-// Livre 21 × 21 cm, couverture rigide brillante, papier intérieur « Premium » non couché (finitions par défaut du produit)
-const BOOK = 'boek_hc_21x21';
+// Livres à couverture rigide brillante, papier intérieur « Premium » non couché (finitions par défaut du produit) :
+// 21 × 21 cm (carré) et A4 portrait 21 × 29,7 cm (identifiant à confirmer par la fiche produit : /api/tools?fn=sante&produits=boek_hc_a4_sta)
+const BOOKS = { carre: 'boek_hc_21x21', a4: 'boek_hc_a4_sta' };
+const BOOK = BOOKS.carre;
+const bookOf = b => (b === 'a4' ? 'a4' : 'carre');
+// Pages intérieures avec 3 mm de fond perdu, et hauteur de la couverture d'un seul tenant (rabats compris), par format
+const INNER_MM = { carre: '216mmx216mm', a4: '216mmx303mm' };
+const COVER_H = { carre: 254, a4: 341 };
 // Couverture : 478 mm de large à 24 pages (rabats de 19 mm, plats de 217 mm, dos de 6 mm), puis 0,1432 mm par feuille en plus
 const coverWidthMm = innerPages => +(478 + Math.max(0, innerPages - 24) / 2 * 0.1432).toFixed(2);
 const spineMm = innerPages => +(6 + Math.max(0, innerPages - 24) / 2 * 0.1432).toFixed(2);
@@ -55,4 +61,4 @@ async function postOrder(payload) {
   return { order: null, err: `HTTP ${r.status} — ${String(r.raw).slice(0, 600)}` };
 }
 
-module.exports = { configured, host, call, token, getOrder, postOrder, BOOK, EXTRAS, coverWidthMm, spineMm, innerCount };
+module.exports = { configured, host, call, token, getOrder, postOrder, BOOK, BOOKS, bookOf, INNER_MM, COVER_H, EXTRAS, coverWidthMm, spineMm, innerCount };

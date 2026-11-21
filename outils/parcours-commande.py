@@ -50,7 +50,13 @@ CAS = [
     dict(pages=24, promo='CADEAU-TEST-0001', mobile=True),
     dict(pages=36, format='pdf', promo='CADEAU-TEST-0001', refus='livre imprimé'),
     dict(pages=36, promo='CADEAU-DEJA-0001', message='déjà été utilisée'),
+    # Livre A4 portrait (21 × 29,7 cm) : fichiers A4, prix du livre + 10 €, même parcours
+    dict(pages=36, livre='a4'), dict(pages=24, livre='a4', options=['coffret', 'affiche']), dict(pages=50, livre='a4', format='pdf'),
+    dict(pages=36, livre='a4', promo='CADEAU-TEST-0001'), dict(pages=24, livre='a4', mobile=True, apres=36),
 ]
+PRIX = {24: 39.99, 36: 49.99, 50: 69.99}
+PRIX_A4 = 10
+OPTS = {'coffret': 9.99, 'express': 4.99, 'affiche': 14.99, 'cadre': 19.99, 'aimant': 12.99}
 
 
 def demarrer_serveur():
@@ -59,7 +65,7 @@ def demarrer_serveur():
 
 
 async def jouer(nav, port, api, i, c):
-    c = dict(dict(format='print', style=None, options=[], pays='FR', langue='fr', apres=None, promo=None, photos=None, mobile=False, refus=None, message=None), **c)
+    c = dict(dict(format='print', style=None, options=[], pays='FR', langue='fr', apres=None, promo=None, photos=None, mobile=False, refus=None, message=None, livre='carre'), **c)
     ctx = await nav.new_context(viewport={'width': 390, 'height': 844} if c['mobile'] else {'width': 1280, 'height': 900}, is_mobile=c['mobile'], has_touch=c['mobile'])
     pg = await ctx.new_page()
     alertes, erreurs, stripe = [], [], {'ok': False}
@@ -86,9 +92,11 @@ async def jouer(nav, port, api, i, c):
         await pg.evaluate(f"setLang('{c['langue']}')")
     pret = await pg.evaluate("""([ph, c]) => {
       S.photos = ph;
+      // photos déjà analysées, comme sur le site (analyse faite à l'ajout) : sinon le changement de format attend ~1 s par photo
+      ph.forEach(p => { p.vis = NA.VIS_VERSION; });
       const info = { names: 'Emma & Hugo', n1: 'Emma', n2: 'Hugo', city: 'Lille', captions: [] };
       const story = NA._ed.defaultStory(info); story.captions = []; story.mag = {};
-      S.story = story; NA.info = info; NA.theme = c.style && NA.THEMES[c.style] ? c.style : 'magazine';
+      S.story = story; NA.info = info; NA.theme = c.style && NA.THEMES[c.style] ? c.style : 'magazine'; NA.format = c.livre;
       try { selectedPages = c.pages; } catch (e) {}
       NA.pages = NA.plan(c.pages, story, info);
       NA.opts = new Set(c.options);
@@ -154,6 +162,12 @@ async def jouer(nav, port, api, i, c):
         total = sum(int(v) for k, v in s.items() if k.endswith('[unit_amount]')) / 100
         if m.get('pages') != str(pret['pages']):
             pb.append(f"livre de {pret['pages']} pages payé comme {m.get('pages')} pages")
+        if m.get('book') != c['livre']:
+            pb.append(f"livre {c['livre']} payé comme {m.get('book')!r}")
+        if c['format'] == 'print' and not c['promo']:
+            du = round(PRIX[pret['pages']] + (PRIX_A4 if c['livre'] == 'a4' else 0) + sum(OPTS[o] for o in c['options']), 2)
+            if abs(total - du) > 0.01:
+                pb.append(f'Stripe demande {total} € au lieu de {du} €')
         attendu = affiche if not c['promo'] else None
         if attendu is not None and abs(total - attendu) > 0.01:
             pb.append(f'prix affiché {attendu} € mais Stripe demande {total} €')
@@ -181,7 +195,7 @@ async def jouer(nav, port, api, i, c):
         pb.append('alerte envoyée alors que le paiement a abouti')
     if not stripe['ok'] and not d['alertes']:
         pb.append('aucune alerte envoyée à Gabin pour ce blocage')
-    desc = ', '.join(f'{k}={v}' for k, v in c.items() if v and not (k == 'format' and v == 'print') and not (k == 'pays' and v == 'FR') and not (k == 'langue' and v == 'fr'))
+    desc = ', '.join(f'{k}={v}' for k, v in c.items() if v and not (k == 'format' and v == 'print') and not (k == 'pays' and v == 'FR') and not (k == 'langue' and v == 'fr') and not (k == 'livre' and v == 'carre'))
     return desc, pb
 
 

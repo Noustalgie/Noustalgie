@@ -35,6 +35,7 @@ function detectCountry(text) {
 }
 
 const SKU = 'BOOK-FE-8_3-SQ-HARD-G';
+const SKU_A4 = 'BOOK-FE-A4-P-HARD-G';   // livre A4 portrait, couverture rigide (un seul PDF : couverture en page 1, dos en dernière page)
 function prodigiCall(method, path, payload) {
   return new Promise(resolve => {
     const buf = payload ? Buffer.from(JSON.stringify(payload)) : null;
@@ -76,7 +77,7 @@ async function postOrder(payload) {
   return r2;
 }
 
-async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId, orderNumber, pages, spine }) {
+async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId, orderNumber, pages, spine, book }) {
   if (!process.env.PRODIGI_API_KEY) { global.__lastProdigiError = 'PRODIGI_API_KEY manquante'; return { id: null }; }
   if (!pdfUrl) { global.__lastProdigiError = 'Pas de PDF'; return { id: null }; }
   const structured = addr && addr.line1 && addr.postal && addr.city && addr.country;
@@ -96,10 +97,11 @@ async function createProdigiOrder({ pdfUrl, name, phone, email, address, addr, s
   // callbackUrl : Prodigi nous prévient à chaque étape (expédition → email de suivi au client)
   const recipient = Object.assign({ name, email }, phone ? { phoneNumber: phone } : {}, { address: recipientAddress });
   const base = { merchantReference: orderNumber, shippingMethod: 'Budget', callbackUrl: 'https://noustalgie.fr/api/prodigi-webhook', recipient };
-  const item = assets => [{ merchantReference: `album-${stripeSessionId}`, sku: SKU, copies: 1, sizing: 'fillPrintArea', assets }];
+  const item = assets => [{ merchantReference: `album-${stripeSessionId}`, sku: book === 'a4' ? SKU_A4 : SKU, copies: 1, sizing: 'fillPrintArea', assets }];
   let note = '';
 
   // 1) Livre avec tranche imprimée : couverture (dos + tranche + face) + pages intérieures
+  if (book === 'a4') spine = null;   // la version à tranche n'existe qu'en carré
   if (spine && spine.cover && spine.inner && n - 2 < 24) note = 'Tranche non proposée : 24 pages intérieures minimum chez Prodigi (album de ' + n + ' pages).';
   else if (spine && spine.cover && spine.inner) {
     const area = await coverPrintArea();
@@ -125,7 +127,7 @@ const OPT_NAMES = { coffret: 'Coffret cadeau', express: 'Fabrication express', a
 // Contenu de la commande Print API (aussi utilisé par _fn/recommande.js pour repasser une commande annulée)
 function printApiPayload({ m, name, phone, email, first, names, orderNumber, pages }) {
   const opts = String(m.options || '').split(',').filter(k => OPT_NAMES[k]);
-  const items = [{ id: 'album', productId: PA.BOOK, pageCount: PA.innerCount(parseInt(pages, 10) || 36), quantity: 1,
+  const items = [{ id: 'album', productId: PA.BOOKS[PA.bookOf(m.book)], pageCount: PA.innerCount(parseInt(pages, 10) || 36), quantity: 1,
     files: { content: m.pa_inner, cover: m.pa_cover }, options: opts.includes('coffret') ? [{ id: 'storage_box', value: 'yes' }] : [] }];
   if (opts.includes('affiche') && m.affiche_url) items.push({ id: 'affiche', productId: PA.EXTRAS.affiche, quantity: 1, files: { content: m.affiche_url } });
   if (opts.includes('cadre') && m.cadre_url) items.push({ id: 'cadre', productId: PA.EXTRAS.cadre, quantity: 1, files: { content: m.cadre_url } });
@@ -301,7 +303,7 @@ module.exports = async (req, res) => {
     } else if (format === 'print' && pdfUrl) {
       const addr = { line1: m.addr_line1, line2: m.addr_line2, postal: m.addr_postal, city: m.addr_city, country: m.addr_country };
       const spine = m.cover_url && m.inner_url ? { cover: m.cover_url, inner: m.inner_url } : null;
-      prodigi = await createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine });
+      prodigi = await createProdigiOrder({ pdfUrl, name, phone, email, address, addr, stripeSessionId: session.id, orderNumber, pages, spine, book: PA.bookOf(m.book) });
       prodigiOrderId = prodigi.id;
     }
     const optList = (prodigi.opts || []).map(k => OPT_NAMES[k]);
@@ -318,7 +320,7 @@ module.exports = async (req, res) => {
         subject: `🎉 ${orderNumber} — ${first} — ${price}€${prodigiOrderId ? ` ✅ ${printer}` : format === 'print' ? ' ⚠️ À TRAITER' : ''}`,
         html: `<h2>Nouvelle commande</h2>
           <p><b>N° :</b> ${orderNumber}<br><b>Client :</b> ${h(name)} (${h(email)})<br><b>Couple :</b> ${h(names)}</p>
-          <p><b>Format :</b> ${format} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
+          <p><b>Format :</b> ${format}${m.book === 'a4' ? ' · <b>A4 portrait</b>' : ''} · <b>Pages :</b> ${h(pages)} · <b>Montant :</b> ${h(price)}€${m.promo ? ` · <b>Promo :</b> ${h(m.promo)}` : ''}</p>
           ${optList.length ? `<p><b>Options :</b> ${h(optList.join(', '))}</p>` : ''}
           ${+m.basse_def > 0 ? `<p style="color:#9a6b12">⚠️ ${h(m.basse_def)} photo(s) imprimée(s) en version écran (1200 px) : leur haute définition n'était plus lisible sur le téléphone du client. Jeter un œil au PDF avant expédition.</p>` : ''}
           <p><b>Destinataire :</b> ${h(name || '—')}${phone ? ` · <b>Tél :</b> ${h(phone)}` : ''}<br><b>Adresse :</b> ${h(address || '(PDF)')}</p>
@@ -334,7 +336,7 @@ module.exports = async (req, res) => {
         to: email,
         subject: 'Votre livre Noustalgie part à l’impression ♥',
         html: mail(`Bonjour ${h(first)},`, `<p>Votre commande est confirmée : le livre <b>${h(names)}</b> part à l’impression.</p>
-          <p>N° de commande : <b style="color:#1c1a18;">${orderNumber}</b><br>Format : 21×21 cm, couverture rigide, ${h(pages)} pages${optList.length ? `<br>Avec : ${h(optList.join(', '))}` : ''}<br>Livraison estimée : ${printer === 'Prodigi' ? '10 à 12 jours' : '6 à 8 jours ouvrés'} environ</p>
+          <p>N° de commande : <b style="color:#1c1a18;">${orderNumber}</b><br>Format : ${m.book === 'a4' ? '21×29,7 cm (A4)' : '21×21 cm'}, couverture rigide, ${h(pages)} pages${optList.length ? `<br>Avec : ${h(optList.join(', '))}` : ''}<br>Livraison estimée : ${printer === 'Prodigi' ? '10 à 12 jours' : '6 à 8 jours ouvrés'} environ</p>
           <p>Vous recevrez le numéro de suivi par email dès l’expédition.</p>${btn('https://noustalgie.fr/#suivi', 'Suivre ma commande')}`),
       });
     }
