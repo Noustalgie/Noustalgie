@@ -9000,9 +9000,10 @@ function docHtml(body, widthMm, heightMm, boxMm, css, cvMm) {
     + '<style>@page{size:' + widthMm + 'mm ' + heightMm + 'mm;margin:0}*{margin:0;padding:0;box-sizing:border-box}html,body{width:' + widthMm + 'mm}.page{width:' + widthMm + 'mm;height:' + heightMm + 'mm;overflow:hidden;position:relative;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}.nst-canvas{transform:scale(' + (793.7 * boxMm / 210 / NA.PX) + ');transform-origin:0 0}.cv{position:absolute;top:0;width:' + boxMm + 'mm;height:' + (cvMm || boxMm) + 'mm;overflow:hidden}' + (css || '') + '</style>'
     + READY + '</head><body>' + body + '</body></html>';
 }
-// Livre A4 portrait : pages de 210 × 297 (Prodigi, copie du client) ; Print API : 216 × 303 avec le fond perdu, couverture de 341 de haut (à confirmer par la fiche produit)
+// Livre A4 portrait : pages de 210 × 297 (Prodigi, copie du client) ; Print API : 216 × 303 avec le fond perdu, couverture de 477 × 342
+// à 24 pages, plats de 216,5 (fiche produit boek_hc_a4_sta lue le 22 novembre 2026)
 const A4 = () => NA.format === 'a4';
-const PA_FMT = { carre: { h: 216, cover: 254 }, a4: { h: 303, cover: 341 } };
+const PA_FMT = { carre: { h: 216, cover: 254, w: 478, plat: 217 }, a4: { h: 303, cover: 342, w: 477, plat: 216.5 } };
 const paFmt = () => PA_FMT[A4() ? 'a4' : 'carre'];
 const pagesDoc = list => docHtml(list.map(p => `<div class="page">${NA.renderPage(p, { print: true })}</div>`).join(''), 210, A4() ? 297 : 210);
 function printHtml() { NA.fixSpreads(NA.pages); return pagesDoc(NA.pages); }           // livre complet (format historique)
@@ -9025,11 +9026,11 @@ function coverHtml(w) {
 /* ── Fichiers Print API (livre 21 × 21 rigide) ──
    Pages intérieures de 216 mm : la page de 210 agrandie de 3 mm de chaque côté (fond perdu, coupé à la fabrication).
    24 pages au minimum : l'album de 24 pages (22 intérieures) reçoit deux pages unies à la fin, la parité des doubles pages ne bouge pas.
-   Couverture d'un seul tenant : rabat 19 | plat arrière 217 | dos | plat avant 217 | rabat 19, sur 254 de haut ; dos de 6 mm à 24 pages,
-   plus 0,1432 mm par feuille. Chaque couverture couvre son plat avec 3 mm de marge ; le reste du rabat, replié à l'intérieur, prend la
-   couleur du papier de l'album. */
+   Couverture d'un seul tenant : rabat 19 | plat arrière | dos | plat avant | rabat 19 ; carré 478 × 254 à 24 pages (plats de 217),
+   A4 477 × 342 (plats de 216,5) ; dos de 6 mm à 24 pages, plus 0,1432 mm par feuille. Chaque couverture couvre son plat avec 3 mm de
+   marge ; le reste du rabat, replié à l'intérieur, prend la couleur du papier de l'album. */
 const paInner = n => Math.max(24, n - 2);
-const paCoverW = n => +(478 + (paInner(n) - 24) / 2 * 0.1432).toFixed(2);
+const paCoverW = n => +(paFmt().w + (paInner(n) - 24) / 2 * 0.1432).toFixed(2);
 function paInnerHtml() {
   const list = NA.pages.slice(1, -1), T = NA.THEMES[NA.theme] || NA.THEMES.galerie;
   const blank = `<div class="page" style="background:${T.paper}"></div>`.repeat(paInner(NA.pages.length) - list.length);
@@ -9048,13 +9049,13 @@ function paSheet(S) {
 }
 const px = mm => Math.round(mm * 96 / 25.4) + 'px';      // pages calées au pixel entier
 function paCoverHtml() {
-  const W = paCoverW(NA.pages.length), sp = +(W - 38 - 434).toFixed(2), S = 223, F = paSheet(S), CH = paFmt().cover, SH = +(S * NA.pageH() / NA.PX).toFixed(2);
+  const P = paFmt(), W = paCoverW(NA.pages.length), sp = +(W - 38 - 2 * P.plat).toFixed(2), S = 223, F = paSheet(S), CH = P.cover, SH = +(S * NA.pageH() / NA.PX).toFixed(2);
   const { bg, fg } = spineStyle(), txt = spineText(), last = NA.pages[NA.pages.length - 1];
   const fs = Math.min(sp * 0.42, 4.2), y = px(CH / 2 - SH / 2);
   const label = txt ? `<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font:500 ${fs.toFixed(2)}mm/1 'Inter',sans-serif;letter-spacing:.08em;color:${fg};">${esc(txt)}</div>` : '';
-  return docHtml(`<div class="page" style="${F.bg}"><div class="cv" style="left:${px(19 + 217 / 2 - S / 2)};top:${y}">${NA.renderPage(last, { print: true })}</div>`
-    + `<div class="cv" style="left:${px(236 + sp + 217 / 2 - S / 2)};top:${y}">${NA.renderPage(NA.pages[0], { print: true })}</div>`
-    + `<div style="position:absolute;top:0;left:236mm;width:${sp}mm;height:${CH}mm;background:${bg};overflow:hidden">${label}</div></div>`, W, CH, S, F.css, SH);
+  return docHtml(`<div class="page" style="${F.bg}"><div class="cv" style="left:${px(19 + P.plat / 2 - S / 2)};top:${y}">${NA.renderPage(last, { print: true })}</div>`
+    + `<div class="cv" style="left:${px(19 + P.plat + sp + P.plat / 2 - S / 2)};top:${y}">${NA.renderPage(NA.pages[0], { print: true })}</div>`
+    + `<div style="position:absolute;top:0;left:${19 + P.plat}mm;width:${sp}mm;height:${CH}mm;background:${bg};overflow:hidden">${label}</div></div>`, W, CH, S, F.css, SH);
 }
 // Photo choisie par le client pour l'affiche, le cadre ou l'aimant (NA.optPhoto[objet] = n° de photo) ; sans choix, la photo de couverture
 function optSlot(k) {
