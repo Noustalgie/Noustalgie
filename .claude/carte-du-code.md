@@ -1,6 +1,6 @@
 # Carte de public/index.html
 
-Générée automatiquement (10873 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
+Générée automatiquement (10874 lignes). Ouvrir une zone : Read avec offset = numéro de ligne.
 
 ## Blocs
 
@@ -13,8 +13,8 @@ Générée automatiquement (10873 lignes). Ouvrir une zone : Read avec offset = 
 - lignes 1844-1955 : <script type="application/ld+json"> (7 Ko)
 - lignes 2568-4744 : <script> (195 Ko)
 - lignes 4745-7409 : <script> (278 Ko)
-- lignes 7410-10832 : <script> (308 Ko)
-- lignes 10833-10870 : <script> (3 Ko)
+- lignes 7410-10833 : <script> (308 Ko)
+- lignes 10834-10871 : <script> (3 Ko)
 
 ## Couches CSS et sections de script (commentaires « ═══ »)
 
@@ -66,13 +66,13 @@ Générée automatiquement (10873 lignes). Ouvrir une zone : Read avec offset = 
  8236  3. Éditeur
  8672  4. Sauvegarde locale (IndexedDB : photos comprises)
  8746  5. Impression : photos en pleine résolution + PDF hébergé
- 9129  6. Paiement
-10292  1. Livre 3D réutilisable
-10419  2. Aperçu en direct pendant la création (ordinateur)
-10453  3. Photos : date de prise de vue, couverture, glisser-déposer
-10555  4. Génération vivante : leurs photos se posent dans un livre
-10581  5. Récapitulatif de commande avec LEUR couverture
-10684  6. Finitions : apparition au défilement, page tournée
+ 9130  6. Paiement
+10293  1. Livre 3D réutilisable
+10420  2. Aperçu en direct pendant la création (ordinateur)
+10454  3. Photos : date de prise de vue, couverture, glisser-déposer
+10556  4. Génération vivante : leurs photos se posent dans un livre
+10582  5. Récapitulatif de commande avec LEUR couverture
+10685  6. Finitions : apparition au défilement, page tournée
 
 ## HTML : sections et zones clés
 
@@ -427,127 +427,127 @@ Générée automatiquement (10873 lignes). Ouvrir une zone : Read avec offset = 
  8804  worker
  8836  nstBake
  8995  docHtml
- 9004  A4
- 9006  paFmt
- 9008  printHtml
- 9009  innerHtml
- 9011  spineStyle
- 9015  spineText
- 9016  defaultSpine
- 9017  coverHtml
- 9033  paInnerHtml
- 9042  paSheet
- 9050  paCoverHtml
- 9060  optSlot
- 9066  afficheHtml
- 9074  cadreHtml
- 9078  aimantHtml
- 9079  generateAlbumPDF
- 9090  gen
- 9097  doc
- 9098  tries
- 9141  processPayment
- 9147  vers
- 9200  goTab
- 9227  lang
- 9237  img
- 9262  stop
- 9293  upd
- 9321  apply
- 9340  T
- 9341  nm
- 9342  renderQuiz
- 9348  mark
- 9354  save
- 9401  mail
- 9567  backLbl
- 9572  toc
- 9579  show
- 9586  openLegal
- 9594  hideLegal
- 9595  closeLegal
- 9623  cur
- 9632  paint
- 9657  lang
- 9662  applyUI
- 9669  setLang
- 9693  syncStory
- 9729  ensureStoryFor
- 9745  recompose
- 9759  addInput
- 9788  removePhoto
- 9805  selectPricing
- 9857  fixTexts
- 9890  saveLink
- 9891  q
- 9929  fermer
- 9949  openFromLink
- 9959  set
- 9977  trHide
- 9979  trackOverlay
- 9987  close
-10026  ouvrir
-10056  ekLabel
-10069  drawEbar
-10094  coach
-10100  done
-10106  goTab
-10115  draw
-10146  payLabel
-10188  optTotal
-10190  drawOpts
-10215  fillOptImgs
-10228  pickOptPhoto
-10251  selectFormat
-10260  highlightPal
-10265  setLang
-10280  lang
-10293  spineColors
-10320  sampleCover
-10339  auto
-10340  build
-10347  name
-10363  words
-10370  apply
-10387  prixLivres
-10403  build
-10412  nst70
-10432  names
-10433  renderLive
-10446  flowMode
-10455  exifDate
-10465  readAscii
-10466  scan
-10483  addPhotos
-10492  remap
-10493  applyOrder
-10506  movePhoto
-10509  sortByDate
-10518  renderPhotosPlus
-10557  startGenAnim
-10569  tick
-10577  stopGenAnim
-10579  runGeneration
-10584  noel
-10587  noelApres
-10592  fill
-10595  renderSummary
-10608  syncPrice
-10633  drawFmt
-10641  palPrix
-10646  fmtUI
-10671  cadeauLien
-10680  goTab
-10702  setLang
-10719  lang
-10750  applyText
-10759  fromFrance
-10767  fromOSM
-10786  close
-10787  render
-10795  pick
-10803  search
-10848  etape
+ 9005  A4
+ 9007  paFmt
+ 9009  printHtml
+ 9010  innerHtml
+ 9012  spineStyle
+ 9016  spineText
+ 9017  defaultSpine
+ 9018  coverHtml
+ 9034  paInnerHtml
+ 9043  paSheet
+ 9051  paCoverHtml
+ 9061  optSlot
+ 9067  afficheHtml
+ 9075  cadreHtml
+ 9079  aimantHtml
+ 9080  generateAlbumPDF
+ 9091  gen
+ 9098  doc
+ 9099  tries
+ 9142  processPayment
+ 9148  vers
+ 9201  goTab
+ 9228  lang
+ 9238  img
+ 9263  stop
+ 9294  upd
+ 9322  apply
+ 9341  T
+ 9342  nm
+ 9343  renderQuiz
+ 9349  mark
+ 9355  save
+ 9402  mail
+ 9568  backLbl
+ 9573  toc
+ 9580  show
+ 9587  openLegal
+ 9595  hideLegal
+ 9596  closeLegal
+ 9624  cur
+ 9633  paint
+ 9658  lang
+ 9663  applyUI
+ 9670  setLang
+ 9694  syncStory
+ 9730  ensureStoryFor
+ 9746  recompose
+ 9760  addInput
+ 9789  removePhoto
+ 9806  selectPricing
+ 9858  fixTexts
+ 9891  saveLink
+ 9892  q
+ 9930  fermer
+ 9950  openFromLink
+ 9960  set
+ 9978  trHide
+ 9980  trackOverlay
+ 9988  close
+10027  ouvrir
+10057  ekLabel
+10070  drawEbar
+10095  coach
+10101  done
+10107  goTab
+10116  draw
+10147  payLabel
+10189  optTotal
+10191  drawOpts
+10216  fillOptImgs
+10229  pickOptPhoto
+10252  selectFormat
+10261  highlightPal
+10266  setLang
+10281  lang
+10294  spineColors
+10321  sampleCover
+10340  auto
+10341  build
+10348  name
+10364  words
+10371  apply
+10388  prixLivres
+10404  build
+10413  nst70
+10433  names
+10434  renderLive
+10447  flowMode
+10456  exifDate
+10466  readAscii
+10467  scan
+10484  addPhotos
+10493  remap
+10494  applyOrder
+10507  movePhoto
+10510  sortByDate
+10519  renderPhotosPlus
+10558  startGenAnim
+10570  tick
+10578  stopGenAnim
+10580  runGeneration
+10585  noel
+10588  noelApres
+10593  fill
+10596  renderSummary
+10609  syncPrice
+10634  drawFmt
+10642  palPrix
+10647  fmtUI
+10672  cadeauLien
+10681  goTab
+10703  setLang
+10720  lang
+10751  applyText
+10760  fromFrance
+10768  fromOSM
+10787  close
+10788  render
+10796  pick
+10804  search
+10849  etape
 
 ## api/
 
@@ -568,8 +568,8 @@ Générée automatiquement (10873 lignes). Ouvrir une zone : Read avec offset = 
 - api/_fn/track.js (60 lignes) api/track.js — « Suivre ma commande » : numéro NOUST-… + email de la commande
 - api/_lib/cadeau.js (75 lignes) api/_lib/cadeau.js — cartes cadeaux (49,99 €, soit un livre imprimé de 36 pages livré)
 - api/_lib/cloudinary.js (43 lignes) api/_lib/cloudinary.js — signature et upload serveur (pas une route)
-- api/_lib/printapi.js (65 lignes) api/_lib/printapi.js — imprimeur Print API (Groningue, Pays-Bas) : jeton OAuth, commandes, lecture d'une comma
-- api/_lib/promo.js (93 lignes) api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
+- api/_lib/printapi.js (67 lignes) api/_lib/printapi.js — imprimeur Print API (Groningue, Pays-Bas) : jeton OAuth, commandes, lecture d'une comma
+- api/_lib/promo.js (94 lignes) api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
 - api/_lib/security.js (59 lignes) api/_lib/security.js — utilitaires partagés (pas une route : préfixe _)
 - api/chat.js (84 lignes) api/chat.js — proxy OpenAI VERROUILLÉ
 - api/cleanup.js (54 lignes) api/cleanup.js — Nettoyage RGPD quotidien (cron Vercel, cf. vercel.json)

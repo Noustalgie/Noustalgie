@@ -10,7 +10,7 @@ const PA = require('./_lib/printapi');
 // Fichiers Print API (fond perdu compris) : pages intérieures, couverture d'un seul tenant, affiche 30 × 40, cadre 15 × 15, aimant 5 × 5
 const PA_KINDS = {
   'pa-inner': (album, book) => ({ pages: PA.innerCount(album), format: PA.INNER_MM[book] }),
-  'pa-cover': (album, book) => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album))}mmx${PA.COVER_H[book]}mm` }),
+  'pa-cover': (album, book) => ({ pages: 1, format: `${PA.coverWidthMm(PA.innerCount(album), book)}mmx${PA.COVER_H[book]}mm` }),
   affiche: () => ({ pages: 1, format: '300mmx400mm' }),
   cadre: () => ({ pages: 1, format: '156mmx156mm' }),
   aimant: () => ({ pages: 1, format: '56mmx56mm' }),
