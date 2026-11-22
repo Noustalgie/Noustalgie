@@ -1,6 +1,7 @@
 // api/_lib/promo.js — codes promo lus depuis la variable Vercel PROMO_CODES
 // Format : "CODE1:free,CODE2:20,CODE3:10"  (free = album offert à 0,50€, nombre = % de remise)
-// PROMO_CODES_EXTRA, même format : codes personnels des relances (ajoutés sans toucher aux codes existants).
+// Toute autre variable dont le nom commence par PROMO_CODES (PROMO_CODES_EXTRA : codes personnels des relances ;
+// PROMO_CODES_30 : codes à 30 %…), même format, est lue aussi : on ajoute des codes sans toucher aux existants.
 // Usage unique : un code déjà utilisé dans un paiement réussi est refusé (recherche Stripe).
 const https = require('https');
 const crypto = require('crypto');
@@ -41,7 +42,7 @@ function lireRelance(code) {
 const normaliser = c => { const m = /^(ALBUM|AMI)-(.*)$/.exec(c); return m ? m[1] + '-' + m[2].replace(/O/g, '0').replace(/[IL]/g, '1') : c; };
 
 function loadPromos() {
-  const raw = [process.env.PROMO_CODES, process.env.PROMO_CODES_EXTRA].filter(Boolean).join(',');
+  const raw = Object.keys(process.env).filter(k => /^PROMO_CODES/.test(k)).sort().map(k => process.env[k]).filter(Boolean).join(',');
   const map = {};
   raw.split(',').map(s => s.trim()).filter(Boolean).forEach(entry => {
     const [code, val] = entry.split(':').map(s => (s || '').trim());
