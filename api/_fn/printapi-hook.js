@@ -45,24 +45,25 @@ module.exports = async (req, res) => {
 <p style="color:#8b857d;font-size:12px;">Le suivi peut mettre quelques heures à s’activer. Commande ${h(o.id)}.</p>
 </div></div></div>`,
     }, `expedie-${o.id}`);
-    // 71 h plus tard (limite de programmation de Resend), le livre est arrivé (3 à 4 jours de transport) : un code de −10 %
-    // à offrir à un couple ami. Un livre offert se montre à toute la famille : chaque client peut en amener un autre.
+    // 71 h plus tard (limite de programmation de Resend) : un code de −10 % à offrir à un couple ami. Un livre offert se montre
+    // à toute la famille : chaque client peut en amener un autre. Le livre n'est pas forcément arrivé à ce moment-là (transport
+    // de 3 à 8 jours) : l'email ne doit jamais dire qu'il est livré ni demander un avis (Sofia, 24 novembre : « livre entre vos
+    // mains » alors que le colis était encore à Roissy, réclamation et avis à 1 étoile). Le seul vrai signal est le suivi.
     const code = codeAmi(o.id), fin = new Date(Date.now() + 89 * 86400000).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', timeZone: 'Europe/Paris' });
     const lien = `https://noustalgie.fr/?code=${encodeURIComponent(code)}`;
     await sendEmail({
       to: meta.email,
       scheduled_at: new Date(Date.now() + 71 * 3600000).toISOString(),
-      subject: `Votre livre est arrivé\u00a0? Offrez −${AMI_PCT}\u00a0% à un couple ami`,
+      subject: `Un code de −${AMI_PCT}\u00a0% à offrir à un couple ami`,
       html: `<div style="background:#f6f4f0;padding:32px 16px;font-family:Georgia,serif;"><div style="max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #e4dfd7;border-radius:14px;padding:32px 28px;color:#1c1a18;">
 <div style="font-size:20px;margin-bottom:24px;">Nous<em>talgie</em></div>
 <h2 style="font-weight:400;font-size:24px;margin:0 0 16px;">Bonjour ${h(meta.first || '')},</h2>
 <div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#5f5a54;">
-<p>Votre livre devrait être entre vos mains. Nous espérons qu’il vous plaît autant qu’à nous de l’avoir imprimé.</p>
+<p>Votre livre est en route vers chez vous (ou peut-être déjà arrivé)&nbsp;: vous pouvez suivre sa livraison à tout moment sur <a href="https://noustalgie.fr/#suivi" style="color:#1c1a18;">noustalgie.fr</a> avec le numéro de commande ci-dessous. Nous espérons qu’il vous plaira autant qu’à nous de l’avoir imprimé.</p>
 <p>Un couple autour de vous mériterait le sien&nbsp;? Offrez-lui <strong style="color:#1c1a18;">${AMI_PCT}&nbsp;% de réduction</strong> avec ce code, à transférer ou à recopier&nbsp;:</p>
 <div style="margin:20px 0;padding:16px;border:1px dashed #c9c2b8;border-radius:12px;text-align:center;font-family:'Courier New',monospace;font-size:20px;letter-spacing:2px;color:#1c1a18;">${h(code)}</div>
 <div style="margin:0 0 20px;"><a href="${h(lien)}" style="background:#1c1a18;color:#ffffff;padding:14px 26px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;display:inline-block;">Ouvrir le site avec le code</a></div>
 <p style="font-size:13px;">Valable une fois, jusqu’au ${h(fin)}, sur un livre imprimé ou un album numérique. Le code s’applique tout seul en passant par ce lien.</p>
-<p>Et si vous avez une minute, votre avis nous aiderait beaucoup&nbsp;: <a href="https://g.page/r/CWD88UdbAKFnEBM/review" style="color:#1c1a18;">laisser un avis sur Google</a>.</p>
 <p style="color:#8b857d;font-size:12px;">Commande ${h(o.id)}. Cet email n’est envoyé qu’une fois ; pour ne plus rien recevoir de notre part, répondez simplement «&nbsp;stop&nbsp;».</p>
 </div></div></div>`,
     }, `ami-${o.id}`);
